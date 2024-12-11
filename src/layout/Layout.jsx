@@ -49,7 +49,7 @@ const Layout = ({ children }) => {
         {/* ------------------------------------------- */}
         <Container
           sx={{
-            maxWidth: "100% !important",
+            maxWidth: "80rem !important",
           }}
      
         >
