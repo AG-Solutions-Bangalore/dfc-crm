@@ -74,7 +74,7 @@ const TodoList = () => {
             <div className="flex gap-2">
               
               <div
-                // onClick={toggleViewerDrawer(true, id)}
+                onClick={()=>navigate(`/edit-todo/${id}`)}
                 className="flex items-center space-x-2"
                 title="Edit"
               >
@@ -118,7 +118,7 @@ const TodoList = () => {
             <div className="flex gap-2">
               <button
                 className=" flex flex-row items-center gap-1 text-center text-sm font-[400] cursor-pointer  w-[5rem] text-white bg-blue-600 hover:bg-red-700 p-2 rounded-lg shadow-md"
-              
+              onClick={()=>navigate(`/createTodo`)}
               >
                 <IconPlus className='w-4 h-4'/> Todo
               </button>

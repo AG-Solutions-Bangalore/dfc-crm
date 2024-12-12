@@ -70,14 +70,14 @@ const AssignTypeTyreList = () => {
         size: 20,
         enableHiding: false,
         Cell: ({ row }) => {
-          const id = row.original.id;
+          const id = row.original.tyre_sub_no;
 
           return (
             <div className="flex gap-2">
               
              
               <div
-                // onClick={toggleViewerDrawer(true, id)}
+                onClick={()=>navigate(`/tyre/assign-view/${id}`)}
                 className="flex items-center space-x-2"
                 title="View"
               >
