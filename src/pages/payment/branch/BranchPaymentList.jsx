@@ -76,7 +76,7 @@ const BranchPaymentList = () => {
             <div className="flex gap-2">
               
               <div
-                // onClick={toggleViewerDrawer(true, id)}
+                onClick={()=>navigate(`/payment/edit-branchpay/${id}`)}
                 className="flex items-center space-x-2"
                 title="Edit"
               >
@@ -119,6 +119,7 @@ const BranchPaymentList = () => {
             </h1>
             <div className="flex gap-2">
               <button
+              onClick={()=>navigate('/payment/createBranchPay')}
                 className=" flex flex-row items-center gap-1 text-center text-sm font-[400] cursor-pointer  w-[9rem] text-white bg-blue-600 hover:bg-red-700 p-2 rounded-lg shadow-md"
               
               >

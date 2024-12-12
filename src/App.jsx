@@ -29,6 +29,18 @@ import TodoList from "./pages/todo/TodoList";
 import AdvancePaymentList from "./pages/payment/advance/AdvancePaymentList";
 import BranchPaymentList from "./pages/payment/branch/BranchPaymentList";
 import DetailsPaymentList from "./pages/payment/details/DetailsPaymentList";
+import CreateTodo from "./pages/todo/CreateTodo";
+import EditTodo from "./pages/todo/EditTodo";
+import AddBranchPayment from "./pages/payment/branch/AddBranchPayment";
+import EditBranchPayment from "./pages/payment/branch/EditBranchPayment";
+import AddAdvacnePayment from "./pages/payment/advance/AddAdvacnePayment";
+import EditAdvancePayment from "./pages/payment/advance/EditAdvancePayment";
+import AddDetailsPayment from "./pages/payment/details/AddDetailsPayment";
+import EditDetailsPayment from "./pages/payment/details/EditDetailsPayment";
+import AssignTypeTyreView from "./pages/tyre/assignType/AssignTypeTyreView";
+import AddPurchaseTyre from "./pages/tyre/purchase/AddPurchaseTyre";
+import EditPurchaseTyre from "./pages/tyre/purchase/EditPurchaseTyre";
+import ViewPurchaseTyre from "./pages/tyre/purchase/ViewPurchaseTyre";
 const App = () => {
   return (
     <>
@@ -59,9 +71,19 @@ const App = () => {
         {/* vechiles  */}
         <Route path="/vechiles-list" element={<VehiclesList />} />
         {/* tyre  */}
+        {/* purchase tyre  */}
         <Route path="/tyre/purchase-list" element={<PurchaseTyreList />} />
+        <Route path="/tyre/createPurchase" element={<AddPurchaseTyre />} />
+        <Route path="/tyre/purchase-edit/:id" element={<EditPurchaseTyre />} />
+        <Route path="/tyre/purchase-view/:id" element={<ViewPurchaseTyre />} />
+
+
+        {/* stock list */}
         <Route path="/tyre/stock-list" element={<StockTyreList />} />
+        {/* assign tyre  */}
         <Route path="/tyre/assign-list" element={<AssignTypeTyreList />} />
+        <Route path="/tyre/assign-view/:id" element={<AssignTypeTyreView />} />
+         {/* unassign tyre */}
         <Route path="/tyre/unassign-list" element={<UnassignTypeTyreList />} />
         <Route path="/tyre/inspection-list" element={<InspectionTyreList />} />
         {/* services  */}
@@ -69,11 +91,22 @@ const App = () => {
         {/* trip  */}
         <Route path="/trip-list" element={<TripList />} />
         {/* payment  */}
+        {/* payment branch  */}
         <Route path="/payment/branch-list" element={<BranchPaymentList />} />
+        <Route path="/payment/edit-branchpay/:id" element={<EditBranchPayment />} />
+        <Route path="/payment/createBranchPay" element={<AddBranchPayment />} />
+        {/* payment advance  */}
         <Route path="/payment/advance-list" element={<AdvancePaymentList />} />
+        <Route path="/payment/createAdvance" element={<AddAdvacnePayment />} />
+        <Route path="/payment/edit-advance/:id" element={<EditAdvancePayment />} />
+        {/* payment details  */}
         <Route path="/payment/details-list" element={<DetailsPaymentList />} />
+        <Route path="/payment/createDetails" element={<AddDetailsPayment />} />
+        <Route path="/payment/edit-details/:id" element={<EditDetailsPayment />} />
         {/* todo  */}
         <Route path="/todo-list" element={<TodoList />} />
+        <Route path="/edit-todo/:id" element={<EditTodo />} />
+        <Route path="/createTodo" element={<CreateTodo />} />
       </Routes>
     </>
   );

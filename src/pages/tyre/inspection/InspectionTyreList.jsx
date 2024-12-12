@@ -5,10 +5,23 @@ import { IconEdit, IconEditCircle, IconEye, IconPlus } from '@tabler/icons-react
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import BASE_URL from '../../../base/BaseUrl';
-
+import { toast } from 'react-toastify';
+import {
+  Button,
+  Dialog,
+  DialogHeader,
+  DialogBody,
+  DialogFooter,
+} from "@material-tailwind/react";
 const InspectionTyreList = () => {
   const [inspectionTyreData, setInspectionTyreData] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [dialogConfig, setDialogConfig] = useState({
+    title: '',
+    message: '',
+    onConfirm: null
+  });
   const navigate = useNavigate();
 
 
@@ -34,6 +47,65 @@ const InspectionTyreList = () => {
   useEffect(() => {
     fetchInspectionData();
   }, []);
+  const handleTyreUpdate = async (e, id) => {
+    e.preventDefault();
+    setDialogConfig({
+      title: 'Update Tyre',
+      message: 'Are you sure you want to update this tyre?',
+      onConfirm: async () => {
+        try {
+          setLoading(true);
+          await axios({
+            url: `${BASE_URL}/api/web-update-tyre-inspection/${id}`,
+            method: "PUT",
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          });
+          fetchInspectionData();
+          toast.success("Tyre Updated Successfully");
+         
+        } catch (error) {
+          console.error("Error updating tyre", error);
+          toast.error("Failed to update tyre");
+        } finally {
+          setLoading(false);
+          setDialogOpen(false);
+        }
+      }
+    });
+    setDialogOpen(true);
+  };
+
+  const handleTyreDead = async (e, id) => {
+    e.preventDefault();
+    setDialogConfig({
+      title: 'Mark Tyre as Dead',
+      message: 'Are you sure you want to mark this tyre as dead?',
+      onConfirm: async () => {
+        try {
+          setLoading(true);
+          await axios({
+            url: `${BASE_URL}/api/web-update-tyre-inspection-dead/${id}`,
+            method: "PUT",
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          });
+          fetchInspectionData();
+          toast.success("Tyre Dead Updated Successfully");
+          
+        } catch (error) {
+          console.error("Error marking tyre as dead", error);
+          toast.error("Failed to mark tyre as dead");
+        } finally {
+          setLoading(false);
+          setDialogOpen(false);
+        }
+      }
+    });
+    setDialogOpen(true);
+  };
 
   const columns = useMemo(
     () => [
@@ -71,16 +143,16 @@ const InspectionTyreList = () => {
             <div className="flex gap-2">
               
               <div
-                // onClick={toggleViewerDrawer(true, id)}
+                onClick={(e)=>handleTyreUpdate(e,id)}
                 className="flex items-center space-x-2"
-                title="Edit"
+                title="Update Tyre"
               >
                 <IconEdit className="h-5 w-5 text-blue-500 cursor-pointer" />
               </div>
               <div
-                // onClick={toggleViewerDrawer(true, id)}
+                onClick={(e)=>handleTyreDead(e,id)}
                 className="flex items-center space-x-2"
-                title="View"
+                title="Tyre Dead"
               >
                 <IconEditCircle className="h-5 w-5 text-blue-500 cursor-pointer" />
               </div>
@@ -110,6 +182,29 @@ const InspectionTyreList = () => {
 
   return (
    <Layout>
+            <Dialog open={dialogOpen} handler={() => setDialogOpen(false)}>
+        <DialogHeader>{dialogConfig.title}</DialogHeader>
+        <DialogBody>
+          {dialogConfig.message}
+        </DialogBody>
+        <DialogFooter>
+          <Button
+            variant="text"
+            color="red"
+            onClick={() => setDialogOpen(false)}
+            className="mr-1"
+          >
+            <span>Cancel</span>
+          </Button>
+          <Button 
+            variant="gradient" 
+            color="green" 
+            onClick={dialogConfig.onConfirm}
+          >
+            <span>Confirm</span>
+          </Button>
+        </DialogFooter>
+      </Dialog>
           <div className="max-w-screen">
         
         <div className="bg-white p-4 mb-4 rounded-lg shadow-md">
