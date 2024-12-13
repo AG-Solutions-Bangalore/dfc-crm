@@ -1,4 +1,4 @@
-import { ToastContainer } from "react-toastify";
+
 import { Route, Routes } from "react-router-dom";
 import Home from "./pages/dashboard/Home";
 import SignIn from "./pages/auth/SignIn";
@@ -7,7 +7,6 @@ import Maintenance from "./pages/maintenance/Maintenance";
 import ForgetPassword from "./pages/auth/ForgetPassword";
 import Profile from "./pages/profile/Profile";
 import ChangePassword from "./pages/profile/ChangePassword";
-import "react-toastify/dist/ReactToastify.css";
 import CompanyList from "./pages/master/company/CompanyList";
 import BranchList from "./pages/master/branch/BranchList";
 import TyrePositionList from "./pages/master/tyrePosition/TyrePositionList";
@@ -41,10 +40,23 @@ import AssignTypeTyreView from "./pages/tyre/assignType/AssignTypeTyreView";
 import AddPurchaseTyre from "./pages/tyre/purchase/AddPurchaseTyre";
 import EditPurchaseTyre from "./pages/tyre/purchase/EditPurchaseTyre";
 import ViewPurchaseTyre from "./pages/tyre/purchase/ViewPurchaseTyre";
+import AddServices from "./pages/services/AddServices";
+import { Toaster  } from 'sonner'
+import EditServices from "./pages/services/EditServices";
+import ViewServices from "./pages/services/ViewServices";
+import AddVechiles from "./pages/vehicles/AddVechiles";
+import AddTyre from "./pages/vehicles/AddTyre";
+import EditVechiles from "./pages/vehicles/EditVechiles";
+import CreateCompany from "./pages/master/company/CreateCompany";
+import CompanyEdit from "./pages/master/company/CompanyEdit";
+import CreateBranch from "./pages/master/branch/CreateBranch";
+import BrandEdit from "./pages/master/branch/BrandEdit";
+import CreateTyreMake from "./pages/master/tyreMake/CreateTyreMake";
+import EditTyreMake from "./pages/master/tyreMake/EditTyreMake";
 const App = () => {
   return (
     <>
-      <ToastContainer />
+      <Toaster richColors position="top-right"  />
       <Routes>
         <Route path="/" element={<SignIn />} />
         <Route path="/register" element={<SIgnUp />} />
@@ -58,10 +70,26 @@ const App = () => {
         />
         {/* master  */}
         <Route path="/master/company-list" element={<CompanyList />} />
+        <Route path="/master/company-edit/:id" element={<CompanyEdit />} />
+        <Route path="/master/createCompany" element={<CreateCompany />} />
+
+
         <Route path="/master/branch-list" element={<BranchList />} />
+        <Route path="/master/branch-edit/:id" element={<BrandEdit />} />
+        <Route path="/master/CreateBranch" element={<CreateBranch />} />
+
+
+
+
         <Route path="/master/tyreposition-list" element={<TyrePositionList />
       } />
         <Route path="/master/tyremake-list" element={<TyreMakeList />} />
+        <Route path="/master/tyremake-edit/:id" element={<EditTyreMake />} />
+        <Route path="/master/createTyremake" element={<CreateTyreMake />} />
+
+
+
+
         <Route path="/master/servicetype-list" element={<ServiceTypeList />} />
         <Route path="/master/team-list" element={<TeamList />} />
         <Route path="/master/driver-list" element={<DriverList />} />
@@ -70,6 +98,9 @@ const App = () => {
 
         {/* vechiles  */}
         <Route path="/vechiles-list" element={<VehiclesList />} />
+        <Route path="/createVechiles" element={<AddVechiles />} />
+        <Route path="/createTyre" element={<AddTyre />} />
+        <Route path="/vechile-edit/:id" element={<EditVechiles />} />
         {/* tyre  */}
         {/* purchase tyre  */}
         <Route path="/tyre/purchase-list" element={<PurchaseTyreList />} />
@@ -88,6 +119,9 @@ const App = () => {
         <Route path="/tyre/inspection-list" element={<InspectionTyreList />} />
         {/* services  */}
         <Route path="/service-list" element={<ServicesList />} />
+        <Route path="/createService" element={<AddServices />} />
+        <Route path="/service-edit/:id" element={<EditServices />} />
+        <Route path="/service-view/:id" element={<ViewServices />} />
         {/* trip  */}
         <Route path="/trip-list" element={<TripList />} />
         {/* payment  */}

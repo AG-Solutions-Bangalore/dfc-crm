@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Layout from "../../../layout/Layout";
 import { useNavigate, useParams } from "react-router-dom";
 import Select from "react-select";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import { IconInfoCircle } from "@tabler/icons-react";
 import { IconArrowBack } from "@tabler/icons-react";
 import BASE_URL from "../../../base/BaseUrl";

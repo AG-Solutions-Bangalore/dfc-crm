@@ -4,7 +4,7 @@ import { IconArrowBack, IconInfoCircle } from "@tabler/icons-react";
 import { useNavigate } from "react-router-dom";
 import BASE_URL from "../../base/BaseUrl";
 import axios from "axios";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 
 const CreateTodo = () => {
   const navigate = useNavigate();

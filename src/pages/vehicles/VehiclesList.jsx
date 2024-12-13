@@ -94,7 +94,7 @@ const VehiclesList = () => {
             <div className="flex gap-2">
               
               <div
-                // onClick={toggleViewerDrawer(true, id)}
+                onClick={()=>navigate(`/vechile-edit/${id}`)}
                 className="flex items-center space-x-2"
                 title="Edit"
               >
@@ -148,12 +148,20 @@ const VehiclesList = () => {
             <h1 className="border-b-2 font-[400] border-dashed border-orange-800 text-center md:text-left">
             Vehicles List
             </h1>
-            <div className="flex gap-2">
+            <div className="flex flex-row items-center gap-2">
               <button
-                className=" flex flex-row items-center gap-1 text-center text-sm font-[400] cursor-pointer  w-[7rem] text-white bg-blue-600 hover:bg-red-700 p-2 rounded-lg shadow-md"
+              onClick={()=>navigate('/createVechiles')}
+                className=" flex flex-row items-center gap-1 text-center text-sm font-[400] cursor-pointer  w-[6rem] text-white bg-blue-600 hover:bg-red-700 p-2 rounded-lg shadow-md"
               
               >
                 <IconPlus className='w-4 h-4'/> Vehicles
+              </button>
+              <button
+              onClick={()=>navigate('/createTyre')}
+                className=" flex flex-row items-center gap-1 text-center text-sm font-[400] cursor-pointer  w-[4rem] text-white bg-blue-600 hover:bg-red-700 p-2 rounded-lg shadow-md"
+              
+              >
+                <IconPlus className='w-4 h-4'/> Tyre
               </button>
               </div>
           </div>

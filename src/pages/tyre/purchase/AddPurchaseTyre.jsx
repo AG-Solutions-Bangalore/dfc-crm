@@ -3,7 +3,7 @@ import Layout from "../../../layout/Layout";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import BASE_URL from "../../../base/BaseUrl";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import { IconInfoCircle, IconPlus, IconTrash } from "@tabler/icons-react";
 import { IconArrowBack } from "@tabler/icons-react";
 import Select from "react-select";

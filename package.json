@@ -53,7 +53,8 @@
     "react-router-dom": "6.17.0",
     "react-select": "^5.9.0",
     "react-to-print": "^2.15.1",
-    "react-toastify": "^10.0.6"
+    "react-toastify": "^10.0.6",
+    "sonner": "^1.7.1"
   },
   "devDependencies": {
     "@types/lodash": "4.14.196",
