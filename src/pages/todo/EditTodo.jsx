@@ -4,7 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { IconArrowBack, IconInfoCircle } from '@tabler/icons-react'
 import axios from 'axios'
 import BASE_URL from '../../base/BaseUrl'
-import { toast } from 'react-toastify'
+import { toast } from "sonner";
 
 const EditTodo = () => {
     const {id} = useParams()

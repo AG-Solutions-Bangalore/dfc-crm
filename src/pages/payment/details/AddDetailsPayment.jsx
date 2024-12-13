@@ -6,7 +6,7 @@ import BASE_URL from "../../../base/BaseUrl";
 import { IconInfoCircle } from "@tabler/icons-react";
 import { IconArrowBack } from "@tabler/icons-react";
 import Select from "react-select";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 
 const details_type = [
   {

@@ -99,14 +99,14 @@ const ServicesList = () => {
             <div className="flex gap-2">
               
               <div
-                // onClick={toggleViewerDrawer(true, id)}
+                onClick={()=>navigate(`/service-edit/${id}`)}
                 className="flex items-center space-x-2"
                 title="Edit"
               >
                 <IconEdit className="h-5 w-5 text-blue-500 cursor-pointer" />
               </div>
               <div
-                // onClick={toggleViewerDrawer(true, id)}
+                onClick={()=>navigate(`/service-view/${id}`)}
                 className="flex items-center space-x-2"
                 title="View"
               >
@@ -148,6 +148,7 @@ const ServicesList = () => {
             </h1>
             <div className="flex gap-2">
               <button
+              onClick={()=>navigate('/createService')}
                 className=" flex flex-row items-center gap-1 text-center text-sm font-[400] cursor-pointer  w-[7rem] text-white bg-blue-600 hover:bg-red-700 p-2 rounded-lg shadow-md"
               
               >

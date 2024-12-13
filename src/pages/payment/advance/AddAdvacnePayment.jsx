@@ -3,7 +3,7 @@ import Layout from "../../../layout/Layout";
 import { useNavigate } from "react-router-dom";
 import BASE_URL from "../../../base/BaseUrl";
 import axios from "axios";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import { IconArrowBack, IconInfoCircle } from "@tabler/icons-react";
 import Select from "react-select";
 
@@ -31,8 +31,6 @@ const AddAdvacnePayment = () => {
   const dd = String(today.getDate()).padStart(2, "0");
   const mm = String(today.getMonth() + 1).padStart(2, "0");
   const yyyy = today.getFullYear();
-
-  //   today = mm + "/" + dd + "/" + yyyy;
   const todayback = yyyy + "-" + mm + "-" + dd;
   const navigate = useNavigate();
   const [payment, setPayment] = useState({

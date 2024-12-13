@@ -16,7 +16,7 @@ import { IconMail, IconUser, IconCircleX } from "@tabler/icons-react";
 import Logout from "../../components/Logout";
 import axios from "axios";
 import BASE_URL from "../../base/BaseUrl";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 
 const Profile = () => {
   const [anchorEl2, setAnchorEl2] = React.useState(null);
