@@ -1,4 +1,3 @@
-
 import { Route, Routes } from "react-router-dom";
 import Home from "./pages/dashboard/Home";
 import SignIn from "./pages/auth/SignIn";
@@ -41,7 +40,7 @@ import AddPurchaseTyre from "./pages/tyre/purchase/AddPurchaseTyre";
 import EditPurchaseTyre from "./pages/tyre/purchase/EditPurchaseTyre";
 import ViewPurchaseTyre from "./pages/tyre/purchase/ViewPurchaseTyre";
 import AddServices from "./pages/services/AddServices";
-import { Toaster  } from 'sonner'
+import { Toaster } from "sonner";
 import EditServices from "./pages/services/EditServices";
 import ViewServices from "./pages/services/ViewServices";
 import AddVechiles from "./pages/vehicles/AddVechiles";
@@ -53,6 +52,7 @@ import CreateBranch from "./pages/master/branch/CreateBranch";
 import BrandEdit from "./pages/master/branch/BrandEdit";
 import CreateTyreMake from "./pages/master/tyreMake/CreateTyreMake";
 import EditTyreMake from "./pages/master/tyreMake/EditTyreMake";
+<<<<<<< HEAD
 import FormTrip from "./pages/trip/FormTrip";
 import AddTrip from "./pages/trip/AddTrip";
 import EditTrip from "./pages/trip/EditTrip";
@@ -66,10 +66,26 @@ import CreateAgencies from "./pages/master/agencies/CreateAgencies";
 import EditAgencies from "./pages/master/agencies/EditAgencies";
 import CreateVendor from "./pages/master/vendor/CreateVendor";
 import EditVendor from "./pages/master/vendor/EditVendor";
+=======
+import AgenciesReportForm from "./pages/reports/agencies/AgenciesReportForm";
+import TeamReportForm from "./pages/reports/team/TeamReportForm";
+import DriverReportForm from "./pages/reports/driver/DriverReportForm";
+import VechilesReportForm from "./pages/reports/vechiles/VechilesReportForm";
+import VendorReportForm from "./pages/reports/vendor/VendorReportForm";
+import VechilesDetailsReportForm from "./pages/reports/vechilesDetails/VechilesDetailsReportForm";
+import TyreReportForm from "./pages/reports/tyre/TyreReportForm";
+import ServiceReportForm from "./pages/reports/service/ServiceReportForm";
+import TripReportForm from "./pages/reports/trip/TripReportForm";
+import SalaryReportForm from "./pages/reports/salary/SalaryReportForm";
+import PaymentReportForm from "./pages/reports/payment/PaymentReportForm";
+import AgenciesReportView from "./pages/reports/agencies/AgenciesReportView";
+import TeamReportView from "./pages/reports/team/TeamReportView";
+
+>>>>>>> 8ceb08ccf98a3f7cdfe97cf23857a0d9e4d1c52f
 const App = () => {
   return (
     <>
-      <Toaster richColors position="top-right"  />
+      <Toaster richColors position="top-right" />
       <Routes>
         <Route path="/" element={<SignIn />} />
         <Route path="/register" element={<SIgnUp />} />
@@ -77,31 +93,23 @@ const App = () => {
         <Route path="/home" element={<Home />} />
         <Route path="/maintenance" element={<Maintenance />} />
         <Route path="/profile" element={<Profile />} />
-        <Route
-          path="/change-password"
-          element={<ChangePassword />} 
-        />
+        <Route path="/change-password" element={<ChangePassword />} />
         {/* master  */}
         <Route path="/master/company-list" element={<CompanyList />} />
         <Route path="/master/company-edit/:id" element={<CompanyEdit />} />
         <Route path="/master/createCompany" element={<CreateCompany />} />
 
-
         <Route path="/master/branch-list" element={<BranchList />} />
         <Route path="/master/branch-edit/:id" element={<BrandEdit />} />
         <Route path="/master/CreateBranch" element={<CreateBranch />} />
 
-
-
-
-        <Route path="/master/tyreposition-list" element={<TyrePositionList />
-      } />
+        <Route
+          path="/master/tyreposition-list"
+          element={<TyrePositionList />}
+        />
         <Route path="/master/tyremake-list" element={<TyreMakeList />} />
         <Route path="/master/tyremake-edit/:id" element={<EditTyreMake />} />
         <Route path="/master/createTyremake" element={<CreateTyreMake />} />
-
-
-
 
         <Route path="/master/servicetype-list" element={<ServiceTypeList />} />
         <Route path="/master/servicetype-edit/:id" element={<EditTeam />} />
@@ -143,13 +151,12 @@ const App = () => {
         <Route path="/tyre/purchase-edit/:id" element={<EditPurchaseTyre />} />
         <Route path="/tyre/purchase-view/:id" element={<ViewPurchaseTyre />} />
 
-
         {/* stock list */}
         <Route path="/tyre/stock-list" element={<StockTyreList />} />
         {/* assign tyre  */}
         <Route path="/tyre/assign-list" element={<AssignTypeTyreList />} />
         <Route path="/tyre/assign-view/:id" element={<AssignTypeTyreView />} />
-         {/* unassign tyre */}
+        {/* unassign tyre */}
         <Route path="/tyre/unassign-list" element={<UnassignTypeTyreList />} />
         <Route path="/tyre/inspection-list" element={<InspectionTyreList />} />
         {/* services  */}
@@ -165,20 +172,52 @@ const App = () => {
         {/* payment  */}
         {/* payment branch  */}
         <Route path="/payment/branch-list" element={<BranchPaymentList />} />
-        <Route path="/payment/edit-branchpay/:id" element={<EditBranchPayment />} />
+        <Route
+          path="/payment/edit-branchpay/:id"
+          element={<EditBranchPayment />}
+        />
         <Route path="/payment/createBranchPay" element={<AddBranchPayment />} />
         {/* payment advance  */}
         <Route path="/payment/advance-list" element={<AdvancePaymentList />} />
         <Route path="/payment/createAdvance" element={<AddAdvacnePayment />} />
-        <Route path="/payment/edit-advance/:id" element={<EditAdvancePayment />} />
+        <Route
+          path="/payment/edit-advance/:id"
+          element={<EditAdvancePayment />}
+        />
         {/* payment details  */}
         <Route path="/payment/details-list" element={<DetailsPaymentList />} />
         <Route path="/payment/createDetails" element={<AddDetailsPayment />} />
-        <Route path="/payment/edit-details/:id" element={<EditDetailsPayment />} />
+        <Route
+          path="/payment/edit-details/:id"
+          element={<EditDetailsPayment />}
+        />
         {/* todo  */}
         <Route path="/todo-list" element={<TodoList />} />
         <Route path="/edit-todo/:id" element={<EditTodo />} />
         <Route path="/createTodo" element={<CreateTodo />} />
+
+        {/* //Report */}
+        {/* //agencies */}
+        <Route path="/report-agencies-form" element={<AgenciesReportForm />} />
+        <Route
+          path="/report-agencies-form/view"
+          element={<AgenciesReportView />}
+        />
+        {/* //team */}
+        <Route path="/report-team-form" element={<TeamReportForm />} />
+        <Route path="/report-team-form/view" element={<TeamReportView />} />
+        <Route path="/report-driver-form" element={<DriverReportForm />} />
+        <Route path="/report-vendor-form" element={<VendorReportForm />} />
+        <Route path="/report-vechiles-form" element={<VechilesReportForm />} />
+        <Route
+          path="/report-vdetails-form"
+          element={<VechilesDetailsReportForm />}
+        />
+        <Route path="/report-tyre-form" element={<TyreReportForm />} />
+        <Route path="/report-services-form" element={<ServiceReportForm />} />
+        <Route path="/report-trip-form" element={<TripReportForm />} />
+        <Route path="/report-salary-form" element={<SalaryReportForm />} />
+        <Route path="/report-payment-form" element={<PaymentReportForm />} />
       </Routes>
     </>
   );
