@@ -65,6 +65,19 @@ import CreateAgencies from "./pages/master/agencies/CreateAgencies";
 import EditAgencies from "./pages/master/agencies/EditAgencies";
 import CreateVendor from "./pages/master/vendor/CreateVendor";
 import EditVendor from "./pages/master/vendor/EditVendor";
+import AgenciesReportForm from "./pages/reports/agencies/AgenciesReportForm";
+import TeamReportForm from "./pages/reports/team/TeamReportForm";
+import DriverReportForm from "./pages/reports/driver/DriverReportForm";
+import VechilesReportForm from "./pages/reports/vechiles/VechilesReportForm";
+import VendorReportForm from "./pages/reports/vendor/VendorReportForm";
+import VechilesDetailsReportForm from "./pages/reports/vechilesDetails/VechilesDetailsReportForm";
+import TyreReportForm from "./pages/reports/tyre/TyreReportForm";
+import ServiceReportForm from "./pages/reports/service/ServiceReportForm";
+import TripReportForm from "./pages/reports/trip/TripReportForm";
+import SalaryReportForm from "./pages/reports/salary/SalaryReportForm";
+import PaymentReportForm from "./pages/reports/payment/PaymentReportForm";
+import AgenciesReportView from "./pages/reports/agencies/AgenciesReportView";
+import TeamReportView from "./pages/reports/team/TeamReportView";
 const App = () => {
   return (
     <>
@@ -95,15 +108,15 @@ const App = () => {
         <Route path="/master/createTyremake" element={<CreateTyreMake />} />
 
         <Route path="/master/servicetype-list" element={<ServiceTypeList />} />
-        <Route path="/master/servicetype-edit/:id" element={<EditTeam />} />
-        <Route path="/master/createServicetype" element={<CreateTeam />} />
+        <Route path="/master/servicetype-edit/:id" element={<EditServiceType />} />
+        <Route path="/master/createServicetype" element={<CreateServiceType />} />
 
 
 
 
         <Route path="/master/team-list" element={<TeamList />} />
-        <Route path="/master/team-edit" element={<TeamList />} />
-        <Route path="/master/createTeam" element={<TeamList />} />
+        <Route path="/master/team-edit" element={<EditTeam />} />
+        <Route path="/master/createTeam" element={<CreateTeam />} />
 
 
         <Route path="/master/driver-list" element={<DriverList />} />
