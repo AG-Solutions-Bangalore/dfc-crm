@@ -186,30 +186,27 @@ const AddTrip = () => {
   }, []);
 
   useEffect(() => {
-    fetchVechileOtherData();
+    if (trip.trip_vehicle && trip.trip_vehicle !== "") {
+      fetchVechileOtherData();
+      fetchVechileDriver();
+    }
   }, [trip.trip_vehicle]);
 
   useEffect(() => {
-    fetchVendor();
+    if (
+      vehiclesOtherData.vehicle_branch &&
+      vehiclesOtherData.vehicle_branch !== ""
+    ) {
+      fetchVendor();
+      fetchAgency();
+      fetchDriver();
+    }
   }, [vehiclesOtherData.vehicle_branch]);
-
   useEffect(() => {
-    fetchAgency();
-  }, [vehiclesOtherData.vehicle_branch]);
-
-  useEffect(() => {
-    fetchVechile();
-  }, []);
-  useEffect(() => {
-    fetchAgencyRt();
+    if (trip.trip_agency && trip.trip_agency !== "") {
+      fetchAgencyRt();
+    }
   }, [trip.trip_agency]);
-
-  useEffect(() => {
-    fetchDriver();
-  }, [vehiclesOtherData.vehicle_branch]);
-  useEffect(() => {
-    fetchVechileDriver();
-  }, [trip.trip_vehicle]);
 
   const validateOnlyDigits = (inputtxt) => {
     var phoneno = /^\d+$/;
@@ -291,7 +288,9 @@ const AddTrip = () => {
       trip_year: "2023-24",
       trip_vehicle: trip.trip_vehicle,
       trip_agency: trip.trip_agency,
-      trip_hsd: Math.round(agenciesRT.agency_rt_km/vehiclesOtherData.vehicle_mileage),
+      trip_hsd: Math.round(
+        agenciesRT.agency_rt_km / vehiclesOtherData.vehicle_mileage
+      ),
       trip_advance: trip.trip_advance,
       trip_hsd_supplied: trip.trip_hsd_supplied,
       trip_supplier: trip.trip_supplier,
@@ -340,8 +339,7 @@ const AddTrip = () => {
     </label>
   );
 
-  const inputClassSelect =
-    "w-full px-3 py-2 text-xs border rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 border-blue-500";
+ 
   const inputClass =
     "w-full px-3 py-2 text-xs border rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-500 border-blue-500";
   return (
@@ -365,7 +363,7 @@ const AddTrip = () => {
           id="addIndiv"
           className="w-full max-w-7xl  rounded-lg mx-auto p-4 space-y-6 "
         >
-          <div className="grid grid-cols-1  md:grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1  md:grid-cols-1 lg:grid-cols-4 gap-6">
             {/* date  */}
             <div>
               <FormLabel required>Date</FormLabel>
@@ -534,18 +532,22 @@ const AddTrip = () => {
             </div>
 
             {/* Fixed HSD  */}
-            <div className=" col-span-0 lg:col-span-3">
+            <div >
               <FormLabel>Fixed HSD</FormLabel>
               <input
                 type="text"
                 name="trip_hsd"
-                value={Math.round(agenciesRT.agency_rt_km/vehiclesOtherData.vehicle_mileage)}
+                value={
+                  Math.round(
+                    agenciesRT.agency_rt_km / vehiclesOtherData.vehicle_mileage
+                  ) || ""
+                }
                 onChange={(e) => onInputChange(e)}
                 className={inputClass}
               />
             </div>
             {/* HSD Supplied  */}
-            <div className=" col-span-0 lg:col-span-3">
+            <div>
               <FormLabel>HSD Supplied</FormLabel>
               <input
                 type="text"
@@ -556,7 +558,7 @@ const AddTrip = () => {
               />
             </div>
             {/* Advance  */}
-            <div className=" col-span-0 lg:col-span-3">
+            <div >
               <FormLabel>Advance</FormLabel>
               <input
                 type="text"
@@ -578,8 +580,7 @@ const AddTrip = () => {
               />
             </div>
           </div>
-          
-          
+
           {/* Form Actions */}
           <div className="flex flex-wrap gap-4 justify-start">
             <button

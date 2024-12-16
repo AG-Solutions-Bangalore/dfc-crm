@@ -154,7 +154,7 @@ const Menuitems = () => [
     id: uniqueId(),
     title: "Trip",
     icon: IconReceipt,
-    href: "/trip-list",
+    href: "/form-trip",
   },
   {
     navlabel: true,
