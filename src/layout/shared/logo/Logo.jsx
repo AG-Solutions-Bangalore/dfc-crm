@@ -21,7 +21,7 @@ const Logo = ({ isCollapsed }) => {
     <>
       {!isCollapsed ? (
         <LinkStyled to="/home">
-          <img src={logosmall} alt="logo" className="h-16" priority />
+          <img src={'https://agsl.online/static/media/header.16b93a3d.png'} alt="logo" className="h-16" priority />
         </LinkStyled>
       ) : (
         <LargeLinkStyled to="/home">
