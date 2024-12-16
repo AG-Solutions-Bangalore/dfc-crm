@@ -52,7 +52,6 @@ import CreateBranch from "./pages/master/branch/CreateBranch";
 import BrandEdit from "./pages/master/branch/BrandEdit";
 import CreateTyreMake from "./pages/master/tyreMake/CreateTyreMake";
 import EditTyreMake from "./pages/master/tyreMake/EditTyreMake";
-<<<<<<< HEAD
 import FormTrip from "./pages/trip/FormTrip";
 import AddTrip from "./pages/trip/AddTrip";
 import EditTrip from "./pages/trip/EditTrip";
@@ -66,22 +65,6 @@ import CreateAgencies from "./pages/master/agencies/CreateAgencies";
 import EditAgencies from "./pages/master/agencies/EditAgencies";
 import CreateVendor from "./pages/master/vendor/CreateVendor";
 import EditVendor from "./pages/master/vendor/EditVendor";
-=======
-import AgenciesReportForm from "./pages/reports/agencies/AgenciesReportForm";
-import TeamReportForm from "./pages/reports/team/TeamReportForm";
-import DriverReportForm from "./pages/reports/driver/DriverReportForm";
-import VechilesReportForm from "./pages/reports/vechiles/VechilesReportForm";
-import VendorReportForm from "./pages/reports/vendor/VendorReportForm";
-import VechilesDetailsReportForm from "./pages/reports/vechilesDetails/VechilesDetailsReportForm";
-import TyreReportForm from "./pages/reports/tyre/TyreReportForm";
-import ServiceReportForm from "./pages/reports/service/ServiceReportForm";
-import TripReportForm from "./pages/reports/trip/TripReportForm";
-import SalaryReportForm from "./pages/reports/salary/SalaryReportForm";
-import PaymentReportForm from "./pages/reports/payment/PaymentReportForm";
-import AgenciesReportView from "./pages/reports/agencies/AgenciesReportView";
-import TeamReportView from "./pages/reports/team/TeamReportView";
-
->>>>>>> 8ceb08ccf98a3f7cdfe97cf23857a0d9e4d1c52f
 const App = () => {
   return (
     <>
