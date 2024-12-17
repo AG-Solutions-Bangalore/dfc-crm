@@ -93,7 +93,10 @@ function VechilesDetailsReportForm() {
       fontSize: "0.75rem",
     }),
   };
-
+  const handleDetailview = () => {
+    navigate("/report-vdetails-form/view");
+    localStorage.setItem("vehicle_reg_no", downloadVehicle.vehicle_reg_no);
+  };
   return (
     <Layout>
       <div className="  bg-[#FFFFFF] p-2   rounded-lg">
@@ -132,7 +135,10 @@ function VechilesDetailsReportForm() {
             </div>
 
             <div className="flex justify-center py-4">
-              <button className=" text-center text-sm font-[400 ] cursor-pointer hover:animate-pulse w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md ml-4">
+              <button
+                className=" text-center text-sm font-[400 ] cursor-pointer hover:animate-pulse w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md ml-4"
+                onClick={handleDetailview}
+              >
                 {" "}
                 View
               </button>

@@ -16,6 +16,7 @@ import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import { toast } from "react-toastify";
 import moment from "moment";
+import { NumericFormat } from "react-number-format";
 const printStyles = `
   @media print {
 
@@ -38,10 +39,10 @@ const printStyles = `
 
   }
 `;
-const VechilesReportView = () => {
+const PaymentReportView = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [vechiles, setVechiles] = useState([]);
+  const [payment, setPayment] = useState([]);
   const [loading, setLoading] = useState(true);
   const componentRef = React.useRef();
   const tableRef = useRef(null);
@@ -103,23 +104,31 @@ const VechilesReportView = () => {
     };
   }, []);
   useEffect(() => {
-    const fetchVechilesData = async () => {
+    const fetchPaymentData = async () => {
       setLoading(true);
       try {
         const token = localStorage.getItem("token");
         let data = {
-          vehicle_branch: localStorage.getItem("vehicle_branch"),
-          vehicle_company: localStorage.getItem("vehicle_company"),
+          payment_details_date_from: localStorage.getItem(
+            "payment_details_date_from"
+          ),
+          payment_details_date_to: localStorage.getItem(
+            "payment_details_date_to"
+          ),
+          payment_details_credit: localStorage.getItem(
+            "payment_details_credit"
+          ),
         };
+
         const Response = await axios.post(
-          `${BASE_URL}/api/fetch-vehicle-report`,
+          `${BASE_URL}/api/fetch-payments-details-report`,
           data,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
 
-        setVechiles(Response.data.vehicle);
+        setPayment(Response.data.payment);
         console.log(Response.data, "resposne");
         setLoading(false);
       } catch (error) {
@@ -128,7 +137,7 @@ const VechilesReportView = () => {
       }
     };
 
-    fetchVechilesData();
+    fetchPaymentData();
   }, []);
 
   if (loading) {
@@ -178,12 +187,15 @@ const VechilesReportView = () => {
   const onSubmit = (e) => {
     e.preventDefault();
     let data = {
-      vehicle_company: localStorage.getItem("vehicle_company"),
-      vehicle_branch: localStorage.getItem("vehicle_branch"),
+      payment_details_date_to: localStorage.getItem("payment_details_date_to"),
+      payment_details_date_from: localStorage.getItem(
+        "payment_details_date_from"
+      ),
+      payment_details_credit: localStorage.getItem("payment_details_credit"),
     };
 
     axios({
-      url: BASE_URL + "/api/download-vehicle-report",
+      url: BASE_URL + "/api/download-payments-details-report",
       method: "POST",
       data,
       headers: {
@@ -195,13 +207,13 @@ const VechilesReportView = () => {
         const url = window.URL.createObjectURL(new Blob([res.data]));
         const link = document.createElement("a");
         link.href = url;
-        link.setAttribute("download", "vehicle.csv");
+        link.setAttribute("download", "paymentDetails.csv");
         document.body.appendChild(link);
         link.click();
-        toast.success("vehicle Report is Downloaded Successfully");
+        toast.success("paymentDetails Report is Downloaded Successfully");
       })
       .catch((err) => {
-        toast.error("vehicle Report is Not Downloaded");
+        toast.error("paymentDetails Report is Not Downloaded");
       });
   };
   return (
@@ -211,7 +223,7 @@ const VechilesReportView = () => {
           <h2 className="px-5 text-[black] text-lg flex flex-row justify-between items-center rounded-xl p-2">
             <div className="flex items-center gap-2">
               <IconInfoCircle className="w-4 h-4" />
-              <span> Vehicle Summary</span>
+              <span>Payment Details Summary</span>
             </div>
             <div className="flex items-center space-x-4">
               <IconFileTypeXls
@@ -231,7 +243,7 @@ const VechilesReportView = () => {
               />
               <IconArrowBack
                 className="cursor-pointer text-gray-600 hover:text-red-600"
-                onClick={() => navigate("/report-vechiles-form")}
+                onClick={() => navigate("/report-agencies-form")}
                 title="Go Back"
               />
             </div>
@@ -244,66 +256,47 @@ const VechilesReportView = () => {
           >
             <div className="mb-4 width">
               <h3 className="text-xl font-bold mb-2 text-center">
-                VEHICLE SUMMARY
+                PAYMENT DETAILS SUMMARY
               </h3>
-              {vechiles.length > 0 ? (
+              {payment.length > 0 ? (
                 <table className="w-full border-collapse">
                   <thead>
                     <tr className="bg-gray-200">
-                      {[
-                        "Register No",
-                        "Vendor Type",
-                        "Company",
-                        "Branch",
-                        "Modal Year",
-                        "Insurance Due",
-                        "Permit Due",
-                        "FC Due",
-                      ].map((header) => (
-                        <th
-                          key={header}
-                          className="p-1 text-xs border border-black"
-                        >
-                          {header}
-                        </th>
-                      ))}
+                      {["Date", "Voucher", "Debit", "Credit", "Amount"].map(
+                        (header) => (
+                          <th key={header} className="p-2 border border-black">
+                            {header}
+                          </th>
+                        )
+                      )}
                     </tr>
                   </thead>
                   <tbody>
-                    {vechiles.map((item, index) => (
+                    {payment.map((item, index) => (
                       <tr key={index}>
-                        <td className="p-1 text-xs border border-black text-center">
-                          {item.reg_no || "N/A"}
+                        <td className="p-2 border border-black">
+                          {moment(item.payment_details_date).format(
+                            "DD-MM-YYYY"
+                          )}
                         </td>
-                        <td className="p-1 text-xs border border-black">
-                          {item.vehicle_type || "N/A"}
+                        <td className="p-2 border border-black">
+                          {item.payment_details_voucher_type || "N/A"}
                         </td>
-                        <td className="p-1 text-xs border border-black">
-                          {item.vehicle_company || "N/A"}
+                        <td className="p-2 border border-black">
+                          {item.payment_details_debit || "N/A"}
                         </td>
-                        <td className="p-1 text-xs border border-black">
-                          {item.vehicle_branch || "N/A"}
-                        </td>
-                        <td className="p-1 text-xs border border-black text-center">
-                          {item.mfg_year || "N/A"}
+                        <td className="p-2 border border-black">
+                          {item.payment_details_credit || "N/A"}
                         </td>
 
-                        <td className="p-1 text-xs border border-black text-center">
-                          {item.ins_due == null
-                            ? ""
-                            : moment(item.ins_due).format("DD-MM-YYYY") ||
-                              "N/A"}
-                        </td>
-                        <td className="p-1 text-xs border border-black text-center">
-                          {item.permit_due == null
-                            ? ""
-                            : moment(item.permit_due).format("DD-MM-YYYY") ||
-                              "N/A"}
-                        </td>
-                        <td className="p-1 text-xs border border-black text-center">
-                          {item.fc_due == null
-                            ? ""
-                            : moment(item.fc_due).format("DD-MM-YYYY") || "N/A"}
+                        <td className="p-2 border border-black">
+                          <NumericFormat
+                            value={item.payment_details_amount}
+                            displayType="text"
+                            thousandSeparator={true}
+                            prefix="₹"
+                            thousandsGroupStyle="lakh"
+                          />
                         </td>
                       </tr>
                     ))}
@@ -311,7 +304,7 @@ const VechilesReportView = () => {
                 </table>
               ) : (
                 <div className="text-center text-gray-500 py-4">
-                  No Tyre Data Available
+                  No Payment Data Available
                 </div>
               )}
             </div>
@@ -322,4 +315,4 @@ const VechilesReportView = () => {
   );
 };
 
-export default VechilesReportView;
+export default PaymentReportView;

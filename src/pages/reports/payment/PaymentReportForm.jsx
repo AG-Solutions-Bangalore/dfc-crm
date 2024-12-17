@@ -106,6 +106,22 @@ function PaymentReportForm() {
       {required && <span className="text-red-500 ml-1">*</span>}
     </label>
   );
+
+  const handleview = () => {
+    navigate("/report-payment-form/view");
+    localStorage.setItem(
+      "payment_details_date_from",
+      downloadPaymentDetails.payment_details_date_from
+    );
+    localStorage.setItem(
+      "payment_details_date_to",
+      downloadPaymentDetails.payment_details_date_to
+    );
+    localStorage.setItem(
+      "payment_details_credit",
+      downloadPaymentDetails.payment_details_credit
+    );
+  };
   return (
     <Layout>
       <div className="  bg-[#FFFFFF] p-2   rounded-lg">
@@ -113,7 +129,7 @@ function PaymentReportForm() {
           <h2 className=" px-5 text-[black] text-lg   flex flex-row  justify-between items-center  rounded-xl p-2 ">
             <div className="flex  items-center gap-2">
               <IconInfoCircle className="w-4 h-4" />
-              <span>Payment </span>
+              <span>Payment</span>
             </div>
           </h2>
         </div>
@@ -173,7 +189,10 @@ function PaymentReportForm() {
                 {" "}
                 Download
               </button>
-              <button className=" text-center text-sm font-[400 ] cursor-pointer hover:animate-pulse w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md ml-4">
+              <button
+                className=" text-center text-sm font-[400 ] cursor-pointer hover:animate-pulse w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md ml-4"
+                onClick={handleview}
+              >
                 {" "}
                 View
               </button>

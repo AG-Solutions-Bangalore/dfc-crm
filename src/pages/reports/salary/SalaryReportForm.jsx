@@ -155,6 +155,23 @@ function SalaryReportForm() {
       {required && <span className="text-red-500 ml-1">*</span>}
     </label>
   );
+
+  const handleMultipleview = () => {
+    navigate("/report-salary-form/multiple/view");
+    localStorage.setItem("trip_date_from", downloadSalary.trip_date_from);
+    localStorage.setItem("trip_date_to", downloadSalary.trip_date_to);
+    localStorage.setItem("trip_company", downloadSalary.trip_company);
+    localStorage.setItem("trip_branch", downloadSalary.trip_branch);
+    localStorage.setItem("trip_driver", downloadSalary.trip_driver);
+  };
+  const handleview = () => {
+    navigate("/report-salary-form/view");
+    localStorage.setItem("trip_date_from", downloadSalary.trip_date_from);
+    localStorage.setItem("trip_date_to", downloadSalary.trip_date_to);
+    localStorage.setItem("trip_company", downloadSalary.trip_company);
+    localStorage.setItem("trip_branch", downloadSalary.trip_branch);
+    localStorage.setItem("trip_driver", downloadSalary.trip_driver);
+  };
   return (
     <Layout>
       <div className="  bg-[#FFFFFF] p-2   rounded-lg">
@@ -263,7 +280,10 @@ function SalaryReportForm() {
               >
                 Single Download
               </button>
-              <button className="text-center text-sm font-medium cursor-pointer hover:animate-pulse w-full sm:w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md">
+              <button
+                className="text-center text-sm font-medium cursor-pointer hover:animate-pulse w-full sm:w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md"
+                onClick={handleview}
+              >
                 Single View
               </button>
               <button
@@ -272,7 +292,10 @@ function SalaryReportForm() {
               >
                 Multiple Download
               </button>
-              <button className="text-center text-sm font-medium cursor-pointer hover:animate-pulse w-full sm:w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md">
+              <button
+                className="text-center text-sm font-medium cursor-pointer hover:animate-pulse w-full sm:w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md"
+                onClick={handleMultipleview}
+              >
                 Multiple View
               </button>
             </div>
