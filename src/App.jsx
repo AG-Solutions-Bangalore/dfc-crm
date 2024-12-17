@@ -78,6 +78,10 @@ import SalaryReportForm from "./pages/reports/salary/SalaryReportForm";
 import PaymentReportForm from "./pages/reports/payment/PaymentReportForm";
 import AgenciesReportView from "./pages/reports/agencies/AgenciesReportView";
 import TeamReportView from "./pages/reports/team/TeamReportView";
+import DriverReportView from "./pages/reports/driver/DriverReportView";
+import VendorReportView from "./pages/reports/vendor/VendorReportView";
+import VechilesReportView from "./pages/reports/vechiles/VechilesReportView";
+
 const App = () => {
   return (
     <>
@@ -202,9 +206,14 @@ const App = () => {
         {/* //team */}
         <Route path="/report-team-form" element={<TeamReportForm />} />
         <Route path="/report-team-form/view" element={<TeamReportView />} />
+        {/* //driver */}
         <Route path="/report-driver-form" element={<DriverReportForm />} />
+        <Route path="/report-driver-form/view" element={<DriverReportView />} />
+        {/* //vendor */}
         <Route path="/report-vendor-form" element={<VendorReportForm />} />
+        <Route path="/report-vendor-form/view" element={<VendorReportView />} />
         <Route path="/report-vechiles-form" element={<VechilesReportForm />} />
+        <Route path="/report-vechiles-form/view" element={<VechilesReportView />} />
         <Route
           path="/report-vdetails-form"
           element={<VechilesDetailsReportForm />}

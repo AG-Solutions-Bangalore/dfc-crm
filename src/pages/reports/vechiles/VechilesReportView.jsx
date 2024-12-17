@@ -15,6 +15,7 @@ import { IconFileTypePdf } from "@tabler/icons-react";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import { toast } from "react-toastify";
+import moment from "moment";
 const printStyles = `
   @media print {
 
@@ -37,10 +38,10 @@ const printStyles = `
 
   }
 `;
-const TeamReportView = () => {
+const VechilesReportView = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [team, setTeam] = useState([]);
+  const [vechiles, setVechiles] = useState([]);
   const [loading, setLoading] = useState(true);
   const componentRef = React.useRef();
   const tableRef = useRef(null);
@@ -102,23 +103,23 @@ const TeamReportView = () => {
     };
   }, []);
   useEffect(() => {
-    const fetchVehicleData = async () => {
+    const fetchVechilesData = async () => {
       setLoading(true);
       try {
         const token = localStorage.getItem("token");
         let data = {
-          user_branch: localStorage.getItem("user_branch"),
-          user_company: localStorage.getItem("user_company"),
+          vehicle_branch: localStorage.getItem("vehicle_branch"),
+          vehicle_company: localStorage.getItem("vehicle_company"),
         };
         const Response = await axios.post(
-          `${BASE_URL}/api/fetch-team-report`,
+          `${BASE_URL}/api/fetch-vehicle-report`,
           data,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
 
-        setTeam(Response.data.team);
+        setVechiles(Response.data.vehicle);
         console.log(Response.data, "resposne");
         setLoading(false);
       } catch (error) {
@@ -127,7 +128,7 @@ const TeamReportView = () => {
       }
     };
 
-    fetchVehicleData();
+    fetchVechilesData();
   }, []);
 
   if (loading) {
@@ -177,12 +178,12 @@ const TeamReportView = () => {
   const onSubmit = (e) => {
     e.preventDefault();
     let data = {
-      user_branch: localStorage.getItem("user_branch"),
-      user_company: localStorage.getItem("user_company"),
+      vehicle_company: localStorage.getItem("vehicle_company"),
+      vehicle_branch: localStorage.getItem("vehicle_branch"),
     };
 
     axios({
-      url: BASE_URL + "/api/download-team-report",
+      url: BASE_URL + "/api/download-vehicle-report",
       method: "POST",
       data,
       headers: {
@@ -194,13 +195,13 @@ const TeamReportView = () => {
         const url = window.URL.createObjectURL(new Blob([res.data]));
         const link = document.createElement("a");
         link.href = url;
-        link.setAttribute("download", "Report.csv");
+        link.setAttribute("download", "vehicle.csv");
         document.body.appendChild(link);
         link.click();
-        toast.success("Team Report is Downloaded Successfully");
+        toast.success("vehicle Report is Downloaded Successfully");
       })
       .catch((err) => {
-        toast.error("Team Report is Not Downloaded");
+        toast.error("vehicle Report is Not Downloaded");
       });
   };
   return (
@@ -210,7 +211,7 @@ const TeamReportView = () => {
           <h2 className="px-5 text-[black] text-lg flex flex-row justify-between items-center rounded-xl p-2">
             <div className="flex items-center gap-2">
               <IconInfoCircle className="w-4 h-4" />
-              <span> Team Summary</span>
+              <span> Vehicle Summary</span>
             </div>
             <div className="flex items-center space-x-4">
               <IconFileTypeXls
@@ -243,22 +244,21 @@ const TeamReportView = () => {
           >
             <div className="mb-4 width">
               <h3 className="text-xl font-bold mb-2 text-center">
-                TEAM SUMMARY
+                VEHICLE SUMMARY
               </h3>
-              {team.length > 0 ? (
+              {vechiles.length > 0 ? (
                 <table className="w-full border-collapse">
                   <thead>
                     <tr className="bg-gray-200">
                       {[
-                        "Full Name",
-                        "Branch",
+                        "Register No",
+                        "Vendor Type",
                         "Company",
-                        "Mobile",
-                        "Email",
-                        "Address",
-                        "Salary",
-                        "User Type",
-                        "Status",
+                        "Branch",
+                        "Modal Year",
+                        "Insurance Due",
+                        "Permit Due",
+                        "FC Due",
                       ].map((header) => (
                         <th key={header} className="p-2 border border-black">
                           {header}
@@ -267,34 +267,41 @@ const TeamReportView = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {team.map((item, index) => (
+                    {vechiles.map((item, index) => (
                       <tr key={index}>
                         <td className="p-2 border border-black">
-                          {item.full_name || "N/A"}
+                          {item.reg_no || "N/A"}
                         </td>
                         <td className="p-2 border border-black">
-                          {item.user_branch || "N/A"}
+                          {item.vehicle_type || "N/A"}
                         </td>
                         <td className="p-2 border border-black">
-                          {item.user_company || "N/A"}
+                          {item.vehicle_company || "N/A"}
                         </td>
                         <td className="p-2 border border-black">
-                          {item.mobile || "N/A"}
+                          {item.vehicle_branch || "N/A"}
                         </td>
                         <td className="p-2 border border-black">
-                          {item.email || "N/A"}
+                          {item.mfg_year || "N/A"}
+                        </td>
+
+                        <td className="p-2 border border-black">
+                          {item.ins_due == null
+                            ? ""
+                            : moment(item.ins_due).format("DD-MM-YYYY") ||
+                              "N/A"}
                         </td>
                         <td className="p-2 border border-black">
-                          {item.user_address || "N/A"}
+                          {item.permit_due == null
+                            ? ""
+                            : moment(item.permit_due).format("DD-MM-YYYY") ||
+                              "N/A"}
                         </td>
                         <td className="p-2 border border-black">
-                          {item.user_salary || "N/A"}
-                        </td>
-                        <td className="p-2 border border-black">
-                          {item.user_type_id || "N/A"}
-                        </td>
-                        <td className="p-2 border border-black">
-                          {item.user_status || "N/A"}
+                          {item.fc_due == null
+                            ? ""
+                            : moment(item.fc_due).format("DD-MM-YYYY") ||
+                              "N/A"}
                         </td>
                       </tr>
                     ))}
@@ -313,4 +320,4 @@ const TeamReportView = () => {
   );
 };
 
-export default TeamReportView;
+export default VechilesReportView;

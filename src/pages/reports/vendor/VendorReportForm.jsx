@@ -121,7 +121,13 @@ function VendorReportForm() {
       fontSize: "0.75rem",
     }),
   };
-
+  const handleview = () => {
+    navigate("/report-vendor-form/view");
+    localStorage.setItem("vendor_branch", downloadVendor.vendor_branch);
+    localStorage.setItem("vendor_type", downloadVendor.vendor_type);
+  };
+  // vendor_branch: "",
+  // vendor_type: "",
   return (
     <Layout>
       <div className="  bg-[#FFFFFF] p-2   rounded-lg">
@@ -136,7 +142,7 @@ function VendorReportForm() {
         <hr />
         <div className="p-4">
           <form id="dowRecp" autoComplete="off">
-            <div className="grid grid-cols-1  gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2  gap-4">
               <SelectInput
                 label="Branch"
                 name="vendor_branch"
@@ -184,7 +190,10 @@ function VendorReportForm() {
                 {" "}
                 Download
               </button>
-              <button className=" text-center text-sm font-[400 ] cursor-pointer hover:animate-pulse w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md ml-4">
+              <button
+                className=" text-center text-sm font-[400 ] cursor-pointer hover:animate-pulse w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md ml-4"
+                onClick={handleview}
+              >
                 {" "}
                 View
               </button>
