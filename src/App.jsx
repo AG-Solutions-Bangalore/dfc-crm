@@ -78,6 +78,9 @@ import SalaryReportForm from "./pages/reports/salary/SalaryReportForm";
 import PaymentReportForm from "./pages/reports/payment/PaymentReportForm";
 import AgenciesReportView from "./pages/reports/agencies/AgenciesReportView";
 import TeamReportView from "./pages/reports/team/TeamReportView";
+import ViewVechile from "./pages/vehicles/ViewVechile";
+import ChangeTyre from "./pages/vehicles/ChangeTyre";
+import ChangePkm from "./pages/vehicles/ChangePkm";
 const App = () => {
   return (
     <>
@@ -140,6 +143,9 @@ const App = () => {
         <Route path="/createVechiles" element={<AddVechiles />} />
         <Route path="/createTyre" element={<AddTyre />} />
         <Route path="/vechile-edit/:id" element={<EditVechiles />} />
+        <Route path="/vechile-view/:id" element={<ViewVechile />} />
+        <Route path="/changeTyre" element={<ChangeTyre />} />
+        <Route path="/changePkm" element={<ChangePkm />} />
         {/* tyre  */}
         {/* purchase tyre  */}
         <Route path="/tyre/purchase-list" element={<PurchaseTyreList />} />

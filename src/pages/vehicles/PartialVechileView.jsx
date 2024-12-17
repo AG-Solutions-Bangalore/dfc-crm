@@ -2,67 +2,66 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import moment from 'moment';
 import { InformationCircleIcon, TruckIcon } from '@heroicons/react/24/outline';
-import BASE_URL from '@/config/BaseUrl';
+import BASE_URL from '../../base/BaseUrl';
 
-const PartialVehicleView = ({ vehicleId }) => {
-  const [vehicle, setVehicle] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    const fetchVehicleDetails = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        const response = await axios.get(
-          `${BASE_URL}/api/web-fetch-vehicles-by-id/${vehicleId}`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
-        setVehicle(response.data.vehicles);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching Vehicle View details:", error);
-        setError(error);
-        setLoading(false);
+const PartialVechileView = ({vehicleId}) => {
+    const [vehicle, setVehicle] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+  
+    useEffect(() => {
+      const fetchVehicleDetails = async () => {
+        try {
+          const token = localStorage.getItem("token");
+          const response = await axios.get(
+            `${BASE_URL}/api/web-fetch-vehicles-by-id/${vehicleId}`,
+            {
+              headers: { Authorization: `Bearer ${token}` },
+            }
+          );
+          setVehicle(response.data.vehicles);
+          setLoading(false);
+        } catch (error) {
+          console.error("Error fetching Vehicle View details:", error);
+          setError(error);
+          setLoading(false);
+        }
+      };
+  
+      if (vehicleId) {
+        fetchVehicleDetails();
       }
-    };
-
-    if (vehicleId) {
-      fetchVehicleDetails();
+    }, [vehicleId]);
+  
+    if (loading) {
+      return (
+        <div className="flex justify-center items-center h-full">
+          <TruckIcon className="w-12 h-12 animate-pulse text-blue-500" />
+        </div>
+      );
     }
-  }, [vehicleId]);
-
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center h-full">
-        <TruckIcon className="w-12 h-12 animate-pulse text-blue-500" />
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="p-4 bg-red-50 border border-red-200 rounded">
-        <p className="text-red-600 flex items-center">
-          <InformationCircleIcon className="w-6 h-6 mr-2 text-red-500" />
-          Unable to fetch vehicle details
-        </p>
-      </div>
-    );
-  }
-
-  if (!vehicle) {
-    return (
-      <div className="p-4 bg-yellow-50 border border-yellow-200 rounded">
-        <p className="text-yellow-600 flex items-center">
-          <InformationCircleIcon className="w-6 h-6 mr-2 text-yellow-500" />
-          No vehicle selected
-        </p>
-      </div>
-    );
-  }
-
+  
+    if (error) {
+      return (
+        <div className="p-4 bg-red-50 border border-red-200 rounded">
+          <p className="text-red-600 flex items-center">
+            <InformationCircleIcon className="w-6 h-6 mr-2 text-red-500" />
+            Unable to fetch vehicle details
+          </p>
+        </div>
+      );
+    }
+  
+    if (!vehicle) {
+      return (
+        <div className="p-4 bg-yellow-50 border border-yellow-200 rounded">
+          <p className="text-yellow-600 flex items-center">
+            <InformationCircleIcon className="w-6 h-6 mr-2 text-yellow-500" />
+            No vehicle selected
+          </p>
+        </div>
+      );
+    }
   return (
     <div className="bg-white shadow-md rounded-lg p-6">
       <div className="mb-4">
@@ -149,7 +148,7 @@ const PartialVehicleView = ({ vehicleId }) => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default PartialVehicleView;
+export default PartialVechileView

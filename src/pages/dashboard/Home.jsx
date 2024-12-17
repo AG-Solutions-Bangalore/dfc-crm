@@ -110,7 +110,6 @@ const Home = () => {
   }, []);
 
   if (loading) return <div><Loader/></div>;
-  if (error) return <div>Error loading dashboard</div>;
   return (
   <Layout>
      <div className="container rounded-lg mx-auto px-4 py-6 bg-white">
