@@ -121,7 +121,11 @@ function DriverReportForm() {
       fontSize: "0.75rem",
     }),
   };
-
+  const handleview = () => {
+    navigate("/report-driver-form/view");
+    localStorage.setItem("agency_branch", downloadDriver.agency_branch);
+    localStorage.setItem("user_company", downloadDriver.user_company);
+  };
   return (
     <Layout>
       <div className="  bg-[#FFFFFF] p-2   rounded-lg">
@@ -187,7 +191,10 @@ function DriverReportForm() {
                 {" "}
                 Download
               </button>
-              <button className=" text-center text-sm font-[400 ] cursor-pointer hover:animate-pulse w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md ml-4">
+              <button
+                className=" text-center text-sm font-[400 ] cursor-pointer hover:animate-pulse w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md ml-4"
+                onClick={handleview}
+              >
                 {" "}
                 View
               </button>

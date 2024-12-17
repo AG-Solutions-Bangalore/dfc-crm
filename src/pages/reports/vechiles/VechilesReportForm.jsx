@@ -121,7 +121,11 @@ function VechilesReportForm() {
       fontSize: "0.75rem",
     }),
   };
-
+  const handleview = () => {
+    navigate("/report-vechiles-form/view");
+    localStorage.setItem("vehicle_branch", downloadVehicle.vehicle_branch);
+    localStorage.setItem("vehicle_company", downloadVehicle.vehicle_company);
+  };
   return (
     <Layout>
       <div className="  bg-[#FFFFFF] p-2   rounded-lg">
@@ -187,7 +191,10 @@ function VechilesReportForm() {
                 {" "}
                 Download
               </button>
-              <button className=" text-center text-sm font-[400 ] cursor-pointer hover:animate-pulse w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md ml-4">
+              <button
+                className=" text-center text-sm font-[400 ] cursor-pointer hover:animate-pulse w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md ml-4"
+                onClick={handleview}
+              >
                 {" "}
                 View
               </button>

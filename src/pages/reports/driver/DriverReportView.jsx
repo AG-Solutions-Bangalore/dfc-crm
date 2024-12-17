@@ -37,10 +37,10 @@ const printStyles = `
 
   }
 `;
-const TeamReportView = () => {
+const DriverReportView = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [team, setTeam] = useState([]);
+  const [driver, setDriver] = useState([]);
   const [loading, setLoading] = useState(true);
   const componentRef = React.useRef();
   const tableRef = useRef(null);
@@ -107,18 +107,18 @@ const TeamReportView = () => {
       try {
         const token = localStorage.getItem("token");
         let data = {
-          user_branch: localStorage.getItem("user_branch"),
+          agency_branch: localStorage.getItem("agency_branch"),
           user_company: localStorage.getItem("user_company"),
         };
         const Response = await axios.post(
-          `${BASE_URL}/api/fetch-team-report`,
+          `${BASE_URL}/api/fetch-driver-report`,
           data,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
 
-        setTeam(Response.data.team);
+        setDriver(Response.data.driver);
         console.log(Response.data, "resposne");
         setLoading(false);
       } catch (error) {
@@ -177,12 +177,12 @@ const TeamReportView = () => {
   const onSubmit = (e) => {
     e.preventDefault();
     let data = {
-      user_branch: localStorage.getItem("user_branch"),
+      agency_branch: localStorage.getItem("agency_branch"),
       user_company: localStorage.getItem("user_company"),
     };
 
     axios({
-      url: BASE_URL + "/api/download-team-report",
+      url: BASE_URL + "/api/download-driver-report",
       method: "POST",
       data,
       headers: {
@@ -197,10 +197,10 @@ const TeamReportView = () => {
         link.setAttribute("download", "Report.csv");
         document.body.appendChild(link);
         link.click();
-        toast.success("Team Report is Downloaded Successfully");
+        toast.success("Driver Report is Downloaded Successfully");
       })
       .catch((err) => {
-        toast.error("Team Report is Not Downloaded");
+        toast.error("Driver Report is Not Downloaded");
       });
   };
   return (
@@ -210,7 +210,7 @@ const TeamReportView = () => {
           <h2 className="px-5 text-[black] text-lg flex flex-row justify-between items-center rounded-xl p-2">
             <div className="flex items-center gap-2">
               <IconInfoCircle className="w-4 h-4" />
-              <span> Team Summary</span>
+              <span> Driver Summary</span>
             </div>
             <div className="flex items-center space-x-4">
               <IconFileTypeXls
@@ -243,9 +243,9 @@ const TeamReportView = () => {
           >
             <div className="mb-4 width">
               <h3 className="text-xl font-bold mb-2 text-center">
-                TEAM SUMMARY
+                DRIVER SUMMARY
               </h3>
-              {team.length > 0 ? (
+              {driver.length > 0 ? (
                 <table className="w-full border-collapse">
                   <thead>
                     <tr className="bg-gray-200">
@@ -254,11 +254,7 @@ const TeamReportView = () => {
                         "Branch",
                         "Company",
                         "Mobile",
-                        "Email",
-                        "Address",
-                        "Salary",
-                        "User Type",
-                        "Status",
+                        "Vehicle Type",
                       ].map((header) => (
                         <th key={header} className="p-2 border border-black">
                           {header}
@@ -267,7 +263,7 @@ const TeamReportView = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {team.map((item, index) => (
+                    {driver.map((item, index) => (
                       <tr key={index}>
                         <td className="p-2 border border-black">
                           {item.full_name || "N/A"}
@@ -282,19 +278,7 @@ const TeamReportView = () => {
                           {item.mobile || "N/A"}
                         </td>
                         <td className="p-2 border border-black">
-                          {item.email || "N/A"}
-                        </td>
-                        <td className="p-2 border border-black">
-                          {item.user_address || "N/A"}
-                        </td>
-                        <td className="p-2 border border-black">
-                          {item.user_salary || "N/A"}
-                        </td>
-                        <td className="p-2 border border-black">
-                          {item.user_type_id || "N/A"}
-                        </td>
-                        <td className="p-2 border border-black">
-                          {item.user_status || "N/A"}
+                          {item.vehicle_type || "N/A"}
                         </td>
                       </tr>
                     ))}
@@ -313,4 +297,4 @@ const TeamReportView = () => {
   );
 };
 
-export default TeamReportView;
+export default DriverReportView;
