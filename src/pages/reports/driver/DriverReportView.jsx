@@ -230,7 +230,7 @@ const DriverReportView = () => {
               />
               <IconArrowBack
                 className="cursor-pointer text-gray-600 hover:text-red-600"
-                onClick={() => navigate("/report-agencies-form")}
+                onClick={() => navigate("/report-driver-form")}
                 title="Go Back"
               />
             </div>
@@ -256,7 +256,7 @@ const DriverReportView = () => {
                         "Mobile",
                         "Vehicle Type",
                       ].map((header) => (
-                        <th key={header} className="p-2 border border-black">
+                        <th key={header} className="p-1 text-xs border border-black">
                           {header}
                         </th>
                       ))}
@@ -265,19 +265,19 @@ const DriverReportView = () => {
                   <tbody>
                     {driver.map((item, index) => (
                       <tr key={index}>
-                        <td className="p-2 border border-black">
-                          {item.full_name || "N/A"}
+                        <td className="p-1 text-xs  border border-black">
+                        {item.full_name || "N/A"}
                         </td>
-                        <td className="p-2 border border-black">
+                        <td className="p-1 text-xs  border border-black">
                           {item.user_branch || "N/A"}
                         </td>
-                        <td className="p-2 border border-black">
+                        <td className="p-1 text-xs  border border-black">
                           {item.user_company || "N/A"}
                         </td>
-                        <td className="p-2 border border-black">
+                        <td className="p-1 text-xs  border border-black text-center">
                           {item.mobile || "N/A"}
                         </td>
-                        <td className="p-2 border border-black">
+                        <td className="p-1 text-xs  border border-black">
                           {item.vehicle_type || "N/A"}
                         </td>
                       </tr>

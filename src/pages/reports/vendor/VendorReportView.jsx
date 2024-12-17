@@ -230,7 +230,7 @@ const VendorReportView = () => {
               />
               <IconArrowBack
                 className="cursor-pointer text-gray-600 hover:text-red-600"
-                onClick={() => navigate("/report-agencies-form")}
+                onClick={() => navigate("/report-vendor-form")}
                 title="Go Back"
               />
             </div>
@@ -256,7 +256,10 @@ const VendorReportView = () => {
                         "Contact Person",
                         "Mobile",
                       ].map((header) => (
-                        <th key={header} className="p-2 border border-black">
+                        <th
+                          key={header}
+                          className="p-1 text-xs border border-black"
+                        >
                           {header}
                         </th>
                       ))}
@@ -265,19 +268,19 @@ const VendorReportView = () => {
                   <tbody>
                     {vendor.map((item, index) => (
                       <tr key={index}>
-                        <td className="p-2 border border-black">
+                        <td className="p-1 text-xs border border-black">
                           {item.vendor_name || "N/A"}
                         </td>
-                        <td className="p-2 border border-black">
+                        <td className="p-1 text-xs border border-black">
                           {item.vendor_type || "N/A"}
                         </td>
-                        <td className="p-2 border border-black">
+                        <td className="p-1 text-xs border border-black">
                           {item.vendor_branch || "N/A"}
                         </td>
-                        <td className="p-2 border border-black">
+                        <td className="p-1 text-xs border border-black">
                           {item.vendor_contact_person || "N/A"}
                         </td>
-                        <td className="p-2 border border-black">
+                        <td className="p-1 text-xs border border-black text-center">
                           {item.vendor_mobile || "N/A"}
                         </td>
                       </tr>

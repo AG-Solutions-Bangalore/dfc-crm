@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import {
   IconInfoCircle,
   IconArrowBack,
@@ -16,6 +16,8 @@ import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import { toast } from "react-toastify";
 import moment from "moment";
+import { NumericFormat } from "react-number-format";
+
 const printStyles = `
   @media print {
 
@@ -38,10 +40,11 @@ const printStyles = `
 
   }
 `;
-const VechilesReportView = () => {
+const TripReportView = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [vechiles, setVechiles] = useState([]);
+  const [trip, setTrip] = useState([]);
+  const [tripsummaryfooter, setSummaryFooter] = useState({});
   const [loading, setLoading] = useState(true);
   const componentRef = React.useRef();
   const tableRef = useRef(null);
@@ -103,23 +106,34 @@ const VechilesReportView = () => {
     };
   }, []);
   useEffect(() => {
-    const fetchVechilesData = async () => {
+    const fetchTripData = async () => {
       setLoading(true);
       try {
         const token = localStorage.getItem("token");
         let data = {
-          vehicle_branch: localStorage.getItem("vehicle_branch"),
-          vehicle_company: localStorage.getItem("vehicle_company"),
+          trip_date_from: localStorage.getItem("trip_date_from"),
+          trip_date_to: localStorage.getItem("trip_date_to"),
+          trip_company: localStorage.getItem("trip_company"),
+          trip_branch: localStorage.getItem("trip_branch"),
+          trip_vehicle: localStorage.getItem("trip_vehicle"),
+          trip_full_vehicle: localStorage.getItem("trip_full_vehicle"),
+          trip_vehicle_type: localStorage.getItem("trip_vehicle_type"),
+          trip_driver: localStorage.getItem("trip_driver"),
+          trip_agency: localStorage.getItem("trip_agency"),
+          trip_supplier: localStorage.getItem("trip_supplier"),
+          trip_status: localStorage.getItem("trip_status"),
         };
+
         const Response = await axios.post(
-          `${BASE_URL}/api/fetch-vehicle-report`,
+          `${BASE_URL}/api/fetch-trip-report`,
           data,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
 
-        setVechiles(Response.data.vehicle);
+        setTrip(Response.data.trip);
+        setSummaryFooter(Response.data.trip_footer);
         console.log(Response.data, "resposne");
         setLoading(false);
       } catch (error) {
@@ -128,7 +142,7 @@ const VechilesReportView = () => {
       }
     };
 
-    fetchVechilesData();
+    fetchTripData();
   }, []);
 
   if (loading) {
@@ -178,12 +192,21 @@ const VechilesReportView = () => {
   const onSubmit = (e) => {
     e.preventDefault();
     let data = {
-      vehicle_company: localStorage.getItem("vehicle_company"),
-      vehicle_branch: localStorage.getItem("vehicle_branch"),
+      trip_date_from: localStorage.getItem("trip_date_from"),
+      trip_date_to: localStorage.getItem("trip_date_to"),
+      trip_company: localStorage.getItem("trip_company"),
+      trip_branch: localStorage.getItem("trip_branch"),
+      trip_vehicle: localStorage.getItem("trip_vehicle"),
+      trip_full_vehicle: localStorage.getItem("trip_full_vehicle"),
+      trip_vehicle_type: localStorage.getItem("trip_vehicle_type"),
+      trip_driver: localStorage.getItem("trip_driver"),
+      trip_agency: localStorage.getItem("trip_agency"),
+      trip_supplier: localStorage.getItem("trip_supplier"),
+      trip_status: localStorage.getItem("trip_status"),
     };
 
     axios({
-      url: BASE_URL + "/api/download-vehicle-report",
+      url: BASE_URL + "/api/download-trip-report",
       method: "POST",
       data,
       headers: {
@@ -195,13 +218,13 @@ const VechilesReportView = () => {
         const url = window.URL.createObjectURL(new Blob([res.data]));
         const link = document.createElement("a");
         link.href = url;
-        link.setAttribute("download", "vehicle.csv");
+        link.setAttribute("download", "trip.csv");
         document.body.appendChild(link);
         link.click();
-        toast.success("vehicle Report is Downloaded Successfully");
+        toast.success("trip Report is Downloaded Successfully");
       })
       .catch((err) => {
-        toast.error("vehicle Report is Not Downloaded");
+        toast.error("trip Report is Not Downloaded");
       });
   };
   return (
@@ -211,7 +234,7 @@ const VechilesReportView = () => {
           <h2 className="px-5 text-[black] text-lg flex flex-row justify-between items-center rounded-xl p-2">
             <div className="flex items-center gap-2">
               <IconInfoCircle className="w-4 h-4" />
-              <span> Vehicle Summary</span>
+              <span>Trips Summary</span>
             </div>
             <div className="flex items-center space-x-4">
               <IconFileTypeXls
@@ -231,7 +254,7 @@ const VechilesReportView = () => {
               />
               <IconArrowBack
                 className="cursor-pointer text-gray-600 hover:text-red-600"
-                onClick={() => navigate("/report-vechiles-form")}
+                onClick={() => navigate("/report-trip-form")}
                 title="Go Back"
               />
             </div>
@@ -244,74 +267,123 @@ const VechilesReportView = () => {
           >
             <div className="mb-4 width">
               <h3 className="text-xl font-bold mb-2 text-center">
-                VEHICLE SUMMARY
+                TRIPS SUMMARY
               </h3>
-              {vechiles.length > 0 ? (
+              {trip.length > 0 ? (
                 <table className="w-full border-collapse">
                   <thead>
                     <tr className="bg-gray-200">
                       {[
-                        "Register No",
-                        "Vendor Type",
-                        "Company",
+                        "Date",
                         "Branch",
-                        "Modal Year",
-                        "Insurance Due",
-                        "Permit Due",
-                        "FC Due",
+                        "Reg No",
+                        "Driver",
+                        "Destination/Agency",
+
+                        "RT KM",
+                        "HSD",
+                        "Advance",
+                        "HSD Supplied",
+                        "Supplier",
+                        "Cost Centre",
+                        "Status",
                       ].map((header) => (
-                        <th
-                          key={header}
-                          className="p-1 text-xs border border-black"
-                        >
+                        <th key={header} className="p-1 text-xs border border-black">
                           {header}
                         </th>
                       ))}
                     </tr>
                   </thead>
                   <tbody>
-                    {vechiles.map((item, index) => (
+                    {trip.map((item, index) => (
                       <tr key={index}>
                         <td className="p-1 text-xs border border-black text-center">
-                          {item.reg_no || "N/A"}
+                          {moment(item.trip_date).format("DD-MM-YYYY")}
                         </td>
                         <td className="p-1 text-xs border border-black">
-                          {item.vehicle_type || "N/A"}
+                          {item.trip_branch || "N/A"}
+                        </td>
+                        <td className="p-1 text-xs border border-black text-blue-500 text-center">
+                          <Link to={"/edit-trip/" + item.id}>
+                            {item.trip_vehicle}
+                          </Link>
                         </td>
                         <td className="p-1 text-xs border border-black">
-                          {item.vehicle_company || "N/A"}
+                          {item.trip_driver || "N/A"}
                         </td>
+
                         <td className="p-1 text-xs border border-black">
-                          {item.vehicle_branch || "N/A"}
-                        </td>
-                        <td className="p-1 text-xs border border-black text-center">
-                          {item.mfg_year || "N/A"}
+                          {item.trip_agency || "N/A"}
                         </td>
 
                         <td className="p-1 text-xs border border-black text-center">
-                          {item.ins_due == null
-                            ? ""
-                            : moment(item.ins_due).format("DD-MM-YYYY") ||
-                              "N/A"}
+                          {item.trip_km || "N/A"}
+                        </td>
+
+                        <td className="p-1 text-xs border border-black text-center">
+                          {item.trip_hsd || "N/A"}
                         </td>
                         <td className="p-1 text-xs border border-black text-center">
-                          {item.permit_due == null
-                            ? ""
-                            : moment(item.permit_due).format("DD-MM-YYYY") ||
-                              "N/A"}
+                          <NumericFormat
+                            value={item.trip_advance}
+                            displayType="text"
+                            thousandSeparator={true}
+                            prefix="₹"
+                            thousandsGroupStyle="lakh"
+                          ></NumericFormat>
                         </td>
+
                         <td className="p-1 text-xs border border-black text-center">
-                          {item.fc_due == null
-                            ? ""
-                            : moment(item.fc_due).format("DD-MM-YYYY") || "N/A"}
+                          {item.trip_hsd_supplied || "N/A"}
+                        </td>
+
+                        <td className="p-1 text-xs border border-black">
+                          {item.trip_supplier || "N/A"}
+                        </td>
+
+                        <td className="p-1 text-xs border border-black">
+                          {item.trip_company || "N/A"}
+                        </td>
+
+                        <td className="p-1 text-xs border border-black">
+                          {item.trip_status || "N/A"}
                         </td>
                       </tr>
                     ))}
                   </tbody>
+                  <tfoot>
+                    <tr className="bg-gray-100 font-bold">
+                      <td
+                        colSpan={5}
+                        className="p-1 text-xs border border-black text-right"
+                      >
+                        Total:
+                      </td>
+                      <td className="p-1 text-xs border border-black">
+                        {tripsummaryfooter.trip_km}
+                      </td>
+                      <td className="p-1 text-xs border border-black">
+                        {tripsummaryfooter.trip_hsd}
+                      </td>
+                      <td className="p-1 text-xs border border-black">
+                        <NumericFormat
+                          value={tripsummaryfooter.trip_advance}
+                          displayType="text"
+                          thousandSeparator={true}
+                          prefix="₹"
+                          thousandsGroupStyle="lakh"
+                        ></NumericFormat>
+                      </td>
+                      <td className="p-1 text-xs border border-black">
+                        {tripsummaryfooter.trip_hsd_supplied}
+                      </td>
+                      <td colSpan={4} className="p-1 text-xs border border-black"></td>
+                    </tr>
+                  </tfoot>
                 </table>
               ) : (
                 <div className="text-center text-gray-500 py-4">
-                  No Tyre Data Available
+                  No Trip Data Available
                 </div>
               )}
             </div>
@@ -322,4 +394,4 @@ const VechilesReportView = () => {
   );
 };
 
-export default VechilesReportView;
+export default TripReportView;

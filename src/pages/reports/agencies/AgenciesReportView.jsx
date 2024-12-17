@@ -255,7 +255,10 @@ const AgenciesReportView = () => {
                         "State",
                         "Mobile",
                       ].map((header) => (
-                        <th key={header} className="p-2 border border-black">
+                        <th
+                          key={header}
+                          className="p-1 text-xs border border-black"
+                        >
                           {header}
                         </th>
                       ))}
@@ -264,22 +267,22 @@ const AgenciesReportView = () => {
                   <tbody>
                     {agencies.map((item, index) => (
                       <tr key={index}>
-                        <td className="p-2 border border-black">
+                        <td className="p-1 text-xs border border-black">
                           {item.agency_name || "N/A"}
                         </td>
-                        <td className="p-2 border border-black">
+                        <td className="p-1 text-xs  border border-black">
                           {item.agency_branch || "N/A"}
                         </td>
-                        <td className="p-2 border border-black">
+                        <td className="p-1 text-xs  border border-black text-center">
                           {item.agency_rt_km || "N/A"}
                         </td>
-                        <td className="p-2 border border-black">
+                        <td className="p-1 text-xs  border border-black">
                           {item.agency_city || "N/A"}
                         </td>
-                        <td className="p-2 border border-black">
+                        <td className="p-1 text-xs  border border-black">
                           {item.agency_state || "N/A"}
                         </td>
-                        <td className="p-2 border border-black">
+                        <td className="p-1 text-xs  border border-black text-center">
                           {item.agency_mobile || "N/A"}
                         </td>
                       </tr>

@@ -140,7 +140,7 @@ function VechilesReportForm() {
         <hr />
         <div className="p-4">
           <form id="dowRecp" autoComplete="off">
-            <div className="grid grid-cols-1  gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2  gap-4">
               <SelectInput
                 label="Branch"
                 name="vehicle_branch"

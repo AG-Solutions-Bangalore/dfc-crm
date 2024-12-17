@@ -38,7 +38,7 @@ const printStyles = `
 
   }
 `;
-const VechilesReportView = () => {
+const TyreReportDetailsView = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [vechiles, setVechiles] = useState([]);
@@ -108,18 +108,23 @@ const VechilesReportView = () => {
       try {
         const token = localStorage.getItem("token");
         let data = {
-          vehicle_branch: localStorage.getItem("vehicle_branch"),
-          vehicle_company: localStorage.getItem("vehicle_company"),
+          tyre_from_date: localStorage.getItem("tyre_from_date"),
+          tyre_to_date: localStorage.getItem("tyre_to_date"),
+          tyre_supplier: localStorage.getItem("tyre_supplier"),
+          tyre_company: localStorage.getItem("tyre_company"),
+          tyre_branch: localStorage.getItem("tyre_branch"),
+          tyre_count: localStorage.getItem("tyre_count"),
         };
+
         const Response = await axios.post(
-          `${BASE_URL}/api/fetch-vehicle-report`,
+          `${BASE_URL}/api/fetch-tyre-details-report`,
           data,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
 
-        setVechiles(Response.data.vehicle);
+        setVechiles(Response.data.tyre);
         console.log(Response.data, "resposne");
         setLoading(false);
       } catch (error) {
@@ -178,12 +183,16 @@ const VechilesReportView = () => {
   const onSubmit = (e) => {
     e.preventDefault();
     let data = {
-      vehicle_company: localStorage.getItem("vehicle_company"),
-      vehicle_branch: localStorage.getItem("vehicle_branch"),
+      tyre_from_date: localStorage.getItem("tyre_from_date"),
+      tyre_to_date: localStorage.getItem("tyre_to_date"),
+      tyre_supplier: localStorage.getItem("tyre_supplier"),
+      tyre_company: localStorage.getItem("tyre_company"),
+      tyre_branch: localStorage.getItem("tyre_branch"),
+      tyre_count: localStorage.getItem("tyre_count"),
     };
 
     axios({
-      url: BASE_URL + "/api/download-vehicle-report",
+      url: BASE_URL + "/api/download-tyre-details-report",
       method: "POST",
       data,
       headers: {
@@ -195,13 +204,13 @@ const VechilesReportView = () => {
         const url = window.URL.createObjectURL(new Blob([res.data]));
         const link = document.createElement("a");
         link.href = url;
-        link.setAttribute("download", "vehicle.csv");
+        link.setAttribute("download", "tyre.csv");
         document.body.appendChild(link);
         link.click();
-        toast.success("vehicle Report is Downloaded Successfully");
+        toast.success("tyre Report is Downloaded Successfully");
       })
       .catch((err) => {
-        toast.error("vehicle Report is Not Downloaded");
+        toast.error("tyre Report is Not Downloaded");
       });
   };
   return (
@@ -211,7 +220,7 @@ const VechilesReportView = () => {
           <h2 className="px-5 text-[black] text-lg flex flex-row justify-between items-center rounded-xl p-2">
             <div className="flex items-center gap-2">
               <IconInfoCircle className="w-4 h-4" />
-              <span> Vehicle Summary</span>
+              <span>Tyres Details Summary</span>
             </div>
             <div className="flex items-center space-x-4">
               <IconFileTypeXls
@@ -231,7 +240,7 @@ const VechilesReportView = () => {
               />
               <IconArrowBack
                 className="cursor-pointer text-gray-600 hover:text-red-600"
-                onClick={() => navigate("/report-vechiles-form")}
+                onClick={() => navigate("/report-tyre-form")}
                 title="Go Back"
               />
             </div>
@@ -244,26 +253,21 @@ const VechilesReportView = () => {
           >
             <div className="mb-4 width">
               <h3 className="text-xl font-bold mb-2 text-center">
-                VEHICLE SUMMARY
+                TYRES DETAILS SUMMARY
               </h3>
               {vechiles.length > 0 ? (
                 <table className="w-full border-collapse">
                   <thead>
                     <tr className="bg-gray-200">
                       {[
-                        "Register No",
-                        "Vendor Type",
-                        "Company",
                         "Branch",
-                        "Modal Year",
-                        "Insurance Due",
-                        "Permit Due",
-                        "FC Due",
+
+                        "Tyre No",
+                        "Tyre Type",
+                        "Tyre Make	",
+                        "Tyre Status",
                       ].map((header) => (
-                        <th
-                          key={header}
-                          className="p-1 text-xs border border-black"
-                        >
+                        <th key={header} className="p-1 text-xs border border-black">
                           {header}
                         </th>
                       ))}
@@ -272,38 +276,21 @@ const VechilesReportView = () => {
                   <tbody>
                     {vechiles.map((item, index) => (
                       <tr key={index}>
-                        <td className="p-1 text-xs border border-black text-center">
-                          {item.reg_no || "N/A"}
+                        <td className="p-1 text-xs border border-black">
+                          {item.tyre_sub_branch || "N/A"}
                         </td>
                         <td className="p-1 text-xs border border-black">
-                          {item.vehicle_type || "N/A"}
+                          {item.tyre_sub_no || "N/A"}
                         </td>
                         <td className="p-1 text-xs border border-black">
-                          {item.vehicle_company || "N/A"}
+                          {item.tyre_sub_type || "N/A"}
                         </td>
                         <td className="p-1 text-xs border border-black">
-                          {item.vehicle_branch || "N/A"}
-                        </td>
-                        <td className="p-1 text-xs border border-black text-center">
-                          {item.mfg_year || "N/A"}
+                          {item.tyre_sub_make || "N/A"}
                         </td>
 
-                        <td className="p-1 text-xs border border-black text-center">
-                          {item.ins_due == null
-                            ? ""
-                            : moment(item.ins_due).format("DD-MM-YYYY") ||
-                              "N/A"}
-                        </td>
-                        <td className="p-1 text-xs border border-black text-center">
-                          {item.permit_due == null
-                            ? ""
-                            : moment(item.permit_due).format("DD-MM-YYYY") ||
-                              "N/A"}
-                        </td>
-                        <td className="p-1 text-xs border border-black text-center">
-                          {item.fc_due == null
-                            ? ""
-                            : moment(item.fc_due).format("DD-MM-YYYY") || "N/A"}
+                        <td className="p-1 text-xs border border-black">
+                          {item.tyre_sub_status || "N/A"}
                         </td>
                       </tr>
                     ))}
@@ -322,4 +309,4 @@ const VechilesReportView = () => {
   );
 };
 
-export default VechilesReportView;
+export default TyreReportDetailsView;
