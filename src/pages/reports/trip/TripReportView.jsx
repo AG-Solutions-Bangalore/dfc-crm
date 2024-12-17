@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import {
   IconInfoCircle,
   IconArrowBack,
@@ -10,11 +10,14 @@ import axios from "axios";
 import BASE_URL from "../../../base/BaseUrl";
 import Layout from "../../../layout/Layout";
 import { useReactToPrint } from "react-to-print";
-import SkeletonLoading from "./SkeletonLoading";
+import SkeletonLoading from "../agencies/SkeletonLoading";
 import { IconFileTypePdf } from "@tabler/icons-react";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import { toast } from "react-toastify";
+import moment from "moment";
+import { NumericFormat } from "react-number-format";
+
 const printStyles = `
   @media print {
 
@@ -37,10 +40,11 @@ const printStyles = `
 
   }
 `;
-const AgenciesReportView = () => {
+const TripReportView = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [agencies, setAgencies] = useState([]);
+  const [trip, setTrip] = useState([]);
+  const [tripsummaryfooter, setSummaryFooter] = useState({});
   const [loading, setLoading] = useState(true);
   const componentRef = React.useRef();
   const tableRef = useRef(null);
@@ -102,22 +106,34 @@ const AgenciesReportView = () => {
     };
   }, []);
   useEffect(() => {
-    const fetchVehicleData = async () => {
+    const fetchTripData = async () => {
       setLoading(true);
       try {
         const token = localStorage.getItem("token");
         let data = {
-          agency_branch: localStorage.getItem("agency_branch"),
+          trip_date_from: localStorage.getItem("trip_date_from"),
+          trip_date_to: localStorage.getItem("trip_date_to"),
+          trip_company: localStorage.getItem("trip_company"),
+          trip_branch: localStorage.getItem("trip_branch"),
+          trip_vehicle: localStorage.getItem("trip_vehicle"),
+          trip_full_vehicle: localStorage.getItem("trip_full_vehicle"),
+          trip_vehicle_type: localStorage.getItem("trip_vehicle_type"),
+          trip_driver: localStorage.getItem("trip_driver"),
+          trip_agency: localStorage.getItem("trip_agency"),
+          trip_supplier: localStorage.getItem("trip_supplier"),
+          trip_status: localStorage.getItem("trip_status"),
         };
+
         const Response = await axios.post(
-          `${BASE_URL}/api/fetch-agencies-report`,
+          `${BASE_URL}/api/fetch-trip-report`,
           data,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
 
-        setAgencies(Response.data.agencies);
+        setTrip(Response.data.trip);
+        setSummaryFooter(Response.data.trip_footer);
         console.log(Response.data, "resposne");
         setLoading(false);
       } catch (error) {
@@ -126,7 +142,7 @@ const AgenciesReportView = () => {
       }
     };
 
-    fetchVehicleData();
+    fetchTripData();
   }, []);
 
   if (loading) {
@@ -176,11 +192,21 @@ const AgenciesReportView = () => {
   const onSubmit = (e) => {
     e.preventDefault();
     let data = {
-      agency_branch: localStorage.getItem("agency_branch"),
+      trip_date_from: localStorage.getItem("trip_date_from"),
+      trip_date_to: localStorage.getItem("trip_date_to"),
+      trip_company: localStorage.getItem("trip_company"),
+      trip_branch: localStorage.getItem("trip_branch"),
+      trip_vehicle: localStorage.getItem("trip_vehicle"),
+      trip_full_vehicle: localStorage.getItem("trip_full_vehicle"),
+      trip_vehicle_type: localStorage.getItem("trip_vehicle_type"),
+      trip_driver: localStorage.getItem("trip_driver"),
+      trip_agency: localStorage.getItem("trip_agency"),
+      trip_supplier: localStorage.getItem("trip_supplier"),
+      trip_status: localStorage.getItem("trip_status"),
     };
 
     axios({
-      url: BASE_URL + "/api/download-agencies-report",
+      url: BASE_URL + "/api/download-trip-report",
       method: "POST",
       data,
       headers: {
@@ -192,13 +218,13 @@ const AgenciesReportView = () => {
         const url = window.URL.createObjectURL(new Blob([res.data]));
         const link = document.createElement("a");
         link.href = url;
-        link.setAttribute("download", "agencies.csv");
+        link.setAttribute("download", "trip.csv");
         document.body.appendChild(link);
         link.click();
-        toast.success("Agencies is Downloaded Successfully");
+        toast.success("trip Report is Downloaded Successfully");
       })
       .catch((err) => {
-        toast.error("Agencies is Not Downloaded");
+        toast.error("trip Report is Not Downloaded");
       });
   };
   return (
@@ -208,7 +234,7 @@ const AgenciesReportView = () => {
           <h2 className="px-5 text-[black] text-lg flex flex-row justify-between items-center rounded-xl p-2">
             <div className="flex items-center gap-2">
               <IconInfoCircle className="w-4 h-4" />
-              <span> AGENCIES SUMMARY</span>
+              <span>Trips Summary</span>
             </div>
             <div className="flex items-center space-x-4">
               <IconFileTypeXls
@@ -228,7 +254,7 @@ const AgenciesReportView = () => {
               />
               <IconArrowBack
                 className="cursor-pointer text-gray-600 hover:text-red-600"
-                onClick={() => navigate("/report-agencies-form")}
+                onClick={() => navigate("/report-trip-form")}
                 title="Go Back"
               />
             </div>
@@ -241,57 +267,123 @@ const AgenciesReportView = () => {
           >
             <div className="mb-4 width">
               <h3 className="text-xl font-bold mb-2 text-center">
-                AGENCIES SUMMARY
+                TRIPS SUMMARY
               </h3>
-              {agencies.length > 0 ? (
+              {trip.length > 0 ? (
                 <table className="w-full border-collapse">
                   <thead>
                     <tr className="bg-gray-200">
                       {[
-                        "Agency",
+                        "Date",
                         "Branch",
+                        "Reg No",
+                        "Driver",
+                        "Destination/Agency",
+
                         "RT KM",
-                        "City",
-                        "State",
-                        "Mobile",
+                        "HSD",
+                        "Advance",
+                        "HSD Supplied",
+                        "Supplier",
+                        "Cost Centre",
+                        "Status",
                       ].map((header) => (
-                        <th
-                          key={header}
-                          className="p-1 text-xs border border-black"
-                        >
+                        <th key={header} className="p-1 text-xs border border-black">
                           {header}
                         </th>
                       ))}
                     </tr>
                   </thead>
                   <tbody>
-                    {agencies.map((item, index) => (
+                    {trip.map((item, index) => (
                       <tr key={index}>
+                        <td className="p-1 text-xs border border-black text-center">
+                          {moment(item.trip_date).format("DD-MM-YYYY")}
+                        </td>
                         <td className="p-1 text-xs border border-black">
-                          {item.agency_name || "N/A"}
+                          {item.trip_branch || "N/A"}
                         </td>
-                        <td className="p-1 text-xs  border border-black">
-                          {item.agency_branch || "N/A"}
+                        <td className="p-1 text-xs border border-black text-blue-500 text-center">
+                          <Link to={"/edit-trip/" + item.id}>
+                            {item.trip_vehicle}
+                          </Link>
                         </td>
-                        <td className="p-1 text-xs  border border-black text-center">
-                          {item.agency_rt_km || "N/A"}
+                        <td className="p-1 text-xs border border-black">
+                          {item.trip_driver || "N/A"}
                         </td>
-                        <td className="p-1 text-xs  border border-black">
-                          {item.agency_city || "N/A"}
+
+                        <td className="p-1 text-xs border border-black">
+                          {item.trip_agency || "N/A"}
                         </td>
-                        <td className="p-1 text-xs  border border-black">
-                          {item.agency_state || "N/A"}
+
+                        <td className="p-1 text-xs border border-black text-center">
+                          {item.trip_km || "N/A"}
                         </td>
-                        <td className="p-1 text-xs  border border-black text-center">
-                          {item.agency_mobile || "N/A"}
+
+                        <td className="p-1 text-xs border border-black text-center">
+                          {item.trip_hsd || "N/A"}
+                        </td>
+                        <td className="p-1 text-xs border border-black text-center">
+                          <NumericFormat
+                            value={item.trip_advance}
+                            displayType="text"
+                            thousandSeparator={true}
+                            prefix="₹"
+                            thousandsGroupStyle="lakh"
+                          ></NumericFormat>
+                        </td>
+
+                        <td className="p-1 text-xs border border-black text-center">
+                          {item.trip_hsd_supplied || "N/A"}
+                        </td>
+
+                        <td className="p-1 text-xs border border-black">
+                          {item.trip_supplier || "N/A"}
+                        </td>
+
+                        <td className="p-1 text-xs border border-black">
+                          {item.trip_company || "N/A"}
+                        </td>
+
+                        <td className="p-1 text-xs border border-black">
+                          {item.trip_status || "N/A"}
                         </td>
                       </tr>
                     ))}
                   </tbody>
+                  <tfoot>
+                    <tr className="bg-gray-100 font-bold">
+                      <td
+                        colSpan={5}
+                        className="p-1 text-xs border border-black text-right"
+                      >
+                        Total:
+                      </td>
+                      <td className="p-1 text-xs border border-black">
+                        {tripsummaryfooter.trip_km}
+                      </td>
+                      <td className="p-1 text-xs border border-black">
+                        {tripsummaryfooter.trip_hsd}
+                      </td>
+                      <td className="p-1 text-xs border border-black">
+                        <NumericFormat
+                          value={tripsummaryfooter.trip_advance}
+                          displayType="text"
+                          thousandSeparator={true}
+                          prefix="₹"
+                          thousandsGroupStyle="lakh"
+                        ></NumericFormat>
+                      </td>
+                      <td className="p-1 text-xs border border-black">
+                        {tripsummaryfooter.trip_hsd_supplied}
+                      </td>
+                      <td colSpan={4} className="p-1 text-xs border border-black"></td>
+                    </tr>
+                  </tfoot>
                 </table>
               ) : (
                 <div className="text-center text-gray-500 py-4">
-                  No Tyre Data Available
+                  No Trip Data Available
                 </div>
               )}
             </div>
@@ -302,4 +394,4 @@ const AgenciesReportView = () => {
   );
 };
 
-export default AgenciesReportView;
+export default TripReportView;

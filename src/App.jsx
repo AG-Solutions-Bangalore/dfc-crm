@@ -81,6 +81,20 @@ import TeamReportView from "./pages/reports/team/TeamReportView";
 import ViewVechile from "./pages/vehicles/ViewVechile";
 import ChangeTyre from "./pages/vehicles/ChangeTyre";
 import ChangePkm from "./pages/vehicles/ChangePkm";
+import DriverReportView from "./pages/reports/driver/DriverReportView";
+import VendorReportView from "./pages/reports/vendor/VendorReportView";
+import VechilesReportView from "./pages/reports/vechiles/VechilesReportView";
+import TyreReportView from "./pages/reports/tyre/TyreReportView";
+import TyreReportDetailsView from "./pages/reports/tyre/TyreReportDetailsView";
+import ServiceReportView from "./pages/reports/service/ServiceReportView";
+import ServiceReportDetailsView from "./pages/reports/service/ServiceReportDetailsView";
+import TripReportView from "./pages/reports/trip/TripReportView";
+import TripReportMultipleView from "./pages/reports/trip/TripReportMultipleView";
+import SalaryReportMultipleView from "./pages/reports/salary/SalaryReportMultipleView";
+import PaymentReportView from "./pages/reports/payment/PaymentReportView";
+import SalaryReportView from "./pages/reports/salary/SalaryReportView";
+import VehicleReportView from "./pages/reports/vechilesDetails/VehicleReportView";
+
 const App = () => {
   return (
     <>
@@ -111,28 +125,26 @@ const App = () => {
         <Route path="/master/createTyremake" element={<CreateTyreMake />} />
 
         <Route path="/master/servicetype-list" element={<ServiceTypeList />} />
-        <Route path="/master/servicetype-edit/:id" element={<EditServiceType />} />
-        <Route path="/master/createServicetype" element={<CreateServiceType />} />
-
-
-
+        <Route
+          path="/master/servicetype-edit/:id"
+          element={<EditServiceType />}
+        />
+        <Route
+          path="/master/createServicetype"
+          element={<CreateServiceType />}
+        />
 
         <Route path="/master/team-list" element={<TeamList />} />
         <Route path="/master/team-edit" element={<EditTeam />} />
         <Route path="/master/createTeam" element={<CreateTeam />} />
 
-
         <Route path="/master/driver-list" element={<DriverList />} />
         <Route path="/master/driver-edit/:id" element={<EditDriver />} />
         <Route path="/master/createDriver" element={<CreateDriver />} />
 
-
-
         <Route path="/master/agencies-list" element={<AgenciesList />} />
         <Route path="/master/agencies-edit/:id" element={<EditAgencies />} />
         <Route path="/master/createAgency" element={<CreateAgencies />} />
-
-
 
         <Route path="/master/vendor-list" element={<VendorList />} />
         <Route path="/master/vendor-edit/:id" element={<EditVendor />} />
@@ -208,18 +220,57 @@ const App = () => {
         {/* //team */}
         <Route path="/report-team-form" element={<TeamReportForm />} />
         <Route path="/report-team-form/view" element={<TeamReportView />} />
+        {/* //driver */}
         <Route path="/report-driver-form" element={<DriverReportForm />} />
+        <Route path="/report-driver-form/view" element={<DriverReportView />} />
+        {/* //vendor */}
         <Route path="/report-vendor-form" element={<VendorReportForm />} />
+        <Route path="/report-vendor-form/view" element={<VendorReportView />} />
         <Route path="/report-vechiles-form" element={<VechilesReportForm />} />
+        <Route
+          path="/report-vechiles-form/view"
+          element={<VechilesReportView />}
+        />
         <Route
           path="/report-vdetails-form"
           element={<VechilesDetailsReportForm />}
         />
+        <Route
+          path="/report-vdetails-form/view"
+          element={<VehicleReportView/>}
+        />
         <Route path="/report-tyre-form" element={<TyreReportForm />} />
+        <Route path="/report-tyre-form/view" element={<TyreReportView />} />
+        <Route
+          path="/report-tyre-form/details/view"
+          element={<TyreReportDetailsView />}
+        />
         <Route path="/report-services-form" element={<ServiceReportForm />} />
+        <Route
+          path="/report-services-form/view"
+          element={<ServiceReportView />}
+        />
+        <Route
+          path="/report-services-form/details/view"
+          element={<ServiceReportDetailsView />}
+        />
         <Route path="/report-trip-form" element={<TripReportForm />} />
+        <Route path="/report-trip-form/view" element={<TripReportView />} />
+        <Route
+          path="/report-trip-form/multiple/view"
+          element={<TripReportMultipleView />}
+        />
         <Route path="/report-salary-form" element={<SalaryReportForm />} />
+        <Route path="/report-salary-form/view" element={<SalaryReportView />} />
+        <Route
+          path="/report-salary-form/multiple/view"
+          element={<SalaryReportMultipleView />}
+        />
         <Route path="/report-payment-form" element={<PaymentReportForm />} />
+        <Route
+          path="/report-payment-form/view"
+          element={<PaymentReportView />}
+        />
       </Routes>
     </>
   );

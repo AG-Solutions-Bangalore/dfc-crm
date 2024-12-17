@@ -10,11 +10,12 @@ import axios from "axios";
 import BASE_URL from "../../../base/BaseUrl";
 import Layout from "../../../layout/Layout";
 import { useReactToPrint } from "react-to-print";
-import SkeletonLoading from "./SkeletonLoading";
+import SkeletonLoading from "../agencies/SkeletonLoading";
 import { IconFileTypePdf } from "@tabler/icons-react";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import { toast } from "react-toastify";
+import moment from "moment";
 const printStyles = `
   @media print {
 
@@ -37,10 +38,10 @@ const printStyles = `
 
   }
 `;
-const AgenciesReportView = () => {
+const VechilesReportView = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [agencies, setAgencies] = useState([]);
+  const [vechiles, setVechiles] = useState([]);
   const [loading, setLoading] = useState(true);
   const componentRef = React.useRef();
   const tableRef = useRef(null);
@@ -102,22 +103,23 @@ const AgenciesReportView = () => {
     };
   }, []);
   useEffect(() => {
-    const fetchVehicleData = async () => {
+    const fetchVechilesData = async () => {
       setLoading(true);
       try {
         const token = localStorage.getItem("token");
         let data = {
-          agency_branch: localStorage.getItem("agency_branch"),
+          vehicle_branch: localStorage.getItem("vehicle_branch"),
+          vehicle_company: localStorage.getItem("vehicle_company"),
         };
         const Response = await axios.post(
-          `${BASE_URL}/api/fetch-agencies-report`,
+          `${BASE_URL}/api/fetch-vehicle-report`,
           data,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
 
-        setAgencies(Response.data.agencies);
+        setVechiles(Response.data.vehicle);
         console.log(Response.data, "resposne");
         setLoading(false);
       } catch (error) {
@@ -126,7 +128,7 @@ const AgenciesReportView = () => {
       }
     };
 
-    fetchVehicleData();
+    fetchVechilesData();
   }, []);
 
   if (loading) {
@@ -176,11 +178,12 @@ const AgenciesReportView = () => {
   const onSubmit = (e) => {
     e.preventDefault();
     let data = {
-      agency_branch: localStorage.getItem("agency_branch"),
+      vehicle_company: localStorage.getItem("vehicle_company"),
+      vehicle_branch: localStorage.getItem("vehicle_branch"),
     };
 
     axios({
-      url: BASE_URL + "/api/download-agencies-report",
+      url: BASE_URL + "/api/download-vehicle-report",
       method: "POST",
       data,
       headers: {
@@ -192,13 +195,13 @@ const AgenciesReportView = () => {
         const url = window.URL.createObjectURL(new Blob([res.data]));
         const link = document.createElement("a");
         link.href = url;
-        link.setAttribute("download", "agencies.csv");
+        link.setAttribute("download", "vehicle.csv");
         document.body.appendChild(link);
         link.click();
-        toast.success("Agencies is Downloaded Successfully");
+        toast.success("vehicle Report is Downloaded Successfully");
       })
       .catch((err) => {
-        toast.error("Agencies is Not Downloaded");
+        toast.error("vehicle Report is Not Downloaded");
       });
   };
   return (
@@ -208,7 +211,7 @@ const AgenciesReportView = () => {
           <h2 className="px-5 text-[black] text-lg flex flex-row justify-between items-center rounded-xl p-2">
             <div className="flex items-center gap-2">
               <IconInfoCircle className="w-4 h-4" />
-              <span> AGENCIES SUMMARY</span>
+              <span> Vehicle Summary</span>
             </div>
             <div className="flex items-center space-x-4">
               <IconFileTypeXls
@@ -228,7 +231,7 @@ const AgenciesReportView = () => {
               />
               <IconArrowBack
                 className="cursor-pointer text-gray-600 hover:text-red-600"
-                onClick={() => navigate("/report-agencies-form")}
+                onClick={() => navigate("/report-vechiles-form")}
                 title="Go Back"
               />
             </div>
@@ -241,19 +244,21 @@ const AgenciesReportView = () => {
           >
             <div className="mb-4 width">
               <h3 className="text-xl font-bold mb-2 text-center">
-                AGENCIES SUMMARY
+                VEHICLE SUMMARY
               </h3>
-              {agencies.length > 0 ? (
+              {vechiles.length > 0 ? (
                 <table className="w-full border-collapse">
                   <thead>
                     <tr className="bg-gray-200">
                       {[
-                        "Agency",
+                        "Register No",
+                        "Vendor Type",
+                        "Company",
                         "Branch",
-                        "RT KM",
-                        "City",
-                        "State",
-                        "Mobile",
+                        "Modal Year",
+                        "Insurance Due",
+                        "Permit Due",
+                        "FC Due",
                       ].map((header) => (
                         <th
                           key={header}
@@ -265,25 +270,40 @@ const AgenciesReportView = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {agencies.map((item, index) => (
+                    {vechiles.map((item, index) => (
                       <tr key={index}>
+                        <td className="p-1 text-xs border border-black text-center">
+                          {item.reg_no || "N/A"}
+                        </td>
                         <td className="p-1 text-xs border border-black">
-                          {item.agency_name || "N/A"}
+                          {item.vehicle_type || "N/A"}
                         </td>
-                        <td className="p-1 text-xs  border border-black">
-                          {item.agency_branch || "N/A"}
+                        <td className="p-1 text-xs border border-black">
+                          {item.vehicle_company || "N/A"}
                         </td>
-                        <td className="p-1 text-xs  border border-black text-center">
-                          {item.agency_rt_km || "N/A"}
+                        <td className="p-1 text-xs border border-black">
+                          {item.vehicle_branch || "N/A"}
                         </td>
-                        <td className="p-1 text-xs  border border-black">
-                          {item.agency_city || "N/A"}
+                        <td className="p-1 text-xs border border-black text-center">
+                          {item.mfg_year || "N/A"}
                         </td>
-                        <td className="p-1 text-xs  border border-black">
-                          {item.agency_state || "N/A"}
+
+                        <td className="p-1 text-xs border border-black text-center">
+                          {item.ins_due == null
+                            ? ""
+                            : moment(item.ins_due).format("DD-MM-YYYY") ||
+                              "N/A"}
                         </td>
-                        <td className="p-1 text-xs  border border-black text-center">
-                          {item.agency_mobile || "N/A"}
+                        <td className="p-1 text-xs border border-black text-center">
+                          {item.permit_due == null
+                            ? ""
+                            : moment(item.permit_due).format("DD-MM-YYYY") ||
+                              "N/A"}
+                        </td>
+                        <td className="p-1 text-xs border border-black text-center">
+                          {item.fc_due == null
+                            ? ""
+                            : moment(item.fc_due).format("DD-MM-YYYY") || "N/A"}
                         </td>
                       </tr>
                     ))}
@@ -302,4 +322,4 @@ const AgenciesReportView = () => {
   );
 };
 
-export default AgenciesReportView;
+export default VechilesReportView;

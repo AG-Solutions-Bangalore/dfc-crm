@@ -232,6 +232,25 @@ function TyreReportForm() {
       {required && <span className="text-red-500 ml-1">*</span>}
     </label>
   );
+
+  const handleview = () => {
+    navigate("/report-tyre-form/view");
+    localStorage.setItem("tyre_from_date", downloadTyre.tyre_from_date);
+    localStorage.setItem("tyre_to_date", downloadTyre.tyre_to_date);
+    localStorage.setItem("tyre_supplier", downloadTyre.tyre_supplier);
+    localStorage.setItem("tyre_count", downloadTyre.tyre_count);
+    localStorage.setItem("tyre_company", downloadTyre.tyre_company);
+    localStorage.setItem("tyre_branch", downloadTyre.tyre_branch);
+  };
+  const handleDetailview = () => {
+    navigate("/report-tyre-form/details/view");
+    localStorage.setItem("tyre_from_date", downloadTyre.tyre_from_date);
+    localStorage.setItem("tyre_to_date", downloadTyre.tyre_to_date);
+    localStorage.setItem("tyre_supplier", downloadTyre.tyre_supplier);
+    localStorage.setItem("tyre_count", downloadTyre.tyre_count);
+    localStorage.setItem("tyre_company", downloadTyre.tyre_company);
+    localStorage.setItem("tyre_branch", downloadTyre.tyre_branch);
+  };
   return (
     <Layout>
       <div className="  bg-[#FFFFFF] p-2   rounded-lg">
@@ -350,7 +369,10 @@ function TyreReportForm() {
               >
                 Download
               </button>
-              <button className="text-center text-sm font-medium cursor-pointer hover:animate-pulse w-full sm:w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md">
+              <button
+                className="text-center text-sm font-medium cursor-pointer hover:animate-pulse w-full sm:w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md"
+                onClick={handleview}
+              >
                 View
               </button>
               <button
@@ -359,7 +381,10 @@ function TyreReportForm() {
               >
                 Details Download
               </button>
-              <button className="text-center text-sm font-medium cursor-pointer hover:animate-pulse w-full sm:w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md">
+              <button
+                className="text-center text-sm font-medium cursor-pointer hover:animate-pulse w-full sm:w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md"
+                onClick={handleDetailview}
+              >
                 Details View
               </button>
             </div>

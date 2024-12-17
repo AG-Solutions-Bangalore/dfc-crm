@@ -203,7 +203,30 @@ function ServiceReportForm() {
       fontSize: "0.75rem",
     }),
   };
-
+  const handleview = () => {
+    navigate("/report-services-form/view");
+    localStorage.setItem(
+      "service_date_from",
+      downloadServices.service_date_from
+    );
+    localStorage.setItem("service_date_to", downloadServices.service_date_to);
+    localStorage.setItem("service_garage", downloadServices.service_garage);
+    localStorage.setItem("service_truck_no", downloadServices.service_truck_no);
+    localStorage.setItem("service_company", downloadServices.service_company);
+    localStorage.setItem("service_branch", downloadServices.service_branch);
+  };
+  const handleview1 = () => {
+    navigate("/report-services-form/details/view");
+    localStorage.setItem(
+      "service_date_from",
+      downloadServices.service_date_from
+    );
+    localStorage.setItem("service_date_to", downloadServices.service_date_to);
+    localStorage.setItem("service_garage", downloadServices.service_garage);
+    localStorage.setItem("service_truck_no", downloadServices.service_truck_no);
+    localStorage.setItem("service_company", downloadServices.service_company);
+    localStorage.setItem("service_branch", downloadServices.service_branch);
+  };
   return (
     <Layout>
       <div className="  bg-[#FFFFFF] p-2   rounded-lg">
@@ -308,7 +331,10 @@ function ServiceReportForm() {
               >
                 Download
               </button>
-              <button className="text-center text-sm font-medium cursor-pointer hover:animate-pulse w-full sm:w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md">
+              <button
+                className="text-center text-sm font-medium cursor-pointer hover:animate-pulse w-full sm:w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md"
+                onClick={handleview}
+              >
                 View
               </button>
               <button
@@ -317,7 +343,10 @@ function ServiceReportForm() {
               >
                 Details Download
               </button>
-              <button className="text-center text-sm font-medium cursor-pointer hover:animate-pulse w-full sm:w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md">
+              <button
+                className="text-center text-sm font-medium cursor-pointer hover:animate-pulse w-full sm:w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md"
+                onClick={handleview1}
+              >
                 Details View
               </button>
             </div>

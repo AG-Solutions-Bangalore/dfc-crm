@@ -379,6 +379,35 @@ function TripReportForm() {
       {required && <span className="text-red-500 ml-1">*</span>}
     </label>
   );
+
+  const handleview = () => {
+    navigate("/report-trip-form/view");
+    localStorage.setItem("trip_date_from", downloadTrip.trip_date_from);
+    localStorage.setItem("trip_date_to", downloadTrip.trip_date_to);
+    localStorage.setItem("trip_company", downloadTrip.trip_company);
+    localStorage.setItem("trip_branch", downloadTrip.trip_branch);
+    localStorage.setItem("trip_vehicle", downloadTrip.trip_vehicle);
+    localStorage.setItem("trip_full_vehicle", downloadTrip.trip_full_vehicle);
+    localStorage.setItem("trip_vehicle_type", downloadTrip.trip_vehicle_type);
+    localStorage.setItem("trip_driver", downloadTrip.trip_driver);
+    localStorage.setItem("trip_agency", downloadTrip.trip_agency);
+    localStorage.setItem("trip_supplier", downloadTrip.trip_supplier);
+    localStorage.setItem("trip_status", downloadTrip.trip_status);
+  };
+  const handleview1 = () => {
+    navigate("/report-trip-form/multiple/view");
+    localStorage.setItem("trip_date_from", downloadTrip.trip_date_from);
+    localStorage.setItem("trip_date_to", downloadTrip.trip_date_to);
+    localStorage.setItem("trip_company", downloadTrip.trip_company);
+    localStorage.setItem("trip_branch", downloadTrip.trip_branch);
+    localStorage.setItem("trip_vehicle", downloadTrip.trip_vehicle);
+    localStorage.setItem("trip_full_vehicle", downloadTrip.trip_full_vehicle);
+    localStorage.setItem("trip_vehicle_type", downloadTrip.trip_vehicle_type);
+    localStorage.setItem("trip_driver", downloadTrip.trip_driver);
+    localStorage.setItem("trip_agency", downloadTrip.trip_agency);
+    localStorage.setItem("trip_supplier", downloadTrip.trip_supplier);
+    localStorage.setItem("trip_status", downloadTrip.trip_status);
+  };
   return (
     <Layout>
       <div className="  bg-[#FFFFFF] p-2   rounded-lg">
@@ -609,7 +638,10 @@ function TripReportForm() {
               >
                 Download
               </button>
-              <button className="text-center text-sm font-medium cursor-pointer hover:animate-pulse w-full sm:w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md">
+              <button
+                className="text-center text-sm font-medium cursor-pointer hover:animate-pulse w-full sm:w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md"
+                onClick={handleview}
+              >
                 View
               </button>
               <button
@@ -618,7 +650,10 @@ function TripReportForm() {
               >
                 Details Download
               </button>
-              <button className="text-center text-sm font-medium cursor-pointer hover:animate-pulse w-full sm:w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md">
+              <button
+                className="text-center text-sm font-medium cursor-pointer hover:animate-pulse w-full sm:w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md"
+                onClick={handleview1}
+              >
                 Details View
               </button>
             </div>
