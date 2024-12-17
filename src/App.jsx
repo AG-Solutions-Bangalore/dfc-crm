@@ -52,6 +52,19 @@ import CreateBranch from "./pages/master/branch/CreateBranch";
 import BrandEdit from "./pages/master/branch/BrandEdit";
 import CreateTyreMake from "./pages/master/tyreMake/CreateTyreMake";
 import EditTyreMake from "./pages/master/tyreMake/EditTyreMake";
+import FormTrip from "./pages/trip/FormTrip";
+import AddTrip from "./pages/trip/AddTrip";
+import EditTrip from "./pages/trip/EditTrip";
+import CreateServiceType from "./pages/master/serviceType/CreateServiceType";
+import EditServiceType from "./pages/master/serviceType/EditServiceType";
+import CreateTeam from "./pages/master/team/CreateTeam";
+import EditTeam from "./pages/master/team/EditTeam";
+import CreateDriver from "./pages/master/driver/CreateDriver";
+import EditDriver from "./pages/master/driver/EditDriver";
+import CreateAgencies from "./pages/master/agencies/CreateAgencies";
+import EditAgencies from "./pages/master/agencies/EditAgencies";
+import CreateVendor from "./pages/master/vendor/CreateVendor";
+import EditVendor from "./pages/master/vendor/EditVendor";
 import AgenciesReportForm from "./pages/reports/agencies/AgenciesReportForm";
 import TeamReportForm from "./pages/reports/team/TeamReportForm";
 import DriverReportForm from "./pages/reports/driver/DriverReportForm";
@@ -99,10 +112,32 @@ const App = () => {
         <Route path="/master/createTyremake" element={<CreateTyreMake />} />
 
         <Route path="/master/servicetype-list" element={<ServiceTypeList />} />
+        <Route path="/master/servicetype-edit/:id" element={<EditServiceType />} />
+        <Route path="/master/createServicetype" element={<CreateServiceType />} />
+
+
+
+
         <Route path="/master/team-list" element={<TeamList />} />
+        <Route path="/master/team-edit" element={<EditTeam />} />
+        <Route path="/master/createTeam" element={<CreateTeam />} />
+
+
         <Route path="/master/driver-list" element={<DriverList />} />
+        <Route path="/master/driver-edit/:id" element={<EditDriver />} />
+        <Route path="/master/createDriver" element={<CreateDriver />} />
+
+
+
         <Route path="/master/agencies-list" element={<AgenciesList />} />
+        <Route path="/master/agencies-edit/:id" element={<EditAgencies />} />
+        <Route path="/master/createAgency" element={<CreateAgencies />} />
+
+
+
         <Route path="/master/vendor-list" element={<VendorList />} />
+        <Route path="/master/vendor-edit/:id" element={<EditVendor />} />
+        <Route path="/master/createVendor" element={<CreateVendor />} />
 
         {/* vechiles  */}
         <Route path="/vechiles-list" element={<VehiclesList />} />
@@ -130,7 +165,10 @@ const App = () => {
         <Route path="/service-edit/:id" element={<EditServices />} />
         <Route path="/service-view/:id" element={<ViewServices />} />
         {/* trip  */}
+        <Route path="/form-trip" element={<FormTrip />} />
         <Route path="/trip-list" element={<TripList />} />
+        <Route path="/createTrip" element={<AddTrip />} />
+        <Route path="/edit-trip/:id" element={<EditTrip />} />
         {/* payment  */}
         {/* payment branch  */}
         <Route path="/payment/branch-list" element={<BranchPaymentList />} />
