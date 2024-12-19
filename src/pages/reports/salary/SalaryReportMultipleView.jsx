@@ -17,6 +17,7 @@ import html2canvas from "html2canvas";
 import { toast } from "react-toastify";
 import moment from "moment";
 import { NumericFormat } from "react-number-format";
+import html2pdf from "html2pdf.js";
 
 const printStyles = `
   @media print {
@@ -54,13 +55,14 @@ const SalaryReportMultipleView = () => {
     pageStyle: `
           @page {
               size: A4;
-              margin: 2mm;
+              margin: 7mm 2mm;
+              margin-top:2mm;
+
           }
           @media print {
               body {
                   margin: 0;
                   font-size: 12px; 
-                  border: 1px solid #000;
                   min-height:100vh
               }
               table {
@@ -71,6 +73,19 @@ const SalaryReportMultipleView = () => {
                   border: 1px solid #ddd;
                   padding: 4px;
               }
+
+
+.trademark {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  // padding: 0 10mm;
+  font-size: 8px;
+  color: gray;
+}
+
               th {
                   background-color: #f4f4f4;
               }
@@ -80,6 +95,7 @@ const SalaryReportMultipleView = () => {
                   .margin-first{
                   margin:10px
                   }
+                  
           }
         `,
   });
@@ -143,46 +159,25 @@ const SalaryReportMultipleView = () => {
     return <SkeletonLoading />;
   }
   const handleSavePDF = () => {
-    const input = tableRef.current;
+    const element = componentRef.current;
+    const opt = {
+      margin: 0.2, 
+      image: { type: "jpeg", quality: 0.98 },
+      html2canvas: { scale: 2 },
+      jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
+    };
 
-    html2canvas(input, { scale: 2 })
-      .then((canvas) => {
-        const imgData = canvas.toDataURL("image/png");
-
-        const pdf = new jsPDF("p", "mm", "a4");
-
-        const pdfWidth = pdf.internal.pageSize.getWidth();
-        const pdfHeight = pdf.internal.pageSize.getHeight();
-
-        const imgWidth = canvas.width;
-        const imgHeight = canvas.height;
-
-        const margin = 10;
-
-        const availableWidth = pdfWidth - 2 * margin;
-
-        const ratio = Math.min(
-          availableWidth / imgWidth,
-          pdfHeight / imgHeight
-        );
-
-        const imgX = margin;
-        const imgY = 0;
-
-        pdf.addImage(
-          imgData,
-          "PNG",
-          imgX,
-          imgY,
-          imgWidth * ratio,
-          imgHeight * ratio
-        );
-        pdf.save("invoice.pdf");
-      })
+    // Use html2pdf to create and download the PDF
+    html2pdf()
+      .from(element)
+      .set(opt)
+      .save()
       .catch((error) => {
-        console.error("Error generating PDF: ", error);
+        console.error("PDF generation error:", error);
+        toast.error("Failed to download PDF.");
       });
   };
+
   const onSubmit = (e) => {
     e.preventDefault();
     let data = {
@@ -272,7 +267,7 @@ const SalaryReportMultipleView = () => {
               />
               <IconArrowBack
                 className="cursor-pointer text-gray-600 hover:text-red-600"
-                onClick={() => navigate("/report-trip-form")}
+                onClick={() => navigate("/report-salary-form")}
                 title="Go Back"
               />
             </div>
@@ -305,7 +300,10 @@ const SalaryReportMultipleView = () => {
                         "Advance",
                         "Net Payable",
                       ].map((header) => (
-                        <th key={header} className="p-2 border border-black">
+                        <th
+                          key={header}
+                          className="text-xs p-1 border border-black"
+                        >
                           {header}
                         </th>
                       ))}
@@ -314,31 +312,31 @@ const SalaryReportMultipleView = () => {
                   <tbody>
                     {salary.map((item, index) => (
                       <tr key={index}>
-                        <td className="p-2 border border-black">
-                          {item.trip_company || "N/A"}
+                        <td className="text-xs p-1 border border-black">
+                          {item.trip_company || "-"}
                         </td>
 
-                        <td className="p-2 border border-black">
-                          {item.trip_branch || "N/A"}
+                        <td className="text-xs p-1 border border-black">
+                          {item.trip_branch || "-"}
                         </td>
 
-                        <td className="p-2 border border-black">
-                          {item.trip_vehicle || "N/A"}
+                        <td className="text-xs p-1 border border-black">
+                          {item.trip_vehicle || "-"}
                         </td>
 
-                        <td className="p-2 border border-black cursor-pointer">
+                        <td className="text-xs p-1 border border-black cursor-pointer">
                           <span onClick={(e) => onReportView(e)}>
                             {item.trip_driver}
                           </span>
                         </td>
 
-                        <td className="p-2 border border-black">
-                          {item.trip_count || "N/A"}
+                        <td className="text-xs p-1 border border-black text-center">
+                          {item.trip_count || "-"}
                         </td>
-                        <td className="p-2 border border-black">
-                          {item.trip_km || "N/A"}
+                        <td className="text-xs p-1 border border-black text-center">
+                          {item.trip_km || "-"}
                         </td>
-                        <td className="p-2 border border-black">
+                        <td className="text-xs p-1 border border-black text-center">
                           <NumericFormat
                             value={item.trip_incentive_amount * item.trip_count}
                             displayType="text"
@@ -347,7 +345,7 @@ const SalaryReportMultipleView = () => {
                             thousandsGroupStyle="lakh"
                           ></NumericFormat>
                         </td>
-                        <td className="p-2 border border-black">
+                        <td className="text-xs p-1 border border-black text-center">
                           <NumericFormat
                             value={item.trip_hmali}
                             displayType="text"
@@ -356,7 +354,7 @@ const SalaryReportMultipleView = () => {
                             thousandsGroupStyle="lakh"
                           ></NumericFormat>
                         </td>
-                        <td className="p-2 border border-black">
+                        <td className="text-xs p-1 border border-black text-center">
                           <NumericFormat
                             value={item.trip_bata_amount}
                             displayType="text"
@@ -365,7 +363,7 @@ const SalaryReportMultipleView = () => {
                             thousandsGroupStyle="lakh"
                           ></NumericFormat>
                         </td>
-                        <td className="p-2 border border-black">
+                        <td className="text-xs p-1 border border-black text-center">
                           <NumericFormat
                             value={item.trip_advance}
                             displayType="text"
@@ -374,7 +372,7 @@ const SalaryReportMultipleView = () => {
                             thousandsGroupStyle="lakh"
                           ></NumericFormat>
                         </td>
-                        <td className="p-2 border border-black">
+                        <td className="text-xs p-1 border border-black text-center">
                           <NumericFormat
                             value={
                               item.trip_incentive_amount * item.trip_count +
@@ -392,22 +390,20 @@ const SalaryReportMultipleView = () => {
                         </td>
                       </tr>
                     ))}
-                  </tbody>
-                  <tfoot>
                     <tr className="bg-gray-100 font-bold">
                       <td
                         colSpan={4}
-                        className="p-2 border border-black text-right"
+                        className="text-xs p-1 border border-black text-right"
                       >
                         Total:
                       </td>
-                      <td className="p-2 border border-black">
+                      <td className="text-xs p-1 border border-black text-center">
                         {salarysummaryfooter.trip_count}
                       </td>
-                      <td className="p-2 border border-black">
+                      <td className="text-xs p-1 border border-black text-center">
                         {salarysummaryfooter.trip_km}
                       </td>
-                      <td className="p-2 border border-black">
+                      <td className="text-xs p-1 border border-black text-center">
                         <NumericFormat
                           value={
                             salarysummaryfooter.trip_incentive_amount *
@@ -419,7 +415,7 @@ const SalaryReportMultipleView = () => {
                           thousandsGroupStyle="lakh"
                         ></NumericFormat>
                       </td>
-                      <td className="p-2 border border-black">
+                      <td className="text-xs p-1 border border-black text-center">
                         <NumericFormat
                           value={salarysummaryfooter.trip_hmali}
                           displayType="text"
@@ -429,7 +425,7 @@ const SalaryReportMultipleView = () => {
                         ></NumericFormat>
                       </td>
 
-                      <td className="p-2 border border-black">
+                      <td className="text-xs p-1 border border-black text-center">
                         <NumericFormat
                           value={salarysummaryfooter.trip_bata_amount}
                           displayType="text"
@@ -438,7 +434,7 @@ const SalaryReportMultipleView = () => {
                           thousandsGroupStyle="lakh"
                         ></NumericFormat>
                       </td>
-                      <td className="p-2 border border-black">
+                      <td className="text-xs p-1 border border-black text-center">
                         <NumericFormat
                           value={salarysummaryfooter.trip_advance}
                           displayType="text"
@@ -447,7 +443,7 @@ const SalaryReportMultipleView = () => {
                           thousandsGroupStyle="lakh"
                         ></NumericFormat>
                       </td>
-                      <td className="p-2 border border-black">
+                      <td className="text-xs p-1 border border-black text-center">
                         <NumericFormat
                           value={
                             (salarysummaryfooter.trip_incentive_amount /
@@ -475,13 +471,104 @@ const SalaryReportMultipleView = () => {
                         ></NumericFormat>
                       </td>
                     </tr>
-                  </tfoot>
+                  </tbody>
+                  {/* <tfoot>
+                    <tr className="bg-gray-100 font-bold">
+                      <td
+                        colSpan={4}
+                        className="text-xs p-1 border border-black text-right"
+                      >
+                        Total:
+                      </td>
+                      <td className="text-xs p-1 border border-black text-center">
+                        {salarysummaryfooter.trip_count}
+                      </td>
+                      <td className="text-xs p-1 border border-black text-center">
+                        {salarysummaryfooter.trip_km}
+                      </td>
+                      <td className="text-xs p-1 border border-black text-center">
+                        <NumericFormat
+                          value={
+                            salarysummaryfooter.trip_incentive_amount *
+                            salarysummaryfooter.trip_count
+                          }
+                          displayType="text"
+                          thousandSeparator={true}
+                          prefix="₹"
+                          thousandsGroupStyle="lakh"
+                        ></NumericFormat>
+                      </td>
+                      <td className="text-xs p-1 border border-black text-center">
+                        <NumericFormat
+                          value={salarysummaryfooter.trip_hmali}
+                          displayType="text"
+                          thousandSeparator={true}
+                          prefix="₹"
+                          thousandsGroupStyle="lakh"
+                        ></NumericFormat>
+                      </td>
+
+                      <td className="text-xs p-1 border border-black text-center">
+                        <NumericFormat
+                          value={salarysummaryfooter.trip_bata_amount}
+                          displayType="text"
+                          thousandSeparator={true}
+                          prefix="₹"
+                          thousandsGroupStyle="lakh"
+                        ></NumericFormat>
+                      </td>
+                      <td className="text-xs p-1 border border-black text-center">
+                        <NumericFormat
+                          value={salarysummaryfooter.trip_advance}
+                          displayType="text"
+                          thousandSeparator={true}
+                          prefix="₹"
+                          thousandsGroupStyle="lakh"
+                        ></NumericFormat>
+                      </td>
+                      <td className="text-xs p-1 border border-black text-center">
+                        <NumericFormat
+                          value={
+                            (salarysummaryfooter.trip_incentive_amount /
+                              salarysummaryfooter.trip_count) *
+                              salarysummaryfooter.trip_count +
+                            salarysummaryfooter.trip_bata_for_trip +
+                            (salarysummaryfooter.trip_hmali -
+                              salarysummaryfooter.trip_advance) +
+                            +(
+                              salarysummaryfooter.trip_bata_amount /
+                              salarysummaryfooter.trip_count
+                            ) +
+                            +(
+                              salarysummaryfooter.trip_driver_salary /
+                              salarysummaryfooter.trip_count
+                            ) +
+                            (salarysummaryfooter.trip_bata_for_km /
+                              salarysummaryfooter.trip_count) *
+                              salarysummaryfooter.trip_km
+                          }
+                          displayType="text"
+                          thousandSeparator={true}
+                          prefix="₹"
+                          thousandsGroupStyle="lakh"
+                        ></NumericFormat>
+                      </td>
+                    </tr>
+                  </tfoot> */}
                 </table>
               ) : (
                 <div className="text-center text-gray-500 py-4">
-                  No Trip Data Available
+                  No Salary Data Available
                 </div>
               )}
+            </div>
+            <div className="hidden print:block">
+              <div className="trademark flex justify-between items-center mt-4 ">
+                <h2 className="text-xs font-medium px-1">DFC</h2>
+                <h2 className="text-xs font-medium px-5">
+                  {new Date().toLocaleDateString("en-GB")}{" "}
+                </h2>
+              </div>
             </div>
           </div>
         </div>

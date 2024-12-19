@@ -51,13 +51,12 @@ const TyreReportDetailsView = () => {
     pageStyle: `
           @page {
               size: A4;
-              margin: 2mm;
+              margin: 4mm;
           }
           @media print {
               body {
                   margin: 0;
                   font-size: 12px; 
-                  border: 1px solid #000;
                   min-height:100vh
               }
               table {
@@ -68,6 +67,19 @@ const TyreReportDetailsView = () => {
                   border: 1px solid #ddd;
                   padding: 4px;
               }
+
+
+.trademark {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  // padding: 0 10mm;
+  font-size: 8px;
+  color: gray;
+}
+
               th {
                   background-color: #f4f4f4;
               }
@@ -77,6 +89,7 @@ const TyreReportDetailsView = () => {
                   .margin-first{
                   margin:10px
                   }
+                  
           }
         `,
   });
@@ -267,7 +280,10 @@ const TyreReportDetailsView = () => {
                         "Tyre Make	",
                         "Tyre Status",
                       ].map((header) => (
-                        <th key={header} className="p-1 text-xs border border-black">
+                        <th
+                          key={header}
+                          className="p-1 text-xs border border-black"
+                        >
                           {header}
                         </th>
                       ))}
@@ -277,20 +293,20 @@ const TyreReportDetailsView = () => {
                     {vechiles.map((item, index) => (
                       <tr key={index}>
                         <td className="p-1 text-xs border border-black">
-                          {item.tyre_sub_branch || "N/A"}
+                          {item.tyre_sub_branch || "-"}
                         </td>
                         <td className="p-1 text-xs border border-black">
-                          {item.tyre_sub_no || "N/A"}
+                          {item.tyre_sub_no || "-"}
                         </td>
                         <td className="p-1 text-xs border border-black">
-                          {item.tyre_sub_type || "N/A"}
+                          {item.tyre_sub_type || "-"}
                         </td>
                         <td className="p-1 text-xs border border-black">
-                          {item.tyre_sub_make || "N/A"}
+                          {item.tyre_sub_make || "-"}
                         </td>
 
                         <td className="p-1 text-xs border border-black">
-                          {item.tyre_sub_status || "N/A"}
+                          {item.tyre_sub_status || "-"}
                         </td>
                       </tr>
                     ))}
@@ -301,6 +317,14 @@ const TyreReportDetailsView = () => {
                   No Tyre Data Available
                 </div>
               )}
+            </div>
+            <div className="hidden print:block">
+              <div className="trademark flex justify-between items-center mt-4 ">
+                <h2 className="text-xs font-medium px-1">DFC</h2>
+                <h2 className="text-xs font-medium px-5">
+                  {new Date().toLocaleDateString("en-GB")}{" "}
+                </h2>
+              </div>
             </div>
           </div>
         </div>

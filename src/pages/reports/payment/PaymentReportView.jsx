@@ -52,13 +52,12 @@ const PaymentReportView = () => {
     pageStyle: `
           @page {
               size: A4;
-              margin: 2mm;
+              margin: 4mm;
           }
           @media print {
               body {
                   margin: 0;
                   font-size: 12px; 
-                  border: 1px solid #000;
                   min-height:100vh
               }
               table {
@@ -69,6 +68,19 @@ const PaymentReportView = () => {
                   border: 1px solid #ddd;
                   padding: 4px;
               }
+
+
+.trademark {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  // padding: 0 10mm;
+  font-size: 8px;
+  color: gray;
+}
+
               th {
                   background-color: #f4f4f4;
               }
@@ -78,6 +90,7 @@ const PaymentReportView = () => {
                   .margin-first{
                   margin:10px
                   }
+                  
           }
         `,
   });
@@ -145,45 +158,59 @@ const PaymentReportView = () => {
   }
   const handleSavePDF = () => {
     const input = tableRef.current;
-
+  
     html2canvas(input, { scale: 2 })
       .then((canvas) => {
         const imgData = canvas.toDataURL("image/png");
-
+  
         const pdf = new jsPDF("p", "mm", "a4");
-
+  
         const pdfWidth = pdf.internal.pageSize.getWidth();
         const pdfHeight = pdf.internal.pageSize.getHeight();
-
+  
         const imgWidth = canvas.width;
         const imgHeight = canvas.height;
-
+  
         const margin = 10;
-
         const availableWidth = pdfWidth - 2 * margin;
-
-        const ratio = Math.min(
-          availableWidth / imgWidth,
-          pdfHeight / imgHeight
-        );
-
-        const imgX = margin;
-        const imgY = 0;
-
-        pdf.addImage(
-          imgData,
-          "PNG",
-          imgX,
-          imgY,
-          imgWidth * ratio,
-          imgHeight * ratio
-        );
-        pdf.save("invoice.pdf");
+  
+        // Determine the scaling ratio
+        const ratio = Math.min(availableWidth / imgWidth, pdfHeight / imgHeight);
+        
+        let imgX = margin;
+        let imgY = 0;
+  
+        // Calculate the height for this page
+        const pageHeight = pdf.internal.pageSize.height;
+  
+        // Add first page
+        pdf.addImage(imgData, "PNG", imgX, imgY, imgWidth * ratio, imgHeight * ratio);
+  
+        // Calculate remaining height
+        let remainingHeight = imgHeight * ratio - pageHeight;
+  
+        while (remainingHeight > 0) {
+          // Add a new page if there's more content
+          pdf.addPage();
+  
+          // Reset imgY to continue from the top
+          imgY = -remainingHeight;
+  
+          // Add image to the new page
+          pdf.addImage(imgData, "PNG", imgX, imgY, imgWidth * ratio, imgHeight * ratio);
+  
+          // Recalculate remaining height
+          remainingHeight -= pageHeight;
+        }
+  
+        // Save the PDF after all pages are added
+        pdf.save("payment_report.pdf");
       })
       .catch((error) => {
         console.error("Error generating PDF: ", error);
       });
   };
+  
   const onSubmit = (e) => {
     e.preventDefault();
     let data = {
@@ -243,7 +270,7 @@ const PaymentReportView = () => {
               />
               <IconArrowBack
                 className="cursor-pointer text-gray-600 hover:text-red-600"
-                onClick={() => navigate("/report-agencies-form")}
+                onClick={() => navigate("/report-payment-form")}
                 title="Go Back"
               />
             </div>
@@ -264,7 +291,10 @@ const PaymentReportView = () => {
                     <tr className="bg-gray-200">
                       {["Date", "Voucher", "Debit", "Credit", "Amount"].map(
                         (header) => (
-                          <th key={header} className="p-2 border border-black">
+                          <th
+                            key={header}
+                            className="text-xs p-1 border border-black"
+                          >
                             {header}
                           </th>
                         )
@@ -274,22 +304,22 @@ const PaymentReportView = () => {
                   <tbody>
                     {payment.map((item, index) => (
                       <tr key={index}>
-                        <td className="p-2 border border-black">
+                        <td className="text-xs p-1 border border-black text-center">
                           {moment(item.payment_details_date).format(
                             "DD-MM-YYYY"
                           )}
                         </td>
-                        <td className="p-2 border border-black">
-                          {item.payment_details_voucher_type || "N/A"}
+                        <td className="text-xs p-1 border border-black">
+                          {item.payment_details_voucher_type || "-"}
                         </td>
-                        <td className="p-2 border border-black">
-                          {item.payment_details_debit || "N/A"}
+                        <td className="text-xs p-1 border border-black">
+                          {item.payment_details_debit || "-"}
                         </td>
-                        <td className="p-2 border border-black">
-                          {item.payment_details_credit || "N/A"}
+                        <td className="text-xs p-1 border border-black">
+                          {item.payment_details_credit || "-"}
                         </td>
 
-                        <td className="p-2 border border-black">
+                        <td className="text-xs p-1 border border-black text-center">
                           <NumericFormat
                             value={item.payment_details_amount}
                             displayType="text"
@@ -307,6 +337,14 @@ const PaymentReportView = () => {
                   No Payment Data Available
                 </div>
               )}
+            </div>
+                        <div className="hidden print:block">
+              <div className="trademark flex justify-between items-center mt-4 ">
+                <h2 className="text-xs font-medium px-1">DFC</h2>
+                <h2 className="text-xs font-medium px-5">
+                  {new Date().toLocaleDateString("en-GB")}{" "}
+                </h2>
+              </div>
             </div>
           </div>
         </div>

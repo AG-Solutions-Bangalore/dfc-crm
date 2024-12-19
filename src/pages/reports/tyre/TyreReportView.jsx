@@ -51,13 +51,12 @@ const TyreReportView = () => {
     pageStyle: `
           @page {
               size: A4;
-              margin: 2mm;
+              margin: 4mm;
           }
           @media print {
               body {
                   margin: 0;
                   font-size: 12px; 
-                  border: 1px solid #000;
                   min-height:100vh
               }
               table {
@@ -68,6 +67,19 @@ const TyreReportView = () => {
                   border: 1px solid #ddd;
                   padding: 4px;
               }
+
+
+.trademark {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  // padding: 0 10mm;
+  font-size: 8px;
+  color: gray;
+}
+
               th {
                   background-color: #f4f4f4;
               }
@@ -77,6 +89,7 @@ const TyreReportView = () => {
                   .margin-first{
                   margin:10px
                   }
+                  
           }
         `,
   });
@@ -286,22 +299,22 @@ const TyreReportView = () => {
                           {moment(item.tyre_date).format("DD-MM-YYYY")}
                         </td>
                         <td className="p-1 text-xs border border-black">
-                          {item.tyre_company || "N/A"}
+                          {item.tyre_company || "-"}
                         </td>
                         <td className="p-1 text-xs border border-black">
-                          {item.tyre_branch || "N/A"}
+                          {item.tyre_branch || "-"}
                         </td>
                         <td className="p-1 text-xs border border-black">
-                          {item.tyre_supplier || "N/A"}
+                          {item.tyre_supplier || "-"}
                         </td>
                         <td className="p-1 text-xs border border-black text-center">
-                          {item.tyre_bill_ref || "N/A"}
+                          {item.tyre_bill_ref || "-"}
                         </td>
                         <td className="p-1 text-xs border border-black text-center">
                           ₹{item.tyre_bill_amount || "0"}
                         </td>
                         <td className="p-1 text-xs border border-black text-center">
-                          {item.tyre_count || "N/A"}
+                          {item.tyre_count || "-"}
                         </td>
                       </tr>
                     ))}
@@ -312,6 +325,14 @@ const TyreReportView = () => {
                   No Tyre Data Available
                 </div>
               )}
+            </div>
+            <div className="hidden print:block">
+              <div className="trademark flex justify-between items-center mt-4 ">
+                <h2 className="text-xs font-medium px-1">DFC</h2>
+                <h2 className="text-xs font-medium px-5">
+                  {new Date().toLocaleDateString("en-GB")}{" "}
+                </h2>
+              </div>
             </div>
           </div>
         </div>
