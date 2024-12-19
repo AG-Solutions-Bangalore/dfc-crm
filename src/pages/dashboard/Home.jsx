@@ -7,7 +7,7 @@ import { BuildingOfficeIcon } from '@heroicons/react/24/outline';
 import moment from 'moment';
 import { IconInfoCircle } from '@tabler/icons-react';
 import dateYear from '../../utils/dateyear';
-const AUTH_TOKEN = localStorage.getItem('token');
+
 
 const Loader = () => {
   return (
@@ -80,8 +80,9 @@ const Home = () => {
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
+        const token =localStorage.getItem('token')
         const response = await axios.get(`${BASE_URL}/api/fetch-dashboard-data-by/${dateYear}`, {
-          headers: { Authorization: `Bearer ${AUTH_TOKEN}` }
+          headers: { Authorization: `Bearer ${token}` }
         });
 
         setDashboardData({

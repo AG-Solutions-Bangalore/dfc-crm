@@ -42,7 +42,6 @@ const EditDriver = () => {
           hazard_lice_no: "",
           user_status: "",
           user_branch: "",
-          user_branch: "",
           user_insurance: "",
           user_insurance_no: "",
           user_bank:"",
