@@ -204,11 +204,11 @@ const VehiclesList = () => {
           );
         },
       },
-      {
-        accessorKey: "vehicle_status",
-        header: "Status",
-        size: 50,
-      },
+      // {
+      //   accessorKey: "vehicle_status",
+      //   header: "Status",
+      //   size: 50,
+      // },
       {
         id: "id",
         header: "Action",
@@ -226,9 +226,9 @@ const VehiclesList = () => {
                 setIsViewExpanded(true); 
               }}
                 className="flex items-center space-x-2"
-                title="Edit"
+                title="Side View"
               >
-                <IconLiveView className="h-5 w-5 text-blue-500 cursor-pointer" />
+                <IconEye className="h-5 w-5 text-blue-500 cursor-pointer" />
               </div>
               <div
                 onClick={() => navigate(`/vechile-edit/${id}`)}
@@ -239,20 +239,22 @@ const VehiclesList = () => {
               </div>
 
 
-              <div
+              {/* <div
                 onClick={() => navigate(`/vechile-view/${id}`)}
                 className="flex items-center space-x-2"
                 title="View"
               >
                 <IconEye className="h-5 w-5 text-blue-500 cursor-pointer" />
-              </div>
+              </div> */}
+               <a href={`/truckdetails-viewall/${id}`} target="_blank" rel="noopener noreferrer">
               <div
-                // onClick={toggleViewerDrawer(true, id)}
+                  // onClick={() => navigate(`/truckdetails-viewall/${id}`)}
                 className="flex items-center space-x-2"
                 title="View"
               >
                 <IconTruck className="h-5 w-5 text-blue-500 cursor-pointer" />
               </div>
+              </a>
             </div>
           );
         },
@@ -285,32 +287,7 @@ const VehiclesList = () => {
     enableStickyHeader: true,
     enableStickyFooter: true,
     mantineTableContainerProps: { sx: { maxHeight: "400px" } },
-    renderTopToolbarCustomActions: () => (
-      <div className="flex justify-center">
-        <div className="inline-flex bg-gray-200 border border-gray-500 rounded-lg shadow-md">
-          <button
-            onClick={() => setActiveTab("Active")}
-            className={`px-4 py-2 w-[6rem] text-sm font-[400] rounded-lg transition-all duration-300 ease-in-out ${
-              activeTab === "Active"
-                ? "bg-blue-600 text-white shadow-md"
-                : "text-gray-700 hover:bg-gray-300"
-            }`}
-          >
-            Active
-          </button>
-          <button
-            onClick={() => setActiveTab("Inactive")}
-            className={`px-4 py-2 w-[6rem] text-sm font-[400] rounded-lg transition-all duration-300 ease-in-out ${
-              activeTab === "Inactive"
-                ? "bg-blue-600 text-white shadow-md"
-                : "text-gray-700 hover:bg-gray-300"
-            }`}
-          >
-            Inactive
-          </button>
-        </div>
-      </div>
-    ),
+   
   });
 
   return (
@@ -368,7 +345,11 @@ const VehiclesList = () => {
             </div>
           </div>
         </div>
-        <div className=" flex w-full p-4 gap-2 relative ">
+
+
+
+        {/* layout change  */}
+        <div className=" flex w-full  gap-2 relative ">
         <div  className={`
             ${isViewExpanded ? "w-[70%]" : "w-full"} 
             transition-all duration-300 ease-in-out  
@@ -382,14 +363,15 @@ const VehiclesList = () => {
                   <div
                     className={`
                       w-[30%] 
-                      p-4 
+                       p-4
                       border-l 
                       border-red-400
                       transition-all 
                       duration-300 
                       ease-in-out 
                       absolute 
-                      right-0 
+                      right-0
+                      
                      
                     
                       ${
@@ -399,10 +381,10 @@ const VehiclesList = () => {
                       }
                     `}
                   >
-                    <div className="flex justify-end mb-2">
+                    <div className="flex justify-end ml-2 ">
                       <button
-                        
-                    
+                        title="close"
+                        className="text-black font-[700] cursor-pointer hover:text-red-900"
                         onClick={() => {
                           setIsViewExpanded(false);
                           setSelectedVehicleId(null);

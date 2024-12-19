@@ -5,12 +5,14 @@ import axios from 'axios';
 import BASE_URL from '../../../base/BaseUrl';
 import { MantineReactTable, useMantineReactTable } from 'mantine-react-table';
 import { IconEdit, IconEye, IconPlus } from '@tabler/icons-react';
+import ViewDriver from './ViewDriver';
 
 const DriverList = () => {
   const [driverData, setDriverData] = useState(null);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-
+ const [isViewExpanded, setIsViewExpanded] = useState(false);
+    const [selectedVehicleId, setSelectedVehicleId] = useState(null);
 
 
   const fetchDriverData = async () => {
@@ -88,7 +90,10 @@ const DriverList = () => {
                 <IconEdit className="h-5 w-5 text-blue-500 cursor-pointer" />
               </div>
               <div
-                // onClick={toggleViewerDrawer(true, id)}
+                 onClick={() => {
+                  setSelectedVehicleId(id); 
+                  setIsViewExpanded(true); 
+                }}
                 className="flex items-center space-x-2"
                 title="View"
               >
@@ -139,9 +144,65 @@ const DriverList = () => {
               </div>
           </div>
         </div>
-
-        <div className=" shadow-md">
+        <div className=" flex w-full  gap-2 relative ">
+        <div className={`
+            ${isViewExpanded ? "w-[70%]" : "w-full"} 
+            transition-all duration-300 ease-in-out  
+            pr-4
+          `}>
           <MantineReactTable table={table} />
+        </div>
+
+
+
+        {isViewExpanded && (
+                  <div
+                    className={`
+                      w-[30%] 
+                       p-4
+                      border-l 
+                      border-red-400
+                      transition-all 
+                      duration-300 
+                      ease-in-out 
+                      absolute 
+                      right-0
+                      
+                     
+                    
+                      ${
+                        isViewExpanded
+                          ? "opacity-100 translate-x-0"
+                          : "opacity-0 translate-x-full"
+                      }
+                    `}
+                  >
+                    <div className="flex justify-end ml-2 ">
+                      <button
+                        title="close"
+                        className="text-black font-[700] cursor-pointer hover:text-red-900"
+                        onClick={() => {
+                          setIsViewExpanded(false);
+                          setSelectedVehicleId(null);
+                        }}
+                      >
+                        ✕
+                      </button>
+                    </div>
+                    <ViewDriver driverId={selectedVehicleId}  />
+                  </div>
+                )}
+
+
+
+
+
+
+
+
+
+
+
         </div>
       </div>
    </Layout>

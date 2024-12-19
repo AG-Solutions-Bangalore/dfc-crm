@@ -3,6 +3,7 @@ import Layout from "../../layout/Layout";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   IconArrowBack,
+  IconChevronRight,
   IconEdit,
   IconEditCircle,
   IconInfoCircle,
@@ -80,6 +81,11 @@ const ViewVechile = () => {
   const [vehicle, setVehicle] = useState({});
   const [tyre, setTyre] = useState({});
   const [loading, setLoading] = useState(true);
+  const [isInfoVisible, setIsInfoVisible] = useState(false);
+
+  const toggleInfo = () => {
+    setIsInfoVisible(!isInfoVisible);
+  };
 
   // Print handler using react-to-print
   const handlePrint = useReactToPrint({
@@ -196,7 +202,7 @@ const ViewVechile = () => {
           <h2 className="px-5 text-black text-lg flex flex-row justify-between items-center rounded-xl p-2">
             <div className="flex items-center gap-2">
               <IconInfoCircle className="w-4 h-4" />
-              <span>Vechile View {id}</span>
+              <span>Vechile View </span>
             </div>
             <div className="flex items-center space-x-4">
               <IconPrinter
@@ -214,78 +220,208 @@ const ViewVechile = () => {
         </div>
 
         <div ref={printRef} className="p-4">
-          <div className="mb-2">
+          <div className="mb-2 flex items-center justify-between">
             <h1 className="print:text-lg print:text-black text-blue-500 font-bold">
               {vehicle.reg_no}
             </h1>
-          </div>
-          <div className="grid grid-cols-2 gap-4 mb-6">
-            <div>
-              <table className="w-full">
-                <tbody>
-                  <tr className="border-b">
-                    <td className="font-semibold w-1/3 py-2">Branch</td>
-                    <td>{vehicle?.vehicle_branch}</td>
-                  </tr>
-                  <tr className="border-b">
-                    <td className="font-semibold w-1/3 py-2">Company</td>
-                    <td>{vehicle?.vehicle_company}</td>
-                  </tr>
-                  <tr className="border-b">
-                    <td className="font-semibold w-1/3 py-2">Vehicle Type</td>
-                    <td>{vehicle?.vehicle_type}</td>
-                  </tr>
-                  <tr className="border-b">
-                    <td className="font-semibold w-1/3 py-2">Modal Year</td>
-                    <td>{vehicle?.mfg_year}</td>
-                  </tr>
-                  <tr className="border-b">
-                    <td className="font-semibold w-1/3 py-2">Open KM</td>
-                    <td>{vehicle?.vehicle_open_km}</td>
-                  </tr>
-                  <tr className="border-b">
-                    <td className="font-semibold w-1/3 py-2">Open HSD</td>
-                    <td>{vehicle?.vehicle_hsd_open}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <div>
-              <table className="w-full">
-                <tbody>
-                  <tr className="border-b">
-                    <td className="font-semibold w-1/3 py-2">Insurance Due</td>
-                    <td>{moment(vehicle?.ins_due).format("DD-MMMM-YYYY")}</td>
-                  </tr>
-                  <tr className="border-b">
-                    <td className="font-semibold w-1/3 py-2">Permit Due</td>
-                    <td>
-                      {moment(vehicle?.permit_due).format("DD-MMMM-YYYY")}
-                    </td>
-                  </tr>
-                  <tr className="border-b">
-                    <td className="font-semibold w-1/3 py-2">FC Due</td>
-                    <td>{moment(vehicle?.fc_due).format("DD-MMMM-YYYY")}</td>
-                  </tr>
-                  <tr className="border-b">
-                    <td className="font-semibold w-1/3 py-2">Mileage</td>
-                    <td>{vehicle?.vehicle_mileage}</td>
-                  </tr>
-                  <tr className="border-b">
-                    <td className="font-semibold w-1/3 py-2">Driver</td>
-                    <td>
-                      {vehicle?.vehicle_driver} {" - "}
-                      {vehicle.vehicle_driver_no}
-                    </td>
-                  </tr>
-                  <tr className="border-b">
-                    <td className="font-semibold w-1/3 py-2">No of Cylinder</td>
-                    <td>{vehicle?.no_of_gas_cylinder}</td>
-                  </tr>
-                </tbody>
-              </table>
+            <div className="block print:hidden">
+            <button
+              onClick={toggleInfo}
+              className="p-1 border  bg-orange-500 text-xs border-black rounded-lg hover:bg-orange-600 transition-colors flex items-center gap-1"
+            >
+              View Info
+              <IconChevronRight
+                className={`w-4 h-4 transition-transform duration-300 ${
+                  isInfoVisible ? "rotate-90" : ""
+                }`}
+              />
+            </button>
             </div>
           </div>
+          {/* Sliding Info Panel */}
+          <div
+            className={`transition-all duration-300 ease-in-out block print:hidden overflow-hidden mb-4 ${
+              isInfoVisible ? "max-h-96" : "max-h-0"
+            }`}
+          >
+            <div className="bg-orange-100 rounded-lg p-4 mt-2">
+              <div className="grid grid-cols-2 gap-6">
+                {/* Left Column */}
+                <div className="bg-white rounded-lg shadow p-4">
+                  <table className="w-full">
+                    <tbody className="divide-y">
+                      <tr>
+                        <td className="font-semibold w-1/3 py-2">Branch</td>
+                        <td>{vehicle?.vehicle_branch}</td>
+                      </tr>
+                      <tr>
+                        <td className="font-semibold w-1/3 py-2">Company</td>
+                        <td>{vehicle?.vehicle_company}</td>
+                      </tr>
+                      <tr>
+                        <td className="font-semibold w-1/3 py-2">
+                          Vehicle Type
+                        </td>
+                        <td>{vehicle?.vehicle_type}</td>
+                      </tr>
+                      <tr>
+                        <td className="font-semibold w-1/3 py-2">Modal Year</td>
+                        <td>{vehicle?.mfg_year}</td>
+                      </tr>
+                      <tr>
+                        <td className="font-semibold w-1/3 py-2">Open KM</td>
+                        <td>{vehicle?.vehicle_open_km}</td>
+                      </tr>
+                      <tr>
+                        <td className="font-semibold w-1/3 py-2">Open HSD</td>
+                        <td>{vehicle?.vehicle_hsd_open}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                {/* Right Column */}
+                <div className="bg-white rounded-lg shadow p-4">
+                  <table className="w-full">
+                    <tbody className="divide-y">
+                      <tr>
+                        <td className="font-semibold w-1/3 py-2">
+                          Insurance Due
+                        </td>
+                        <td>
+                          {moment(vehicle?.ins_due).format("DD-MMMM-YYYY")}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="font-semibold w-1/3 py-2">Permit Due</td>
+                        <td>
+                          {moment(vehicle?.permit_due).format("DD-MMMM-YYYY")}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="font-semibold w-1/3 py-2">FC Due</td>
+                        <td>
+                          {moment(vehicle?.fc_due).format("DD-MMMM-YYYY")}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="font-semibold w-1/3 py-2">Mileage</td>
+                        <td>{vehicle?.vehicle_mileage}</td>
+                      </tr>
+                      <tr>
+                        <td className="font-semibold w-1/3 py-2">Driver</td>
+                        <td>
+                          {vehicle?.vehicle_driver} {" - "}{" "}
+                          {vehicle.vehicle_driver_no}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="font-semibold w-1/3 py-2">
+                          No of Cylinder
+                        </td>
+                        <td>{vehicle?.no_of_gas_cylinder}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="hidden print:block">
+            <div className="grid grid-cols-2 gap-4 mb-6">
+              <div>
+                <table className="w-full">
+                  <tbody>
+                    <tr className="border-b">
+                      <td className="font-semibold w-1/3 print:py-0 py-2 ">
+                        Branch
+                      </td>
+                      <td>{vehicle?.vehicle_branch}</td>
+                    </tr>
+                    <tr className="border-b">
+                      <td className="font-semibold w-1/3 print:py-0 py-2">
+                        Company
+                      </td>
+                      <td>{vehicle?.vehicle_company}</td>
+                    </tr>
+                    <tr className="border-b">
+                      <td className="font-semibold w-1/3 print:py-0 py-2">
+                        Vehicle Type
+                      </td>
+                      <td>{vehicle?.vehicle_type}</td>
+                    </tr>
+                    <tr className="border-b">
+                      <td className="font-semibold w-1/3 print:py-0 py-2">
+                        Modal Year
+                      </td>
+                      <td>{vehicle?.mfg_year}</td>
+                    </tr>
+                    <tr className="border-b">
+                      <td className="font-semibold w-1/3 print:py-0 py-2">
+                        Open KM
+                      </td>
+                      <td>{vehicle?.vehicle_open_km}</td>
+                    </tr>
+                    <tr className="border-b">
+                      <td className="font-semibold w-1/3 print:py-0 py-2">
+                        Open HSD
+                      </td>
+                      <td>{vehicle?.vehicle_hsd_open}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div>
+                <table className="w-full">
+                  <tbody>
+                    <tr className="border-b">
+                      <td className="font-semibold w-1/3 print:py-0  py-2">
+                        Insurance Due
+                      </td>
+                      <td>{moment(vehicle?.ins_due).format("DD-MMMM-YYYY")}</td>
+                    </tr>
+                    <tr className="border-b">
+                      <td className="font-semibold w-1/3 print:py-0 py-2">
+                        Permit Due
+                      </td>
+                      <td>
+                        {moment(vehicle?.permit_due).format("DD-MMMM-YYYY")}
+                      </td>
+                    </tr>
+                    <tr className="border-b">
+                      <td className="font-semibold w-1/3 print:py-0 py-2">
+                        FC Due
+                      </td>
+                      <td>{moment(vehicle?.fc_due).format("DD-MMMM-YYYY")}</td>
+                    </tr>
+                    <tr className="border-b">
+                      <td className="font-semibold w-1/3 print:py-0 py-2">
+                        Mileage
+                      </td>
+                      <td>{vehicle?.vehicle_mileage}</td>
+                    </tr>
+                    <tr className="border-b">
+                      <td className="font-semibold w-1/3 print:py-0 py-2">
+                        Driver
+                      </td>
+                      <td>
+                        {vehicle?.vehicle_driver} {" - "}
+                        {vehicle.vehicle_driver_no}
+                      </td>
+                    </tr>
+                    <tr className="border-b">
+                      <td className="font-semibold w-1/3 print:py-0 py-2">
+                        No of Cylinder
+                      </td>
+                      <td>{vehicle?.no_of_gas_cylinder}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
           {tyre != 0 && (
             <div className="mt-4">
               <h3 className="text-lg font-semibold mb-2 text-center">Tyre</h3>
@@ -346,12 +482,12 @@ const ViewVechile = () => {
                           </button>
 
                           <button
-                             onClick={(e) =>
-                                handleChangePkm(
-                                  e,
-                                  tyre?.id + "#tyre_assign_1_front_left_no"
-                                )
-                              }
+                            onClick={(e) =>
+                              handleChangePkm(
+                                e,
+                                tyre?.id + "#tyre_assign_1_front_left_no"
+                              )
+                            }
                             title="change present km"
                             className="text-blue-500 hover:text-blue-700"
                           >
@@ -403,12 +539,12 @@ const ViewVechile = () => {
                           </button>
 
                           <button
-                              onClick={(e) =>
-                                handleChangePkm(
-                                  e,
-                                  tyre?.id + "#tyre_assign_2_front_right_no"
-                                )
-                              }
+                            onClick={(e) =>
+                              handleChangePkm(
+                                e,
+                                tyre?.id + "#tyre_assign_2_front_right_no"
+                              )
+                            }
                             title="change present km"
                             className="text-blue-500 hover:text-blue-700"
                           >
@@ -461,12 +597,12 @@ const ViewVechile = () => {
                           </button>
 
                           <button
-                             onClick={(e) =>
-                                handleChangePkm(
-                                  e,
-                                  tyre?.id + "#tyre_assign_3_back_left_no"
-                                )
-                              }
+                            onClick={(e) =>
+                              handleChangePkm(
+                                e,
+                                tyre?.id + "#tyre_assign_3_back_left_no"
+                              )
+                            }
                             title="change present km"
                             className="text-blue-500 hover:text-blue-700"
                           >
@@ -519,11 +655,11 @@ const ViewVechile = () => {
 
                           <button
                             onClick={(e) =>
-                                handleChangePkm(
-                                  e,
-                                  tyre?.id + "#tyre_assign_4_back_left_no"
-                                )
-                              }
+                              handleChangePkm(
+                                e,
+                                tyre?.id + "#tyre_assign_4_back_left_no"
+                              )
+                            }
                             title="change present km"
                             className="text-blue-500 hover:text-blue-700"
                           >
@@ -576,11 +712,11 @@ const ViewVechile = () => {
 
                           <button
                             onClick={(e) =>
-                                handleChangePkm(
-                                  e,
-                                  tyre?.id + "#tyre_assign_5_back_right_no"
-                                )
-                              }
+                              handleChangePkm(
+                                e,
+                                tyre?.id + "#tyre_assign_5_back_right_no"
+                              )
+                            }
                             title="change present km"
                             className="text-blue-500 hover:text-blue-700"
                           >
@@ -632,12 +768,12 @@ const ViewVechile = () => {
                           </button>
 
                           <button
-                           onClick={(e) =>
-                            handleChangePkm(
-                              e,
-                              tyre?.id + "#tyre_assign_6_back_right_no"
-                            )
-                          }
+                            onClick={(e) =>
+                              handleChangePkm(
+                                e,
+                                tyre?.id + "#tyre_assign_6_back_right_no"
+                              )
+                            }
                             title="change present km"
                             className="text-blue-500 hover:text-blue-700"
                           >
@@ -690,12 +826,12 @@ const ViewVechile = () => {
                           </button>
 
                           <button
-                               onClick={(e) =>
-                                handleChangePkm(
-                                  e,
-                                  tyre?.id + "#tyre_assign_3_back_housing_left_no"
-                                )
-                              }
+                            onClick={(e) =>
+                              handleChangePkm(
+                                e,
+                                tyre?.id + "#tyre_assign_3_back_housing_left_no"
+                              )
+                            }
                             title="change present km"
                             className="text-blue-500 hover:text-blue-700"
                           >
@@ -748,12 +884,12 @@ const ViewVechile = () => {
                           </button>
 
                           <button
-                              onClick={(e) =>
-                                handleChangePkm(
-                                  e,
-                                  tyre?.id + "#tyre_assign_4_back_housing_left_no"
-                                )
-                              }
+                            onClick={(e) =>
+                              handleChangePkm(
+                                e,
+                                tyre?.id + "#tyre_assign_4_back_housing_left_no"
+                              )
+                            }
                             title="change present km"
                             className="text-blue-500 hover:text-blue-700"
                           >
@@ -807,11 +943,11 @@ const ViewVechile = () => {
 
                           <button
                             onClick={(e) =>
-                                handleChangePkm(
-                                  e,
-                                  tyre?.id + "#tyre_assign_5_back_dummy_left_no"
-                                )
-                              }
+                              handleChangePkm(
+                                e,
+                                tyre?.id + "#tyre_assign_5_back_dummy_left_no"
+                              )
+                            }
                             title="change present km"
                             className="text-blue-500 hover:text-blue-700"
                           >
@@ -863,12 +999,12 @@ const ViewVechile = () => {
                           </button>
 
                           <button
-                          onClick={(e) =>
-                            handleChangePkm(
-                              e,
-                              tyre?.id + "#tyre_assign_6_back_dummy_left_no"
-                            )
-                          }
+                            onClick={(e) =>
+                              handleChangePkm(
+                                e,
+                                tyre?.id + "#tyre_assign_6_back_dummy_left_no"
+                              )
+                            }
                             title="change present km"
                             className="text-blue-500 hover:text-blue-700"
                           >
@@ -923,11 +1059,12 @@ const ViewVechile = () => {
 
                           <button
                             onClick={(e) =>
-                                handleChangePkm(
-                                  e,
-                                  tyre?.id + "#tyre_assign_7_back_housing_right_no"
-                                )
-                              }
+                              handleChangePkm(
+                                e,
+                                tyre?.id +
+                                  "#tyre_assign_7_back_housing_right_no"
+                              )
+                            }
                             title="change present km"
                             className="text-blue-500 hover:text-blue-700"
                           >
@@ -982,11 +1119,12 @@ const ViewVechile = () => {
 
                           <button
                             onClick={(e) =>
-                                handleChangePkm(
-                                  e,
-                                  tyre?.id + "#tyre_assign_8_back_housing_right_no"
-                                )
-                              }
+                              handleChangePkm(
+                                e,
+                                tyre?.id +
+                                  "#tyre_assign_8_back_housing_right_no"
+                              )
+                            }
                             title="change present km"
                             className="text-blue-500 hover:text-blue-700"
                           >
@@ -1038,12 +1176,12 @@ const ViewVechile = () => {
                           </button>
 
                           <button
-                              onClick={(e) =>
-                                handleChangePkm(
-                                  e,
-                                  tyre?.id + "#tyre_assign_9_back_dummy_right_no"
-                                )
-                              }
+                            onClick={(e) =>
+                              handleChangePkm(
+                                e,
+                                tyre?.id + "#tyre_assign_9_back_dummy_right_no"
+                              )
+                            }
                             title="change present km"
                             className="text-blue-500 hover:text-blue-700"
                           >
@@ -1095,12 +1233,12 @@ const ViewVechile = () => {
                           </button>
 
                           <button
-                             onClick={(e) =>
-                                handleChangePkm(
-                                  e,
-                                  tyre?.id + "#tyre_assign_10_back_dummy_right_no"
-                                )
-                              }
+                            onClick={(e) =>
+                              handleChangePkm(
+                                e,
+                                tyre?.id + "#tyre_assign_10_back_dummy_right_no"
+                              )
+                            }
                             title="change present km"
                             className="text-blue-500 hover:text-blue-700"
                           >

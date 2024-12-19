@@ -94,6 +94,8 @@ import SalaryReportMultipleView from "./pages/reports/salary/SalaryReportMultipl
 import PaymentReportView from "./pages/reports/payment/PaymentReportView";
 import SalaryReportView from "./pages/reports/salary/SalaryReportView";
 import VehicleReportView from "./pages/reports/vechilesDetails/VehicleReportView";
+import TruckView from "./pages/vehicles/TruckView";
+import ChangeSpkm from "./pages/vehicles/ChangeSpkm";
 
 const App = () => {
   return (
@@ -158,6 +160,8 @@ const App = () => {
         <Route path="/vechile-view/:id" element={<ViewVechile />} />
         <Route path="/changeTyre" element={<ChangeTyre />} />
         <Route path="/changePkm" element={<ChangePkm />} />
+        <Route path="/spkm/:id" element={<ChangeSpkm />} />
+        <Route path="//truckdetails-viewall/:id" element={<TruckView />} />
         {/* tyre  */}
         {/* purchase tyre  */}
         <Route path="/tyre/purchase-list" element={<PurchaseTyreList />} />
