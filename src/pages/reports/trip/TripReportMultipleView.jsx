@@ -53,13 +53,12 @@ const TripReportMultipleView = () => {
     pageStyle: `
           @page {
               size: A4;
-              margin: 2mm;
+              margin: 4mm;
           }
           @media print {
               body {
                   margin: 0;
                   font-size: 12px; 
-                  border: 1px solid #000;
                   min-height:100vh
               }
               table {
@@ -70,6 +69,19 @@ const TripReportMultipleView = () => {
                   border: 1px solid #ddd;
                   padding: 4px;
               }
+
+
+.trademark {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  // padding: 0 10mm;
+  font-size: 8px;
+  color: gray;
+}
+
               th {
                   background-color: #f4f4f4;
               }
@@ -79,6 +91,7 @@ const TripReportMultipleView = () => {
                   .margin-first{
                   margin:10px
                   }
+                  
           }
         `,
   });
@@ -280,7 +293,10 @@ const TripReportMultipleView = () => {
                         "RT KM",
                         "HSD Supplied",
                       ].map((header) => (
-                        <th key={header} className="p-2 border border-black">
+                        <th
+                          key={header}
+                          className="text-xs p-1 border border-black"
+                        >
                           {header}
                         </th>
                       ))}
@@ -289,32 +305,32 @@ const TripReportMultipleView = () => {
                   <tbody>
                     {trip.map((item, index) => (
                       <tr key={index}>
-                        <td className="p-2 border border-black">
-                          {item.trip_company || "N/A"}
+                        <td className="text-xs p-1 border border-black">
+                          {item.trip_company || "-"}
                         </td>
 
-                        <td className="p-2 border border-black">
-                          {item.trip_branch || "N/A"}
+                        <td className="text-xs p-1 border border-black">
+                          {item.trip_branch || "-"}
                         </td>
 
-                        <td className="p-2 border border-black">
-                          {item.trip_vehicle || "N/A"}
+                        <td className="text-xs p-1 border border-black text-center">
+                          {item.trip_vehicle || "-"}
                         </td>
 
-                        <td className="p-2 border border-black">
-                          {item.trip_driver || "N/A"}
+                        <td className="text-xs p-1 border border-black">
+                          {item.trip_driver || "-"}
                         </td>
 
-                        <td className="p-2 border border-black">
-                          {item.trip_total || "N/A"}
+                        <td className="text-xs p-1 border border-black text-center">
+                          {item.trip_total || "-"}
                         </td>
 
-                        <td className="p-2 border border-black">
-                          {item.trip_km || "N/A"}
+                        <td className="text-xs p-1 border border-black text-center">
+                          {item.trip_km || "-"}
                         </td>
 
-                        <td className="p-2 border border-black">
-                          {item.trip_hsd_supplied || "N/A"}
+                        <td className="text-xs p-1 border border-black text-center">
+                          {item.trip_hsd_supplied || "-"}
                         </td>
                       </tr>
                     ))}
@@ -325,6 +341,14 @@ const TripReportMultipleView = () => {
                   No Trip Data Available
                 </div>
               )}
+            </div>
+            <div className="hidden print:block">
+              <div className="trademark flex justify-between items-center mt-4 ">
+                <h2 className="text-xs font-medium px-1">DFC</h2>
+                <h2 className="text-xs font-medium px-5">
+                  {new Date().toLocaleDateString("en-GB")}{" "}
+                </h2>
+              </div>
             </div>
           </div>
         </div>
