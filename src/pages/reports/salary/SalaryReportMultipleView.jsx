@@ -14,8 +14,11 @@ import SkeletonLoading from "../agencies/SkeletonLoading";
 import { IconFileTypePdf } from "@tabler/icons-react";
 import { toast } from "react-toastify";
 import { NumericFormat } from "react-number-format";
-import html2pdf from "html2pdf.js";
+
 import jsPDF from "jspdf";
+import pdfMake from "pdfmake/build/pdfmake";
+
+
 
 const printStyles = `
       @page {
@@ -96,26 +99,87 @@ const SalaryReportMultipleView = () => {
   });
 
 
-  const handleSavePDF = () => {
-    const content = componentRef.current;
-
-    const styledContent = content.cloneNode(true);
-    styledContent.style.padding = "20px"; 
-    styledContent.style.margin = "0 auto"; 
-    styledContent.style.width = "90%"; 
-
-    const doc = new jsPDF();
-
-    doc.html(styledContent, {
-      callback: function (doc) {
-        doc.save("content.pdf");
-      },
-      x: 0, // Adjust margins
-      y: 10,
-      width: 210,
-      windowWidth: 1600, // Scale content to fit PDF
-    });
-  };
+ const handleSavePDF = () => {
+   const tableBody = [
+     [
+       "Company",
+       "Branch",
+       "Vehicle",
+       "Driver",
+       "Total Trip",
+       "Total KM",
+       "Trip Amount",
+       "Hamali",
+       "Incentive",
+       "Advance",
+       "Net Payable",
+     ], // Header row
+     ...salary.map((item) => [
+       item.trip_company || "-",
+       item.trip_branch || "-",
+       item.trip_vehicle || "-",
+       item.trip_driver || "-",
+       item.trip_count || "-",
+       item.trip_km || "-",
+       item.trip_incentive_amount * item.trip_count || "-",
+       item.trip_hmali || "-",
+       item.trip_bata_amount || "-",
+       item.trip_advance || "-",
+       item.trip_incentive_amount * item.trip_count +
+         item.trip_bata_for_trip +
+         (item.trip_hmali - item.trip_advance) +
+         +item.trip_bata_amount +
+         +item.trip_driver_salary +
+         item.trip_bata_for_km * item.trip_km || "-",
+     ]),
+   ];
+ 
+   const docDefinition = {
+     pageSize: "A4",
+     pageMargins: [10, 10, 10, 10],
+     content: [
+       { text: "Salary Report", style: "header", alignment: "center" },
+       {
+         table: {
+           headerRows: 1,
+           widths: [
+             "auto", // Adjust column widths based on content
+             "auto",
+             "auto",
+             "auto",
+             "auto",
+             "auto",
+             "auto",
+             "auto",
+             "auto",
+             "auto",
+             "auto",
+             
+           ],
+           body: tableBody,
+         },
+         layout: {
+           fillColor: (rowIndex) => (rowIndex === 0 ? "#CCCCCC" : null), // Header background
+           hLineWidth: () => 0.3,
+           vLineWidth: () => 0.3,
+           
+         },
+       },
+     ],
+     styles: {
+       header: {
+         fontSize: 12,
+         bold: true,
+         margin: [0, 0, 0, 10],
+       },
+     },
+     defaultStyle: {
+       fontSize: 7,
+     },
+   };
+ 
+   pdfMake.createPdf(docDefinition).download("salary_report.pdf");
+ };
 
   useEffect(() => {
     const styleSheet = document.createElement("style");
