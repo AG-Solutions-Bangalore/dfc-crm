@@ -72,13 +72,13 @@ const SalaryReportView = () => {
     pageStyle: `
           @page {
               size: A4;
-              margin: 2mm;
-          }
+  margin: 7mm 2mm; 
+  margin-top:2mm;
+            }
           @media print {
               body {
                   margin: 0;
                   font-size: 12px; 
-                  border: 1px solid #000;
                   min-height:100vh
               }
               table {
@@ -89,6 +89,19 @@ const SalaryReportView = () => {
                   border: 1px solid #ddd;
                   padding: 4px;
               }
+
+
+.trademark {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  // padding: 10mm;
+  font-size: 8px;
+  color: gray;
+}
+
               th {
                   background-color: #f4f4f4;
               }
@@ -98,6 +111,7 @@ const SalaryReportView = () => {
                   .margin-first{
                   margin:10px
                   }
+                  
           }
         `,
   });
@@ -311,7 +325,7 @@ const SalaryReportView = () => {
                       ].map((header) => (
                         <th
                           key={header}
-                          className="p-1 text-xs border border-black"
+                          className="p-1 text-xs  border border-black"
                         >
                           {header}
                         </th>
@@ -320,35 +334,35 @@ const SalaryReportView = () => {
                   </thead>
                   <tbody>
                     <tr>
-                      <td className="text-xs border border-black"></td>
-                      <td className="text-xs border border-black"></td>
-                      <td className="text-xs border border-black text-center">
+                      <td className="text-xs p-1 border border-black"></td>
+                      <td className="text-xs p-1 border border-black"></td>
+                      <td className=" p-1 text-xs  border border-black text-start">
                         HSD BALANCE B/F
                       </td>
-                      <td className="text-xs border border-black"></td>
-                      <td className="text-xs border border-black"></td>
-                      <td className="text-xs border border-black"></td>
+                      <td className="text-xs p-1 border border-black"></td>
+                      <td className="text-xs p-1 border border-black"></td>
+                      <td className="text-xs p-1 border border-black"></td>
 
-                      <td className="text-xs border border-black text-center">
+                      <td className="text-xs p-1 border border-black text-center">
                         {salarysummaryfooterhsd}
                       </td>
-                      <td className="text-xs border border-black"></td>
-                      <td className="text-xs border border-black"></td>
+                      <td className="text-xs p-1 border border-black"></td>
+                      <td className="text-xs p-1 border border-black"></td>
 
-                      <td className="text-xs border border-black"></td>
+                      <td className="text-xs p-1 border border-black"></td>
                     </tr>
                     {salarysummary.map((item, index) => (
                       <tr key={index}>
-                        <td className="text-xs border border-black text-center">
-                          {index + 1 || "N/A"}
+                        <td className="text-xs p-1 border border-black text-center">
+                          {index + 1 || "-"}
                         </td>
-                        <td className="text-xs border border-black text-center">
+                        <td className="text-xs p-1 border border-black text-center">
                           {moment(item.trip_date).format("DD-MM-YYYY")}
                         </td>
-                        <td className="text-xs border border-black text-center">
-                          {item.trip_agency || "N/A"}
+                        <td className="text-xs p-1 border border-black text-start">
+                          {item.trip_agency || "-"}
                         </td>
-                        <td className="text-xs border border-black text-center">
+                        <td className="text-xs p-1 border border-black text-center">
                           {item.trip_km / item.trip_hsd_supplied == "Infinity"
                             ? 0
                             : (item.trip_km / item.trip_hsd_supplied).toFixed(
@@ -356,7 +370,7 @@ const SalaryReportView = () => {
                               )}
                         </td>
 
-                        <td className="text-xs border border-black text-center">
+                        <td className="text-xs p-1 border border-black text-center">
                           <NumericFormat
                             value={item.trip_hmali}
                             displayType="text"
@@ -365,16 +379,16 @@ const SalaryReportView = () => {
                             thousandsGroupStyle="lakh"
                           />
                         </td>
-                        <td className="text-xs border border-black text-center">
-                          {item.trip_km || "N/A"}
+                        <td className="text-xs p-1 border border-black text-center">
+                          {item.trip_km || "-"}
                         </td>
-                        <td className="text-xs border border-black text-center">
-                          {item.trip_hsd || "N/A"}
+                        <td className="text-xs p-1 border border-black text-center">
+                          {item.trip_hsd || "-"}
                         </td>
-                        <td className="text-xs border border-black text-center">
-                          {item.trip_hsd_supplied || "N/A"}
+                        <td className="text-xs p-1 border border-black text-center">
+                          {item.trip_hsd_supplied || "-"}
                         </td>
-                        <td className="text-xs border border-black text-center">
+                        <td className="text-xs p-1 border border-black text-center">
                           <NumericFormat
                             value={item.trip_advance}
                             displayType="text"
@@ -383,7 +397,7 @@ const SalaryReportView = () => {
                             thousandsGroupStyle="lakh"
                           />
                         </td>
-                        <td className="text-xs border border-black text-center">
+                        <td className="text-xs p-1 border border-black text-center">
                           <NumericFormat
                             value={item.trip_bata_amount}
                             displayType="text"
@@ -472,7 +486,7 @@ const SalaryReportView = () => {
                           thousandsGroupStyle="lakh"
                         ></NumericFormat>
                       </td>
-                      <td className="text-xs border border-black"></td>
+                      <td className="text-xs p-1 border border-black"></td>
                     </tr>
                     <tr>
                       <td
@@ -532,7 +546,7 @@ const SalaryReportView = () => {
                           thousandsGroupStyle="lakh"
                         ></NumericFormat>
                       </td>
-                      <td className="text-xs border border-black"></td>
+                      <td className="text-xs p-1 border border-black"></td>
                     </tr>
                     <tr>
                       <td
@@ -550,7 +564,7 @@ const SalaryReportView = () => {
                           thousandsGroupStyle="lakh"
                         ></NumericFormat>
                       </td>
-                      <td className="text-xs border border-black"></td>
+                      <td className="text-xs p-1 border border-black"></td>
                     </tr>
                     <tr>
                       <td
@@ -577,7 +591,7 @@ const SalaryReportView = () => {
                           thousandsGroupStyle="lakh"
                         ></NumericFormat>
                       </td>
-                      <td className="text-xs border border-black"></td>
+                      <td className="text-xs p-1 border border-black"></td>
                     </tr>
                     <tr>
                       <td
@@ -603,11 +617,11 @@ const SalaryReportView = () => {
                           thousandsGroupStyle="lakh"
                         ></NumericFormat>
                       </td>
-                      <td className="text-xs border border-black"></td>
+                      <td className="text-xs p-1 border border-black"></td>
                     </tr>
                     <tr>
                       <td
-                        className="p-1 text-xs border border-black text-right"
+                        className="p-1 text-xs  border border-black text-right"
                         colSpan={8}
                       >
                         Trip Bata for a Day
@@ -628,11 +642,11 @@ const SalaryReportView = () => {
                           thousandsGroupStyle="lakh"
                         ></NumericFormat>
                       </td>
-                      <td className="text-xs border border-black"></td>
+                      <td className="text-xs p-1 border border-black"></td>
                     </tr>
                     <tr>
                       <td
-                        className="p-1 text-xs border border-black text-right"
+                        className="p-1 text-xs  border border-black text-right"
                         colSpan={8}
                       >
                         Payment Advance
@@ -651,7 +665,7 @@ const SalaryReportView = () => {
                           thousandsGroupStyle="lakh"
                         ></NumericFormat>
                       </td>
-                      <td className="text-xs border border-black"></td>
+                      <td className="text-xs p-1 border border-black"></td>
                     </tr>
                     <tr>
                       <td
@@ -689,7 +703,7 @@ const SalaryReportView = () => {
                           thousandsGroupStyle="lakh"
                         ></NumericFormat>
                       </td>
-                      <td className="text-xs border border-black"></td>
+                      <td className="text-xs p-1 border border-black"></td>
                     </tr>
                     <tr>
                       <td
@@ -701,32 +715,32 @@ const SalaryReportView = () => {
                     </tr>
 
                     <tr>
-                      <td className="text-xs border border-black"></td>
-                      <td className="text-xs border border-black"></td>
-                      <td className="text-xs border border-black">
+                      <td className="text-xs p-1 border border-black"></td>
+                      <td className="text-xs p-1 border border-black"></td>
+                      <td className="text-xs p-1 border border-black">
                         HSD BALANCE C/F
                       </td>
-                      <td className="text-xs border border-black"></td>
+                      <td className="text-xs p-1 border border-black"></td>
 
-                      <td className="text-xs border border-black"></td>
+                      <td className="text-xs p-1 border border-black"></td>
 
-                      <td className="text-xs border border-black"></td>
+                      <td className="text-xs p-1 border border-black"></td>
 
-                      <td className="text-xs border border-black"></td>
-                      <td className="text-xs border border-black text-center">
+                      <td className="text-xs p-1 border border-black"></td>
+                      <td className="text-xs p-1 border border-black text-center">
                         {salarysummaryfooterthsdsupplied.trip_hsd_supplied +
                           +salarysummaryfooterhsd -
                           salarysummaryfooterthsd.trip_hsd}
                       </td>
-                      <td className="text-xs border border-black"></td>
+                      <td className="text-xs p-1 border border-black"></td>
 
-                      <td className="text-xs border border-black"></td>
+                      <td className="text-xs p-1 border border-black"></td>
                     </tr>
                   </tfoot>
                 </table>
               ) : (
                 <div className="text-center text-gray-500 py-4">
-                  No Tyre Data Available
+                  No Salary Data Available
                 </div>
               )}
             </div>
@@ -754,18 +768,18 @@ const SalaryReportView = () => {
                   </thead>
                   <tbody>
                     <tr>
-                      <td className="text-xs border border-black text-center">
-                        {salarysummaryfooterhsd || "N/A"}
+                      <td className="text-xs p-1 border border-black text-center">
+                        {salarysummaryfooterhsd || "-"}
                       </td>
-                      <td className="text-xs border border-black text-center">
-                        {salarysummaryfooterthsd.trip_hsd || "N/A"}
+                      <td className="text-xs p-1 border border-black text-center">
+                        {salarysummaryfooterthsd.trip_hsd || "-"}
                       </td>
-                      <td className="text-xs border border-black text-center">
+                      <td className="text-xs p-1 border border-black text-center">
                         {salarysummaryfooterthsdsupplied.trip_hsd_supplied ||
-                          "N/A"}
+                          "-"}
                       </td>
-                      <td className="text-xs border border-black text-center"></td>
-                      <td className="text-xs border border-black text-center">
+                      <td className="text-xs p-1 border border-black text-center"></td>
+                      <td className="text-xs p-1 border border-black text-center">
                         {salarysummaryfooterthsdsupplied.trip_hsd_supplied +
                           +salarysummaryfooterhsd -
                           salarysummaryfooterthsd.trip_hsd}
@@ -775,7 +789,7 @@ const SalaryReportView = () => {
                 </table>
               ) : (
                 <div className="text-center text-gray-500 py-4">
-                  No Service Data Available
+                  No Salary Data Available
                 </div>
               )}
             </div>
@@ -794,7 +808,7 @@ const SalaryReportView = () => {
                         {["Sl No", "Date", "Amount"].map((header) => (
                           <th
                             key={header}
-                            className="text-xs border border-black"
+                            className="text-xs p-1 border border-black"
                           >
                             {header}
                           </th>
@@ -804,17 +818,17 @@ const SalaryReportView = () => {
                     <tbody>
                       {salarysummarypayment.map((item, index) => (
                         <tr key={index}>
-                          <td className="text-xs border border-black text-center">
-                            {index + 1 || "N/A"}
+                          <td className="text-xs p-1 border border-black text-center">
+                            {index + 1 || "-"}
                           </td>
 
-                          <td className="text-xs border border-black text-center">
+                          <td className="text-xs p-1 border border-black text-center">
                             {moment(item.payment_details_date).format(
                               "DD-MM-YYYY"
                             )}
                           </td>
 
-                          <td className="text-xs border border-black text-center">
+                          <td className="text-xs p-1 border border-black text-center">
                             <NumericFormat
                               value={item.payment_details_amount}
                               displayType="text"
@@ -830,11 +844,11 @@ const SalaryReportView = () => {
                       <tr className="bg-gray-100 font-bold text-center">
                         <td
                           colSpan={2}
-                          className="text-xs border border-black text-right"
+                          className="text-xs p-1 border border-black text-right"
                         >
                           Total:
                         </td>
-                        <td className="text-xs border border-black font-bold">
+                        <td className="text-xs p-1 border border-black font-bold">
                           <NumericFormat
                             value={
                               salarysummaryfooterpayment.payment_details_amount ==
@@ -853,6 +867,14 @@ const SalaryReportView = () => {
                   </table>
                 </>
               )}
+            </div>
+            <div className="hidden print:block">
+              <div className="trademark flex justify-between items-center mt-4 ">
+                <h2 className="text-xs font-medium px-1">DFC</h2>
+                <h2 className="text-xs font-medium px-5">
+                  {new Date().toLocaleDateString("en-GB")}{" "}
+                </h2>
+              </div>
             </div>
           </div>
         </div>

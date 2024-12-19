@@ -12,88 +12,110 @@ import Layout from "../../../layout/Layout";
 import { useReactToPrint } from "react-to-print";
 import SkeletonLoading from "../agencies/SkeletonLoading";
 import { IconFileTypePdf } from "@tabler/icons-react";
-import jsPDF from "jspdf";
-import html2canvas from "html2canvas";
 import { toast } from "react-toastify";
-import moment from "moment";
 import { NumericFormat } from "react-number-format";
+import html2pdf from "html2pdf.js";
+import jsPDF from "jspdf";
 
 const printStyles = `
-  @media print {
-
-
-
-
-    /* Print content with 20px margin */
-    .print-content {
-      margin: 10px !important; /* Apply 20px margin to the printed content */
-  padding: 3px;
+      @page {
+        size: A4;
+        margin: 7mm 2mm;
+        margin-top: 2mm;
       }
-
-.page-break {
-      page-break-before: always;
-      margin-top: 10mm;
-    }
-
-
-
-
-  }
+      @media print {
+        body {
+          margin: 0;
+          font-size: 12px;
+          min-height: 100vh;
+        }
+        table {
+          width: 100%;
+          border-collapse: collapse;
+        }
+        th, td {
+          border: 1px solid #ddd;
+          padding: 4px;
+        }
+        .page-break {
+          page-break-before: always;
+          margin-top: 10mm;
+        }
+        th {
+          background-color: #f4f4f4;
+        }
+        .text-center {
+          text-align: center;
+        }
+      }
 `;
+
 const SalaryReportMultipleView = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [salary, setTrip] = useState([]);
   const [salarysummaryfooter, setSummaryFooter] = useState({});
   const [loading, setLoading] = useState(true);
-  const componentRef = React.useRef();
+  const componentRef = useRef();
   const tableRef = useRef(null);
 
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
     pageStyle: `
-          @page {
-              size: A4;
-              margin: 2mm;
-          }
-          @media print {
-              body {
-                  margin: 0;
-                  font-size: 12px; 
-                  border: 1px solid #000;
-                  min-height:100vh
-              }
-              table {
-                  width: 100%;
-                  border-collapse: collapse;
-              }
-              th, td {
-                  border: 1px solid #ddd;
-                  padding: 4px;
-              }
-              th {
-                  background-color: #f4f4f4;
-              }
-              .text-center {
-                  text-align: center;
-              }
-                  .margin-first{
-                  margin:10px
-                  }
-          }
-        `,
-  });
-  const mergeRefs =
-    (...refs) =>
-    (node) => {
-      refs.forEach((ref) => {
-        if (typeof ref === "function") {
-          ref(node);
-        } else if (ref) {
-          ref.current = node;
+      @page {
+        size: A4;
+        margin: 7mm 2mm;
+        margin-top: 2mm;
+      }
+      @media print {
+        body {
+          margin: 0;
+          font-size: 12px;
+          min-height: 100vh;
         }
-      });
-    };
+        table {
+          width: 100%;
+          border-collapse: collapse;
+        }
+        th, td {
+          border: 1px solid #ddd;
+          padding: 4px;
+        }
+        .page-break {
+          page-break-before: always;
+          margin-top: 10mm;
+        }
+        th {
+          background-color: #f4f4f4;
+        }
+        .text-center {
+          text-align: center;
+        }
+      }
+    `,
+  });
+
+
+  const handleSavePDF = () => {
+    const content = componentRef.current;
+
+    const styledContent = content.cloneNode(true);
+    styledContent.style.padding = "20px"; 
+    styledContent.style.margin = "0 auto"; 
+    styledContent.style.width = "90%"; 
+
+    const doc = new jsPDF();
+
+    doc.html(styledContent, {
+      callback: function (doc) {
+        doc.save("content.pdf");
+      },
+      x: 0, // Adjust margins
+      y: 10,
+      width: 210,
+      windowWidth: 1600, // Scale content to fit PDF
+    });
+  };
 
   useEffect(() => {
     const styleSheet = document.createElement("style");
@@ -105,6 +127,7 @@ const SalaryReportMultipleView = () => {
       document.head.removeChild(styleSheet);
     };
   }, []);
+
   useEffect(() => {
     const fetchSalaryData = async () => {
       setLoading(true);
@@ -128,7 +151,6 @@ const SalaryReportMultipleView = () => {
 
         setTrip(Response.data.salary);
         setSummaryFooter(Response.data.salary_footer);
-        console.log(Response.data, "resposne");
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -142,47 +164,7 @@ const SalaryReportMultipleView = () => {
   if (loading) {
     return <SkeletonLoading />;
   }
-  const handleSavePDF = () => {
-    const input = tableRef.current;
 
-    html2canvas(input, { scale: 2 })
-      .then((canvas) => {
-        const imgData = canvas.toDataURL("image/png");
-
-        const pdf = new jsPDF("p", "mm", "a4");
-
-        const pdfWidth = pdf.internal.pageSize.getWidth();
-        const pdfHeight = pdf.internal.pageSize.getHeight();
-
-        const imgWidth = canvas.width;
-        const imgHeight = canvas.height;
-
-        const margin = 10;
-
-        const availableWidth = pdfWidth - 2 * margin;
-
-        const ratio = Math.min(
-          availableWidth / imgWidth,
-          pdfHeight / imgHeight
-        );
-
-        const imgX = margin;
-        const imgY = 0;
-
-        pdf.addImage(
-          imgData,
-          "PNG",
-          imgX,
-          imgY,
-          imgWidth * ratio,
-          imgHeight * ratio
-        );
-        pdf.save("invoice.pdf");
-      })
-      .catch((error) => {
-        console.error("Error generating PDF: ", error);
-      });
-  };
   const onSubmit = (e) => {
     e.preventDefault();
     let data = {
@@ -201,7 +183,6 @@ const SalaryReportMultipleView = () => {
       },
     })
       .then((res) => {
-        console.log("data : ", res.data);
         const url = window.URL.createObjectURL(new Blob([res.data]));
         const link = document.createElement("a");
         link.href = url;
@@ -214,6 +195,7 @@ const SalaryReportMultipleView = () => {
         toast.error("salary Report is Not Downloaded");
       });
   };
+
   const onReportView = (e) => {
     e.preventDefault();
     let data = {
@@ -232,7 +214,6 @@ const SalaryReportMultipleView = () => {
       },
     })
       .then((res) => {
-        console.log("data : ", res.data);
         const url = window.URL.createObjectURL(new Blob([res.data]));
         const link = document.createElement("a");
         link.href = url;
@@ -245,6 +226,7 @@ const SalaryReportMultipleView = () => {
         toast.error("salary Report is Not Downloaded");
       });
   };
+
   return (
     <Layout>
       <div className="bg-[#FFFFFF] p-2 rounded-lg ">
@@ -272,23 +254,20 @@ const SalaryReportMultipleView = () => {
               />
               <IconArrowBack
                 className="cursor-pointer text-gray-600 hover:text-red-600"
-                onClick={() => navigate("/report-trip-form")}
+                onClick={() => navigate("/report-salary-form")}
                 title="Go Back"
               />
             </div>
           </h2>
         </div>
-        <div className=" grid sm:grid-cols-1 overflow-x-auto">
-          <div
-            ref={mergeRefs(componentRef, tableRef)}
-            className="print-padding width margin-first"
-          >
-            <div className="mb-4 width">
-              <h3 className="text-xl font-bold mb-2 text-center">
+        <div className="grid sm:grid-cols-1 overflow-x-auto ">
+          <div ref={componentRef}>
+            <div className="mb-4 ">
+              <h3 className="text-xl font-bold mb-2 text-center  ">
                 TRIP ACCOUNT OF DRIVERS
               </h3>
               {salary.length > 0 ? (
-                <table className="w-full border-collapse">
+                <table className="w-full border-collapse ">
                   <thead>
                     <tr className="bg-gray-200">
                       {[
@@ -305,7 +284,10 @@ const SalaryReportMultipleView = () => {
                         "Advance",
                         "Net Payable",
                       ].map((header) => (
-                        <th key={header} className="p-2 border border-black">
+                        <th
+                          key={header}
+                          className="text-xs p-1 border border-black"
+                        >
                           {header}
                         </th>
                       ))}
@@ -313,32 +295,32 @@ const SalaryReportMultipleView = () => {
                   </thead>
                   <tbody>
                     {salary.map((item, index) => (
-                      <tr key={index}>
-                        <td className="p-2 border border-black">
-                          {item.trip_company || "N/A"}
+                      <tr key={index} className="avoid-break">
+                        <td className="text-xs p-1 border border-black">
+                          {item.trip_company || "-"}
                         </td>
 
-                        <td className="p-2 border border-black">
-                          {item.trip_branch || "N/A"}
+                        <td className="text-xs p-1 border border-black">
+                          {item.trip_branch || "-"}
                         </td>
 
-                        <td className="p-2 border border-black">
-                          {item.trip_vehicle || "N/A"}
+                        <td className="text-xs p-1 border border-black">
+                          {item.trip_vehicle || "-"}
                         </td>
 
-                        <td className="p-2 border border-black cursor-pointer">
+                        <td className="text-xs p-1 border border-black cursor-pointer">
                           <span onClick={(e) => onReportView(e)}>
                             {item.trip_driver}
                           </span>
                         </td>
 
-                        <td className="p-2 border border-black">
-                          {item.trip_count || "N/A"}
+                        <td className="text-xs p-1 border border-black text-center">
+                          {item.trip_count || "-"}
                         </td>
-                        <td className="p-2 border border-black">
-                          {item.trip_km || "N/A"}
+                        <td className="text-xs p-1 border border-black text-center">
+                          {item.trip_km || "-"}
                         </td>
-                        <td className="p-2 border border-black">
+                        <td className="text-xs p-1 border border-black text-center">
                           <NumericFormat
                             value={item.trip_incentive_amount * item.trip_count}
                             displayType="text"
@@ -347,7 +329,7 @@ const SalaryReportMultipleView = () => {
                             thousandsGroupStyle="lakh"
                           ></NumericFormat>
                         </td>
-                        <td className="p-2 border border-black">
+                        <td className="text-xs p-1 border border-black text-center">
                           <NumericFormat
                             value={item.trip_hmali}
                             displayType="text"
@@ -356,7 +338,7 @@ const SalaryReportMultipleView = () => {
                             thousandsGroupStyle="lakh"
                           ></NumericFormat>
                         </td>
-                        <td className="p-2 border border-black">
+                        <td className="text-xs p-1 border border-black text-center">
                           <NumericFormat
                             value={item.trip_bata_amount}
                             displayType="text"
@@ -365,7 +347,7 @@ const SalaryReportMultipleView = () => {
                             thousandsGroupStyle="lakh"
                           ></NumericFormat>
                         </td>
-                        <td className="p-2 border border-black">
+                        <td className="text-xs p-1 border border-black text-center">
                           <NumericFormat
                             value={item.trip_advance}
                             displayType="text"
@@ -374,7 +356,7 @@ const SalaryReportMultipleView = () => {
                             thousandsGroupStyle="lakh"
                           ></NumericFormat>
                         </td>
-                        <td className="p-2 border border-black">
+                        <td className="text-xs p-1 border border-black text-center">
                           <NumericFormat
                             value={
                               item.trip_incentive_amount * item.trip_count +
@@ -392,22 +374,20 @@ const SalaryReportMultipleView = () => {
                         </td>
                       </tr>
                     ))}
-                  </tbody>
-                  <tfoot>
                     <tr className="bg-gray-100 font-bold">
                       <td
                         colSpan={4}
-                        className="p-2 border border-black text-right"
+                        className="text-xs p-1 border border-black text-right"
                       >
                         Total:
                       </td>
-                      <td className="p-2 border border-black">
+                      <td className="text-xs p-1 border border-black text-center">
                         {salarysummaryfooter.trip_count}
                       </td>
-                      <td className="p-2 border border-black">
+                      <td className="text-xs p-1 border border-black text-center">
                         {salarysummaryfooter.trip_km}
                       </td>
-                      <td className="p-2 border border-black">
+                      <td className="text-xs p-1 border border-black text-center">
                         <NumericFormat
                           value={
                             salarysummaryfooter.trip_incentive_amount *
@@ -419,7 +399,7 @@ const SalaryReportMultipleView = () => {
                           thousandsGroupStyle="lakh"
                         ></NumericFormat>
                       </td>
-                      <td className="p-2 border border-black">
+                      <td className="text-xs p-1 border border-black text-center">
                         <NumericFormat
                           value={salarysummaryfooter.trip_hmali}
                           displayType="text"
@@ -429,7 +409,7 @@ const SalaryReportMultipleView = () => {
                         ></NumericFormat>
                       </td>
 
-                      <td className="p-2 border border-black">
+                      <td className="text-xs p-1 border border-black text-center">
                         <NumericFormat
                           value={salarysummaryfooter.trip_bata_amount}
                           displayType="text"
@@ -438,7 +418,7 @@ const SalaryReportMultipleView = () => {
                           thousandsGroupStyle="lakh"
                         ></NumericFormat>
                       </td>
-                      <td className="p-2 border border-black">
+                      <td className="text-xs p-1 border border-black text-center">
                         <NumericFormat
                           value={salarysummaryfooter.trip_advance}
                           displayType="text"
@@ -447,7 +427,7 @@ const SalaryReportMultipleView = () => {
                           thousandsGroupStyle="lakh"
                         ></NumericFormat>
                       </td>
-                      <td className="p-2 border border-black">
+                      <td className="text-xs p-1 border border-black text-center">
                         <NumericFormat
                           value={
                             (salarysummaryfooter.trip_incentive_amount /
@@ -475,13 +455,19 @@ const SalaryReportMultipleView = () => {
                         ></NumericFormat>
                       </td>
                     </tr>
-                  </tfoot>
+                  </tbody>
                 </table>
               ) : (
-                <div className="text-center text-gray-500 py-4">
-                  No Trip Data Available
-                </div>
+                <p>No salary data available.</p>
               )}
+            </div>
+            <div className="hidden print:block  page-break">
+              <div className="trademark flex justify-between items-center mt-4 ">
+                <h2 className="text-xs font-medium px-1">DFC</h2>
+                <h2 className="text-xs font-medium px-5">
+                  {new Date().toLocaleDateString("en-GB")}{" "}
+                </h2>
+              </div>
             </div>
           </div>
         </div>

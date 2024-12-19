@@ -53,13 +53,12 @@ const ServiceReportDetailsView = () => {
     pageStyle: `
           @page {
               size: A4;
-              margin: 2mm;
+              margin: 4mm;
           }
           @media print {
               body {
                   margin: 0;
                   font-size: 12px; 
-                  border: 1px solid #000;
                   min-height:100vh
               }
               table {
@@ -70,6 +69,19 @@ const ServiceReportDetailsView = () => {
                   border: 1px solid #ddd;
                   padding: 4px;
               }
+
+
+.trademark {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  // padding: 0 10mm;
+  font-size: 8px;
+  color: gray;
+}
+
               th {
                   background-color: #f4f4f4;
               }
@@ -79,6 +91,7 @@ const ServiceReportDetailsView = () => {
                   .margin-first{
                   margin:10px
                   }
+                  
           }
         `,
   });
@@ -267,7 +280,10 @@ const ServiceReportDetailsView = () => {
                         "Amount",
                         "Details",
                       ].map((header) => (
-                        <th key={header} className="p-1 text-xs border border-black">
+                        <th
+                          key={header}
+                          className="p-1 text-xs border border-black"
+                        >
                           {header}
                         </th>
                       ))}
@@ -276,18 +292,18 @@ const ServiceReportDetailsView = () => {
                   <tbody>
                     {service.map((item, index) => (
                       <tr key={index}>
-                        <td className="p-1 text-xs border border-black">
+                        <td className="p-1 text-xs border border-black text-center">
                           {moment(item.service_date).format("DD-MM-YYYY")}
                         </td>
 
-                        <td className="p-1 text-xs border border-black">
-                          {item.service_truck_no || "N/A"}
+                        <td className="p-1 text-xs border border-black text-center">
+                          {item.service_truck_no || "-"}
                         </td>
                         <td className="p-1 text-xs border border-black">
-                          {item.service_sub_type || "N/A"}
+                          {item.service_sub_type || "-"}
                         </td>
 
-                        <td className="p-1 text-xs border border-black">
+                        <td className="p-1 text-xs border border-black text-center">
                           <NumericFormat
                             value={item.service_sub_amount}
                             displayType="text"
@@ -297,7 +313,7 @@ const ServiceReportDetailsView = () => {
                           />
                         </td>
                         <td className="p-1 text-xs border border-black">
-                          {item.service_sub_details || "N/A"}
+                          {item.service_sub_details || "-"}
                         </td>
                       </tr>
                     ))}
@@ -308,6 +324,14 @@ const ServiceReportDetailsView = () => {
                   No Service Data Available
                 </div>
               )}
+            </div>
+            <div className="hidden print:block">
+              <div className="trademark flex justify-between items-center mt-4 ">
+                <h2 className="text-xs font-medium px-1">DFC</h2>
+                <h2 className="text-xs font-medium px-5">
+                  {new Date().toLocaleDateString("en-GB")}{" "}
+                </h2>
+              </div>
             </div>
           </div>
         </div>

@@ -50,13 +50,12 @@ const VendorReportView = () => {
     pageStyle: `
           @page {
               size: A4;
-              margin: 2mm;
+              margin: 4mm;
           }
           @media print {
               body {
                   margin: 0;
                   font-size: 12px; 
-                  border: 1px solid #000;
                   min-height:100vh
               }
               table {
@@ -67,6 +66,19 @@ const VendorReportView = () => {
                   border: 1px solid #ddd;
                   padding: 4px;
               }
+
+
+.trademark {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  // padding: 0 10mm;
+  font-size: 8px;
+  color: gray;
+}
+
               th {
                   background-color: #f4f4f4;
               }
@@ -76,6 +88,7 @@ const VendorReportView = () => {
                   .margin-first{
                   margin:10px
                   }
+                  
           }
         `,
   });
@@ -269,19 +282,19 @@ const VendorReportView = () => {
                     {vendor.map((item, index) => (
                       <tr key={index}>
                         <td className="p-1 text-xs border border-black">
-                          {item.vendor_name || "N/A"}
+                          {item.vendor_name || "-"}
                         </td>
                         <td className="p-1 text-xs border border-black">
-                          {item.vendor_type || "N/A"}
+                          {item.vendor_type || "-"}
                         </td>
                         <td className="p-1 text-xs border border-black">
-                          {item.vendor_branch || "N/A"}
+                          {item.vendor_branch || "-"}
                         </td>
                         <td className="p-1 text-xs border border-black">
-                          {item.vendor_contact_person || "N/A"}
+                          {item.vendor_contact_person || "-"}
                         </td>
                         <td className="p-1 text-xs border border-black text-center">
-                          {item.vendor_mobile || "N/A"}
+                          {item.vendor_mobile || "-"}
                         </td>
                       </tr>
                     ))}
@@ -289,9 +302,17 @@ const VendorReportView = () => {
                 </table>
               ) : (
                 <div className="text-center text-gray-500 py-4">
-                  No Tyre Data Available
+                  No Vendor Data Available
                 </div>
               )}
+            </div>
+            <div className="hidden print:block">
+              <div className="trademark flex justify-between items-center mt-4 ">
+                <h2 className="text-xs font-medium px-1">DFC</h2>
+                <h2 className="text-xs font-medium px-5">
+                  {new Date().toLocaleDateString("en-GB")}{" "}
+                </h2>
+              </div>
             </div>
           </div>
         </div>

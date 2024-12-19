@@ -54,13 +54,12 @@ const TripReportView = () => {
     pageStyle: `
           @page {
               size: A4;
-              margin: 2mm;
+              margin: 4mm;
           }
           @media print {
               body {
                   margin: 0;
                   font-size: 12px; 
-                  border: 1px solid #000;
                   min-height:100vh
               }
               table {
@@ -71,6 +70,19 @@ const TripReportView = () => {
                   border: 1px solid #ddd;
                   padding: 4px;
               }
+
+
+.trademark {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  // padding: 0 10mm;
+  font-size: 8px;
+  color: gray;
+}
+
               th {
                   background-color: #f4f4f4;
               }
@@ -80,6 +92,7 @@ const TripReportView = () => {
                   .margin-first{
                   margin:10px
                   }
+                  
           }
         `,
   });
@@ -288,7 +301,10 @@ const TripReportView = () => {
                         "Cost Centre",
                         "Status",
                       ].map((header) => (
-                        <th key={header} className="p-1 text-xs border border-black">
+                        <th
+                          key={header}
+                          className="p-1 text-xs border border-black"
+                        >
                           {header}
                         </th>
                       ))}
@@ -301,7 +317,7 @@ const TripReportView = () => {
                           {moment(item.trip_date).format("DD-MM-YYYY")}
                         </td>
                         <td className="p-1 text-xs border border-black">
-                          {item.trip_branch || "N/A"}
+                          {item.trip_branch || "-"}
                         </td>
                         <td className="p-1 text-xs border border-black text-blue-500 text-center">
                           <Link to={"/edit-trip/" + item.id}>
@@ -309,19 +325,19 @@ const TripReportView = () => {
                           </Link>
                         </td>
                         <td className="p-1 text-xs border border-black">
-                          {item.trip_driver || "N/A"}
+                          {item.trip_driver || "-"}
                         </td>
 
                         <td className="p-1 text-xs border border-black">
-                          {item.trip_agency || "N/A"}
+                          {item.trip_agency || "-"}
                         </td>
 
                         <td className="p-1 text-xs border border-black text-center">
-                          {item.trip_km || "N/A"}
+                          {item.trip_km || "-"}
                         </td>
 
                         <td className="p-1 text-xs border border-black text-center">
-                          {item.trip_hsd || "N/A"}
+                          {item.trip_hsd || "-"}
                         </td>
                         <td className="p-1 text-xs border border-black text-center">
                           <NumericFormat
@@ -334,24 +350,22 @@ const TripReportView = () => {
                         </td>
 
                         <td className="p-1 text-xs border border-black text-center">
-                          {item.trip_hsd_supplied || "N/A"}
+                          {item.trip_hsd_supplied || "-"}
                         </td>
 
                         <td className="p-1 text-xs border border-black">
-                          {item.trip_supplier || "N/A"}
+                          {item.trip_supplier || "-"}
                         </td>
 
                         <td className="p-1 text-xs border border-black">
-                          {item.trip_company || "N/A"}
+                          {item.trip_company || "-"}
                         </td>
 
                         <td className="p-1 text-xs border border-black">
-                          {item.trip_status || "N/A"}
+                          {item.trip_status || "-"}
                         </td>
                       </tr>
                     ))}
-                  </tbody>
-                  <tfoot>
                     <tr className="bg-gray-100 font-bold">
                       <td
                         colSpan={5}
@@ -377,15 +391,58 @@ const TripReportView = () => {
                       <td className="p-1 text-xs border border-black">
                         {tripsummaryfooter.trip_hsd_supplied}
                       </td>
-                      <td colSpan={4} className="p-1 text-xs border border-black"></td>
+                      <td
+                        colSpan={4}
+                        className="p-1 text-xs border border-black"
+                      ></td>
                     </tr>
-                  </tfoot>
+                  </tbody>
+                  {/* <tfoot>
+                    <tr className="bg-gray-100 font-bold">
+                      <td
+                        colSpan={5}
+                        className="p-1 text-xs border border-black text-right"
+                      >
+                        Total:
+                      </td>
+                      <td className="p-1 text-xs border border-black">
+                        {tripsummaryfooter.trip_km}
+                      </td>
+                      <td className="p-1 text-xs border border-black">
+                        {tripsummaryfooter.trip_hsd}
+                      </td>
+                      <td className="p-1 text-xs border border-black">
+                        <NumericFormat
+                          value={tripsummaryfooter.trip_advance}
+                          displayType="text"
+                          thousandSeparator={true}
+                          prefix="₹"
+                          thousandsGroupStyle="lakh"
+                        ></NumericFormat>
+                      </td>
+                      <td className="p-1 text-xs border border-black">
+                        {tripsummaryfooter.trip_hsd_supplied}
+                      </td>
+                      <td
+                        colSpan={4}
+                        className="p-1 text-xs border border-black"
+                      ></td>
+                    </tr>
+                  </tfoot> */}
                 </table>
               ) : (
                 <div className="text-center text-gray-500 py-4">
                   No Trip Data Available
                 </div>
               )}
+            </div>
+            <div className="hidden print:block">
+              <div className="trademark flex justify-between items-center mt-4 ">
+                <h2 className="text-xs font-medium px-1">DFC</h2>
+                <h2 className="text-xs font-medium px-5">
+                  {new Date().toLocaleDateString("en-GB")}{" "}
+                </h2>
+              </div>
             </div>
           </div>
         </div>
