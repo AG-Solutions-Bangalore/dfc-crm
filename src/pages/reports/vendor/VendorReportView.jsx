@@ -12,9 +12,9 @@ import Layout from "../../../layout/Layout";
 import { useReactToPrint } from "react-to-print";
 import SkeletonLoading from "../agencies/SkeletonLoading";
 import { IconFileTypePdf } from "@tabler/icons-react";
-import jsPDF from "jspdf";
-import html2canvas from "html2canvas";
-import { toast } from "react-toastify";
+import pdfMake from "pdfmake/build/pdfmake";
+import pdfFonts from "pdfmake/build/vfs_fonts";
+import { toast } from "sonner";
 const printStyles = `
   @media print {
 
@@ -147,45 +147,69 @@ const VendorReportView = () => {
     return <SkeletonLoading />;
   }
   const handleSavePDF = () => {
-    const input = tableRef.current;
+    const tableBody = [
+      ["Vendor", "Vendor Type", "Branch", "Contact Person", "Mobile"], // Header row
+      ...vendor.map((item) => [
+        item.vendor_name || "-",
+        item.vendor_type || "-",
+        item.vendor_branch || "-",
+        item.vendor_contact_person || "-",
+        item.vendor_mobile || "-",
+      ]),
+    ];
 
-    html2canvas(input, { scale: 2 })
-      .then((canvas) => {
-        const imgData = canvas.toDataURL("image/png");
+    const docDefinition = {
+      pageSize: "A4",
+      pageMargins: [10, 10, 10, 40], // Adjust bottom margin for footer
+      content: [
+        { text: "Vendor Report", style: "header", alignment: "center" },
+        {
+          table: {
+            headerRows: 1,
+            widths: ["20%", "20%", "20%", "20%", "20%"], // Equal distribution across the page
+            body: tableBody,
+          },
+          layout: {
+            fillColor: (rowIndex) => (rowIndex === 0 ? "#CCCCCC" : null), // Header background
+            hLineWidth: () => 0.3,
+            vLineWidth: () => 0.3,
+          },
+        },
+      ],
+      styles: {
+        header: {
+          fontSize: 12,
+          bold: true,
+          margin: [0, 0, 0, 10],
+        },
+        footerText: {
+          fontSize: 8,
+        },
+      },
+      defaultStyle: {
+        fontSize: 7,
+      },
+      footer: (currentPage, pageCount) => ({
+        columns: [
+          {
+            text: "DFC",
+            style: "footerText",
+            alignment: "left",
+            margin: [10, 0],
+          },
+          {
+            text: new Date().toLocaleDateString("en-GB"),
+            style: "footerText",
+            alignment: "right",
+            margin: [0, 0, 10, 0],
+          },
+        ],
+        margin: [10, 0, 10, 10],
+      }),
+    };
+    toast.success("PDFis Downloaded Successfully");
 
-        const pdf = new jsPDF("p", "mm", "a4");
-
-        const pdfWidth = pdf.internal.pageSize.getWidth();
-        const pdfHeight = pdf.internal.pageSize.getHeight();
-
-        const imgWidth = canvas.width;
-        const imgHeight = canvas.height;
-
-        const margin = 10;
-
-        const availableWidth = pdfWidth - 2 * margin;
-
-        const ratio = Math.min(
-          availableWidth / imgWidth,
-          pdfHeight / imgHeight
-        );
-
-        const imgX = margin;
-        const imgY = 0;
-
-        pdf.addImage(
-          imgData,
-          "PNG",
-          imgX,
-          imgY,
-          imgWidth * ratio,
-          imgHeight * ratio
-        );
-        pdf.save("invoice.pdf");
-      })
-      .catch((error) => {
-        console.error("Error generating PDF: ", error);
-      });
+    pdfMake.createPdf(docDefinition).download("team_report.pdf");
   };
   const onSubmit = (e) => {
     e.preventDefault();

@@ -1,7 +1,7 @@
 import Layout from "../../../layout/Layout";
 import { useState, useEffect } from "react";
 import BASE_URL from "../../../base/BaseUrl";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import axios from "axios";
 import SelectInput from "../../../components/common/SelectField";
 import { useNavigate } from "react-router-dom";
@@ -46,39 +46,39 @@ function VechilesDetailsReportForm() {
     VehicleReg();
   }, []);
   //DOWNLOAD
-  const onSubmit = (e) => {
-    e.preventDefault();
-    let data = {
-      vehicle_branch: downloadVehicle.vendor_branch,
-      vehicle_company: downloadVehicle.vehicle_reg_no,
-    };
-    var v = document.getElementById("dowRecp").checkValidity();
-    var v = document.getElementById("dowRecp").reportValidity();
+  // const onSubmit = (e) => {
+  //   e.preventDefault();
+  //   let data = {
+  //     vehicle_branch: downloadVehicle.vendor_branch,
+  //     vehicle_company: downloadVehicle.vehicle_reg_no,
+  //   };
+  //   var v = document.getElementById("dowRecp").checkValidity();
+  //   var v = document.getElementById("dowRecp").reportValidity();
 
-    if (v) {
-      axios({
-        url: BASE_URL + "/api/download-vendor-report",
-        method: "POST",
-        data,
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      })
-        .then((res) => {
-          console.log("data : ", res.data);
-          const url = window.URL.createObjectURL(new Blob([res.data]));
-          const link = document.createElement("a");
-          link.href = url;
-          link.setAttribute("download", "vehicle.csv");
-          document.body.appendChild(link);
-          link.click();
-          toast.success("Vendor is Downloaded Successfully");
-        })
-        .catch((err) => {
-          toast.error("Vendor is Not Downloaded");
-        });
-    }
-  };
+  //   if (v) {
+  //     axios({
+  //       url: BASE_URL + "/api/download-vendor-report",
+  //       method: "POST",
+  //       data,
+  //       headers: {
+  //         Authorization: `Bearer ${localStorage.getItem("token")}`,
+  //       },
+  //     })
+  //       .then((res) => {
+  //         console.log("data : ", res.data);
+  //         const url = window.URL.createObjectURL(new Blob([res.data]));
+  //         const link = document.createElement("a");
+  //         link.href = url;
+  //         link.setAttribute("download", "vehicle.csv");
+  //         document.body.appendChild(link);
+  //         link.click();
+  //         toast.success("Vendor is Downloaded Successfully");
+  //       })
+  //       .catch((err) => {
+  //         toast.error("Vendor is Not Downloaded");
+  //       });
+  //   }
+  // };
   const customStyles = {
     control: (provided) => ({
       ...provided,

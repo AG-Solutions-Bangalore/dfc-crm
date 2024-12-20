@@ -1,11 +1,11 @@
 import Layout from "../../../layout/Layout";
 import { useState, useEffect } from "react";
 import BASE_URL from "../../../base/BaseUrl";
-import { toast } from "react-toastify";
 import axios from "axios";
 import SelectInput from "../../../components/common/SelectField";
 import { useNavigate } from "react-router-dom";
 import { IconInfoCircle } from "@tabler/icons-react";
+import { toast } from "sonner";
 
 function TeamReportForm() {
   const navigate = useNavigate();
@@ -84,13 +84,13 @@ function TeamReportForm() {
           const url = window.URL.createObjectURL(new Blob([res.data]));
           const link = document.createElement("a");
           link.href = url;
-          link.setAttribute("download", "agencies.csv");
+          link.setAttribute("download", "team.csv");
           document.body.appendChild(link);
           link.click();
-          toast.success("Agencies is Downloaded Successfully");
+          toast.success("Team is Downloaded Successfully");
         })
         .catch((err) => {
-          toast.error("Agencies is Not Downloaded");
+          toast.error("Team is Not Downloaded");
         });
     }
   };

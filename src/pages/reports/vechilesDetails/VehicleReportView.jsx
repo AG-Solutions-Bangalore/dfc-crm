@@ -4,13 +4,15 @@ import {
   IconInfoCircle,
   IconArrowBack,
   IconPrinter,
+  IconFileTypePdf,
 } from "@tabler/icons-react";
 import axios from "axios";
 import BASE_URL from "../../../base/BaseUrl";
 import Layout from "../../../layout/Layout";
 import moment from "moment";
 import { useReactToPrint } from "react-to-print";
-
+import html2pdf from "html2pdf.js";
+import { toast } from "sonner";
 const SkeletonLoading = () => {
   return (
     <Layout>
@@ -170,7 +172,25 @@ const VehicleReportView = () => {
   if (loading) {
     return <SkeletonLoading />;
   }
+  const handleSavePDF = () => {
+    const element = componentRef.current;
+    const opt = {
+      margin: 0.2,
+      filename: "salary-report.pdf",
+      image: { type: "jpeg", quality: 0.98 },
+      html2canvas: { scale: 2, width: 780 },
+      jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
+    };
 
+    html2pdf().set(opt).from(element).save();
+    toast
+      .success("Vehicle is Downloaded Successfully")
+
+      .catch((error) => {
+        console.error("PDF generation error:", error);
+        toast.error("Failed to download PDF.");
+      });
+  };
   return (
     <Layout>
       <div className=" bg-[#FFFFFF] p-2  rounded-lg  ">
@@ -184,6 +204,11 @@ const VehicleReportView = () => {
               <IconPrinter
                 className="cursor-pointer text-gray-600 hover:text-blue-600"
                 onClick={handlePrint}
+                title="Print"
+              />
+              <IconFileTypePdf
+                className="cursor-pointer text-gray-600 hover:text-blue-600"
+                onClick={handleSavePDF}
                 title="Print"
               />
               <IconArrowBack
