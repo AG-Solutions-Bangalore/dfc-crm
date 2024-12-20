@@ -1,7 +1,7 @@
 import Layout from "../../../layout/Layout";
 import { useState, useEffect } from "react";
 import BASE_URL from "../../../base/BaseUrl";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import axios from "axios";
 import SelectInput from "../../../components/common/SelectField";
 import { useNavigate } from "react-router-dom";
@@ -78,6 +78,15 @@ function TripReportForm() {
       ...prevState,
       [action.name]: selectedOption ? selectedOption.value : "",
     }));
+  };
+
+
+
+  const onInputChange1 = (e) => {
+    setTripDownload({
+      ...downloadTrip,
+      [e.target.name]: e.target.value,
+    });
   };
   // const fetchCompany = async () => {
   //   try {
@@ -346,11 +355,10 @@ function TripReportForm() {
           const url = window.URL.createObjectURL(new Blob([res.data]));
           const link = document.createElement("a");
           link.href = url;
-          link.setAttribute("download", "Trip.csv");
+          link.setAttribute("download", "Services.csv");
           document.body.appendChild(link);
           link.click();
-          toast.success("Details Trip is Downloaded Successfully");
-          setIsButtonDisabled(false);
+          toast.success("Details Trip Report  is Downloaded Successfully");
         })
         .catch((err) => {
           toast.error("Details Trip is Not Downloaded");
@@ -429,7 +437,7 @@ function TripReportForm() {
                   type="date"
                   name="trip_date_from"
                   value={downloadTrip.trip_date_from}
-                  onChange={onInputChange}
+                  onChange={onInputChange1}
                   className={inputClass}
                   required
                 />
@@ -440,7 +448,7 @@ function TripReportForm() {
                   type="date"
                   name="trip_date_to"
                   value={downloadTrip.trip_date_to}
-                  onChange={onInputChange}
+                  onChange={onInputChange1}
                   className={inputClass}
                   required
                 />

@@ -1,25 +1,33 @@
 import Layout from "../../../layout/Layout";
 import { useState, useEffect } from "react";
 import BASE_URL from "../../../base/BaseUrl";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import axios from "axios";
 import SelectInput from "../../../components/common/SelectField";
 import { useNavigate } from "react-router-dom";
 import { IconInfoCircle } from "@tabler/icons-react";
 import moment from "moment";
-import { FormLabel } from "@mui/material";
 
 function SalaryReportForm() {
   const navigate = useNavigate();
   const [branch, setBranch] = useState([]);
-  const todayback = moment().format("YYYY-MM-DD");
-  const firstdate = moment().startOf("month").format("YYYY-MM-DD");
+  const previousMonthStart = moment()
+    .subtract(1, "month")
+    .startOf("month")
+    .format("YYYY-MM-DD");
+  const previousMonthEnd = moment()
+    .subtract(1, "month")
+    .endOf("month")
+    .format("YYYY-MM-DD");
+
+  console.log("Previous Month Start:", previousMonthStart);
+  console.log("Previous Month End:", previousMonthEnd);
   const [company, setCompany] = useState([]);
   const [driver, setDriver] = useState([]);
 
   const [downloadSalary, setSalaryDownload] = useState({
-    trip_date_from: firstdate,
-    trip_date_to: todayback,
+    trip_date_from: previousMonthStart,
+    trip_date_to: previousMonthEnd,
     trip_company: "",
     trip_branch: "",
     trip_driver: "",
@@ -33,6 +41,14 @@ function SalaryReportForm() {
       [action.name]: selectedOption ? selectedOption.value : "",
     }));
   };
+
+  const onInputChange1 = (e) => {
+    setSalaryDownload({
+      ...downloadSalary,
+      [e.target.name]: e.target.value,
+    });
+  };
+
   const fetchData = async (url, setState, key = null) => {
     try {
       const token = localStorage.getItem("token");
@@ -88,10 +104,10 @@ function SalaryReportForm() {
           link.setAttribute("download", "salary.csv");
           document.body.appendChild(link);
           link.click();
-          toast.success(" Report  is Downloaded Successfully");
+          toast.success("Report is Downloaded Successfully");
         })
         .catch((err) => {
-          toast.error(" Report  is Not Downloaded");
+          toast.error("Report is Not Downloaded");
         });
     }
   };
@@ -111,7 +127,7 @@ function SalaryReportForm() {
 
     if (v) {
       axios({
-        url: BASE_URL + "/api/download-salary-report-test",
+        url: BASE_URL + "/api/download-salary-multiple-report",
         method: "POST",
         data,
         headers: {
@@ -126,7 +142,7 @@ function SalaryReportForm() {
           link.setAttribute("download", "salary.csv");
           document.body.appendChild(link);
           link.click();
-          toast.success("Report is Downloaded Successfully");
+          toast.success("Salary is Downloaded Successfully");
         })
         .catch((err) => {
           toast.error("Report is Not Downloaded");
@@ -191,9 +207,9 @@ function SalaryReportForm() {
                 <FormLabel required>From Date</FormLabel>
                 <input
                   type="date"
-                  name="trip_date_to"
-                  value={downloadSalary.trip_date_to}
-                  onChange={onInputChange}
+                  name="trip_date_from"
+                  value={downloadSalary.trip_date_from}
+                  onChange={onInputChange1}
                   className={inputClass}
                   required
                 />
@@ -204,7 +220,7 @@ function SalaryReportForm() {
                   type="date"
                   name="trip_date_to"
                   value={downloadSalary.trip_date_to}
-                  onChange={onInputChange}
+                  onChange={onInputChange1}
                   className={inputClass}
                   required
                 />

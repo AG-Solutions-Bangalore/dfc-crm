@@ -12,9 +12,11 @@ import Layout from "../../../layout/Layout";
 import { useReactToPrint } from "react-to-print";
 import SkeletonLoading from "../agencies/SkeletonLoading";
 import { IconFileTypePdf } from "@tabler/icons-react";
-import jsPDF from "jspdf";
-import html2canvas from "html2canvas";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
+import moment from "moment";
+import { NumericFormat } from "react-number-format";
+import pdfMake from "pdfmake/build/pdfmake";
+import pdfFonts from "pdfmake/build/vfs_fonts";
 const printStyles = `
   @media print {
 
@@ -37,10 +39,10 @@ const printStyles = `
 
   }
 `;
-const TeamReportView = () => {
+const ServiceReportView = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [team, setTeam] = useState([]);
+  const [service, setService] = useState([]);
   const [loading, setLoading] = useState(true);
   const componentRef = React.useRef();
   const tableRef = useRef(null);
@@ -50,7 +52,7 @@ const TeamReportView = () => {
     pageStyle: `
           @page {
               size: A4;
-              margin: 2mm;
+              margin: 4mm;
           }
           @media print {
               body {
@@ -66,16 +68,9 @@ const TeamReportView = () => {
                   border: 1px solid #ddd;
                   padding: 4px;
               }
-              th {
-                  background-color: #f4f4f4;
-              }
-              .text-center {
-                  text-align: center;
-              }
-                  .margin-first{
-                  margin:10px
-                  }
-                  .trademark {
+
+
+.trademark {
   position: fixed;
   bottom: 0;
   width: 100%;
@@ -86,6 +81,16 @@ const TeamReportView = () => {
   color: gray;
 }
 
+              th {
+                  background-color: #f4f4f4;
+              }
+              .text-center {
+                  text-align: center;
+              }
+                  .margin-first{
+                  margin:10px
+                  }
+                  
           }
         `,
   });
@@ -112,23 +117,27 @@ const TeamReportView = () => {
     };
   }, []);
   useEffect(() => {
-    const fetchVehicleData = async () => {
+    const fetchServicesData = async () => {
       setLoading(true);
       try {
         const token = localStorage.getItem("token");
         let data = {
-          user_branch: localStorage.getItem("user_branch"),
-          user_company: localStorage.getItem("user_company"),
+          service_date_from: localStorage.getItem("service_date_from"),
+          service_date_to: localStorage.getItem("service_date_to"),
+          service_garage: localStorage.getItem("service_garage"),
+          service_company: localStorage.getItem("service_company"),
+          service_branch: localStorage.getItem("service_branch"),
+          service_truck_no: localStorage.getItem("service_truck_no"),
         };
         const Response = await axios.post(
-          `${BASE_URL}/api/fetch-team-report`,
+          `${BASE_URL}/api/fetch-services-report`,
           data,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
 
-        setTeam(Response.data.team);
+        setService(Response.data.services);
         console.log(Response.data, "resposne");
         setLoading(false);
       } catch (error) {
@@ -137,62 +146,102 @@ const TeamReportView = () => {
       }
     };
 
-    fetchVehicleData();
+    fetchServicesData();
   }, []);
 
   if (loading) {
     return <SkeletonLoading />;
   }
   const handleSavePDF = () => {
-    const input = tableRef.current;
+    const tableBody = [
+      [
+        { text: "Date", bold: true },
+        { text: "Vehicle No", bold: true },
+        { text: "Company", bold: true },
+        { text: "Branch", bold: true },
+        { text: "Garage", bold: true },
+        { text: "Amount", bold: true },
+        { text: "No of Changes", bold: true },
+      ],
+      ...service.map((item) => [
+        moment(item.service_date).format("DD-MM-YYYY") || "-",
+        item.service_truck_no || "-",
+        item.service_company || "-",
+        item.service_branch || "-",
+        item.service_garage || "-",
+        item.service_amount
+          ? `₹${Number(item.service_amount).toLocaleString("en-IN", {
+              maximumFractionDigits: 2,
+            })}`
+          : "-",
+        item.service_count || "-",
+      ]),
+    ];
 
-    html2canvas(input, { scale: 2 })
-      .then((canvas) => {
-        const imgData = canvas.toDataURL("image/png");
+    const docDefinition = {
+      pageSize: "A4",
+      pageMargins: [10, 10, 10, 10],
+      content: [
+        { text: "Services Report", style: "header", alignment: "center" },
+        {
+          table: {
+            headerRows: 1,
+            widths: ["15%", "15%", "10%", "auto", "auto", "10%", "9%"], // Adjust column widths
+            body: tableBody,
+          },
+          layout: {
+            fillColor: (rowIndex) => (rowIndex === 0 ? "#CCCCCC" : null), // Header background color
+            hLineWidth: () => 0.3,
+            vLineWidth: () => 0.3,
+          },
+        },
+      ],
+      styles: {
+        header: {
+          fontSize: 12,
+          bold: true,
+          margin: [0, 0, 0, 10],
+        },
+      },
+      defaultStyle: {
+        fontSize: 8,
+      },
+      footer: (currentPage, pageCount) => ({
+        columns: [
+          {
+            text: "DFC",
+            style: "footerText",
+            alignment: "left",
+            margin: [10, 0],
+          },
+          {
+            text: new Date().toLocaleDateString("en-GB"),
+            style: "footerText",
+            alignment: "right",
+            margin: [0, 0, 10, 0],
+          },
+        ],
+        margin: [10, 0, 10, 10],
+      }),
+    };
+    toast.success("PDF Report is Downloaded Successfully");
 
-        const pdf = new jsPDF("p", "mm", "a4");
-
-        const pdfWidth = pdf.internal.pageSize.getWidth();
-        const pdfHeight = pdf.internal.pageSize.getHeight();
-
-        const imgWidth = canvas.width;
-        const imgHeight = canvas.height;
-
-        const margin = 10;
-
-        const availableWidth = pdfWidth - 2 * margin;
-
-        const ratio = Math.min(
-          availableWidth / imgWidth,
-          pdfHeight / imgHeight
-        );
-
-        const imgX = margin;
-        const imgY = 0;
-
-        pdf.addImage(
-          imgData,
-          "PNG",
-          imgX,
-          imgY,
-          imgWidth * ratio,
-          imgHeight * ratio
-        );
-        pdf.save("invoice.pdf");
-      })
-      .catch((error) => {
-        console.error("Error generating PDF: ", error);
-      });
+    pdfMake.createPdf(docDefinition).download("Service_report.pdf");
   };
+
   const onSubmit = (e) => {
     e.preventDefault();
     let data = {
-      user_branch: localStorage.getItem("user_branch"),
-      user_company: localStorage.getItem("user_company"),
+      service_date_from: localStorage.getItem("service_date_from"),
+      service_date_to: localStorage.getItem("service_date_to"),
+      service_garage: localStorage.getItem("service_garage"),
+      service_company: localStorage.getItem("service_company"),
+      service_branch: localStorage.getItem("service_branch"),
+      service_truck_no: localStorage.getItem("service_truck_no"),
     };
 
     axios({
-      url: BASE_URL + "/api/download-team-report",
+      url: BASE_URL + "/api/download-services-report",
       method: "POST",
       data,
       headers: {
@@ -204,10 +253,10 @@ const TeamReportView = () => {
         const url = window.URL.createObjectURL(new Blob([res.data]));
         const link = document.createElement("a");
         link.href = url;
-        link.setAttribute("download", "Report.csv");
+        link.setAttribute("download", "team.csv");
         document.body.appendChild(link);
         link.click();
-        toast.success("Team Report is Downloaded Successfully");
+        toast.success("team Report is Downloaded Successfully");
       })
       .catch((err) => {
         toast.error("Team Report is Not Downloaded");
@@ -220,7 +269,7 @@ const TeamReportView = () => {
           <h2 className="px-5 text-[black] text-lg flex flex-row justify-between items-center rounded-xl p-2">
             <div className="flex items-center gap-2">
               <IconInfoCircle className="w-4 h-4" />
-              <span> Team Summary</span>
+              <span> Services Summary</span>
             </div>
             <div className="flex items-center space-x-4">
               <IconFileTypeXls
@@ -240,7 +289,7 @@ const TeamReportView = () => {
               />
               <IconArrowBack
                 className="cursor-pointer text-gray-600 hover:text-red-600"
-                onClick={() => navigate("/report-team-form")}
+                onClick={() => navigate("/report-services-form")}
                 title="Go Back"
               />
             </div>
@@ -253,22 +302,20 @@ const TeamReportView = () => {
           >
             <div className="mb-4 width">
               <h3 className="text-xl font-bold mb-2 text-center">
-                TEAM SUMMARY
+                SERVICES SUMMARY
               </h3>
-              {team.length > 0 ? (
+              {service.length > 0 ? (
                 <table className="w-full border-collapse">
                   <thead>
                     <tr className="bg-gray-200">
                       {[
-                        "Full Name",
-                        "Branch",
+                        "Date",
+                        "Vehicle No",
                         "Company",
-                        "Mobile",
-                        "Email",
-                        "Address",
-                        "Salary",
-                        "User Type",
-                        "Status",
+                        "Branch",
+                        "Garage",
+                        "Amount",
+                        "No of Changes",
                       ].map((header) => (
                         <th
                           key={header}
@@ -280,34 +327,35 @@ const TeamReportView = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {team.map((item, index) => (
+                    {service.map((item, index) => (
                       <tr key={index}>
-                        <td className="p-1 text-xs  border border-black">
-                          {item.full_name || "-"}
+                        <td className="p-1 text-xs border border-black text-center">
+                          {moment(item.service_date).format("DD-MM-YYYY")}
                         </td>
-                        <td className="p-1 text-xs  border border-black">
-                          {item.user_branch || "-"}
+                        <td className="p-1 text-xs border border-black text-center">
+                          {item.service_truck_no || "-"}
                         </td>
-                        <td className="p-1 text-xs  border border-black">
-                          {item.user_company || "-"}
+                        <td className="p-1 text-xs border border-black">
+                          {item.service_company || "-"}
                         </td>
-                        <td className="p-1 text-xs  border border-black text-center">
-                          {item.mobile || "-"}
+                        <td className="p-1 text-xs border border-black">
+                          {item.service_branch || "-"}
                         </td>
-                        <td className="p-1 text-xs  border border-black">
-                          {item.email || "-"}
+                        <td className="p-1 text-xs border border-black">
+                          {item.service_garage || "-"}
                         </td>
-                        <td className="p-1 text-xs  border border-black">
-                          {item.user_address || "-"}
+
+                        <td className="p-1 text-xs border border-black text-center">
+                          <NumericFormat
+                            value={item.service_amount}
+                            displayType="text"
+                            thousandSeparator={true}
+                            prefix="₹"
+                            thousandsGroupStyle="lakh"
+                          />
                         </td>
-                        <td className="p-1 text-xs  border border-black text-center">
-                          {item.user_salary || "-"}
-                        </td>
-                        <td className="p-1 text-xs  border border-black">
-                          {item.user_type_id || "-"}
-                        </td>
-                        <td className="p-1 text-xs  border border-black">
-                          {item.user_status || "-"}
+                        <td className="p-1 text-xs border border-black text-center">
+                          {item.service_count || "-"}
                         </td>
                       </tr>
                     ))}
@@ -315,7 +363,7 @@ const TeamReportView = () => {
                 </table>
               ) : (
                 <div className="text-center text-gray-500 py-4">
-                  No Team Data Available
+                  No Servive Data Available
                 </div>
               )}
             </div>
@@ -334,4 +382,4 @@ const TeamReportView = () => {
   );
 };
 
-export default TeamReportView;
+export default ServiceReportView;

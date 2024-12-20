@@ -4,12 +4,13 @@ import {
   DialogBody,
   DialogFooter,
   DialogHeader,
+  Slider,
 } from "@material-tailwind/react";
+import { Slide } from "@mui/material";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
 const Logout = ({ open, handleOpen }) => {
-  
   const navigate = useNavigate();
   const handleLogout = () => {
     localStorage.clear();
@@ -17,7 +18,12 @@ const Logout = ({ open, handleOpen }) => {
   };
 
   return (
-    <Dialog open={open} handler={handleOpen}>
+    <Dialog
+      open={open}
+      handler={handleOpen}
+      transition="slide-in"
+      transitionDuration="500"
+    >
       <DialogHeader>Confirm Logout</DialogHeader>
       <DialogBody>Are you sure you want to log out?</DialogBody>
       <DialogFooter>

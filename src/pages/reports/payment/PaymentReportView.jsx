@@ -12,11 +12,11 @@ import Layout from "../../../layout/Layout";
 import { useReactToPrint } from "react-to-print";
 import SkeletonLoading from "../agencies/SkeletonLoading";
 import { IconFileTypePdf } from "@tabler/icons-react";
-import jsPDF from "jspdf";
-import html2canvas from "html2canvas";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import moment from "moment";
 import { NumericFormat } from "react-number-format";
+import pdfMake from "pdfmake/build/pdfmake";
+import pdfFonts from "pdfmake/build/vfs_fonts";
 const printStyles = `
   @media print {
 
@@ -157,60 +157,76 @@ const PaymentReportView = () => {
     return <SkeletonLoading />;
   }
   const handleSavePDF = () => {
-    const input = tableRef.current;
-  
-    html2canvas(input, { scale: 2 })
-      .then((canvas) => {
-        const imgData = canvas.toDataURL("image/png");
-  
-        const pdf = new jsPDF("p", "mm", "a4");
-  
-        const pdfWidth = pdf.internal.pageSize.getWidth();
-        const pdfHeight = pdf.internal.pageSize.getHeight();
-  
-        const imgWidth = canvas.width;
-        const imgHeight = canvas.height;
-  
-        const margin = 10;
-        const availableWidth = pdfWidth - 2 * margin;
-  
-        // Determine the scaling ratio
-        const ratio = Math.min(availableWidth / imgWidth, pdfHeight / imgHeight);
-        
-        let imgX = margin;
-        let imgY = 0;
-  
-        // Calculate the height for this page
-        const pageHeight = pdf.internal.pageSize.height;
-  
-        // Add first page
-        pdf.addImage(imgData, "PNG", imgX, imgY, imgWidth * ratio, imgHeight * ratio);
-  
-        // Calculate remaining height
-        let remainingHeight = imgHeight * ratio - pageHeight;
-  
-        while (remainingHeight > 0) {
-          // Add a new page if there's more content
-          pdf.addPage();
-  
-          // Reset imgY to continue from the top
-          imgY = -remainingHeight;
-  
-          // Add image to the new page
-          pdf.addImage(imgData, "PNG", imgX, imgY, imgWidth * ratio, imgHeight * ratio);
-  
-          // Recalculate remaining height
-          remainingHeight -= pageHeight;
-        }
-  
-        // Save the PDF after all pages are added
-        pdf.save("payment_report.pdf");
-      })
-      .catch((error) => {
-        console.error("Error generating PDF: ", error);
-      });
+    // Table body structure
+    const tableBody = [
+      ["Date", "Voucher", "Debit", "Credit", "Amount"], // Header row
+      ...payment.map((item) => [
+        moment(item.payment_details_date).format("DD-MM-YYYY"),
+        item.payment_details_voucher_type || "-",
+        item.payment_details_debit || "-",
+        item.payment_details_credit || "-",
+        item.payment_details_amount
+          ? `₹${Number(item.payment_details_amount).toLocaleString("en-IN", {
+              maximumFractionDigits: 2,
+            })}`
+          : "-",
+      ]),
+    ];
+
+    const docDefinition = {
+      pageSize: "A4",
+      pageMargins: [10, 10, 10, 40],
+      content: [
+        { text: "Payment Report", style: "header", alignment: "center" },
+        {
+          table: {
+            headerRows: 1,
+            widths: ["20%", "20%", "20%", "20%", "20%"],
+            body: tableBody,
+          },
+          layout: {
+            fillColor: (rowIndex) => (rowIndex === 0 ? "#CCCCCC" : null), // Header background color
+            hLineWidth: () => 0.3,
+            vLineWidth: () => 0.3,
+          },
+        },
+      ],
+      styles: {
+        header: {
+          fontSize: 12,
+          bold: true,
+          margin: [0, 0, 0, 10],
+        },
+        footerText: {
+          fontSize: 8,
+        },
+      },
+      defaultStyle: {
+        fontSize: 6,
+      },
+      footer: (currentPage, pageCount) => ({
+        columns: [
+          {
+            text: "DFC",
+            style: "footerText",
+            alignment: "left",
+            margin: [10, 0],
+          },
+          {
+            text: `Page ${currentPage} of ${pageCount}`,
+            style: "footerText",
+            alignment: "right",
+            margin: [0, 0, 10, 0],
+          },
+        ],
+        margin: [10, 0, 10, 10],
+      }),
+    };
+    toast.success("PDF is Downloaded Successfully");
+
+    pdfMake.createPdf(docDefinition).download("Payment_report.pdf");
   };
-  
+
   const onSubmit = (e) => {
     e.preventDefault();
     let data = {
@@ -338,7 +354,7 @@ const PaymentReportView = () => {
                 </div>
               )}
             </div>
-                        <div className="hidden print:block">
+            <div className="hidden print:block">
               <div className="trademark flex justify-between items-center mt-4 ">
                 <h2 className="text-xs font-medium px-1">DFC</h2>
                 <h2 className="text-xs font-medium px-5">

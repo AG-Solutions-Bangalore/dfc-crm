@@ -12,11 +12,11 @@ import Layout from "../../../layout/Layout";
 import { useReactToPrint } from "react-to-print";
 import SkeletonLoading from "../agencies/SkeletonLoading";
 import { IconFileTypePdf } from "@tabler/icons-react";
-import jsPDF from "jspdf";
-import html2canvas from "html2canvas";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import moment from "moment";
 import { NumericFormat } from "react-number-format";
+import html2pdf from "html2pdf.js";
+
 const printStyles = `
   @media print {
 
@@ -191,44 +191,22 @@ const SalaryReportView = () => {
     return <SkeletonLoading />;
   }
   const handleSavePDF = () => {
-    const input = tableRef.current;
+    const element = componentRef.current;
+    const opt = {
+      margin: 0.2,
+      filename: "salary-report.pdf",
+      image: { type: "jpeg", quality: 0.98 },
+      html2canvas: { scale: 2, width: 800 },
+      jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
+    };
 
-    html2canvas(input, { scale: 2 })
-      .then((canvas) => {
-        const imgData = canvas.toDataURL("image/png");
+    html2pdf().set(opt).from(element).save();
+    toast
+      .success("PDF is Downloaded Successfully")
 
-        const pdf = new jsPDF("p", "mm", "a4");
-
-        const pdfWidth = pdf.internal.pageSize.getWidth();
-        const pdfHeight = pdf.internal.pageSize.getHeight();
-
-        const imgWidth = canvas.width;
-        const imgHeight = canvas.height;
-
-        const margin = 10;
-
-        const availableWidth = pdfWidth - 2 * margin;
-
-        const ratio = Math.min(
-          availableWidth / imgWidth,
-          pdfHeight / imgHeight
-        );
-
-        const imgX = margin;
-        const imgY = 0;
-
-        pdf.addImage(
-          imgData,
-          "PNG",
-          imgX,
-          imgY,
-          imgWidth * ratio,
-          imgHeight * ratio
-        );
-        pdf.save("invoice.pdf");
-      })
       .catch((error) => {
-        console.error("Error generating PDF: ", error);
+        console.error("PDF generation error:", error);
+        toast.error("Failed to download PDF.");
       });
   };
   const onSubmit = (e) => {

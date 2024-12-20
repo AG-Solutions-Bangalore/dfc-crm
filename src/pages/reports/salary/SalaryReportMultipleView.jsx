@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   IconInfoCircle,
   IconArrowBack,
@@ -12,13 +12,10 @@ import Layout from "../../../layout/Layout";
 import { useReactToPrint } from "react-to-print";
 import SkeletonLoading from "../agencies/SkeletonLoading";
 import { IconFileTypePdf } from "@tabler/icons-react";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import { NumericFormat } from "react-number-format";
-
-import jsPDF from "jspdf";
 import pdfMake from "pdfmake/build/pdfmake";
-
-
+import pdfFonts from "pdfmake/build/vfs_fonts";
 
 const printStyles = `
       @page {
@@ -54,13 +51,11 @@ const printStyles = `
 `;
 
 const SalaryReportMultipleView = () => {
-  const { id } = useParams();
   const navigate = useNavigate();
   const [salary, setTrip] = useState([]);
   const [salarysummaryfooter, setSummaryFooter] = useState({});
   const [loading, setLoading] = useState(true);
   const componentRef = useRef();
-  const tableRef = useRef(null);
 
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
@@ -98,88 +93,265 @@ const SalaryReportMultipleView = () => {
     `,
   });
 
+  // const handleSavePDF = () => {
+  //   const tableBody = [
+  //     [
+  //       "Company",
+  //       "Branch",
+  //       "Vehicle",
+  //       "Driver",
+  //       "Total Trip",
+  //       "Total KM",
+  //       "Trip Amount",
+  //       "Hamali",
+  //       "Incentive",
+  //       "Advance",
+  //       "Net Payable",
+  //     ],
+  //     ...salary.map((item) => [
+  //       item.trip_company || "-",
+  //       item.trip_branch || "-",
+  //       item.trip_vehicle || "-",
+  //       item.trip_driver || "-",
+  //       item.trip_count || "-",
+  //       item.trip_km || "-",
+  //       item.trip_incentive_amount * item.trip_count || "-",
+  //       item.trip_hmali || "-",
+  //       item.trip_bata_amount || "-",
+  //       item.trip_advance || "-",
+  //       item.trip_incentive_amount * item.trip_count +
+  //         item.trip_bata_for_trip +
+  //         (item.trip_hmali - item.trip_advance) +
+  //         +item.trip_bata_amount +
+  //         +item.trip_driver_salary +
+  //         item.trip_bata_for_km * item.trip_km || "-",
+  //     ]),
+  //     [
+  //       { text: "Total:", colSpan: 5, alignment: "right", bold: true },
+  //       "",
+  //       "",
+  //       "",
+  //       "",
+  //       salarysummaryfooter.trip_count || "-",
+  //       salarysummaryfooter.trip_km || "-",
+  //       salarysummaryfooter.trip_incentive_amount
+  //         ? `₹${(
+  //             salarysummaryfooter.trip_incentive_amount *
+  //             salarysummaryfooter.trip_count
+  //           ).toLocaleString("en-IN", {
+  //             maximumFractionDigits: 2,
+  //           })}`
+  //         : "-",
+  //       salarysummaryfooter.trip_hmali
+  //         ? `₹${Number(salarysummaryfooter.trip_hmali).toLocaleString("en-IN", {
+  //             maximumFractionDigits: 2,
+  //           })}`
+  //         : "-",
+  //       salarysummaryfooter.trip_bata_amount
+  //         ? `₹${Number(salarysummaryfooter.trip_bata_amount).toLocaleString(
+  //             "en-IN",
+  //             {
+  //               maximumFractionDigits: 2,
+  //             }
+  //           )}`
+  //         : "-",
+  //       salarysummaryfooter.trip_advance
+  //         ? `₹${Number(salarysummaryfooter.trip_advance).toLocaleString(
+  //             "en-IN",
+  //             {
+  //               maximumFractionDigits: 2,
+  //             }
+  //           )}`
+  //         : "-",
+  //       `₹${(
+  //         (salarysummaryfooter.trip_incentive_amount /
+  //           salarysummaryfooter.trip_count) *
+  //           salarysummaryfooter.trip_count +
+  //         salarysummaryfooter.trip_bata_for_trip +
+  //         (salarysummaryfooter.trip_hmali - salarysummaryfooter.trip_advance) +
+  //         +(
+  //           salarysummaryfooter.trip_bata_amount /
+  //           salarysummaryfooter.trip_count
+  //         ) +
+  //         +(
+  //           salarysummaryfooter.trip_driver_salary /
+  //           salarysummaryfooter.trip_count
+  //         ) +
+  //         (salarysummaryfooter.trip_bata_for_km /
+  //           salarysummaryfooter.trip_count) *
+  //           salarysummaryfooter.trip_km
+  //       ).toLocaleString("en-IN", {
+  //         maximumFractionDigits: 2,
+  //       })}`,
+  //     ],
+  //   ];
 
- const handleSavePDF = () => {
-   const tableBody = [
-     [
-       "Company",
-       "Branch",
-       "Vehicle",
-       "Driver",
-       "Total Trip",
-       "Total KM",
-       "Trip Amount",
-       "Hamali",
-       "Incentive",
-       "Advance",
-       "Net Payable",
-     ], // Header row
-     ...salary.map((item) => [
-       item.trip_company || "-",
-       item.trip_branch || "-",
-       item.trip_vehicle || "-",
-       item.trip_driver || "-",
-       item.trip_count || "-",
-       item.trip_km || "-",
-       item.trip_incentive_amount * item.trip_count || "-",
-       item.trip_hmali || "-",
-       item.trip_bata_amount || "-",
-       item.trip_advance || "-",
-       item.trip_incentive_amount * item.trip_count +
-         item.trip_bata_for_trip +
-         (item.trip_hmali - item.trip_advance) +
-         +item.trip_bata_amount +
-         +item.trip_driver_salary +
-         item.trip_bata_for_km * item.trip_km || "-",
-     ]),
-   ];
- 
-   const docDefinition = {
-     pageSize: "A4",
-     pageMargins: [10, 10, 10, 10],
-     content: [
-       { text: "Salary Report", style: "header", alignment: "center" },
-       {
-         table: {
-           headerRows: 1,
-           widths: [
-             "auto", // Adjust column widths based on content
-             "auto",
-             "auto",
-             "auto",
-             "auto",
-             "auto",
-             "auto",
-             "auto",
-             "auto",
-             "auto",
-             "auto",
-             
-           ],
-           body: tableBody,
-         },
-         layout: {
-           fillColor: (rowIndex) => (rowIndex === 0 ? "#CCCCCC" : null), // Header background
-           hLineWidth: () => 0.3,
-           vLineWidth: () => 0.3,
-           
-         },
-       },
-     ],
-     styles: {
-       header: {
-         fontSize: 12,
-         bold: true,
-         margin: [0, 0, 0, 10],
-       },
-     },
-     defaultStyle: {
-       fontSize: 7,
-     },
-   };
- 
-   pdfMake.createPdf(docDefinition).download("salary_report.pdf");
- };
+  //   const docDefinition = {
+  //     pageSize: "A4",
+  //     pageMargins: [10, 10, 10, 10],
+  //     content: [
+  //       { text: "Salary Report", style: "header", alignment: "center" },
+  //       {
+  //         table: {
+  //           headerRows: 1,
+  //           widths: [
+  //             "auto", // Adjust column widths based on content
+  //             "auto",
+  //             "auto",
+  //             "auto",
+  //             "auto",
+  //             "auto",
+  //             "auto",
+  //             "auto",
+  //             "auto",
+  //             "auto",
+  //             "auto",
+  //           ],
+  //           body: tableBody,
+  //         },
+  //         layout: {
+  //           fillColor: (rowIndex) => (rowIndex === 0 ? "#CCCCCC" : null), // Header background
+  //           hLineWidth: () => 0.3,
+  //           vLineWidth: () => 0.3,
+  //         },
+  //       },
+  //     ],
+  //     styles: {
+  //       header: {
+  //         fontSize: 12,
+  //         bold: true,
+  //         margin: [0, 0, 0, 10],
+  //       },
+  //     },
+  //     defaultStyle: {
+  //       fontSize: 7,
+  //     },
+  //   };
+
+  //   pdfMake.createPdf(docDefinition).download("salary_report.pdf");
+  // };
+  const handleSavePDF = () => {
+    const tableBody = [
+      [
+        "Company",
+        "Branch",
+        "Vehicle",
+        "Driver",
+        "Total Trip",
+        "Total KM",
+        "Trip Amount",
+        "Hamali",
+        "Incentive",
+        "Advance",
+        "Net Payable",
+      ], // Header row
+      ...salary.map((item) => [
+        item.trip_company || "-",
+        item.trip_branch || "-",
+        item.trip_vehicle || "-",
+        item.trip_driver || "-",
+        item.trip_count || "-",
+        item.trip_km || "-",
+        `₹${(
+          Number(item.trip_incentive_amount) * Number(item.trip_count) || 0
+        ).toLocaleString("en-IN", { maximumFractionDigits: 2 })}`,
+        `₹${(isNaN(Number(item.trip_hmali))
+          ? 0
+          : Number(item.trip_hmali)
+        ).toLocaleString("en-IN", { maximumFractionDigits: 2 })}`,
+        `₹${(isNaN(Number(item.trip_bata_amount))
+          ? 0
+          : Number(item.trip_bata_amount)
+        ).toLocaleString("en-IN", { maximumFractionDigits: 2 })}`,
+        `₹${(isNaN(Number(item.trip_advance))
+          ? 0
+          : Number(item.trip_advance)
+        ).toLocaleString("en-IN", { maximumFractionDigits: 2 })}`,
+        `₹${(
+          (Number(item.trip_incentive_amount) * Number(item.trip_count) || 0) +
+          (Number(item.trip_bata_for_trip) || 0) +
+          (Number(item.trip_hmali) || 0) -
+          (Number(item.trip_advance) || 0) +
+          (Number(item.trip_bata_amount) || 0) +
+          (Number(item.trip_driver_salary) || 0) +
+          (Number(item.trip_bata_for_km) || 0) * (Number(item.trip_km) || 0)
+        ).toLocaleString("en-IN", { maximumFractionDigits: 2 })}`,
+      ]),
+      [
+        { text: "Total:", colSpan: 4, alignment: "right", bold: true },
+        "",
+        "",
+        "",
+        salarysummaryfooter.trip_count || "-",
+        salarysummaryfooter.trip_km || "-",
+        `₹${(
+          (salarysummaryfooter.trip_incentive_amount || 0) *
+          (salarysummaryfooter.trip_count || 0)
+        ).toLocaleString("en-IN", { maximumFractionDigits: 2 })}`,
+        `₹${(Number(salarysummaryfooter.trip_hmali) || 0).toLocaleString(
+          "en-IN",
+          { maximumFractionDigits: 2 }
+        )}`,
+        `₹${(Number(salarysummaryfooter.trip_bata_amount) || 0).toLocaleString(
+          "en-IN",
+          { maximumFractionDigits: 2 }
+        )}`,
+        `₹${(Number(salarysummaryfooter.trip_advance) || 0).toLocaleString(
+          "en-IN",
+          { maximumFractionDigits: 2 }
+        )}`,
+
+        `₹${(
+          ((salarysummaryfooter.trip_incentive_amount || 0) /
+            (salarysummaryfooter.trip_count || 1)) *
+            (salarysummaryfooter.trip_count || 0) +
+          (salarysummaryfooter.trip_bata_for_trip || 0) +
+          ((salarysummaryfooter.trip_hmali || 0) -
+            (salarysummaryfooter.trip_advance || 0)) +
+          (salarysummaryfooter.trip_bata_amount || 0) /
+            (salarysummaryfooter.trip_count || 1) +
+          (salarysummaryfooter.trip_driver_salary || 0) /
+            (salarysummaryfooter.trip_count || 1) +
+          ((salarysummaryfooter.trip_bata_for_km || 0) /
+            (salarysummaryfooter.trip_count || 1)) *
+            (salarysummaryfooter.trip_km || 0)
+        ).toLocaleString("en-IN", { maximumFractionDigits: 2 })}`,
+      ],
+    ];
+
+    const docDefinition = {
+      pageSize: "A4",
+      pageMargins: [10, 10, 10, 10],
+      content: [
+        { text: "Salary Report", style: "header", alignment: "center" },
+        {
+          table: {
+            headerRows: 1,
+            widths: Array(11).fill("auto"),
+            body: tableBody,
+          },
+          layout: {
+            fillColor: (rowIndex) => (rowIndex === 0 ? "#CCCCCC" : null),
+            hLineWidth: () => 0.3,
+            vLineWidth: () => 0.3,
+          },
+        },
+      ],
+      styles: {
+        header: {
+          fontSize: 12,
+          bold: true,
+          margin: [0, 0, 0, 10],
+        },
+      },
+      defaultStyle: {
+        fontSize: 7,
+      },
+    };
+    toast.success("PDF is Downloaded Successfully");
+
+    pdfMake.createPdf(docDefinition).download("salary_report.pdf");
+  };
 
   useEffect(() => {
     const styleSheet = document.createElement("style");
@@ -253,10 +425,10 @@ const SalaryReportMultipleView = () => {
         link.setAttribute("download", "salary.csv");
         document.body.appendChild(link);
         link.click();
-        toast.success("salary Report is Downloaded Successfully");
+        toast.success("Salary Report is Downloaded Successfully");
       })
       .catch((err) => {
-        toast.error("salary Report is Not Downloaded");
+        toast.error("Salary Report is Not Downloaded");
       });
   };
 
@@ -516,6 +688,8 @@ const SalaryReportMultipleView = () => {
                           thousandSeparator={true}
                           prefix="₹"
                           thousandsGroupStyle="lakh"
+                          decimalScale={2}
+                          fixedDecimalScale={true}
                         ></NumericFormat>
                       </td>
                     </tr>
