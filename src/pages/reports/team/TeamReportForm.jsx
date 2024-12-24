@@ -64,7 +64,7 @@ function TeamReportForm() {
   const onSubmit = (e) => {
     e.preventDefault();
     let data = {
-      agency_branch: downloadTeam.agency_branch,
+      user_branch: downloadTeam.agency_branch,
       user_company: downloadTeam.user_company,
     };
     var v = document.getElementById("dowRecp").checkValidity();
@@ -129,26 +129,6 @@ function TeamReportForm() {
           <form id="dowRecp" autoComplete="off">
             <div className="grid grid-cols-1 md:grid-cols-2   gap-4">
               <SelectInput
-                label="Branch"
-                name="agency_branch"
-                value={
-                  downloadTeam.agency_branch
-                    ? {
-                        value: downloadTeam.agency_branch,
-                        label: downloadTeam.agency_branch,
-                      }
-                    : null
-                }
-                options={team.map((item) => ({
-                  value: item.branch_name,
-                  label: item.branch_name,
-                }))}
-                onChange={onInputChange}
-                placeholder="Select Branch"
-                styles={customStyles}
-                isSearchable={true}
-              />
-              <SelectInput
                 label="Company"
                 name="user_company"
                 value={
@@ -165,6 +145,26 @@ function TeamReportForm() {
                 }))}
                 onChange={onInputChange}
                 placeholder="Select Company"
+                styles={customStyles}
+                isSearchable={true}
+              />
+              <SelectInput
+                label="Branch"
+                name="agency_branch"
+                value={
+                  downloadTeam.agency_branch
+                    ? {
+                        value: downloadTeam.agency_branch,
+                        label: downloadTeam.agency_branch,
+                      }
+                    : null
+                }
+                options={team.map((item) => ({
+                  value: item.branch_name,
+                  label: item.branch_name,
+                }))}
+                onChange={onInputChange}
+                placeholder="Select Branch"
                 styles={customStyles}
                 isSearchable={true}
               />

@@ -1,27 +1,29 @@
-import React, { useEffect, useMemo, useState } from 'react'
-import Layout from '../../layout/Layout'
-import { IconEdit, IconEye, IconPlus } from '@tabler/icons-react';
-import { MantineReactTable, useMantineReactTable } from 'mantine-react-table';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import BASE_URL from '../../base/BaseUrl';
+import React, { useEffect, useMemo, useState } from "react";
+import Layout from "../../layout/Layout";
+import { IconEdit, IconEye, IconPlus } from "@tabler/icons-react";
+import { MantineReactTable, useMantineReactTable } from "mantine-react-table";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import BASE_URL from "../../base/BaseUrl";
+import moment from "moment/moment";
 
 const ServicesList = () => {
   const [serviceData, setServiceData] = useState(null);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-
-
   const fetchServiceData = async () => {
     try {
       setLoading(true);
       const token = localStorage.getItem("token");
-      const response = await axios.get(`${BASE_URL}/api/web-fetch-services-list`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axios.get(
+        `${BASE_URL}/api/web-fetch-services-list`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       setServiceData(response.data?.services);
     } catch (error) {
@@ -40,19 +42,37 @@ const ServicesList = () => {
       {
         accessorKey: "service_date",
         header: "Date",
-        size:150,
-       
-      },
-      {
-        accessorKey: "service_truck_no",
-        header: "Truck No",
         size: 150,
+
+        Cell: ({ row }) => {
+          const date = row.original.service_date;
+          return date ? moment(date).format("DD-MMM-YYYY") : "";
+        },
       },
+      // {
+      //   accessorKey: "service_truck_no",
+      //   header: "Truck No",
+      //   size: 150,
+      // },
       {
-        accessorKey: "service_company",
-        header: "Company",
-        size: 50,
+        accessorKey: "combined",
+        header: "Truck No & Company",
+        size: 150,
+        accessorFn: (row) => `${row.service_truck_no} - ${row.service_company}`,
+        Cell: ({ row }) => (
+          <div className="flex flex-col">
+            <span className="text-black font-semibold">
+              {row.original.service_truck_no}
+            </span>
+            <span className="text-black ">{row.original.service_company} </span>
+          </div>
+        ),
       },
+      // {
+      //   accessorKey: "service_company",
+      //   header: "Company",
+      //   size: 50,
+      // },
       {
         accessorKey: "service_garage",
         header: "Garage",
@@ -67,15 +87,11 @@ const ServicesList = () => {
         accessorKey: "service_amount",
         header: "Total Amount",
         size: 50,
-        Cell: ({row})=>{
-          const amount = row.original.service_amount
-        
-          return (
-            <span>
-              &#8377;{" "}{amount}
-            </span>
-          )
-        }
+        Cell: ({ row }) => {
+          const amount = row.original.service_amount;
+
+          return <span>&#8377; {amount}</span>;
+        },
       },
       {
         accessorKey: "service_count",
@@ -97,23 +113,20 @@ const ServicesList = () => {
 
           return (
             <div className="flex gap-2">
-              
               <div
-                onClick={()=>navigate(`/service-edit/${id}`)}
+                onClick={() => navigate(`/service-edit/${id}`)}
                 className="flex items-center space-x-2"
                 title="Edit"
               >
                 <IconEdit className="h-5 w-5 text-blue-500 cursor-pointer" />
               </div>
               <div
-                onClick={()=>navigate(`/service-view/${id}`)}
+                onClick={() => navigate(`/service-view/${id}`)}
                 className="flex items-center space-x-2"
                 title="View"
               >
                 <IconEye className="h-5 w-5 text-blue-500 cursor-pointer" />
               </div>
-              
-              
             </div>
           );
         },
@@ -132,14 +145,13 @@ const ServicesList = () => {
     enableStickyHeader: true,
     enableStickyFooter: true,
     mantineTableContainerProps: { sx: { maxHeight: "400px" } },
- 
+
     initialState: { columnVisibility: { address: false } },
   });
 
   return (
-   <Layout>
-   <div className="max-w-screen">
-        
+    <Layout>
+      <div className="max-w-screen">
         <div className="bg-white p-4 mb-4 rounded-lg shadow-md">
           {/* Header Section */}
           <div className="flex flex-col md:flex-row justify-between gap-4 items-center">
@@ -148,13 +160,12 @@ const ServicesList = () => {
             </h1>
             <div className="flex gap-2">
               <button
-              onClick={()=>navigate('/createService')}
+                onClick={() => navigate("/createService")}
                 className=" flex flex-row items-center gap-1 text-center text-sm font-[400] cursor-pointer  w-[7rem] text-white bg-blue-600 hover:bg-red-700 p-2 rounded-lg shadow-md"
-              
               >
-                <IconPlus className='w-4 h-4'/> Service
+                <IconPlus className="w-4 h-4" /> Service
               </button>
-              </div>
+            </div>
           </div>
         </div>
 
@@ -162,8 +173,8 @@ const ServicesList = () => {
           <MantineReactTable table={table} />
         </div>
       </div>
-   </Layout>
-  )
-}
+    </Layout>
+  );
+};
 
-export default ServicesList
+export default ServicesList;

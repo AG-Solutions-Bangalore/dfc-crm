@@ -78,7 +78,7 @@ function VendorReportForm() {
     e.preventDefault();
     let data = {
       vehicle_branch: downloadVendor.vendor_branch,
-      vehicle_company: downloadVendor.vendor_type,
+      vendor_type: downloadVendor.vendor_type,
     };
     var v = document.getElementById("dowRecp").checkValidity();
     var v = document.getElementById("dowRecp").reportValidity();
@@ -97,7 +97,7 @@ function VendorReportForm() {
           const url = window.URL.createObjectURL(new Blob([res.data]));
           const link = document.createElement("a");
           link.href = url;
-          link.setAttribute("download", "vehicle.csv");
+          link.setAttribute("download", "vendor.csv");
           document.body.appendChild(link);
           link.click();
           toast.success("Vendor is Downloaded Successfully");
@@ -144,6 +144,24 @@ function VendorReportForm() {
           <form id="dowRecp" autoComplete="off">
             <div className="grid grid-cols-1 md:grid-cols-2  gap-4">
               <SelectInput
+                label="Vendor Type"
+                name="vendor_type"
+                value={
+                  downloadVendor.vendor_type
+                    ? {
+                        value: downloadVendor.vendor_type,
+                        label: downloadVendor.vendor_type,
+                      }
+                    : null
+                }
+                options={VType}
+                onChange={onInputChange}
+                placeholder="Select Vendor Type"
+                styles={customStyles}
+                isSearchable={true}
+              />
+
+              <SelectInput
                 label="Branch"
                 name="vendor_branch"
                 value={
@@ -160,23 +178,6 @@ function VendorReportForm() {
                 }))}
                 onChange={onInputChange}
                 placeholder="Select Branch"
-                styles={customStyles}
-                isSearchable={true}
-              />
-              <SelectInput
-                label="Vendor Type"
-                name="vendor_type"
-                value={
-                  downloadVendor.vendor_type
-                    ? {
-                        value: downloadVendor.vendor_type,
-                        label: downloadVendor.vendor_type,
-                      }
-                    : null
-                }
-                options={VType}
-                onChange={onInputChange}
-                placeholder="Select Vendor Type"
                 styles={customStyles}
                 isSearchable={true}
               />

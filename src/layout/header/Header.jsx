@@ -1,26 +1,12 @@
 import React, { useState } from "react";
-import {
-  Box,
-  AppBar,
-  Toolbar,
-  styled,
-  Stack,
-  IconButton,
-} from "@mui/material";
+import { Box, AppBar, Toolbar, styled, Stack, IconButton } from "@mui/material";
 import PropTypes from "prop-types";
 
 // components
 import Profile from "./Profile";
-import {
-  IconArrowBack,
-  IconInfoOctagon,
-  IconMenu,
-  IconMenuDeep,
-} from "@tabler/icons-react";
+import { IconMenu, IconMenuDeep } from "@tabler/icons-react";
 
 const Header = ({ toggleMobileSidebar, toggleSidebar }) => {
-  
-
   const AppBarStyled = styled(AppBar)(({ theme }) => ({
     boxShadow: "none",
     background: theme.palette.background.paper,
@@ -36,8 +22,6 @@ const Header = ({ toggleMobileSidebar, toggleSidebar }) => {
     color: theme.palette.text.secondary,
   }));
 
-
-  
   return (
     <AppBarStyled position="sticky" color="default">
       <ToolbarStyled>
@@ -71,21 +55,7 @@ const Header = ({ toggleMobileSidebar, toggleSidebar }) => {
         <Box flexGrow={1} />
 
         <Stack spacing={1} direction="row" alignItems="center">
-     
-            <IconInfoOctagon
-              width={20}
-              className="cursor-pointer"
-             
-            />
-          
-        </Stack>
-        
-     
-         
-        <Stack spacing={1} direction="row" alignItems="center">
-       
-            <Profile />
-       
+          <Profile />
         </Stack>
       </ToolbarStyled>
     </AppBarStyled>

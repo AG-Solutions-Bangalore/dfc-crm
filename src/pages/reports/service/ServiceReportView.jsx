@@ -182,7 +182,11 @@ const ServiceReportView = () => {
       pageSize: "A4",
       pageMargins: [10, 10, 10, 10],
       content: [
-        { text: "Services Report", style: "header", alignment: "center" },
+        {
+          text: "SERVICES SUMMARY",
+          style: "header",
+          alignment: "center",
+        },
         {
           table: {
             headerRows: 1,
@@ -332,20 +336,20 @@ const ServiceReportView = () => {
                         <td className="p-1 text-xs border border-black text-center">
                           {moment(item.service_date).format("DD-MM-YYYY")}
                         </td>
-                        <td className="p-1 text-xs border border-black text-center">
+                        <td className="p-1 text-xs border border-black px-2">
                           {item.service_truck_no || "-"}
                         </td>
-                        <td className="p-1 text-xs border border-black">
+                        <td className="p-1 text-xs border border-black px-2">
                           {item.service_company || "-"}
                         </td>
-                        <td className="p-1 text-xs border border-black">
+                        <td className="p-1 text-xs border border-black px-2">
                           {item.service_branch || "-"}
                         </td>
-                        <td className="p-1 text-xs border border-black">
+                        <td className="p-1 text-xs border border-black px-2">
                           {item.service_garage || "-"}
                         </td>
 
-                        <td className="p-1 text-xs border border-black text-center">
+                        <td className="p-1 text-xs border border-black text-end px-2">
                           <NumericFormat
                             value={item.service_amount}
                             displayType="text"

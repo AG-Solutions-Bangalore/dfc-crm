@@ -23,7 +23,7 @@ const ProfileDialog = ({
   const inputClass =
     "w-full px-3 py-2 text-xs border rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-500 border-blue-500";
 
-  console.log("ProfileDialog open state:", open);
+  // console.log("ProfileDialog open state:", open);
 
   const FormLabel = ({ children, required }) => (
     <label className="block text-sm font-semibold text-black mb-1 ">

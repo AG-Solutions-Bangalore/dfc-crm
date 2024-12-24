@@ -176,7 +176,7 @@ const VehicleReportView = () => {
     const element = componentRef.current;
     const opt = {
       margin: 0.2,
-      filename: "salary-report.pdf",
+      filename: "vehicle-report.pdf",
       image: { type: "jpeg", quality: 0.98 },
       html2canvas: { scale: 2, width: 780 },
       jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
@@ -315,7 +315,7 @@ const VehicleReportView = () => {
                     <tbody>
                       {fullservicesSub.map((item, index) => (
                         <tr key={index}>
-                          <td className="text-xs border p-1 border-black text-center">
+                          <td className="text-xs border p-1 border-black px-2">
                             {item?.service_sub_type || "-"}
                           </td>
                           <td className="text-xs border p-1 border-black text-center">
@@ -377,14 +377,14 @@ const VehicleReportView = () => {
                             {moment(item?.trip_date).format("DD-MM-YYYY") ||
                               "-"}
                           </td>
-                          <td className="text-xs border p-2 border-black text-center">
+                          <td className="text-xs border  border-black p-2">
                             {item?.trip_agency || "-"}
                           </td>
 
                           <td className="text-xs border p-2 border-black text-center">
                             {item?.trip_km || "-"}
                           </td>
-                          <td className="text-xs border p-2 border-black text-center">
+                          <td className="text-xs border p-2 border-black ">
                             {item?.trip_supplier || "-"}
                           </td>
                           <td className="text-xs border p-2 border-black text-center">
@@ -393,7 +393,7 @@ const VehicleReportView = () => {
                           <td className="text-xs border p-1 border-black text-center">
                             {item?.trip_hsd_supplied || "-"}
                           </td>
-                          <td className="text-xs border p-2 border-black text-center">
+                          <td className="text-xs border p-2 border-black">
                             {item?.trip_driver || "-"}
                             {" - "}
                             {item?.trip_driver_no || "-"}
@@ -442,16 +442,18 @@ const VehicleReportView = () => {
                       {/* //one */}
                       {vehicle.vehicle_type != "Other" && (
                         <tr>
-                          <td className="text-xs border p-1 border-black text-center">
+                          <td className="text-xs border p-1 border-black px-2">
                             1. Front Left{" "}
                           </td>
-                          <td className="text-xs border p-1 border-black text-center">
+                          <td className="text-xs border p-1 border-black px-2">
                             {tyre.tyre_assign_1_front_left_no || "-"}
                           </td>
                           <td className="text-xs border p-1 border-black text-center">
-                            {moment(tyre.tyre_assign_1_front_left_date).format(
-                              "DD-MM-YYYY"
-                            ) || "-"}
+                            {tyre.tyre_assign_1_front_left_date
+                              ? moment(
+                                  tyre.tyre_assign_1_front_left_date
+                                ).format("DD-MM-YYYY")
+                              : "-"}
                           </td>
                           <td className="text-xs border p-1 border-black text-center">
                             {tyre.tyre_assign_1_front_left_km || "-"}
@@ -467,16 +469,18 @@ const VehicleReportView = () => {
                       {/* //TWO */}
                       {vehicle.vehicle_type != "Other" && (
                         <tr>
-                          <td className="text-xs border p-1 border-black text-center">
+                          <td className="text-xs border p-1 border-black px-2">
                             2. Front Right
                           </td>
-                          <td className="text-xs border p-1 border-black text-center">
+                          <td className="text-xs border p-1 border-black px-2">
                             {tyre.tyre_assign_2_front_right_no || "-"}
                           </td>
                           <td className="text-xs border p-1 border-black text-center">
-                            {moment(tyre.tyre_assign_2_front_right_date).format(
-                              "DD-MM-YYYY"
-                            ) || "-"}
+                            {tyre.tyre_assign_2_front_right_date
+                              ? moment(
+                                  tyre.tyre_assign_2_front_right_date
+                                ).format("DD-MM-YYYY")
+                              : "-"}
                           </td>
                           <td className="text-xs border p-1 border-black text-center">
                             {tyre.tyre_assign_2_front_right_km || "-"}
@@ -492,16 +496,18 @@ const VehicleReportView = () => {
                       {/* //THREE */}
                       {vehicle.vehicle_type == "6W Truck" && (
                         <tr>
-                          <td className="text-xs border p-1 border-black text-center">
+                          <td className="text-xs border p-1 border-black px-2">
                             3. Back Left
                           </td>
-                          <td className="text-xs border p-1 border-black text-center">
+                          <td className="text-xs border p-1 border-black px-2">
                             {tyre.tyre_assign_3_back_left_no || "-"}
                           </td>
                           <td className="text-xs border p-1 border-black text-center">
-                            {moment(tyre.tyre_assign_3_back_left_date).format(
-                              "DD-MM-YYYY"
-                            ) || "-"}
+                            {tyre.tyre_assign_3_back_left_date
+                              ? moment(
+                                  tyre.tyre_assign_3_back_left_date
+                                ).format("DD-MM-YYYY")
+                              : "-"}
                           </td>
                           <td className="text-xs border p-1 border-black text-center">
                             {tyre.tyre_assign_3_back_left_km || "-"}
@@ -517,16 +523,18 @@ const VehicleReportView = () => {
                       {/* //FOUR */}
                       {vehicle.vehicle_type == "6W Truck" && (
                         <tr>
-                          <td className="text-xs border p-1 border-black text-center">
+                          <td className="text-xs border p-1 border-black px-2">
                             4. Back Left
                           </td>
-                          <td className="text-xs border p-1 border-black text-center">
+                          <td className="text-xs border p-1 border-black px-2">
                             {tyre.tyre_assign_4_back_left_no || "-"}
                           </td>
                           <td className="text-xs border p-1 border-black text-center">
-                            {moment(tyre.tyre_assign_4_back_left_date).format(
-                              "DD-MM-YYYY"
-                            ) || "-"}
+                            {tyre.tyre_assign_4_back_left_date
+                              ? moment(
+                                  tyre.tyre_assign_4_back_left_date
+                                ).format("DD-MM-YYYY")
+                              : "-"}
                           </td>
                           <td className="text-xs border p-1 border-black text-center">
                             {tyre.tyre_assign_4_back_left_km || "-"}
@@ -542,16 +550,18 @@ const VehicleReportView = () => {
                       {/* //FIVE */}
                       {vehicle.vehicle_type == "6W Truck" && (
                         <tr>
-                          <td className="text-xs border p-1 border-black text-center">
+                          <td className="text-xs border p-1 border-black px-2">
                             5. Back Right
                           </td>
-                          <td className="text-xs border p-1 border-black text-center">
+                          <td className="text-xs border p-1 border-black px-2">
                             {tyre.tyre_assign_5_back_right_no || "-"}
                           </td>
                           <td className="text-xs border p-1 border-black text-center">
-                            {moment(tyre.tyre_assign_5_back_right_date).format(
-                              "DD-MM-YYYY"
-                            ) || "-"}
+                            {tyre.tyre_assign_5_back_right_date
+                              ? moment(
+                                  tyre.tyre_assign_5_back_right_date
+                                ).format("DD-MM-YYYY")
+                              : "-"}
                           </td>
                           <td className="text-xs border p-1 border-black text-center">
                             {tyre.tyre_assign_5_back_right_km || "-"}
@@ -567,16 +577,18 @@ const VehicleReportView = () => {
                       {/* //SIX */}
                       {vehicle.vehicle_type == "6W Truck" && (
                         <tr>
-                          <td className="text-xs border p-1 border-black text-center">
+                          <td className="text-xs border p-1 border-black px-2">
                             6. Back Right
                           </td>
-                          <td className="text-xs border p-1 border-black text-center">
+                          <td className="text-xs border p-1 border-black px-2">
                             {tyre.tyre_assign_6_back_right_no || "-"}
                           </td>
                           <td className="text-xs border p-1 border-black text-center">
-                            {moment(tyre.tyre_assign_6_back_right_date).format(
-                              "DD-MM-YYYY"
-                            ) || "-"}
+                            {tyre.tyre_assign_6_back_right_date
+                              ? moment(
+                                  tyre.tyre_assign_6_back_right_date
+                                ).format("DD-MM-YYYY")
+                              : "-"}
                           </td>
                           <td className="text-xs border p-1 border-black text-center">
                             {tyre.tyre_assign_6_back_right_km || "-"}
@@ -592,16 +604,18 @@ const VehicleReportView = () => {
                       {/* //SEVEN */}
                       {vehicle.vehicle_type == "10W Truck" && (
                         <tr>
-                          <td className="text-xs border p-1 border-black text-center">
+                          <td className="text-xs border p-1 border-black px-2">
                             3. Back Housing Left
                           </td>
-                          <td className="text-xs border p-1 border-black text-center">
+                          <td className="text-xs border p-1 border-black px-2">
                             {tyre.tyre_assign_3_back_housing_left_no || "-"}
                           </td>
                           <td className="text-xs border p-1 border-black text-center">
-                            {moment(
-                              tyre.tyre_assign_3_back_housing_left_date
-                            ).format("DD-MM-YYYY") || "-"}
+                            {tyre.tyre_assign_3_back_housing_left_date
+                              ? moment(
+                                  tyre.tyre_assign_3_back_housing_left_date
+                                ).format("DD-MM-YYYY")
+                              : "-"}
                           </td>
                           <td className="text-xs border p-1 border-black text-center">
                             {tyre.tyre_assign_3_back_housing_left_km || "-"}
@@ -617,16 +631,18 @@ const VehicleReportView = () => {
                       {/* //EIGHT */}
                       {vehicle.vehicle_type == "10W Truck" && (
                         <tr>
-                          <td className="text-xs border p-1 border-black text-center">
+                          <td className="text-xs border p-1 border-black px-2">
                             4. Back Housing Left
                           </td>
-                          <td className="text-xs border p-1 border-black text-center">
+                          <td className="text-xs border p-1 border-black px-2">
                             {tyre.tyre_assign_4_back_housing_left_no || "-"}
                           </td>
                           <td className="text-xs border p-1 border-black text-center">
-                            {moment(
-                              tyre.tyre_assign_4_back_housing_left_date
-                            ).format("DD-MM-YYYY") || "-"}
+                            {tyre.tyre_assign_4_back_housing_left_date
+                              ? moment(
+                                  tyre.tyre_assign_4_back_housing_left_date
+                                ).format("DD-MM-YYYY")
+                              : "-"}
                           </td>
                           <td className="text-xs border p-1 border-black text-center">
                             {tyre.tyre_assign_4_back_housing_left_km || "-"}
@@ -642,16 +658,18 @@ const VehicleReportView = () => {
                       {/* //NINE */}
                       {vehicle.vehicle_type == "10W Truck" && (
                         <tr>
-                          <td className="text-xs border p-1 border-black text-center">
+                          <td className="text-xs border p-1 border-black px-2">
                             5. Back Dummy Left
                           </td>
-                          <td className="text-xs border p-1 border-black text-center">
+                          <td className="text-xs border p-1 border-black px-2">
                             {tyre.tyre_assign_5_back_dummy_left_no || "-"}
                           </td>
                           <td className="text-xs border p-1 border-black text-center">
-                            {moment(
-                              tyre.tyre_assign_5_back_dummy_left_date
-                            ).format("DD-MM-YYYY") || "-"}
+                            {tyre.tyre_assign_5_back_dummy_left_date
+                              ? moment(
+                                  tyre.tyre_assign_5_back_dummy_left_date
+                                ).format("DD-MM-YYYY")
+                              : "-"}
                           </td>
                           <td className="text-xs border p-1 border-black text-center">
                             {tyre.tyre_assign_5_back_dummy_left_km || "-"}
@@ -667,16 +685,18 @@ const VehicleReportView = () => {
                       {/* //TEN */}
                       {vehicle.vehicle_type == "10W Truck" && (
                         <tr>
-                          <td className="text-xs border p-1 border-black text-center">
+                          <td className="text-xs border p-1 border-black px-2">
                             6. Back Dummy Left
                           </td>
-                          <td className="text-xs border p-1 border-black text-center">
+                          <td className="text-xs border p-1 border-black px-2">
                             {tyre.tyre_assign_6_back_dummy_left_no || "-"}
                           </td>
                           <td className="text-xs border p-1 border-black text-center">
-                            {moment(
-                              tyre.tyre_assign_6_back_dummy_left_date
-                            ).format("DD-MM-YYYY") || "-"}
+                            {tyre.tyre_assign_6_back_dummy_left_date
+                              ? moment(
+                                  tyre.tyre_assign_6_back_dummy_left_date
+                                ).format("DD-MM-YYYY")
+                              : "-"}
                           </td>
                           <td className="text-xs border p-1 border-black text-center">
                             {tyre.tyre_assign_6_back_dummy_left_km || "-"}
@@ -692,16 +712,18 @@ const VehicleReportView = () => {
                       {/* //ELEVEN */}
                       {vehicle.vehicle_type == "10W Truck" && (
                         <tr>
-                          <td className="text-xs border p-1 border-black text-center">
+                          <td className="text-xs border p-1 border-black px-2">
                             7. Back Housing Right
                           </td>
-                          <td className="text-xs border p-1 border-black text-center">
+                          <td className="text-xs border p-1 border-black px-2">
                             {tyre.tyre_assign_7_back_housing_right_no || "-"}
                           </td>
                           <td className="text-xs border p-1 border-black text-center">
-                            {moment(
-                              tyre.tyre_assign_7_back_housing_right_date
-                            ).format("DD-MM-YYYY") || "-"}
+                            {tyre.tyre_assign_7_back_housing_right_date
+                              ? moment(
+                                  tyre.tyre_assign_7_back_housing_right_date
+                                ).format("DD-MM-YYYY")
+                              : "-"}
                           </td>
                           <td className="text-xs border p-1 border-black text-center">
                             {tyre.tyre_assign_7_back_housing_right_km || "-"}
@@ -719,16 +741,18 @@ const VehicleReportView = () => {
                       {/* //TWELE */}
                       {vehicle.vehicle_type == "10W Truck" && (
                         <tr>
-                          <td className="text-xs border p-1 border-black text-center">
+                          <td className="text-xs border p-1 border-black px-2">
                             8. Back Housing Right
                           </td>
-                          <td className="text-xs border p-1 border-black text-center">
+                          <td className="text-xs border p-1 border-black px-2">
                             {tyre.tyre_assign_8_back_housing_right_no || "-"}
                           </td>
                           <td className="text-xs border p-1 border-black text-center">
-                            {moment(
-                              tyre.tyre_assign_8_back_housing_right_date
-                            ).format("DD-MM-YYYY") || "-"}
+                            {tyre.tyre_assign_8_back_housing_right_date
+                              ? moment(
+                                  tyre.tyre_assign_8_back_housing_right_date
+                                ).format("DD-MM-YYYY")
+                              : "-"}
                           </td>
                           <td className="text-xs border p-1 border-black text-center">
                             {tyre.tyre_assign_8_back_housing_right_km || "-"}
@@ -746,16 +770,18 @@ const VehicleReportView = () => {
                       {/* //THIRTEEN */}
                       {vehicle.vehicle_type == "10W Truck" && (
                         <tr>
-                          <td className="text-xs border p-1 border-black text-center">
+                          <td className="text-xs border p-1 border-black px-2">
                             9. Back Dummy Right
                           </td>
-                          <td className="text-xs border p-1 border-black text-center">
+                          <td className="text-xs border p-1 border-black px-2">
                             {tyre.tyre_assign_9_back_dummy_right_no || "-"}
                           </td>
                           <td className="text-xs border p-1 border-black text-center">
-                            {moment(
-                              tyre.tyre_assign_9_back_dummy_right_date
-                            ).format("DD-MM-YYYY") || "-"}
+                            {tyre.tyre_assign_9_back_dummy_right_date
+                              ? moment(
+                                  tyre.tyre_assign_9_back_dummy_right_date
+                                ).format("DD-MM-YYYY")
+                              : "-"}
                           </td>
                           <td className="text-xs border p-1 border-black text-center">
                             {tyre.tyre_assign_9_back_dummy_right_km || "-"}
@@ -771,16 +797,18 @@ const VehicleReportView = () => {
                       {/* //FOURETRENN */}
                       {vehicle.vehicle_type == "10W Truck" && (
                         <tr>
-                          <td className="text-xs border p-1 border-black text-center">
+                          <td className="text-xs border p-1 border-black px-2">
                             10. Back Dummy Right
                           </td>
-                          <td className="text-xs border p-1 border-black text-center">
+                          <td className="text-xs border p-1 border-black px-2">
                             {tyre.tyre_assign_10_back_dummy_right_no || "-"}
                           </td>
                           <td className="text-xs border p-1 border-black text-center">
-                            {moment(
-                              tyre.tyre_assign_10_back_dummy_right_date
-                            ).format("DD-MM-YYYY") || "-"}
+                            {tyre.tyre_assign_10_back_dummy_right_date
+                              ? moment(
+                                  tyre.tyre_assign_10_back_dummy_right_date
+                                ).format("DD-MM-YYYY")
+                              : "-"}
                           </td>
                           <td className="text-xs border p-1 border-black text-center">
                             {tyre.tyre_assign_10_back_dummy_right_km || "-"}

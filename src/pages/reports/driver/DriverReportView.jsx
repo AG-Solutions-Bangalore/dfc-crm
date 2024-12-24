@@ -119,7 +119,7 @@ const DriverReportView = () => {
       try {
         const token = localStorage.getItem("token");
         let data = {
-          agency_branch: localStorage.getItem("agency_branch"),
+          user_branch: localStorage.getItem("user_branch"),
           user_company: localStorage.getItem("user_company"),
         };
         const Response = await axios.post(
@@ -147,7 +147,7 @@ const DriverReportView = () => {
   }
   const handleSavePDF = () => {
     const tableBody = [
-      ["Full Name", "Branch", "Company", "Mobile", "Vehicle Type"], // Header row
+      ["Full Name", "Branch", "Company", "Mobile", "Vehicle Type"],
       ...driver.map((item) => [
         item.full_name || "-",
         item.user_branch || "-",
@@ -159,9 +159,9 @@ const DriverReportView = () => {
 
     const docDefinition = {
       pageSize: "A4",
-      pageMargins: [10, 10, 10, 40], // Adjust bottom margin for footer
+      pageMargins: [10, 10, 10, 40],
       content: [
-        { text: "Driver Report", style: "header", alignment: "center" },
+        { text: "DRIVER SUMMARY", style: "header", alignment: "center" },
         {
           table: {
             headerRows: 1,
@@ -208,13 +208,13 @@ const DriverReportView = () => {
     };
     toast.success("PDF  is Downloaded Successfully");
 
-    pdfMake.createPdf(docDefinition).download("team_report.pdf");
+    pdfMake.createPdf(docDefinition).download("driver_report.pdf");
   };
 
   const onSubmit = (e) => {
     e.preventDefault();
     let data = {
-      agency_branch: localStorage.getItem("agency_branch"),
+      user_branch: localStorage.getItem("user_branch"),
       user_company: localStorage.getItem("user_company"),
     };
 
@@ -231,7 +231,7 @@ const DriverReportView = () => {
         const url = window.URL.createObjectURL(new Blob([res.data]));
         const link = document.createElement("a");
         link.href = url;
-        link.setAttribute("download", "Report.csv");
+        link.setAttribute("download", "driver.csv");
         document.body.appendChild(link);
         link.click();
         toast.success("Driver Report is Downloaded Successfully");
@@ -305,19 +305,19 @@ const DriverReportView = () => {
                   <tbody>
                     {driver.map((item, index) => (
                       <tr key={index}>
-                        <td className="p-1 text-xs  border border-black">
+                        <td className="p-1 text-xs  border border-black px-2">
                           {item.full_name || "-"}
                         </td>
-                        <td className="p-1 text-xs  border border-black">
+                        <td className="p-1 text-xs  border border-black px-2">
                           {item.user_branch || "-"}
                         </td>
-                        <td className="p-1 text-xs  border border-black">
+                        <td className="p-1 text-xs  border border-black px-2">
                           {item.user_company || "-"}
                         </td>
-                        <td className="p-1 text-xs  border border-black text-center">
+                        <td className="p-1 text-xs  border border-black px-2">
                           {item.mobile || "-"}
                         </td>
-                        <td className="p-1 text-xs  border border-black">
+                        <td className="p-1 text-xs  border border-black px-2">
                           {item.vehicle_type || "-"}
                         </td>
                       </tr>

@@ -64,7 +64,7 @@ function DriverReportForm() {
   const onSubmit = (e) => {
     e.preventDefault();
     let data = {
-      agency_branch: downloadDriver.agency_branch,
+      user_branch: downloadDriver.agency_branch,
       user_company: downloadDriver.user_company,
     };
     var v = document.getElementById("dowRecp").checkValidity();
@@ -110,7 +110,7 @@ function DriverReportForm() {
   };
   const handleview = () => {
     navigate("/report-driver-form/view");
-    localStorage.setItem("agency_branch", downloadDriver.agency_branch);
+    localStorage.setItem("user_branch", downloadDriver.agency_branch);
     localStorage.setItem("user_company", downloadDriver.user_company);
   };
   return (
@@ -129,26 +129,6 @@ function DriverReportForm() {
           <form id="dowRecp" autoComplete="off">
             <div className="grid grid-cols-1 md:grid-cols-2   gap-4">
               <SelectInput
-                label="Branch"
-                name="agency_branch"
-                value={
-                  downloadDriver.agency_branch
-                    ? {
-                        value: downloadDriver.agency_branch,
-                        label: downloadDriver.agency_branch,
-                      }
-                    : null
-                }
-                options={driver.map((item) => ({
-                  value: item.branch_name,
-                  label: item.branch_name,
-                }))}
-                onChange={onInputChange}
-                placeholder="Select Branch"
-                styles={customStyles}
-                isSearchable={true}
-              />
-              <SelectInput
                 label="Company"
                 name="user_company"
                 value={
@@ -165,6 +145,26 @@ function DriverReportForm() {
                 }))}
                 onChange={onInputChange}
                 placeholder="Select Company"
+                styles={customStyles}
+                isSearchable={true}
+              />
+              <SelectInput
+                label="Branch"
+                name="agency_branch"
+                value={
+                  downloadDriver.agency_branch
+                    ? {
+                        value: downloadDriver.agency_branch,
+                        label: downloadDriver.agency_branch,
+                      }
+                    : null
+                }
+                options={driver.map((item) => ({
+                  value: item.branch_name,
+                  label: item.branch_name,
+                }))}
+                onChange={onInputChange}
+                placeholder="Select Branch"
                 styles={customStyles}
                 isSearchable={true}
               />

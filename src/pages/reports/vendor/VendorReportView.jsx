@@ -120,8 +120,8 @@ const VendorReportView = () => {
       try {
         const token = localStorage.getItem("token");
         let data = {
-          user_branch: localStorage.getItem("user_branch"),
-          user_company: localStorage.getItem("user_company"),
+          vendor_type: localStorage.getItem("vendor_type"),
+          vendor_branch: localStorage.getItem("vendor_branch"),
         };
         const Response = await axios.post(
           `${BASE_URL}/api/fetch-vendor-report`,
@@ -162,7 +162,7 @@ const VendorReportView = () => {
       pageSize: "A4",
       pageMargins: [10, 10, 10, 40], // Adjust bottom margin for footer
       content: [
-        { text: "Vendor Report", style: "header", alignment: "center" },
+        { text: "VENDORS SUMMARY", style: "header", alignment: "center" },
         {
           table: {
             headerRows: 1,
@@ -209,7 +209,7 @@ const VendorReportView = () => {
     };
     toast.success("PDFis Downloaded Successfully");
 
-    pdfMake.createPdf(docDefinition).download("team_report.pdf");
+    pdfMake.createPdf(docDefinition).download("vendor_report.pdf");
   };
   const onSubmit = (e) => {
     e.preventDefault();
@@ -247,7 +247,7 @@ const VendorReportView = () => {
           <h2 className="px-5 text-[black] text-lg flex flex-row justify-between items-center rounded-xl p-2">
             <div className="flex items-center gap-2">
               <IconInfoCircle className="w-4 h-4" />
-              <span> Vendor Summary</span>
+              <span> Vendors Summary</span>
             </div>
             <div className="flex items-center space-x-4">
               <IconFileTypeXls
@@ -280,7 +280,7 @@ const VendorReportView = () => {
           >
             <div className="mb-4 width">
               <h3 className="text-xl font-bold mb-2 text-center">
-                VENDOR SUMMARY
+                VENDORS SUMMARY
               </h3>
               {vendor.length > 0 ? (
                 <table className="w-full border-collapse">
@@ -305,19 +305,19 @@ const VendorReportView = () => {
                   <tbody>
                     {vendor.map((item, index) => (
                       <tr key={index}>
-                        <td className="p-1 text-xs border border-black">
+                        <td className="p-1 text-xs border border-black px-2">
                           {item.vendor_name || "-"}
                         </td>
-                        <td className="p-1 text-xs border border-black">
+                        <td className="p-1 text-xs border border-black px-2">
                           {item.vendor_type || "-"}
                         </td>
-                        <td className="p-1 text-xs border border-black">
+                        <td className="p-1 text-xs border border-black px-2">
                           {item.vendor_branch || "-"}
                         </td>
-                        <td className="p-1 text-xs border border-black">
+                        <td className="p-1 text-xs border border-black px-2">
                           {item.vendor_contact_person || "-"}
                         </td>
-                        <td className="p-1 text-xs border border-black text-center">
+                        <td className="p-1 text-xs border border-black  px-2">
                           {item.vendor_mobile || "-"}
                         </td>
                       </tr>

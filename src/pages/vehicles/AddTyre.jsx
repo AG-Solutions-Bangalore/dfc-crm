@@ -7,9 +7,6 @@ import { toast } from "sonner";
 import { IconArrowBack, IconInfoCircle } from "@tabler/icons-react";
 import Select from "react-select";
 
-
-
-
 const AddTyre = () => {
   const navigate = useNavigate();
   const today = new Date();
@@ -361,7 +358,7 @@ const AddTyre = () => {
           ...vehicles,
           [e.target.name]: e.target.value,
         });
-      } 
+      }
     } else if (e.target.name == "tyre_assign_5_back_dummy_left_km") {
       if (validateOnlyDigits(e.target.value)) {
         setVehicles({
@@ -609,53 +606,54 @@ const AddTyre = () => {
   const inputClass =
     "w-full px-3 py-2 text-xs border rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-500 border-blue-500";
 
-    const TyreAssignmentBlock = ({ 
-        label, 
-        noName, 
-        dateName, 
-        kmName 
-      }) => (
-        <div className="col-span-full grid grid-cols-3 gap-4 mb-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700">{label}</label>
-            <Select
-              name={noName}
-              options={tyre.map((option) => ({
-                value: option.tyre_sub_no,
-                label: option.tyre_sub_no,
-                name:noName,
-              }))}
-              onChange={(e) => onInputChange(e)}
-              value={vehicles[noName] ? {
-                value: vehicles[noName],
-                label: vehicles[noName]
-              } : null}
-              placeholder="Select Tyre"
-              styles={customStyles}
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">Date</label>
-            <input
-              type="date"
-              name={dateName}
-              value={vehicles[dateName]}
-              onChange={(e) => onInputChange(e)}
-              className={inputClass}
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">KM</label>
-            <input
-              type="tel"
-              name={kmName}
-              value={vehicles[kmName]}
-              onChange={(e) => onInputChange(e)}
-              className={inputClass}
-            />
-          </div>
-        </div>
-      );
+  const TyreAssignmentBlock = ({ label, noName, dateName, kmName }) => (
+    <div className="col-span-full grid grid-cols-3 gap-4 mb-4">
+      <div>
+        <label className="block text-sm font-medium text-gray-700">
+          {label}
+        </label>
+        <Select
+          name={noName}
+          options={tyre.map((option) => ({
+            value: option.tyre_sub_no,
+            label: option.tyre_sub_no,
+            name: noName,
+          }))}
+          onChange={(e) => onInputChange(e)}
+          value={
+            vehicles[noName]
+              ? {
+                  value: vehicles[noName],
+                  label: vehicles[noName],
+                }
+              : null
+          }
+          placeholder="Select Tyre"
+          styles={customStyles}
+        />
+      </div>
+      <div>
+        <label className="block text-sm font-medium text-gray-700">Date</label>
+        <input
+          type="date"
+          name={dateName}
+          value={vehicles[dateName]}
+          onChange={(e) => onInputChange(e)}
+          className={inputClass}
+        />
+      </div>
+      <div>
+        <label className="block text-sm font-medium text-gray-700">KM</label>
+        <input
+          type="number"
+          name={kmName}
+          value={vehicles[kmName]}
+          onChange={(e) => onInputChange(e)}
+          className={inputClass}
+        />
+      </div>
+    </div>
+  );
   return (
     <Layout>
       <div className=" bg-[#FFFFFF] p-2  rounded-lg  ">
@@ -712,7 +710,7 @@ const AddTyre = () => {
                 name="vehicle_company"
                 value={vehicles.vehicle_company}
                 onChange={(e) => onInputChange(e)}
-                className={inputClass}
+                className={`${inputClass} cursor-not-allowed opacity-50`}
                 required
                 disabled
               />
@@ -720,13 +718,13 @@ const AddTyre = () => {
             {/* Brand(Hp/Ioc)  */}
 
             <div>
-              <FormLabel >Brand(Hp/Ioc)</FormLabel>
+              <FormLabel>Brand(Hp/Ioc)</FormLabel>
               <input
                 type="text"
                 name="vehicle_agency_short"
                 value={vehicles.vehicle_agency_short}
                 onChange={(e) => onInputChange(e)}
-                className={inputClass}
+                className={`${inputClass} cursor-not-allowed opacity-50`}
                 disabled
               />
             </div>
@@ -740,7 +738,7 @@ const AddTyre = () => {
                 name="vehicle_type"
                 value={vehicles.vehicle_type}
                 onChange={(e) => onInputChange(e)}
-                className={inputClass}
+                className={`${inputClass} cursor-not-allowed opacity-50`}
                 required
                 disabled
               />
@@ -754,7 +752,7 @@ const AddTyre = () => {
                 name="vehicle_branch"
                 value={vehicles.vehicle_branch}
                 onChange={(e) => onInputChange(e)}
-                className={inputClass}
+                className={`${inputClass} cursor-not-allowed opacity-50`}
                 required
                 disabled
               />
@@ -768,7 +766,7 @@ const AddTyre = () => {
                 name="vehicle_driver"
                 value={vehicles.vehicle_driver}
                 onChange={(e) => onInputChange(e)}
-                className={inputClass}
+                className={`${inputClass} cursor-not-allowed opacity-50`}
                 disabled
               />
             </div>
@@ -780,20 +778,20 @@ const AddTyre = () => {
                 name="mfg_year"
                 value={vehicles.mfg_year}
                 onChange={(e) => onInputChange(e)}
-                className={inputClass}
+                className={`${inputClass} cursor-not-allowed opacity-50`}
                 required
                 disabled
               />
             </div>
             {/* Fixed HSD  */}
             <div>
-              <FormLabel >Fixed HSD</FormLabel>
+              <FormLabel>Fixed HSD</FormLabel>
               <input
                 type="tel"
                 name="vehicle_hsd"
                 value={vehicles.vehicle_hsd}
                 onChange={(e) => onInputChange(e)}
-                className={inputClass}
+                className={`${inputClass} cursor-not-allowed opacity-50`}
                 disabled
               />
             </div>
@@ -805,7 +803,7 @@ const AddTyre = () => {
                 name="vehicle_open_km"
                 value={vehicles.vehicle_open_km}
                 onChange={(e) => onInputChange(e)}
-                className={inputClass}
+                className={`${inputClass} cursor-not-allowed opacity-50`}
                 required
                 disabled
               />
@@ -819,7 +817,7 @@ const AddTyre = () => {
                 name="ins_due"
                 value={vehicles.ins_due}
                 onChange={(e) => onInputChange(e)}
-                className={inputClass}
+                className={`${inputClass} cursor-not-allowed opacity-50`}
                 disabled
               />
             </div>
@@ -843,7 +841,7 @@ const AddTyre = () => {
                 name="fc_due"
                 value={vehicles.fc_due}
                 onChange={(e) => onInputChange(e)}
-                className={inputClass}
+                className={`${inputClass} cursor-not-allowed opacity-50`}
                 disabled
               />
             </div>
@@ -856,7 +854,7 @@ const AddTyre = () => {
                 name="no_of_gas_cylinder"
                 value={vehicles.no_of_gas_cylinder}
                 onChange={(e) => onInputChange(e)}
-                className={inputClass}
+                className={`${inputClass} cursor-not-allowed opacity-50`}
                 disabled
               />
             </div>
@@ -909,108 +907,826 @@ const AddTyre = () => {
             </div>
           </div>
 
-       
           {vehicles.vehicle_type !== "Other" && (
-          <div className="col-span-full">
-            {/* Front Tyres - Always shown */}
-            <TyreAssignmentBlock 
-              label="1. Front Left"
-              noName="tyre_assign_1_front_left_no"
-              dateName="tyre_assign_1_front_left_date"
-              kmName="tyre_assign_1_front_left_km"
-            />
-            <TyreAssignmentBlock 
-              label="2. Front Right"
-              noName="tyre_assign_2_front_right_no"
-              dateName="tyre_assign_2_front_right_date"
-              kmName="tyre_assign_2_front_right_km"
-            />
+            <div className="col-span-full">
+              {/* 1.front left */}
+              <div className="col-span-full grid grid-cols-3 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">
+                    1. Front Left
+                  </label>
+                  <Select
+                    name="tyre_assign_1_front_left_no"
+                    options={tyre.map((option) => ({
+                      value: option.tyre_sub_no,
+                      label: option.tyre_sub_no,
+                      name: "tyre_assign_1_front_left_no",
+                    }))}
+                    onChange={(e) => onInputChange(e)}
+                    value={
+                      vehicles.tyre_assign_1_front_left_no
+                        ? {
+                            value: vehicles.tyre_assign_1_front_left_no,
+                            label: vehicles.tyre_assign_1_front_left_no,
+                          }
+                        : null
+                    }
+                    placeholder="Select Tyre"
+                    styles={customStyles}
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Date
+                  </label>
+                  <input
+                    type="date"
+                    name="tyre_assign_1_front_left_date"
+                    value={vehicles.tyre_assign_1_front_left_date}
+                    onChange={(e) => onInputChange(e)}
+                    className={inputClass}
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">
+                    KM
+                  </label>
+                  <input
+                    type="tel"
+                    name="tyre_assign_1_front_left_km"
+                    value={vehicles.tyre_assign_1_front_left_km}
+                    onChange={(e) => onInputChange(e)}
+                    className={inputClass}
+                  />
+                </div>
+              </div>
 
-            {/* 6W Truck Back Tyres */}
-            {vehicles.vehicle_type === "6W Truck" && (
-              <>
-                <TyreAssignmentBlock 
-                  label="3. Back Left"
-                  noName="tyre_assign_3_back_left_no"
-                  dateName="tyre_assign_3_back_left_date"
-                  kmName="tyre_assign_3_back_left_km"
-                />
-                <TyreAssignmentBlock 
-                  label="4. Back Left"
-                  noName="tyre_assign_4_back_left_no"
-                  dateName="tyre_assign_4_back_left_date"
-                  kmName="tyre_assign_4_back_left_km"
-                />
-                <TyreAssignmentBlock 
-                  label="5. Back Right"
-                  noName="tyre_assign_5_back_right_no"
-                  dateName="tyre_assign_5_back_right_date"
-                  kmName="tyre_assign_5_back_right_km"
-                />
-                <TyreAssignmentBlock 
-                  label="6. Back Right"
-                  noName="tyre_assign_6_back_right_no"
-                  dateName="tyre_assign_6_back_right_date"
-                  kmName="tyre_assign_6_back_right_km"
-                />
-              </>
-            )}
+              {/* 2 front right  */}
+              <div className="col-span-full grid grid-cols-3 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">
+                    2. Front Right
+                  </label>
+                  <Select
+                    name="tyre_assign_2_front_right_no"
+                    options={tyre.map((option) => ({
+                      value: option.tyre_sub_no,
+                      label: option.tyre_sub_no,
+                      name: "tyre_assign_2_front_right_no",
+                    }))}
+                    onChange={(e) => onInputChange(e)}
+                    value={
+                      vehicles.tyre_assign_2_front_right_no
+                        ? {
+                            value: vehicles.tyre_assign_2_front_right_no,
+                            label: vehicles.tyre_assign_2_front_right_no,
+                          }
+                        : null
+                    }
+                    placeholder="Select Tyre"
+                    styles={customStyles}
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Date
+                  </label>
+                  <input
+                    type="date"
+                    name="tyre_assign_2_front_right_date"
+                    value={vehicles.tyre_assign_2_front_right_date}
+                    onChange={(e) => onInputChange(e)}
+                    className={inputClass}
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">
+                    KM
+                  </label>
+                  <input
+                    type="tel"
+                    name="tyre_assign_2_front_right_km"
+                    value={vehicles.tyre_assign_2_front_right_km}
+                    onChange={(e) => onInputChange(e)}
+                    className={inputClass}
+                  />
+                </div>
+              </div>
+              {/* Front Tyres - Always shown
+              <TyreAssignmentBlock
+                label="1. Front Left"
+                noName="tyre_assign_1_front_left_no"
+                dateName="tyre_assign_1_front_left_date"
+                kmName="tyre_assign_1_front_left_km"
+              />
+              <TyreAssignmentBlock
+                label="2. Front Right"
+                noName="tyre_assign_2_front_right_no"
+                dateName="tyre_assign_2_front_right_date"
+                kmName="tyre_assign_2_front_right_km"
+              /> */}
 
-            {/* 10W Truck Back Tyres */}
-            {vehicles.vehicle_type === "10W Truck" && (
-              <>
-                <TyreAssignmentBlock 
-                  label="3. Back Housing Left"
-                  noName="tyre_assign_3_back_housing_left_no"
-                  dateName="tyre_assign_3_back_housing_left_date"
-                  kmName="tyre_assign_3_back_housing_left_km"
-                />
-                <TyreAssignmentBlock 
-                  label="4. Back Housing Left"
-                  noName="tyre_assign_4_back_housing_left_no"
-                  dateName="tyre_assign_4_back_housing_left_date"
-                  kmName="tyre_assign_4_back_housing_left_km"
-                />
-                <TyreAssignmentBlock 
-                  label="5. Back Dummy Left"
-                  noName="tyre_assign_5_back_dummy_left_no"
-                  dateName="tyre_assign_5_back_dummy_left_date"
-                  kmName="tyre_assign_5_back_dummy_left_km"
-                />
-                <TyreAssignmentBlock 
-                  label="6. Back Dummy Left"
-                  noName="tyre_assign_6_back_dummy_left_no"
-                  dateName="tyre_assign_6_back_dummy_left_date"
-                  kmName="tyre_assign_6_back_dummy_left_km"
-                />
-                <TyreAssignmentBlock 
-                  label="7. Back Housing Right"
-                  noName="tyre_assign_7_back_housing_right_no"
-                  dateName="tyre_assign_7_back_housing_right_date"
-                  kmName="tyre_assign_7_back_housing_right_km"
-                />
-                <TyreAssignmentBlock 
-                  label="8. Back Housing Right"
-                  noName="tyre_assign_8_back_housing_right_no"
-                  dateName="tyre_assign_8_back_housing_right_date"
-                  kmName="tyre_assign_8_back_housing_right_km"
-                />
-                <TyreAssignmentBlock 
-                  label="9. Back Dummy Right"
-                  noName="tyre_assign_9_back_dummy_right_no"
-                  dateName="tyre_assign_9_back_dummy_right_date"
-                  kmName="tyre_assign_9_back_dummy_right_km"
-                />
-                <TyreAssignmentBlock 
-                  label="10. Back Dummy Right"
-                  noName="tyre_assign_10_back_dummy_right_no"
-                  dateName="tyre_assign_10_back_dummy_right_date"
-                  kmName="tyre_assign_10_back_dummy_right_km"
-                />
-              </>
-            )}
-          </div>
-        )}
+              {/* 6W Truck Back Tyres */}
+              {vehicles.vehicle_type === "6W Truck" && (
+                <>
+                  {/* <TyreAssignmentBlock
+                    label="3. Back Left"
+                    noName="tyre_assign_3_back_left_no"
+                    dateName="tyre_assign_3_back_left_date"
+                    kmName="tyre_assign_3_back_left_km"
+                  /> */}
+                  <div className="col-span-full grid grid-cols-3 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">
+                        3. Back Left
+                      </label>
+                      <Select
+                        name="tyre_assign_3_back_left_no"
+                        options={tyre.map((option) => ({
+                          value: option.tyre_sub_no,
+                          label: option.tyre_sub_no,
+                          name: "tyre_assign_3_back_left_no",
+                        }))}
+                        onChange={(e) => onInputChange(e)}
+                        value={
+                          vehicles.tyre_assign_3_back_left_no
+                            ? {
+                                value: vehicles.tyre_assign_3_back_left_no,
+                                label: vehicles.tyre_assign_3_back_left_no,
+                              }
+                            : null
+                        }
+                        placeholder="Select Tyre"
+                        styles={customStyles}
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">
+                        Date
+                      </label>
+                      <input
+                        type="date"
+                        name="tyre_assign_3_back_left_date"
+                        value={vehicles.tyre_assign_3_back_left_date}
+                        onChange={(e) => onInputChange(e)}
+                        className={inputClass}
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">
+                        KM
+                      </label>
+                      <input
+                        type="tel"
+                        name="tyre_assign_3_back_left_km"
+                        value={vehicles.tyre_assign_3_back_left_km}
+                        onChange={(e) => onInputChange(e)}
+                        className={inputClass}
+                      />
+                    </div>
+                  </div>
+                  {/* <TyreAssignmentBlock
+                    label="4. Back Left"
+                    noName="tyre_assign_4_back_left_no"
+                    dateName="tyre_assign_4_back_left_date"
+                    kmName="tyre_assign_4_back_left_km"
+                  /> */}
+                  <div className="col-span-full grid grid-cols-3 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">
+                        4. Back Left
+                      </label>
+                      <Select
+                        name="tyre_assign_4_back_left_no"
+                        options={tyre.map((option) => ({
+                          value: option.tyre_sub_no,
+                          label: option.tyre_sub_no,
+                          name: "tyre_assign_4_back_left_no",
+                        }))}
+                        onChange={(e) => onInputChange(e)}
+                        value={
+                          vehicles.tyre_assign_4_back_left_no
+                            ? {
+                                value: vehicles.tyre_assign_4_back_left_no,
+                                label: vehicles.tyre_assign_4_back_left_no,
+                              }
+                            : null
+                        }
+                        placeholder="Select Tyre"
+                        styles={customStyles}
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">
+                        Date
+                      </label>
+                      <input
+                        type="date"
+                        name="tyre_assign_4_back_left_date"
+                        value={vehicles.tyre_assign_4_back_left_date}
+                        onChange={(e) => onInputChange(e)}
+                        className={inputClass}
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">
+                        KM
+                      </label>
+                      <input
+                        type="tel"
+                        name="tyre_assign_4_back_left_km"
+                        value={vehicles.tyre_assign_4_back_left_km}
+                        onChange={(e) => onInputChange(e)}
+                        className={inputClass}
+                      />
+                    </div>
+                  </div>
+                  {/* <TyreAssignmentBlock
+                    label="5. Back Right"
+                    noName="tyre_assign_5_back_right_no"
+                    dateName="tyre_assign_5_back_right_date"
+                    kmName="tyre_assign_5_back_right_km"
+                  /> */}
+                  <div className="col-span-full grid grid-cols-3 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">
+                        5. Back Right
+                      </label>
+                      <Select
+                        name="tyre_assign_5_back_right_no"
+                        options={tyre.map((option) => ({
+                          value: option.tyre_sub_no,
+                          label: option.tyre_sub_no,
+                          name: "tyre_assign_5_back_right_no",
+                        }))}
+                        onChange={(e) => onInputChange(e)}
+                        value={
+                          vehicles.tyre_assign_5_back_right_no
+                            ? {
+                                value: vehicles.tyre_assign_5_back_right_no,
+                                label: vehicles.tyre_assign_5_back_right_no,
+                              }
+                            : null
+                        }
+                        placeholder="Select Tyre"
+                        styles={customStyles}
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">
+                        Date
+                      </label>
+                      <input
+                        type="date"
+                        name="tyre_assign_5_back_right_date"
+                        value={vehicles.tyre_assign_5_back_right_date}
+                        onChange={(e) => onInputChange(e)}
+                        className={inputClass}
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">
+                        KM
+                      </label>
+                      <input
+                        type="tel"
+                        name="tyre_assign_5_back_right_km"
+                        value={vehicles.tyre_assign_5_back_right_km}
+                        onChange={(e) => onInputChange(e)}
+                        className={inputClass}
+                      />
+                    </div>
+                  </div>
+                  {/* <TyreAssignmentBlock
+                    label="6. Back Right"
+                    noName="tyre_assign_6_back_right_no"
+                    dateName="tyre_assign_6_back_right_date"
+                    kmName="tyre_assign_6_back_right_km"
+                  /> */}
+                  <div className="col-span-full grid grid-cols-3 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">
+                        6. Back Right
+                      </label>
+                      <Select
+                        name="tyre_assign_6_back_right_no"
+                        options={tyre.map((option) => ({
+                          value: option.tyre_sub_no,
+                          label: option.tyre_sub_no,
+                          name: "tyre_assign_6_back_right_no",
+                        }))}
+                        onChange={(e) => onInputChange(e)}
+                        value={
+                          vehicles.tyre_assign_6_back_right_no
+                            ? {
+                                value: vehicles.tyre_assign_6_back_right_no,
+                                label: vehicles.tyre_assign_6_back_right_no,
+                              }
+                            : null
+                        }
+                        placeholder="Select Tyre"
+                        styles={customStyles}
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">
+                        Date
+                      </label>
+                      <input
+                        type="date"
+                        name="tyre_assign_6_back_right_date"
+                        value={vehicles.tyre_assign_6_back_right_date}
+                        onChange={(e) => onInputChange(e)}
+                        className={inputClass}
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">
+                        KM
+                      </label>
+                      <input
+                        type="tel"
+                        name="tyre_assign_6_back_right_km"
+                        value={vehicles.tyre_assign_6_back_right_km}
+                        onChange={(e) => onInputChange(e)}
+                        className={inputClass}
+                      />
+                    </div>
+                  </div>
+                </>
+              )}
+
+              {/* 10W Truck Back Tyres */}
+              {vehicles.vehicle_type === "10W Truck" && (
+                <>
+                  {/* <TyreAssignmentBlock
+                    label="3. Back Housing Left"
+                    noName="tyre_assign_3_back_housing_left_no"
+                    dateName="tyre_assign_3_back_housing_left_date"
+                    kmName="tyre_assign_3_back_housing_left_km"
+                  /> */}
+                  <div className="col-span-full grid grid-cols-3 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">
+                        3. Back Housing Left
+                      </label>
+                      <Select
+                        name="tyre_assign_3_back_housing_left_no"
+                        options={tyre.map((option) => ({
+                          value: option.tyre_sub_no,
+                          label: option.tyre_sub_no,
+                          name: "tyre_assign_3_back_housing_left_no",
+                        }))}
+                        onChange={(e) => onInputChange(e)}
+                        value={
+                          vehicles.tyre_assign_3_back_housing_left_no
+                            ? {
+                                value:
+                                  vehicles.tyre_assign_3_back_housing_left_no,
+                                label:
+                                  vehicles.tyre_assign_3_back_housing_left_no,
+                              }
+                            : null
+                        }
+                        placeholder="Select Tyre"
+                        styles={customStyles}
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">
+                        Date
+                      </label>
+                      <input
+                        type="date"
+                        name="tyre_assign_3_back_housing_left_date"
+                        value={vehicles.tyre_assign_3_back_housing_left_date}
+                        onChange={(e) => onInputChange(e)}
+                        className={inputClass}
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">
+                        KM
+                      </label>
+                      <input
+                        type="tel"
+                        name="tyre_assign_3_back_housing_left_km"
+                        value={vehicles.tyre_assign_3_back_housing_left_km}
+                        onChange={(e) => onInputChange(e)}
+                        className={inputClass}
+                      />
+                    </div>
+                  </div>
+                  {/* <TyreAssignmentBlock
+                    label="4. Back Housing Left"
+                    noName="tyre_assign_4_back_housing_left_no"
+                    dateName="tyre_assign_4_back_housing_left_date"
+                    kmName="tyre_assign_4_back_housing_left_km"
+                  /> */}
+                  <div className="col-span-full grid grid-cols-3 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">
+                        4. Back Housing Left
+                      </label>
+                      <Select
+                        name="tyre_assign_4_back_housing_left_no"
+                        options={tyre.map((option) => ({
+                          value: option.tyre_sub_no,
+                          label: option.tyre_sub_no,
+                          name: "tyre_assign_4_back_housing_left_no",
+                        }))}
+                        onChange={(e) => onInputChange(e)}
+                        value={
+                          vehicles.tyre_assign_4_back_housing_left_no
+                            ? {
+                                value:
+                                  vehicles.tyre_assign_4_back_housing_left_no,
+                                label:
+                                  vehicles.tyre_assign_4_back_housing_left_no,
+                              }
+                            : null
+                        }
+                        placeholder="Select Tyre"
+                        styles={customStyles}
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">
+                        Date
+                      </label>
+                      <input
+                        type="date"
+                        name="tyre_assign_4_back_housing_left_date"
+                        value={vehicles.tyre_assign_4_back_housing_left_date}
+                        onChange={(e) => onInputChange(e)}
+                        className={inputClass}
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">
+                        KM
+                      </label>
+                      <input
+                        type="tel"
+                        name="tyre_assign_4_back_housing_left_km"
+                        value={vehicles.tyre_assign_4_back_housing_left_km}
+                        onChange={(e) => onInputChange(e)}
+                        className={inputClass}
+                      />
+                    </div>
+                  </div>
+                  {/* <TyreAssignmentBlock
+                    label="5. Back Dummy Left"
+                    noName="tyre_assign_5_back_dummy_left_no"
+                    dateName="tyre_assign_5_back_dummy_left_date"
+                    kmName="tyre_assign_5_back_dummy_left_km"
+                  /> */}
+                  <div className="col-span-full grid grid-cols-3 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">
+                        5. Back Dummy Left
+                      </label>
+                      <Select
+                        name="tyre_assign_5_back_dummy_left_no"
+                        options={tyre.map((option) => ({
+                          value: option.tyre_sub_no,
+                          label: option.tyre_sub_no,
+                          name: "tyre_assign_5_back_dummy_left_no",
+                        }))}
+                        onChange={(e) => onInputChange(e)}
+                        value={
+                          vehicles.tyre_assign_5_back_dummy_left_no
+                            ? {
+                                value:
+                                  vehicles.tyre_assign_5_back_dummy_left_no,
+                                label:
+                                  vehicles.tyre_assign_5_back_dummy_left_no,
+                              }
+                            : null
+                        }
+                        placeholder="Select Tyre"
+                        styles={customStyles}
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">
+                        Date
+                      </label>
+                      <input
+                        type="date"
+                        name="tyre_assign_5_back_dummy_left_date"
+                        value={vehicles.tyre_assign_5_back_dummy_left_date}
+                        onChange={(e) => onInputChange(e)}
+                        className={inputClass}
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">
+                        KM
+                      </label>
+                      <input
+                        type="tel"
+                        name="tyre_assign_5_back_dummy_left_km"
+                        value={vehicles.tyre_assign_5_back_dummy_left_km}
+                        onChange={(e) => onInputChange(e)}
+                        className={inputClass}
+                      />
+                    </div>
+                  </div>
+                  {/* <TyreAssignmentBlock
+                    label="6. Back Dummy Left"
+                    noName="tyre_assign_6_back_dummy_left_no"
+                    dateName="tyre_assign_6_back_dummy_left_date"
+                    kmName="tyre_assign_6_back_dummy_left_km"
+                  /> */}
+                  <div className="col-span-full grid grid-cols-3 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">
+                        6. Back Dummy Left
+                      </label>
+                      <Select
+                        name="tyre_assign_6_back_dummy_left_no"
+                        options={tyre.map((option) => ({
+                          value: option.tyre_sub_no,
+                          label: option.tyre_sub_no,
+                          name: "tyre_assign_6_back_dummy_left_no",
+                        }))}
+                        onChange={(e) => onInputChange(e)}
+                        value={
+                          vehicles.tyre_assign_6_back_dummy_left_no
+                            ? {
+                                value:
+                                  vehicles.tyre_assign_6_back_dummy_left_no,
+                                label:
+                                  vehicles.tyre_assign_6_back_dummy_left_no,
+                              }
+                            : null
+                        }
+                        placeholder="Select Tyre"
+                        styles={customStyles}
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">
+                        Date
+                      </label>
+                      <input
+                        type="date"
+                        name="tyre_assign_6_back_dummy_left_date"
+                        value={vehicles.tyre_assign_6_back_dummy_left_date}
+                        onChange={(e) => onInputChange(e)}
+                        className={inputClass}
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">
+                        KM
+                      </label>
+                      <input
+                        type="tel"
+                        name="tyre_assign_6_back_dummy_left_km"
+                        value={vehicles.tyre_assign_6_back_dummy_left_km}
+                        onChange={(e) => onInputChange(e)}
+                        className={inputClass}
+                      />
+                    </div>
+                  </div>
+                  {/* <TyreAssignmentBlock
+                    label="7. Back Housing Right"
+                    noName="tyre_assign_7_back_housing_right_no"
+                    dateName="tyre_assign_7_back_housing_right_date"
+                    kmName="tyre_assign_7_back_housing_right_km"
+                  /> */}
+                  <div className="col-span-full grid grid-cols-3 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">
+                        7. Back Housing Right
+                      </label>
+                      <Select
+                        name="tyre_assign_7_back_housing_right_no"
+                        options={tyre.map((option) => ({
+                          value: option.tyre_sub_no,
+                          label: option.tyre_sub_no,
+                          name: "tyre_assign_7_back_housing_right_no",
+                        }))}
+                        onChange={(e) => onInputChange(e)}
+                        value={
+                          vehicles.tyre_assign_7_back_housing_right_no
+                            ? {
+                                value:
+                                  vehicles.tyre_assign_7_back_housing_right_no,
+                                label:
+                                  vehicles.tyre_assign_7_back_housing_right_no,
+                              }
+                            : null
+                        }
+                        placeholder="Select Tyre"
+                        styles={customStyles}
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">
+                        Date
+                      </label>
+                      <input
+                        type="date"
+                        name="tyre_assign_7_back_housing_right_date"
+                        value={vehicles.tyre_assign_7_back_housing_right_date}
+                        onChange={(e) => onInputChange(e)}
+                        className={inputClass}
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">
+                        KM
+                      </label>
+                      <input
+                        type="tel"
+                        name="tyre_assign_7_back_housing_right_km"
+                        value={vehicles.tyre_assign_7_back_housing_right_km}
+                        onChange={(e) => onInputChange(e)}
+                        className={inputClass}
+                      />
+                    </div>
+                  </div>
+                  {/* <TyreAssignmentBlock
+                    label="8. Back Housing Right"
+                    noName="tyre_assign_8_back_housing_right_no"
+                    dateName="tyre_assign_8_back_housing_right_date"
+                    kmName="tyre_assign_8_back_housing_right_km"
+                  /> */}
+                  <div className="col-span-full grid grid-cols-3 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">
+                        8. Back Housing Right
+                      </label>
+                      <Select
+                        name="tyre_assign_8_back_housing_right_no"
+                        options={tyre.map((option) => ({
+                          value: option.tyre_sub_no,
+                          label: option.tyre_sub_no,
+                          name: "tyre_assign_8_back_housing_right_no",
+                        }))}
+                        onChange={(e) => onInputChange(e)}
+                        value={
+                          vehicles.tyre_assign_8_back_housing_right_no
+                            ? {
+                                value:
+                                  vehicles.tyre_assign_8_back_housing_right_no,
+                                label:
+                                  vehicles.tyre_assign_8_back_housing_right_no,
+                              }
+                            : null
+                        }
+                        placeholder="Select Tyre"
+                        styles={customStyles}
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">
+                        Date
+                      </label>
+                      <input
+                        type="date"
+                        name="tyre_assign_8_back_housing_right_date"
+                        value={vehicles.tyre_assign_8_back_housing_right_date}
+                        onChange={(e) => onInputChange(e)}
+                        className={inputClass}
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">
+                        KM
+                      </label>
+                      <input
+                        type="tel"
+                        name="tyre_assign_8_back_housing_right_km"
+                        value={vehicles.tyre_assign_8_back_housing_right_km}
+                        onChange={(e) => onInputChange(e)}
+                        className={inputClass}
+                      />
+                    </div>
+                  </div>
+                  {/* <TyreAssignmentBlock
+                    label="9. Back Dummy Right"
+                    noName="tyre_assign_9_back_dummy_right_no"
+                    dateName="tyre_assign_9_back_dummy_right_date"
+                    kmName="tyre_assign_9_back_dummy_right_km"
+                  /> */}
+                  <div className="col-span-full grid grid-cols-3 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">
+                        9. Back Dummy Right
+                      </label>
+                      <Select
+                        name="tyre_assign_9_back_dummy_right_no"
+                        options={tyre.map((option) => ({
+                          value: option.tyre_sub_no,
+                          label: option.tyre_sub_no,
+                          name: "tyre_assign_9_back_dummy_right_no",
+                        }))}
+                        onChange={(e) => onInputChange(e)}
+                        value={
+                          vehicles.tyre_assign_9_back_dummy_right_no
+                            ? {
+                                value:
+                                  vehicles.tyre_assign_9_back_dummy_right_no,
+                                label:
+                                  vehicles.tyre_assign_9_back_dummy_right_no,
+                              }
+                            : null
+                        }
+                        placeholder="Select Tyre"
+                        styles={customStyles}
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">
+                        Date
+                      </label>
+                      <input
+                        type="date"
+                        name="tyre_assign_9_back_dummy_right_date"
+                        value={vehicles.tyre_assign_9_back_dummy_right_date}
+                        onChange={(e) => onInputChange(e)}
+                        className={inputClass}
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">
+                        KM
+                      </label>
+                      <input
+                        type="tel"
+                        name="tyre_assign_9_back_dummy_right_km"
+                        value={vehicles.tyre_assign_9_back_dummy_right_km}
+                        onChange={(e) => onInputChange(e)}
+                        className={inputClass}
+                      />
+                    </div>
+                  </div>
+                  {/* <TyreAssignmentBlock
+                    label="10. Back Dummy Right"
+                    noName="tyre_assign_10_back_dummy_right_no"
+                    dateName="tyre_assign_10_back_dummy_right_date"
+                    kmName="tyre_assign_10_back_dummy_right_km"
+                  /> */}
+                  <div className="col-span-full grid grid-cols-3 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">
+                        10. Back Dummy Right
+                      </label>
+                      <Select
+                        name="tyre_assign_10_back_dummy_right_no"
+                        options={tyre.map((option) => ({
+                          value: option.tyre_sub_no,
+                          label: option.tyre_sub_no,
+                          name: "tyre_assign_10_back_dummy_right_no",
+                        }))}
+                        onChange={(e) => onInputChange(e)}
+                        value={
+                          vehicles.tyre_assign_10_back_dummy_right_no
+                            ? {
+                                value:
+                                  vehicles.tyre_assign_10_back_dummy_right_no,
+                                label:
+                                  vehicles.tyre_assign_10_back_dummy_right_no,
+                              }
+                            : null
+                        }
+                        placeholder="Select Tyre"
+                        styles={customStyles}
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">
+                        Date
+                      </label>
+                      <input
+                        type="date"
+                        name="tyre_assign_10_back_dummy_right_date"
+                        value={vehicles.tyre_assign_10_back_dummy_right_date}
+                        onChange={(e) => onInputChange(e)}
+                        className={inputClass}
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">
+                        KM
+                      </label>
+                      <input
+                        type="tel"
+                        name="tyre_assign_10_back_dummy_right_km"
+                        value={vehicles.tyre_assign_10_back_dummy_right_km}
+                        onChange={(e) => onInputChange(e)}
+                        className={inputClass}
+                      />
+                    </div>
+                  </div>
+                </>
+              )}
+            </div>
+          )}
 
           {/* Form Actions */}
           <div className="flex flex-wrap gap-4 justify-start">
@@ -1037,9 +1753,5 @@ const AddTyre = () => {
     </Layout>
   );
 };
-
-
-
-
 
 export default AddTyre;

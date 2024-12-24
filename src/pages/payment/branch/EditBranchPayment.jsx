@@ -1,132 +1,133 @@
-import React, { useEffect, useState } from 'react'
-import Layout from '../../../layout/Layout'
-import { useNavigate, useParams } from 'react-router-dom'
-import BASE_URL from '../../../base/BaseUrl'
-import axios from 'axios'
-import { IconArrowBack, IconInfoCircle } from '@tabler/icons-react'
-import { toast } from 'react-toastify'
+import React, { useEffect, useState } from "react";
+import Layout from "../../../layout/Layout";
+import { useNavigate, useParams } from "react-router-dom";
+import BASE_URL from "../../../base/BaseUrl";
+import axios from "axios";
+import { IconArrowBack, IconInfoCircle } from "@tabler/icons-react";
+import { toast } from "react-toastify";
 
 const EditBranchPayment = () => {
-    const {id} = useParams()
-    const navigate = useNavigate();
-    const [payment, setPayment] = useState({
-        payment_date: "",
-        payment_branch: "",
-        payment_amount: "",
-    });
-    const [isButtonDisabled, setIsButtonDisabled] = useState(false);
-    const [loading, setLoading] = useState(false);
-    const [branch, setBranch] = useState([]);
-    const fetchEditPayment = async () => {
-      try {
-        setLoading(true);
-        const token = localStorage.getItem("token");
-        const response = await axios.get(`${BASE_URL}/api/web-fetch-payment-by-id/${id}`, {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const [payment, setPayment] = useState({
+    payment_date: "",
+    payment_branch: "",
+    payment_amount: "",
+  });
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [branch, setBranch] = useState([]);
+  const fetchEditPayment = async () => {
+    try {
+      setLoading(true);
+      const token = localStorage.getItem("token");
+      const response = await axios.get(
+        `${BASE_URL}/api/web-fetch-payment-by-id/${id}`,
+        {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        });
-  
-        setPayment(response.data?.payment);
-      } catch (error) {
-        console.error("Error fetching payment Branch data", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    const fetchBranch = async () => {
-      try {
-        setLoading(true);
-        const token = localStorage.getItem("token");
-        const response = await axios.get(`${BASE_URL}/api/web-fetch-branch`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-  
-        setBranch(response.data?.branch);
-      } catch (error) {
-        console.error("Error fetching payment Branch data", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-  
-    useEffect(() => {
-        fetchEditPayment()
-      fetchBranch();
-    }, []);
-
-    const validateOnlyDigits = (inputtxt) => {
-        var phoneno = /^\d+$/;
-        if(inputtxt.match(phoneno) || inputtxt.length==0){
-            return true;
-        }else{
-            return false;
         }
+      );
+
+      setPayment(response.data?.payment);
+    } catch (error) {
+      console.error("Error fetching payment Branch data", error);
+    } finally {
+      setLoading(false);
     }
-  
-    const onInputChange = (e) => {
-        if(e.target.name=="payment_amount"){
-             if(validateOnlyDigits(e.target.value)){
-                 setPayment({
-                   ...payment,
-                   [e.target.name]: e.target.value,
-                 });
-             }
-         }else{
-             setPayment({
-                 ...payment,
-                 [e.target.name]: e.target.value,
-             });
-         }
-         
-     };
-  
-    const handleSubmit = async (e) => {
-      e.preventDefault();
-      const form = document.getElementById("addIndiv");
-      if (!form.checkValidity()) {
-        toast.error("Fill all required");
-        setIsButtonDisabled(false);
-  
-        return;
-      }
-      const data = {
-        payment_date : payment.payment_date,
-        payment_branch: payment.payment_branch,
-        payment_amount: payment.payment_amount,
-      };
-  
-      setIsButtonDisabled(true);
-      axios({
-        url: BASE_URL + `/api/web-update-payment/${id}`,
-        method: "PUT",
-        data,
+  };
+  const fetchBranch = async () => {
+    try {
+      setLoading(true);
+      const token = localStorage.getItem("token");
+      const response = await axios.get(`${BASE_URL}/api/web-fetch-branch`, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          Authorization: `Bearer ${token}`,
         },
-      }).then((res) => {
-        toast.success("Branch Updated Sucessfully");
-       
-        navigate('/payment/branch-list')
-       
       });
+
+      setBranch(response.data?.branch);
+    } catch (error) {
+      console.error("Error fetching payment Branch data", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchEditPayment();
+    fetchBranch();
+  }, []);
+
+  const validateOnlyDigits = (inputtxt) => {
+    var phoneno = /^\d+$/;
+    if (inputtxt.match(phoneno) || inputtxt.length == 0) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  const onInputChange = (e) => {
+    if (e.target.name == "payment_amount") {
+      if (validateOnlyDigits(e.target.value)) {
+        setPayment({
+          ...payment,
+          [e.target.name]: e.target.value,
+        });
+      }
+    } else {
+      setPayment({
+        ...payment,
+        [e.target.name]: e.target.value,
+      });
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const form = document.getElementById("addIndiv");
+    if (!form.checkValidity()) {
+      toast.error("Fill all required");
+      setIsButtonDisabled(false);
+
+      return;
+    }
+    const data = {
+      payment_date: payment.payment_date,
+      payment_branch: payment.payment_branch,
+      payment_amount: payment.payment_amount,
     };
-  
-    const FormLabel = ({ children, required }) => (
-      <label className="block text-sm font-semibold text-black mb-1 ">
-        {children}
-        {required && <span className="text-red-500 ml-1">*</span>}
-      </label>
-    );
-  
-    const inputClassSelect =
-      "w-full px-3 py-2 text-xs border rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 border-blue-500";
-    const inputClass =
-      "w-full px-3 py-2 text-xs border rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-500 border-blue-500";
+
+    setIsButtonDisabled(true);
+    axios({
+      url: BASE_URL + `/api/web-update-payment/${id}`,
+      method: "PUT",
+      data,
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    }).then((res) => {
+      toast.success("Branch Updated Sucessfully");
+
+      navigate("/payment/branch-list");
+    });
+  };
+
+  const FormLabel = ({ children, required }) => (
+    <label className="block text-sm font-semibold text-black mb-1 ">
+      {children}
+      {required && <span className="text-red-500 ml-1">*</span>}
+    </label>
+  );
+
+  const inputClassSelect =
+    "w-full px-3 py-2 text-xs border rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 border-blue-500";
+  const inputClass =
+    "w-full px-3 py-2 text-xs border rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-500 border-blue-500";
   return (
-   <Layout>
+    <Layout>
       <div className=" bg-[#FFFFFF] p-2  rounded-lg  ">
         <div className="sticky top-0 p-2  mb-4 border-b-2 border-red-500 rounded-lg  bg-[#E1F5FA] ">
           <h2 className=" px-5 text-[black] text-lg   flex flex-row  justify-between items-center  rounded-xl p-2 ">
@@ -147,7 +148,7 @@ const EditBranchPayment = () => {
           className="w-full max-w-7xl  rounded-lg mx-auto p-4 space-y-6 "
         >
           <div className="grid grid-cols-1  md:grid-cols-1 lg:grid-cols-3 gap-6">
-          <div>
+            <div>
               <FormLabel required>Date</FormLabel>
               <input
                 type="date"
@@ -156,7 +157,7 @@ const EditBranchPayment = () => {
                 name="payment_date"
                 value={payment.payment_date}
                 onChange={(e) => onInputChange(e)}
-                className={inputClass}
+                className={`${inputClass} cursor-not-allowed opacity-50`}
               />
             </div>
             <div>
@@ -196,7 +197,7 @@ const EditBranchPayment = () => {
               className="text-center text-sm font-[400] cursor-pointer  w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md"
               disabled={isButtonDisabled}
             >
-              {isButtonDisabled ? "Updating..." : "Update"} 
+              {isButtonDisabled ? "Updating..." : "Update"}
             </button>
 
             <button
@@ -211,8 +212,8 @@ const EditBranchPayment = () => {
           </div>
         </form>
       </div>
-   </Layout>
-  )
-}
+    </Layout>
+  );
+};
 
-export default EditBranchPayment
+export default EditBranchPayment;

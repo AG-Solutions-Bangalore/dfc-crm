@@ -73,7 +73,7 @@ function PaymentReportForm() {
           const url = window.URL.createObjectURL(new Blob([res.data]));
           const link = document.createElement("a");
           link.href = url;
-          link.setAttribute("download", "agencies.csv");
+          link.setAttribute("download", "Payment.csv");
           document.body.appendChild(link);
           link.click();
           toast.success("Payment is Downloaded Successfully");

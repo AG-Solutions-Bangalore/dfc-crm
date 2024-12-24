@@ -31,29 +31,29 @@ const EditDriver = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [driver, setDriver] = useState({
-        full_name: "",
-          email: "",
-          mobile: "",
-          user_company: "",
-          vehicle_type: "",
-          user_address: "",
-          dl_no: "",
-          dl_expiry: "",
-          hazard_lice_no: "",
-          user_status: "",
-          user_branch: "",
-          user_insurance: "",
-          user_insurance_no: "",
-          user_bank:"",
-          user_bank_branch: "",
-          user_account_no: "",
-          user_ifsc_code: "",
-          user_image: "",
-          user_adhar_card: "",
-          user_pan_card: "",
-          user_passbook: "",
-          user_licence: "",
-      });
+    full_name: "",
+    email: "",
+    mobile: "",
+    user_company: "",
+    vehicle_type: "",
+    user_address: "",
+    dl_no: "",
+    dl_expiry: "",
+    hazard_lice_no: "",
+    user_status: "",
+    user_branch: "",
+    user_insurance: "",
+    user_insurance_no: "",
+    user_bank: "",
+    user_bank_branch: "",
+    user_account_no: "",
+    user_ifsc_code: "",
+    user_image: "",
+    user_adhar_card: "",
+    user_pan_card: "",
+    user_passbook: "",
+    user_licence: "",
+  });
 
   const [selectedFile1, setSelectedFile1] = useState(null);
   const [selectedFile2, setSelectedFile2] = useState(null);
@@ -68,11 +68,14 @@ const EditDriver = () => {
     try {
       setLoading(true);
       const token = localStorage.getItem("token");
-      const response = await axios.get(`${BASE_URL}/api/web-fetch-driver-by-id/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axios.get(
+        `${BASE_URL}/api/web-fetch-driver-by-id/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       setDriver(response.data?.driver);
     } catch (error) {
@@ -117,7 +120,7 @@ const EditDriver = () => {
   };
 
   useEffect(() => {
-    fetchEditDriver()
+    fetchEditDriver();
     fetchCompany();
     fetchBranch();
   }, []);
@@ -181,10 +184,9 @@ const EditDriver = () => {
     data.append("user_passbook", selectedFile4);
     data.append("user_licence", selectedFile5);
 
-
     setIsButtonDisabled(true);
     axios({
-      url: BASE_URL + `/api/web-update-driver/${id}?_method_PUT`,
+      url: BASE_URL + `/api/web-update-driver/${id}?_method=PUT`,
       method: "POST",
       data,
       headers: {
@@ -194,7 +196,6 @@ const EditDriver = () => {
       toast.success("Driver Updated Sucessfully");
 
       navigate("/master/driver-list");
-      
     });
   };
 
@@ -235,12 +236,12 @@ const EditDriver = () => {
             <div>
               <FormLabel required>Driver Name</FormLabel>
               <input
-              disabled
+                disabled
                 type="text"
                 name="full_name"
                 value={driver.full_name}
                 onChange={(e) => onInputChange(e)}
-                className={inputClass}
+                className={`${inputClass} cursor-not-allowed opacity-50`}
                 required
               />
             </div>
@@ -283,11 +284,11 @@ const EditDriver = () => {
             </div>
             {/* Mobile  */}
             <div>
-              <FormLabel>Mobile</FormLabel>
+              <FormLabel required>Mobile</FormLabel>
               <input
-                min={10}
-                max={10}
+                maxLength={10}
                 type="tel"
+                required
                 name="mobile"
                 value={driver.mobile}
                 onChange={(e) => onInputChange(e)}
@@ -298,26 +299,26 @@ const EditDriver = () => {
             {/* Address  */}
             <div className="col-span-0 lg:col-span-4">
               <FormLabel required>Address</FormLabel>
-              <input
+              <textarea
                 type="text"
                 name="user_address"
                 value={driver.user_address}
                 onChange={(e) => onInputChange(e)}
                 className={inputClass}
                 required
+                rows={3}
               />
             </div>
 
             {/* Email  */}
             <div>
-              <FormLabel required>Email</FormLabel>
+              <FormLabel>Email</FormLabel>
               <input
                 type="email"
                 name="email"
                 value={driver.email}
                 onChange={(e) => onInputChange(e)}
                 className={inputClass}
-                required
               />
             </div>
 
@@ -385,78 +386,72 @@ const EditDriver = () => {
             </div>
             {/* Bank  */}
             <div>
-              <FormLabel required>Bank</FormLabel>
+              <FormLabel>Bank</FormLabel>
               <input
                 type="text"
                 name="user_bank"
                 value={driver.user_bank}
                 onChange={(e) => onInputChange(e)}
                 className={inputClass}
-                required
               />
             </div>
             {/* Bank Branch  */}
             <div>
-              <FormLabel required>Bank Branch</FormLabel>
+              <FormLabel>Bank Branch</FormLabel>
               <input
                 type="text"
                 name="user_bank_branch"
                 value={driver.user_bank_branch}
                 onChange={(e) => onInputChange(e)}
                 className={inputClass}
-                required
               />
             </div>
             {/* Bank IFSC  */}
             <div>
-              <FormLabel required>Bank IFSC</FormLabel>
+              <FormLabel>Bank IFSC</FormLabel>
               <input
                 type="text"
                 name="user_ifsc_code"
                 value={driver.user_ifsc_code}
                 onChange={(e) => onInputChange(e)}
                 className={inputClass}
-                required
               />
             </div>
             {/* Account No  */}
             <div>
-              <FormLabel required>Account No</FormLabel>
+              <FormLabel>Account No</FormLabel>
               <input
                 type="text"
                 name="user_account_no"
                 value={driver.user_account_no}
                 onChange={(e) => onInputChange(e)}
                 className={inputClass}
-                required
               />
             </div>
             {/* Insurance  */}
             <div>
-              <FormLabel required>Insurance</FormLabel>
+              <FormLabel>Insurance</FormLabel>
               <input
                 type="text"
                 name="user_insurance"
                 value={driver.user_insurance}
                 onChange={(e) => onInputChange(e)}
                 className={inputClass}
-                required
               />
             </div>
             {/* Insurance No  */}
             <div>
-              <FormLabel required>Insurance No</FormLabel>
+              <FormLabel>Insurance No</FormLabel>
               <input
                 type="text"
                 name="user_insurance_no"
                 value={driver.user_insurance_no}
                 onChange={(e) => onInputChange(e)}
                 className={inputClass}
-                required
               />
             </div>
-              {/* Status  */}
-              <div>
+            {/* Status  */}
+            <div>
               <FormLabel required>Status</FormLabel>
               <select
                 name="user_status"
@@ -475,63 +470,68 @@ const EditDriver = () => {
             </div>
             {/* Photo */}
             <div>
-              <FormLabel >Photo</FormLabel>
+              <FormLabel>Photo</FormLabel>
               <input
                 type="file"
                 name="user_image"
                 onChange={(e) => setSelectedFile1(e.target.files[0])}
-                
                 className="w-full px-3 py-1 text-xs border rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-500 border-blue-500 file:mr-4 file:py-1 file:px-2 file:rounded-lg file:border-0 file:text-xs  file:bg-[#E1F5FA] file:text-black  cursor-not-allowed  "
               />
-               <span className='text-[11px] p-1 ml-2 text-red-900'>{driver?.user_image}</span>
+              <span className="text-[11px] p-1 ml-2 text-red-900">
+                {driver?.user_image}
+              </span>
             </div>
             {/* Aadhar Card */}
             <div>
-              <FormLabel >Aadhar Card</FormLabel>
+              <FormLabel>Aadhar Card</FormLabel>
               <input
                 type="file"
                 name="user_adhar_card"
                 onChange={(e) => setSelectedFile2(e.target.files[0])}
-                
                 className="w-full px-3 py-1 text-xs border rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-500 border-blue-500 file:mr-4 file:py-1 file:px-2 file:rounded-lg file:border-0 file:text-xs  file:bg-[#E1F5FA] file:text-black  cursor-not-allowed  "
               />
-                <span className='text-[11px] p-1 ml-2 text-red-900'>{driver?.user_adhar_card}</span>
+              <span className="text-[11px] p-1 ml-2 text-red-900">
+                {driver?.user_adhar_card}
+              </span>
             </div>
             {/* PAN Card */}
             <div>
-              <FormLabel >PAN Card</FormLabel>
+              <FormLabel>PAN Card</FormLabel>
               <input
                 type="file"
                 name="user_pan_card"
                 onChange={(e) => setSelectedFile3(e.target.files[0])}
-                
                 className="w-full px-3 py-1 text-xs border rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-500 border-blue-500 file:mr-4 file:py-1 file:px-2 file:rounded-lg file:border-0 file:text-xs  file:bg-[#E1F5FA] file:text-black  cursor-not-allowed  "
               />
-                <span className='text-[11px] p-1 ml-2 text-red-900'>{driver?.user_pan_card}</span>
+              <span className="text-[11px] p-1 ml-2 text-red-900">
+                {driver?.user_pan_card}
+              </span>
             </div>
             {/* Pass Book */}
             <div>
-              <FormLabel >Pass Book</FormLabel>
+              <FormLabel>Pass Book</FormLabel>
               <input
                 type="file"
                 name="user_passbook"
                 onChange={(e) => setSelectedFile4(e.target.files[0])}
-                
                 className="w-full px-3 py-1 text-xs border rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-500 border-blue-500 file:mr-4 file:py-1 file:px-2 file:rounded-lg file:border-0 file:text-xs  file:bg-[#E1F5FA] file:text-black  cursor-not-allowed  "
               />
-                 <span className='text-[11px] p-1 ml-2 text-red-900'>{driver?.user_passbook}</span>
+              <span className="text-[11px] p-1 ml-2 text-red-900">
+                {driver?.user_passbook}
+              </span>
             </div>
             {/* Licence */}
             <div>
-              <FormLabel >Licence</FormLabel>
+              <FormLabel>Licence</FormLabel>
               <input
                 type="file"
                 name="user_licence"
                 onChange={(e) => setSelectedFile5(e.target.files[0])}
-                
                 className="w-full px-3 py-1 text-xs border rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-500 border-blue-500 file:mr-4 file:py-1 file:px-2 file:rounded-lg file:border-0 file:text-xs  file:bg-[#E1F5FA] file:text-black  cursor-not-allowed  "
               />
-                 <span className='text-[11px] p-1 ml-2 text-red-900'>{driver?.user_licence}</span>
+              <span className="text-[11px] p-1 ml-2 text-red-900">
+                {driver?.user_licence}
+              </span>
             </div>
           </div>
 

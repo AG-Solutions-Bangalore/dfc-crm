@@ -1,91 +1,91 @@
-import axios from 'axios';
-import React, { useEffect, useState } from 'react'
-import BASE_URL from '../../../base/BaseUrl';
-import { InformationCircleIcon } from '@heroicons/react/24/outline';
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import BASE_URL, { TEAM_URL } from "../../../base/BaseUrl";
+import { InformationCircleIcon } from "@heroicons/react/24/outline";
 import {
-    Card,
-    CardHeader,
-    CardBody,
-    Typography,
-  } from "@material-tailwind/react";
-  const DetailRow = ({ label, value,downloadUrl }) => (
-    <div className="flex justify-between py-2 border-b last:border-b-0">
-      <span className="text-sm text-gray-800 font-semibold">{label}</span>
-      {downloadUrl ? (
-            <a
-                href={downloadUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-sm font-medium text-blue-500 underline"
-                download
-            >
-                Download
-            </a>
-        ) : (
-            <span className="text-sm font-medium text-right">{value}</span>
-        )}
-    </div>
-  );
-const ViewTeam = ({teamId}) => {
-    const [team, setTeam] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-    useEffect(() => {
-        const fetchVehicleDetails = async () => {
-          try {
-            const token = localStorage.getItem("token");
-            const response = await axios.get(
-              `${BASE_URL}/api/web-fetch-team-by-id/${teamId}`,
-              {
-                headers: { Authorization: `Bearer ${token}` },
-              }
-            );
-            setTeam(response.data.team);
-            setLoading(false);
-          } catch (error) {
-            console.error("Error fetching Team View details:", error);
-            setError(error);
-            setLoading(false);
+  Card,
+  CardHeader,
+  CardBody,
+  Typography,
+} from "@material-tailwind/react";
+const DetailRow = ({ label, value, downloadUrl }) => (
+  <div className="flex justify-between py-2 border-b last:border-b-0">
+    <span className="text-sm text-gray-800 font-semibold">{label}</span>
+    {downloadUrl ? (
+      <a
+        href={downloadUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-sm font-medium text-blue-500 underline"
+        download
+      >
+        Download
+      </a>
+    ) : (
+      <span className="text-sm font-medium text-right">{value}</span>
+    )}
+  </div>
+);
+const ViewTeam = ({ teamId }) => {
+  const [team, setTeam] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  useEffect(() => {
+    const fetchVehicleDetails = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const response = await axios.get(
+          `${BASE_URL}/api/web-fetch-team-by-id/${teamId}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
           }
-        };
-    
-        if (teamId) {
-          fetchVehicleDetails();
-        }
-      }, [teamId]);
-      
-      if (loading) {
-        return (
-            <div className="p-4 bg-orange-300 border border-yellow-200 rounded">
-            <p className="text-black flex items-center animate-pulse">
-              <InformationCircleIcon className="w-6 h-6 mr-2  text-black" />
-              Loading...
-            </p>
-          </div>
         );
+        setTeam(response.data.team);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching Team View details:", error);
+        setError(error);
+        setLoading(false);
       }
-    
-      if (error) {
-        return (
-          <div className=" bg-red-50 border border-red-200 rounded">
-            <p className="text-red-600 flex items-center">
-              <InformationCircleIcon className="w-6 h-6 mr-2 text-red-500" />
-              Unable to fetch Team details
-            </p>
-          </div>
-        );
-      }
-    
-      if (!teamId) {
-        return (
-          <div className="p-4 bg-yellow-50 border border-yellow-200 rounded">
-            <p className="text-yellow-600 flex items-center">
-              <InformationCircleIcon className="w-6 h-6 mr-2 text-yellow-500" />
-              No Team Id selected
-            </p>
-          </div>
-        );
-      }
+    };
+
+    if (teamId) {
+      fetchVehicleDetails();
+    }
+  }, [teamId]);
+
+  if (loading) {
+    return (
+      <div className="p-4 bg-orange-300 border border-yellow-200 rounded">
+        <p className="text-black flex items-center animate-pulse">
+          <InformationCircleIcon className="w-6 h-6 mr-2  text-black" />
+          Loading...
+        </p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className=" bg-red-50 border border-red-200 rounded">
+        <p className="text-red-600 flex items-center">
+          <InformationCircleIcon className="w-6 h-6 mr-2 text-red-500" />
+          Unable to fetch Team details
+        </p>
+      </div>
+    );
+  }
+
+  if (!teamId) {
+    return (
+      <div className="p-4 bg-yellow-50 border border-yellow-200 rounded">
+        <p className="text-yellow-600 flex items-center">
+          <InformationCircleIcon className="w-6 h-6 mr-2 text-yellow-500" />
+          No Team Id selected
+        </p>
+      </div>
+    );
+  }
   return (
     <Card className="w-full">
       <CardHeader
@@ -114,7 +114,6 @@ const ViewTeam = ({teamId}) => {
             <DetailRow label="Email" value={team?.email} />
             <DetailRow label="Salary" value={team?.user_salary} />
             <DetailRow label="Address" value={team?.user_address} />
-            
           </div>
 
           <div>
@@ -131,9 +130,8 @@ const ViewTeam = ({teamId}) => {
             <DetailRow label="Account No" value={team?.user_account_no} />
             <DetailRow label="Insurance" value={team?.user_insurance} />
             <DetailRow label="Insurance No" value={team?.user_insurance_no} />
-           
           </div>
-          <div>
+          {/* <div>
             <Typography
               variant="h6"
               color="blue-gray"
@@ -148,15 +146,51 @@ const ViewTeam = ({teamId}) => {
             <DetailRow label="Licence"  downloadUrl={`https://dfclogistics.online/storage/app/public/profiles_document/${team?.user_licence}`} />
           
            
+          </div> */}
+
+          <div>
+            <Typography
+              variant="h6"
+              color="blue-gray"
+              className="mb-2 border-b pb-1"
+            >
+              Attachment
+            </Typography>
+            {team?.user_image && (
+              <DetailRow
+                label="Photo"
+                downloadUrl={`${TEAM_URL}/profiles/${team?.user_image}`}
+              />
+            )}
+            {team?.user_adhar_card && (
+              <DetailRow
+                label="Aadhar Card"
+                downloadUrl={`${TEAM_URL}/profiles_document/${team?.user_adhar_card}`}
+              />
+            )}
+            {team?.user_pan_card && (
+              <DetailRow
+                label="Pan Card"
+                downloadUrl={`${TEAM_URL}/profiles_document/${team?.user_pan_card}`}
+              />
+            )}
+            {team?.user_passbook && (
+              <DetailRow
+                label="Passbook"
+                downloadUrl={`${TEAM_URL}/profiles_document/${team?.user_passbook}`}
+              />
+            )}
+            {team?.user_licence && (
+              <DetailRow
+                label="Licence"
+                downloadUrl={`${TEAM_URL}/profiles_document/${team?.user_licence}`}
+              />
+            )}
           </div>
-
-       
-
-    
         </div>
       </CardBody>
     </Card>
-  )
-}
+  );
+};
 
-export default ViewTeam
+export default ViewTeam;

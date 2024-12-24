@@ -68,8 +68,8 @@ const CreateTodo = () => {
       },
     }).then((res) => {
       toast.success("Todo Created Sucessfully");
-     
-      navigate('/todo-list')
+
+      navigate("/todo-list");
       setTodo({
         todo_branch: "",
         todo_description: "",
@@ -129,13 +129,14 @@ const CreateTodo = () => {
             </div>
             <div className="col-span-1 lg:col-span-2">
               <FormLabel required>Description</FormLabel>
-              <input
+              <textarea
                 type="text"
                 name="todo_description"
                 value={todo.todo_description}
                 onChange={(e) => onInputChange(e)}
                 className={inputClass}
                 required
+                rows={3}
               />
             </div>
           </div>
@@ -147,7 +148,7 @@ const CreateTodo = () => {
               className="text-center text-sm font-[400] cursor-pointer  w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md"
               disabled={isButtonDisabled}
             >
-              {isButtonDisabled ? "Sumbitting..." : "Sumbit"} 
+              {isButtonDisabled ? "Sumbitting..." : "Sumbit"}
             </button>
 
             <button
