@@ -16,6 +16,7 @@ import { toast } from "sonner";
 import moment from "moment";
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
+import { NumericFormat } from "react-number-format";
 const printStyles = `
   @media print {
 
@@ -171,10 +172,10 @@ const TyreReportView = () => {
         item.tyre_bill_ref || "-",
         // item.tyre_bill_amount ? item.tyre_bill_amount.toLocaleString() : "-",
         item.tyre_bill_amount
-        ? `₹${Number(item.tyre_bill_amount).toLocaleString("en-IN", {
-            maximumFractionDigits: 2,
-          })}`
-        : "-",
+          ? `₹${Number(item.tyre_bill_amount).toLocaleString("en-IN", {
+              maximumFractionDigits: 2,
+            })}`
+          : "-",
         item.tyre_count || "-",
       ]),
     ];
@@ -183,7 +184,7 @@ const TyreReportView = () => {
       pageSize: "A4",
       pageMargins: [10, 10, 10, 10],
       content: [
-        { text: "Tyre Report", style: "header", alignment: "center" },
+        { text: "TYRE SUMMARY", style: "header", alignment: "center" },
         {
           table: {
             headerRows: 1,
@@ -324,7 +325,6 @@ const TyreReportView = () => {
                         "Supplier",
                         "Bill Ref	",
                         "Amount",
-
                         "No of Tyres",
                       ].map((header) => (
                         <th
@@ -342,20 +342,26 @@ const TyreReportView = () => {
                         <td className="p-1 text-xs border border-black text-center">
                           {moment(item.tyre_date).format("DD-MM-YYYY")}
                         </td>
-                        <td className="p-1 text-xs border border-black">
+                        <td className="p-1 text-xs border border-black px-2">
                           {item.tyre_company || "-"}
                         </td>
-                        <td className="p-1 text-xs border border-black">
+                        <td className="p-1 text-xs border border-black px-2">
                           {item.tyre_branch || "-"}
                         </td>
-                        <td className="p-1 text-xs border border-black">
+                        <td className="p-1 text-xs border border-black px-2">
                           {item.tyre_supplier || "-"}
                         </td>
                         <td className="p-1 text-xs border border-black text-center">
                           {item.tyre_bill_ref || "-"}
                         </td>
-                        <td className="p-1 text-xs border border-black text-center">
-                          ₹{item.tyre_bill_amount || "0"}
+                        <td className="p-1 text-xs border border-black text-end px-2">
+                          <NumericFormat
+                            value={item.tyre_bill_amount}
+                            displayType="text"
+                            thousandSeparator={true}
+                            prefix="₹"
+                            thousandsGroupStyle="lakh"
+                          />
                         </td>
                         <td className="p-1 text-xs border border-black text-center">
                           {item.tyre_count || "-"}

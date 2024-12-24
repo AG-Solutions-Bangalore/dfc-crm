@@ -163,11 +163,11 @@ const AgenciesReportView = () => {
       pageSize: "A4",
       pageMargins: [10, 10, 10, 40],
       content: [
-        { text: "Agencies Report", style: "header", alignment: "center" },
+        { text: "AGENCIES SUMMARY", style: "header", alignment: "center" },
         {
           table: {
             headerRows: 1,
-            widths: ["auto", "auto", "auto", "auto", "auto", "auto"],
+            widths: ["30%", "15%", "10%", "15%", "15%", "15%"],
             body: tableBody,
           },
           layout: {
@@ -308,19 +308,19 @@ const AgenciesReportView = () => {
                   <tbody>
                     {agencies.map((item, index) => (
                       <tr key={index}>
-                        <td className="p-1 text-xs border border-black">
+                        <td className="p-1 text-xs border border-black px-2">
                           {item.agency_name || "-"}
                         </td>
-                        <td className="p-1 text-xs  border border-black">
+                        <td className="p-1 text-xs  border border-black px-2">
                           {item.agency_branch || "-"}
                         </td>
                         <td className="p-1 text-xs  border border-black text-center">
                           {item.agency_rt_km || "-"}
                         </td>
-                        <td className="p-1 text-xs  border border-black">
+                        <td className="p-1 text-xs  border border-black px-2">
                           {item.agency_city || "-"}
                         </td>
-                        <td className="p-1 text-xs  border border-black">
+                        <td className="p-1 text-xs  border border-black px-2">
                           {item.agency_state || "-"}
                         </td>
                         <td className="p-1 text-xs  border border-black text-center">

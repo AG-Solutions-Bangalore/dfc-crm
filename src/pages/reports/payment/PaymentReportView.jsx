@@ -177,7 +177,11 @@ const PaymentReportView = () => {
       pageSize: "A4",
       pageMargins: [10, 10, 10, 40],
       content: [
-        { text: "Payment Report", style: "header", alignment: "center" },
+        {
+          text: "PAYMENT DETAILS SUMMARY",
+          style: "header",
+          alignment: "center",
+        },
         {
           table: {
             headerRows: 1,
@@ -325,17 +329,17 @@ const PaymentReportView = () => {
                             "DD-MM-YYYY"
                           )}
                         </td>
-                        <td className="text-xs p-1 border border-black">
+                        <td className="text-xs p-1 border border-black px-2">
                           {item.payment_details_voucher_type || "-"}
                         </td>
-                        <td className="text-xs p-1 border border-black">
+                        <td className="text-xs p-1 border border-black px-2">
                           {item.payment_details_debit || "-"}
                         </td>
-                        <td className="text-xs p-1 border border-black">
+                        <td className="text-xs p-1 border border-black px-2">
                           {item.payment_details_credit || "-"}
                         </td>
 
-                        <td className="text-xs p-1 border border-black text-center">
+                        <td className="text-xs p-1 border border-black text-end px-2">
                           <NumericFormat
                             value={item.payment_details_amount}
                             displayType="text"

@@ -1,11 +1,12 @@
-import {  Typography } from "@material-tailwind/react";
+import { Typography } from "@material-tailwind/react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import BASE_URL from "../../base/BaseUrl";
 import toast, { Toaster } from "react-hot-toast";
 import { FormLabel } from "@mui/material";
-
+import logo from "../../assets/Companylogo/dfc.png";
+import logo1 from "../../assets/Companylogo/logo1.jpg";
 const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -17,7 +18,6 @@ const SignIn = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
 
     setLoading(true);
 
@@ -57,7 +57,12 @@ const SignIn = () => {
 
   const inputClass =
     "w-full px-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 border-green-500";
-
+  const FormLabel = ({ children, required }) => (
+    <label className="block text-sm font-semibold text-black mb-1 ">
+      {children}
+      {required && <span className="text-red-500 ml-1">*</span>}
+    </label>
+  );
   return (
     <>
       <Toaster
@@ -82,16 +87,16 @@ const SignIn = () => {
             {/* Left Side - Image */}
             <div className="lg:w-1/2 hidden lg:block">
               <img
-                src={'https://agsl.online/static/media/header.16b93a3d.png'}
+                src={logo1}
                 alt="Login"
-                className="object-cover h-full w-full"
+                className="object-contain h-full w-full "
               />
             </div>
 
             {/* Right Side - Form */}
             <div className="flex-1 p-4 sm:px-0 md:px-16 flex flex-col mt-8 max-h-[682px]">
               <div className="flex items-center justify-center mb-8">
-                <img src={'https://agsl.online/static/media/header.16b93a3d.png'} alt="Company Logo" className="w-32 h-32" />
+                <img src={logo} alt="Company Logo" className="w-32 h-35" />
               </div>
               <Typography
                 variant="h4"

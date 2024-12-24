@@ -158,6 +158,7 @@ const TripReportMultipleView = () => {
     return <SkeletonLoading />;
   }
   const handleSavePDF = () => {
+    // Table body structure
     const tableBody = [
       [
         "Company",
@@ -177,6 +178,22 @@ const TripReportMultipleView = () => {
         item.trip_km || "-",
         item.trip_hsd_supplied || "-",
       ]),
+      [
+        { text: "Total:", colSpan: 3, alignment: "right", bold: true }, // Config for total row
+        "",
+        "",
+        "",
+        "",
+        trip.length > 0
+          ? trip.reduce((sum, trip) => sum + trip.trip_total, 0)
+          : "-", // Total trip_total or "-"
+        trip.length > 0
+          ? trip.reduce((sum, trip) => sum + trip.trip_km, 0)
+          : "-", // Total trip_km or "-"
+        trip.length > 0
+          ? trip.reduce((sum, trip) => sum + trip.trip_hsd_supplied, 0)
+          : "-",
+      ],
     ];
 
     const docDefinition = {
@@ -187,11 +204,12 @@ const TripReportMultipleView = () => {
         {
           table: {
             headerRows: 1,
-            widths: ["16%", "20%", "12%", "24%", "8%", "10%", "10%"],
+            widths: ["auto", "auto", "auto", "auto", "auto", "auto", "auto"],
+
             body: tableBody,
           },
           layout: {
-            fillColor: (rowIndex) => (rowIndex === 0 ? "#CCCCCC" : null),
+            fillColor: (rowIndex) => (rowIndex === 0 ? "#CCCCCC" : null), // Header background color
             hLineWidth: () => 0.3,
             vLineWidth: () => 0.3,
           },
@@ -219,7 +237,7 @@ const TripReportMultipleView = () => {
             margin: [10, 0],
           },
           {
-            text: new Date().toLocaleDateString("en-GB"),
+            text: `Page ${currentPage} of ${pageCount}`,
             style: "footerText",
             alignment: "right",
             margin: [0, 0, 10, 0],
@@ -232,6 +250,7 @@ const TripReportMultipleView = () => {
 
     pdfMake.createPdf(docDefinition).download("trip_report.pdf");
   };
+
   const onSubmit = (e) => {
     e.preventDefault();
     let data = {
@@ -337,19 +356,19 @@ const TripReportMultipleView = () => {
                   <tbody>
                     {trip.map((item, index) => (
                       <tr key={index}>
-                        <td className="text-xs p-1 border border-black">
+                        <td className="text-xs p-1 border border-black px-2">
                           {item.trip_company || "-"}
                         </td>
 
-                        <td className="text-xs p-1 border border-black">
+                        <td className="text-xs p-1 border border-black px-2">
                           {item.trip_branch || "-"}
                         </td>
 
-                        <td className="text-xs p-1 border border-black text-center">
+                        <td className="text-xs p-1 border border-black px-2">
                           {item.trip_vehicle || "-"}
                         </td>
 
-                        <td className="text-xs p-1 border border-black">
+                        <td className="text-xs p-1 border border-black px-2">
                           {item.trip_driver || "-"}
                         </td>
 
@@ -366,6 +385,27 @@ const TripReportMultipleView = () => {
                         </td>
                       </tr>
                     ))}
+
+                    <tr className="bg-gray-100 font-bold">
+                      <td
+                        colSpan={4}
+                        className="p-1 text-xs border border-black text-right"
+                      >
+                        Total:
+                      </td>
+                      <td className="p-1 text-xs border border-black text-center">
+                        {trip.reduce((sum, trip) => sum + trip.trip_total, 0)}
+                      </td>
+                      <td className="p-1 text-xs border border-black text-center">
+                        {trip.reduce((sum, trip) => sum + trip.trip_km, 0)}
+                      </td>
+                      <td className="p-1 text-xs border border-black text-center">
+                        {trip.reduce(
+                          (sum, trip) => sum + trip.trip_hsd_supplied,
+                          0
+                        )}
+                      </td>
+                    </tr>
                   </tbody>
                 </table>
               ) : (

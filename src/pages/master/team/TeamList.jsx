@@ -1,19 +1,18 @@
-import React, { useEffect, useMemo, useState } from 'react'
-import Layout from '../../../layout/Layout'
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import BASE_URL from '../../../base/BaseUrl';
-import { IconEdit, IconEye, IconPlus } from '@tabler/icons-react';
-import { MantineReactTable, useMantineReactTable } from 'mantine-react-table';
-import ViewTeam from './ViewTeam';
+import React, { useEffect, useMemo, useState } from "react";
+import Layout from "../../../layout/Layout";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import BASE_URL from "../../../base/BaseUrl";
+import { IconEdit, IconEye, IconPlus } from "@tabler/icons-react";
+import { MantineReactTable, useMantineReactTable } from "mantine-react-table";
+import ViewTeam from "./ViewTeam";
 
 const TeamList = () => {
   const [teamData, setTeamData] = useState(null);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
- const [isViewExpanded, setIsViewExpanded] = useState(false);
-    const [selectedVehicleId, setSelectedVehicleId] = useState(null);
-
+  const [isViewExpanded, setIsViewExpanded] = useState(false);
+  const [selectedVehicleId, setSelectedVehicleId] = useState(null);
 
   const fetchTeamData = async () => {
     try {
@@ -42,8 +41,7 @@ const TeamList = () => {
       {
         accessorKey: "full_name",
         header: "Full Name",
-        size:150,
-       
+        size: 150,
       },
       {
         accessorKey: "user_branch",
@@ -64,15 +62,13 @@ const TeamList = () => {
         accessorKey: "user_type_id",
         header: "User Type",
         size: 50,
-        Cell: ({row})=>{
-          const userType = row.original.user_type_id
-        
+        Cell: ({ row }) => {
+          const userType = row.original.user_type_id;
+
           return (
-            <span>
-             {userType == '3' ? 'Branch Manager' : 'Branch User'}
-            </span>
-          )
-        }
+            <span>{userType == "3" ? "Branch Manager" : "Branch User"}</span>
+          );
+        },
       },
       {
         accessorKey: "user_salary",
@@ -94,26 +90,23 @@ const TeamList = () => {
 
           return (
             <div className="flex gap-2">
-              
               <div
-                onClick={()=>navigate(`/master/servicetype-edit/${id}`)}
+                onClick={() => navigate(`/master/team-edit/${id}`)}
                 className="flex items-center space-x-2"
-                title="View"
+                title="Edit"
               >
                 <IconEdit className="h-5 w-5 text-blue-500 cursor-pointer" />
               </div>
               <div
-               onClick={() => {
-                setSelectedVehicleId(id); 
-                setIsViewExpanded(true); 
-              }}
+                onClick={() => {
+                  setSelectedVehicleId(id);
+                  setIsViewExpanded(true);
+                }}
                 className="flex items-center space-x-2"
                 title="View"
               >
                 <IconEye className="h-5 w-5 text-blue-500 cursor-pointer" />
               </div>
-              
-              
             </div>
           );
         },
@@ -132,14 +125,13 @@ const TeamList = () => {
     enableStickyHeader: true,
     enableStickyFooter: true,
     mantineTableContainerProps: { sx: { maxHeight: "400px" } },
- 
+
     initialState: { columnVisibility: { address: false } },
   });
 
   return (
- <Layout>
-       <div className="max-w-screen">
-        
+    <Layout>
+      <div className="max-w-screen">
         <div className="bg-white p-4 mb-4 rounded-lg shadow-md">
           {/* Header Section */}
           <div className="flex flex-col md:flex-row justify-between gap-4 items-center">
@@ -148,30 +140,28 @@ const TeamList = () => {
             </h1>
             <div className="flex gap-2">
               <button
-               onClick={()=>navigate('/master/createServicetype')}
+                onClick={() => navigate("/master/createTeam")}
                 className=" flex flex-row items-center gap-1 text-center text-sm font-[400] cursor-pointer  w-[7rem] text-white bg-blue-600 hover:bg-red-700 p-2 rounded-lg shadow-md"
-              
               >
-                <IconPlus className='w-4 h-4'/> Team
+                <IconPlus className="w-4 h-4" /> Team
               </button>
-              </div>
+            </div>
           </div>
         </div>
         <div className=" flex w-full  gap-2 relative ">
-        <div className={`
+          <div
+            className={`
             ${isViewExpanded ? "w-[70%]" : "w-full"} 
             transition-all duration-300 ease-in-out  
             pr-4
-          `}>
-          <MantineReactTable table={table} />
-        </div>
+          `}
+          >
+            <MantineReactTable table={table} />
+          </div>
 
-
-
-          
-        {isViewExpanded && (
-                  <div
-                    className={`
+          {isViewExpanded && (
+            <div
+              className={`
                       w-[30%] 
                        p-4
                       border-l 
@@ -190,27 +180,26 @@ const TeamList = () => {
                           : "opacity-0 translate-x-full"
                       }
                     `}
-                  >
-                    <div className="flex justify-end ml-2 ">
-                      <button
-                        title="close"
-                        className="text-black font-[700] cursor-pointer hover:text-red-900"
-                        onClick={() => {
-                          setIsViewExpanded(false);
-                          setSelectedVehicleId(null);
-                        }}
-                      >
-                        ✕
-                      </button>
-                    </div>
-                    <ViewTeam teamId={selectedVehicleId}  />
-                  </div>
-                )}
-
+            >
+              <div className="flex justify-end ml-2 ">
+                <button
+                  title="close"
+                  className="text-black font-[700] cursor-pointer hover:text-red-900"
+                  onClick={() => {
+                    setIsViewExpanded(false);
+                    setSelectedVehicleId(null);
+                  }}
+                >
+                  ✕
+                </button>
+              </div>
+              <ViewTeam teamId={selectedVehicleId} />
+            </div>
+          )}
         </div>
       </div>
- </Layout>
-  )
-}
+    </Layout>
+  );
+};
 
-export default TeamList
+export default TeamList;

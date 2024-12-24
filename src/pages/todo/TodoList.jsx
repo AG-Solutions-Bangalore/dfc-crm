@@ -1,17 +1,16 @@
-import React, { useEffect, useMemo, useState } from 'react'
-import Layout from '../../layout/Layout'
-import { IconEdit, IconPlus } from '@tabler/icons-react';
-import { MantineReactTable, useMantineReactTable } from 'mantine-react-table';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import BASE_URL from '../../base/BaseUrl';
+import React, { useEffect, useMemo, useState } from "react";
+import Layout from "../../layout/Layout";
+import { IconEdit, IconPlus } from "@tabler/icons-react";
+import { MantineReactTable, useMantineReactTable } from "mantine-react-table";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import BASE_URL from "../../base/BaseUrl";
+import moment from "moment/moment";
 
 const TodoList = () => {
   const [todoData, setTodoData] = useState(null);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-
-
 
   const fetchTodoData = async () => {
     try {
@@ -40,8 +39,11 @@ const TodoList = () => {
       {
         accessorKey: "todo_date",
         header: "Date",
-        size:150,
-       
+        size: 150,
+        Cell: ({ row }) => {
+          const date = row.original.todo_date;
+          return date ? moment(date).format("DD-MMM-YYYY") : "";
+        },
       },
       {
         accessorKey: "todo_branch",
@@ -52,16 +54,13 @@ const TodoList = () => {
         accessorKey: "todo_description",
         header: "Description",
         size: 50,
-       
       },
       {
         accessorKey: "todo_status",
         header: "Status",
         size: 50,
-       
       },
- 
-      
+
       {
         id: "id",
         header: "Action",
@@ -72,17 +71,13 @@ const TodoList = () => {
 
           return (
             <div className="flex gap-2">
-              
               <div
-                onClick={()=>navigate(`/edit-todo/${id}`)}
+                onClick={() => navigate(`/edit-todo/${id}`)}
                 className="flex items-center space-x-2"
                 title="Edit"
               >
                 <IconEdit className="h-5 w-5 text-blue-500 cursor-pointer" />
               </div>
-              
-              
-              
             </div>
           );
         },
@@ -101,14 +96,13 @@ const TodoList = () => {
     enableStickyHeader: true,
     enableStickyFooter: true,
     mantineTableContainerProps: { sx: { maxHeight: "400px" } },
- 
+
     initialState: { columnVisibility: { address: false } },
   });
 
   return (
     <Layout>
-       <div className="max-w-screen">
-        
+      <div className="max-w-screen">
         <div className="bg-white p-4 mb-4 rounded-lg shadow-md">
           {/* Header Section */}
           <div className="flex flex-col md:flex-row justify-between gap-4 items-center">
@@ -118,11 +112,11 @@ const TodoList = () => {
             <div className="flex gap-2">
               <button
                 className=" flex flex-row items-center gap-1 text-center text-sm font-[400] cursor-pointer  w-[5rem] text-white bg-blue-600 hover:bg-red-700 p-2 rounded-lg shadow-md"
-              onClick={()=>navigate(`/createTodo`)}
+                onClick={() => navigate(`/createTodo`)}
               >
-                <IconPlus className='w-4 h-4'/> Todo
+                <IconPlus className="w-4 h-4" /> Todo
               </button>
-              </div>
+            </div>
           </div>
         </div>
 
@@ -131,7 +125,7 @@ const TodoList = () => {
         </div>
       </div>
     </Layout>
-  )
-}
+  );
+};
 
-export default TodoList
+export default TodoList;

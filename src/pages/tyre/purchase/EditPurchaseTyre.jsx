@@ -8,19 +8,19 @@ import BASE_URL from "../../../base/BaseUrl";
 import { IconArrowBack, IconInfoCircle } from "@tabler/icons-react";
 
 const TMake = [
-    {
-      value: "Nylon",
-      label: "Nylon",
-    },
-    {
-      value: "Radial",
-      label: "Radial",
-    },
-  ];
+  {
+    value: "Nylon",
+    label: "Nylon",
+  },
+  {
+    value: "Radial",
+    label: "Radial",
+  },
+];
 
 const EditPurchaseTyre = () => {
   const { id } = useParams();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [tyre, setTyre] = useState({
     tyre_date: "",
     tyre_reference: "",
@@ -34,7 +34,12 @@ const EditPurchaseTyre = () => {
     tyre_branch: "",
   });
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
-  const useTemplate = {tyre_sub_no:"", tyre_sub_type:"", tyre_sub_make:"", id:""};
+  const useTemplate = {
+    tyre_sub_no: "",
+    tyre_sub_type: "",
+    tyre_sub_make: "",
+    id: "",
+  };
 
   const [users, setUsers] = useState([useTemplate]);
   const [loading, setLoading] = useState(false);
@@ -46,11 +51,14 @@ const EditPurchaseTyre = () => {
     try {
       setLoading(true);
       const token = localStorage.getItem("token");
-      const response = await axios.get(`${BASE_URL}/api/web-fetch-tyre-by-id/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axios.get(
+        `${BASE_URL}/api/web-fetch-tyre-by-id/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       setTyre(response.data?.tyre);
       setUsers(response.data?.tyreSub);
@@ -133,7 +141,7 @@ const EditPurchaseTyre = () => {
   };
 
   useEffect(() => {
-    fetchEditPurchase()
+    fetchEditPurchase();
     fetchBranch();
     fetchCompany();
     fetchTyreMake();
@@ -142,8 +150,6 @@ const EditPurchaseTyre = () => {
   useEffect(() => {
     fetchVendor();
   }, []);
-
-
 
   const onChange = (e, index) => {
     const updatedUsers = users.map((user, i) =>
@@ -154,7 +160,6 @@ const EditPurchaseTyre = () => {
     setUsers(updatedUsers);
   };
 
- 
   const validateOnlyNumber = (inputtxt) => {
     var phoneno = /^\d*\.?\d*$/;
     if (inputtxt.match(phoneno) || inputtxt.length == 0) {
@@ -209,16 +214,16 @@ const EditPurchaseTyre = () => {
       return;
     }
     const data = {
-        tyre_date: tyre.tyre_date,
-        tyre_reference: tyre.tyre_reference,
-        tyre_supplier : tyre.tyre_supplier,
-        tyre_company : tyre.tyre_company,
-        tyre_branch: tyre.tyre_branch,
-        tyre_bill_ref : tyre.tyre_bill_ref,
-        tyre_bill_amount : tyre.tyre_bill_amount,
-        tyre_remarks : tyre.tyre_remarks,
-        tyre_count : tyre.tyre_count,
-        tyre_sub_data : users,
+      tyre_date: tyre.tyre_date,
+      tyre_reference: tyre.tyre_reference,
+      tyre_supplier: tyre.tyre_supplier,
+      tyre_company: tyre.tyre_company,
+      tyre_branch: tyre.tyre_branch,
+      tyre_bill_ref: tyre.tyre_bill_ref,
+      tyre_bill_amount: tyre.tyre_bill_amount,
+      tyre_remarks: tyre.tyre_remarks,
+      tyre_count: tyre.tyre_count,
+      tyre_sub_data: users,
     };
 
     setIsButtonDisabled(true);
@@ -233,7 +238,6 @@ const EditPurchaseTyre = () => {
       toast.success("Purchase Updated Sucessfully");
 
       navigate("/tyre/purchase-list");
-     
     });
   };
 
@@ -250,7 +254,7 @@ const EditPurchaseTyre = () => {
     "w-full px-3 py-2 text-xs border rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-500 border-blue-500";
   return (
     <Layout>
-    <div className=" bg-[#FFFFFF] p-2  rounded-lg  ">
+      <div className=" bg-[#FFFFFF] p-2  rounded-lg  ">
         <div className="sticky top-0 p-2  mb-4 border-b-2 border-red-500 rounded-lg  bg-[#E1F5FA] ">
           <h2 className=" px-5 text-[black] text-lg   flex flex-row  justify-between items-center  rounded-xl p-2 ">
             <div className="flex  items-center gap-2">
@@ -371,12 +375,13 @@ const EditPurchaseTyre = () => {
             {/* Remark  */}
             <div className=" col-span-0 lg:col-span-3">
               <FormLabel>Remarks</FormLabel>
-              <input
+              <textarea
                 type="text"
                 name="tyre_remarks"
                 value={tyre.tyre_remarks}
                 onChange={(e) => onInputChange(e)}
                 className={inputClass}
+                rows={3}
               />
             </div>
           </div>
@@ -434,10 +439,9 @@ const EditPurchaseTyre = () => {
                   ))}
                 </select>
               </div>
-          
             </div>
           ))}
-     
+
           {/* Form Actions */}
           <div className="flex flex-wrap gap-4 justify-start">
             <button

@@ -180,14 +180,13 @@ const VechilesReportView = () => {
       pageSize: "A4",
       pageMargins: [10, 10, 10, 10],
       content: [
-        { text: "Vehicle Report", style: "header", alignment: "center" },
+        { text: "VEHICLE SUMMARY", style: "header", alignment: "center" },
         {
           table: {
             headerRows: 1,
             widths: [
               "15%",
               "15%",
-
               "10%",
               "20%",
               "10%",
@@ -237,7 +236,7 @@ const VechilesReportView = () => {
     };
     toast.success("PDF is Downloaded Successfully");
 
-    pdfMake.createPdf(docDefinition).download("salary_report.pdf");
+    pdfMake.createPdf(docDefinition).download("vehicles_report.pdf");
   };
   const onSubmit = (e) => {
     e.preventDefault();
@@ -259,7 +258,7 @@ const VechilesReportView = () => {
         const url = window.URL.createObjectURL(new Blob([res.data]));
         const link = document.createElement("a");
         link.href = url;
-        link.setAttribute("download", "vehicle.csv");
+        link.setAttribute("download", "vehicles.csv");
         document.body.appendChild(link);
         link.click();
         toast.success("vehicle Report is Downloaded Successfully");
@@ -275,7 +274,7 @@ const VechilesReportView = () => {
           <h2 className="px-5 text-[black] text-lg flex flex-row justify-between items-center rounded-xl p-2">
             <div className="flex items-center gap-2">
               <IconInfoCircle className="w-4 h-4" />
-              <span> Vehicle Summary</span>
+              <span> Vehicles Summary</span>
             </div>
             <div className="flex items-center space-x-4">
               <IconFileTypeXls
@@ -336,34 +335,34 @@ const VechilesReportView = () => {
                   <tbody>
                     {vechiles.map((item, index) => (
                       <tr key={index}>
-                        <td className="p-1 text-xs border border-black text-center">
+                        <td className="p-1 text-xs border border-black text-center px-2">
                           {item.reg_no || "-"}
                         </td>
-                        <td className="p-1 text-xs border border-black">
+                        <td className="p-1 text-xs border border-black px-2">
                           {item.vehicle_type || "-"}
                         </td>
-                        <td className="p-1 text-xs border border-black">
+                        <td className="p-1 text-xs border border-black px-2">
                           {item.vehicle_company || "-"}
                         </td>
-                        <td className="p-1 text-xs border border-black">
+                        <td className="p-1 text-xs border border-black px-2">
                           {item.vehicle_branch || "-"}
                         </td>
-                        <td className="p-1 text-xs border border-black text-center">
+                        <td className="p-1 text-xs border border-black text-center px-2">
                           {item.mfg_year || "-"}
                         </td>
 
-                        <td className="p-1 text-xs border border-black text-center">
+                        <td className="p-1 text-xs border border-black text-center px-2">
                           {item.ins_due == null
                             ? ""
                             : moment(item.ins_due).format("DD-MM-YYYY") || "-"}
                         </td>
-                        <td className="p-1 text-xs border border-black text-center">
+                        <td className="p-1 text-xs border border-black text-center px-2">
                           {item.permit_due == null
                             ? ""
                             : moment(item.permit_due).format("DD-MM-YYYY") ||
                               "-"}
                         </td>
-                        <td className="p-1 text-xs border border-black text-center">
+                        <td className="p-1 text-xs border border-black text-center px-2">
                           {item.fc_due == null
                             ? ""
                             : moment(item.fc_due).format("DD-MM-YYYY") || "-"}

@@ -173,7 +173,11 @@ const ServiceReportDetailsView = () => {
       pageSize: "A4",
       pageMargins: [10, 10, 10, 40],
       content: [
-        { text: "Team Report", style: "header", alignment: "center" },
+        {
+          text: "SERVICES DETAILS SUMMARY",
+          style: "header",
+          alignment: "center",
+        },
         {
           table: {
             headerRows: 1,
@@ -220,7 +224,7 @@ const ServiceReportDetailsView = () => {
     };
     toast.success("services Report is Downloaded Successfully");
 
-    pdfMake.createPdf(docDefinition).download("team_report.pdf");
+    pdfMake.createPdf(docDefinition).download("servicesdetails_report.pdf");
   };
   const onSubmit = (e) => {
     e.preventDefault();
@@ -324,14 +328,14 @@ const ServiceReportDetailsView = () => {
                           {moment(item.service_date).format("DD-MM-YYYY")}
                         </td>
 
-                        <td className="p-1 text-xs border border-black text-center">
+                        <td className="p-1 text-xs border border-black px-2">
                           {item.service_truck_no || "-"}
                         </td>
-                        <td className="p-1 text-xs border border-black">
+                        <td className="p-1 text-xs border border-black px-2">
                           {item.service_sub_type || "-"}
                         </td>
 
-                        <td className="p-1 text-xs border border-black text-center">
+                        <td className="p-1 text-xs border border-black text-end px-2">
                           <NumericFormat
                             value={item.service_sub_amount}
                             displayType="text"
@@ -340,7 +344,7 @@ const ServiceReportDetailsView = () => {
                             thousandsGroupStyle="lakh"
                           />
                         </td>
-                        <td className="p-1 text-xs border border-black">
+                        <td className="p-1 text-xs border border-black px-2">
                           {item.service_sub_details || "-"}
                         </td>
                       </tr>

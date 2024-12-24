@@ -196,7 +196,6 @@ function TyreReportForm() {
           document.body.appendChild(link);
           link.click();
           toast.success("Report is Downloaded Successfully");
-          setIsButtonDisabled(false);
         })
         .catch((err) => {
           toast.error("Report is Not Downloaded");
@@ -343,14 +342,13 @@ function TyreReportForm() {
                 isSearchable={true}
               />
               <div>
-                <FormLabel required>No of Tyres</FormLabel>
+                <FormLabel>No of Tyres</FormLabel>
                 <input
                   type="text"
                   name="tyre_count"
                   value={downloadTyre.tyre_count}
                   onChange={(e) => onInputChange(null, e)}
                   className={inputClass}
-                  required
                 />
               </div>
             </div>

@@ -83,35 +83,91 @@ const ViewServices = () => {
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
     pageStyle: `
-          @page {
-              size: A4;
-              margin: 2mm;
-          }
-          @media print {
-              body {
-                  margin: 0;
-                  font-size: 12px; 
-                  border: 1px solid #000;
-                  min-height:100vh
-              }
-              table {
-                  width: 100%;
-                  border-collapse: collapse;
-              }
-              th, td {
-                  border: 1px solid #ddd;
-                  padding: 4px;
-              }
-              th {
-                  background-color: #f4f4f4;
-              }
-              .text-center {
-                  text-align: center;
-              }
-          }
-        `,
-  });
+            @page {
+                size: A4;
+                margin: 2mm;
+            }
+            @media print {
+                body {
+                    margin: 0;
+                    font-size: 12px;
+                    border: 1px solid #000;
+                    min-height:100vh
+                }
+                table {
+                    width: 100%;
+                    border-collapse: collapse;
+                }
+                th, td {
+                    border: 1px solid #ddd;
+                    padding: 4px;
+                }
+                th {
+                    background-color: #f4f4f4;
+                }
+                .text-center {
+                    text-align: center;
+                }
+                    .trademark {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    // padding: 0 10mm;
+    font-size: 8px;
+    color: gray;
+  }
 
+            }
+          `,
+  });
+  //   const handlePrint = useReactToPrint({
+  //     content: () => componentRef.current,
+  //     pageStyle: `
+  //         @page {
+  //             size: A4;
+  //             margin: 4mm;
+  //         }
+  //         @media print {
+  //             body {
+  //                 margin: 0;
+  //                 font-size: 12px;
+  //                 min-height:100vh
+  //             }
+  //             table {
+  //                 width: 100%;
+  //                 border-collapse: collapse;
+  //             }
+  //             th, td {
+  //                 border: 1px solid #ddd;
+  //                 padding: 4px;
+  //             }
+
+  // .trademark {
+  // position: fixed;
+  // bottom: 0;
+  // width: 100%;
+  // display: flex;
+  // justify-content: space-between;
+  // // padding: 0 10mm;
+  // font-size: 8px;
+  // color: gray;
+  // }
+
+  //             th {
+  //                 background-color: #f4f4f4;
+  //             }
+  //             .text-center {
+  //                 text-align: center;
+  //             }
+  //                 .margin-first{
+  //                 margin:10px
+  //                 }
+
+  //         }
+  //       `,
+  //   });
   useEffect(() => {
     const fetchServiceDetails = async () => {
       try {
@@ -165,19 +221,14 @@ const ViewServices = () => {
         </div>
 
         <div ref={componentRef} className="p-4">
-          {/* <div className="mb-4">
-            <h1 className="text-2xl font-bold">{service?.service_truck_no}</h1>
-          </div> */}
-
+          <h3 className="text-xl font-bold mb-2 text-center">SERVICE</h3>
           <div className="grid grid-cols-2 gap-4 mb-4">
             <div>
               <table className="w-full">
                 <tbody>
                   <tr className="border-b">
                     <td className="font-semibold w-1/3 py-1">Vechile No</td>
-                    <td className="font-bold">
-                    {service?.service_truck_no}
-                    </td>
+                    <td className="font-bold">{service?.service_truck_no}</td>
                   </tr>
                   <tr className="border-b">
                     <td className="font-semibold w-1/3 py-1">Date</td>
@@ -232,7 +283,7 @@ const ViewServices = () => {
               {serviceSub.map((subService, index) => (
                 <tr key={index} className="border">
                   <td className="border p-2">{subService?.service_sub_type}</td>
-                  <td className="border p-2">
+                  <td className="border p-2 text-right">
                     ₹ {subService?.service_sub_amount.toLocaleString()}
                   </td>
                   <td className="border p-2">
@@ -240,8 +291,33 @@ const ViewServices = () => {
                   </td>
                 </tr>
               ))}
+
+              {/* Calculate and display total */}
+              <tr className="border font-bold">
+                <td className="border p-2" colSpan="1">
+                  Total
+                </td>
+                <td className="border p-2 text-right">
+                  ₹{" "}
+                  {serviceSub
+                    .reduce(
+                      (total, subService) =>
+                        total + Number(subService?.service_sub_amount || 0), // Ensure the amount is treated as a number
+                      0
+                    )
+                    .toLocaleString()}
+                </td>
+              </tr>
             </tbody>
           </table>
+          <div className="hidden print:block">
+            <div className="trademark flex justify-between items-center mt-4 ">
+              <h2 className="text-xs font-medium px-1">DFC</h2>
+              <h2 className="text-xs font-medium px-5">
+                {new Date().toLocaleDateString("en-GB")}{" "}
+              </h2>
+            </div>
+          </div>
         </div>
       </div>
     </Layout>

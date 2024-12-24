@@ -286,7 +286,7 @@ const EditServices = () => {
                 name="service_date"
                 value={service.service_date}
                 onChange={(e) => onInputChange(e)}
-                className={inputClass}
+                className={`${inputClass} opacity-50 cursor-not-allowed`}
                 disabled
               />
             </div>
@@ -298,7 +298,7 @@ const EditServices = () => {
                 name="service_company"
                 value={service.service_company}
                 onChange={(e) => onInputChange(e)}
-                className={inputClass}
+                className={`${inputClass} opacity-50 cursor-not-allowed`}
                 required
                 disabled
               />
@@ -312,7 +312,7 @@ const EditServices = () => {
                 name="service_branch"
                 value={service.service_branch}
                 onChange={(e) => onInputChange(e)}
-                className={inputClass}
+                className={`${inputClass} opacity-50 cursor-not-allowed`}
                 required
                 disabled
               />
@@ -327,7 +327,7 @@ const EditServices = () => {
                 name="service_truck_no"
                 value={service.service_truck_no}
                 onChange={(e) => onInputChange(e)}
-                className={inputClass}
+                className={`${inputClass} opacity-50 cursor-not-allowed`}
                 required
                 disabled
               />
@@ -383,31 +383,26 @@ const EditServices = () => {
               />
             </div>
 
-           
-
             {/* status */}
             <div>
-                <FormLabel required>Status</FormLabel>
-                <select
-                  name="service_status"
-                  value={service.service_status}
-                  onChange={(e) => onInputChange(e)}
-                  required
-                  className={inputClassSelect}
-                >
-                  <option value="">Select Status</option>
-                  {status.map((option) => (
-                    <option
-                      key={option.value}
-                      value={option.value}
-                    >
-                      {option.value}
-                    </option>
-                  ))}
-                </select>
-              </div>
-               {/* Remark  */}
-            <div className=" col-span-0 lg:col-span-4" >
+              <FormLabel required>Status</FormLabel>
+              <select
+                name="service_status"
+                value={service.service_status}
+                onChange={(e) => onInputChange(e)}
+                required
+                className={inputClassSelect}
+              >
+                <option value="">Select Status</option>
+                {status.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.value}
+                  </option>
+                ))}
+              </select>
+            </div>
+            {/* Remark  */}
+            <div className=" col-span-0 lg:col-span-4">
               <FormLabel>Remarks</FormLabel>
               <input
                 type="text"
@@ -418,7 +413,6 @@ const EditServices = () => {
               />
             </div>
           </div>
-          
 
           {/* service type show here with multiple add  */}
           <hr />
@@ -473,11 +467,9 @@ const EditServices = () => {
                   required
                 />
               </div>
-
-            
             </div>
           ))}
-          
+
           {/* Form Actions */}
           <div className="flex flex-wrap gap-4 justify-start">
             <button

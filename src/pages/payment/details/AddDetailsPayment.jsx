@@ -208,6 +208,7 @@ const AddDetailsPayment = () => {
       payment_details_credit: payment.payment_details_credit,
       payment_details_transaction: payment.payment_details_transaction,
       payment_details_company: payment.payment_details_company,
+      payment_details_narration: payment.payment_details_narration,
     };
 
     setIsButtonDisabled(true);
@@ -268,7 +269,7 @@ const AddDetailsPayment = () => {
           id="addIndiv"
           className="w-full max-w-7xl  rounded-lg mx-auto p-4 space-y-6 "
         >
-          <div className="grid grid-cols-1  md:grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1  md:grid-cols-1 lg:grid-cols-4 gap-6">
             <div>
               <FormLabel required>Date</FormLabel>
               <input
@@ -338,9 +339,11 @@ const AddDetailsPayment = () => {
                 ))}
               </select>
             </div>
+          </div>
+          <div className="grid grid-cols-1  md:grid-cols-1 lg:grid-cols-3 gap-6">
             {/* debit  */}
             <div>
-              <FormLabel>Debit</FormLabel>
+              <FormLabel required>Debit</FormLabel>
 
               <Select
                 name="payment_details_debit"
@@ -358,6 +361,7 @@ const AddDetailsPayment = () => {
                       }
                     : null
                 }
+                required
                 placeholder="Select Debit"
                 styles={customStyles}
                 isSearchable={true}
@@ -394,26 +398,30 @@ const AddDetailsPayment = () => {
                 ))}
               </select>
             </div>
+          </div>
+          <div className="grid grid-cols-1  md:grid-cols-2 gap-6">
             {/* Transaction details  */}
             <div>
               <FormLabel>Transaction Details</FormLabel>
-              <input
+              <textarea
                 type="text"
                 name="payment_details_transaction"
                 value={payment.payment_details_transaction}
                 onChange={(e) => onInputChange(e)}
                 className={inputClass}
+                rows={3}
               />
             </div>
             {/* narration details  */}
             <div>
               <FormLabel>Narration Details</FormLabel>
-              <input
+              <textarea
                 type="text"
                 name="payment_details_narration"
                 value={payment.payment_details_narration}
                 onChange={(e) => onInputChange(e)}
                 className={inputClass}
+                rows={3}
               />
             </div>
           </div>

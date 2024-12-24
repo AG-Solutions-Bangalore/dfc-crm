@@ -45,22 +45,19 @@ const CreateTeam = () => {
   const [selectedFile3, setSelectedFile3] = useState(null);
   const [selectedFile4, setSelectedFile4] = useState(null);
   const [selectedFile5, setSelectedFile5] = useState(null);
-const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const [company, setCompany] = useState([]);
- const [branch, setBranch] = useState([]);
+  const [branch, setBranch] = useState([]);
   const fetchCompany = async () => {
     try {
       setLoading(true);
       const token = localStorage.getItem("token");
-      const response = await axios.get(
-        `${BASE_URL}/api/web-fetch-company`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await axios.get(`${BASE_URL}/api/web-fetch-company`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       setCompany(response.data?.company);
     } catch (error) {
@@ -73,14 +70,11 @@ const [loading, setLoading] = useState(false);
     try {
       setLoading(true);
       const token = localStorage.getItem("token");
-      const response = await axios.get(
-        `${BASE_URL}/api/web-fetch-branch`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await axios.get(`${BASE_URL}/api/web-fetch-branch`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       setBranch(response.data?.branch);
     } catch (error) {
@@ -90,42 +84,42 @@ const [loading, setLoading] = useState(false);
     }
   };
 
-    useEffect(() => {
-        fetchCompany();
-        fetchBranch()
-    }, []);
+  useEffect(() => {
+    fetchCompany();
+    fetchBranch();
+  }, []);
 
   const validateOnlyDigits = (inputtxt) => {
     var phoneno = /^\d+$/;
-    if(inputtxt.match(phoneno) || inputtxt.length==0){
-        return true;
-    }else{
-        return false;
+    if (inputtxt.match(phoneno) || inputtxt.length == 0) {
+      return true;
+    } else {
+      return false;
     }
-}
+  };
 
-const onInputChange = (e) => {
-    if(e.target.name=="mobile"){
-        if(validateOnlyDigits(e.target.value)){
-            setTeam({
-              ...team,
-              [e.target.name]: e.target.value,
-            });
-        }
-    }else if(e.target.name=="user_salary"){
-        if(validateOnlyDigits(e.target.value)){
-            setTeam({
-              ...team,
-              [e.target.name]: e.target.value,
-            });
-        }
-    }else{
+  const onInputChange = (e) => {
+    if (e.target.name == "mobile") {
+      if (validateOnlyDigits(e.target.value)) {
         setTeam({
-            ...team,
-            [e.target.name]: e.target.value,
+          ...team,
+          [e.target.name]: e.target.value,
         });
+      }
+    } else if (e.target.name == "user_salary") {
+      if (validateOnlyDigits(e.target.value)) {
+        setTeam({
+          ...team,
+          [e.target.name]: e.target.value,
+        });
+      }
+    } else {
+      setTeam({
+        ...team,
+        [e.target.name]: e.target.value,
+      });
     }
-};
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -137,25 +131,25 @@ const onInputChange = (e) => {
       return;
     }
     const data = new FormData();
-      data.append("full_name",team.full_name);
-      data.append("email",team.email);
-      data.append("mobile",team.mobile);
-      data.append("user_company",team.user_company);
-      data.append("user_salary",team.user_salary);
-      data.append("user_type_id",team.user_type_id);
-      data.append("user_address",team.user_address);
-      data.append("user_branch",team.user_branch);
-      data.append("user_insurance",team.user_insurance);
-      data.append("user_insurance_no",team.user_insurance_no);
-      data.append("user_bank",team.user_bank);
-      data.append("user_bank_branch",team.user_bank_branch);
-      data.append("user_account_no",team.user_account_no);
-      data.append("user_ifsc_code",team.user_ifsc_code);
-      data.append("user_image",selectedFile1);
-      data.append("user_adhar_card",selectedFile2);
-      data.append("user_pan_card",selectedFile3);
-      data.append("user_passbook",selectedFile4);  
-      data.append("user_licence",selectedFile5);  
+    data.append("full_name", team.full_name);
+    data.append("email", team.email);
+    data.append("mobile", team.mobile);
+    data.append("user_company", team.user_company);
+    data.append("user_salary", team.user_salary);
+    data.append("user_type_id", team.user_type_id);
+    data.append("user_address", team.user_address);
+    data.append("user_branch", team.user_branch);
+    data.append("user_insurance", team.user_insurance);
+    data.append("user_insurance_no", team.user_insurance_no);
+    data.append("user_bank", team.user_bank);
+    data.append("user_bank_branch", team.user_bank_branch);
+    data.append("user_account_no", team.user_account_no);
+    data.append("user_ifsc_code", team.user_ifsc_code);
+    data.append("user_image", selectedFile1);
+    data.append("user_adhar_card", selectedFile2);
+    data.append("user_pan_card", selectedFile3);
+    data.append("user_passbook", selectedFile4);
+    data.append("user_licence", selectedFile5);
 
     setIsButtonDisabled(true);
     axios({
@@ -239,8 +233,8 @@ const onInputChange = (e) => {
               />
             </div>
 
-             {/* Company  */}
-             <div>
+            {/* Company  */}
+            <div>
               <FormLabel required>Company</FormLabel>
               <select
                 name="user_company"
@@ -257,8 +251,8 @@ const onInputChange = (e) => {
                 ))}
               </select>
             </div>
-             {/* Branch  */}
-             <div>
+            {/* Branch  */}
+            <div>
               <FormLabel required>Branch</FormLabel>
               <select
                 name="user_branch"
@@ -276,33 +270,36 @@ const onInputChange = (e) => {
               </select>
             </div>
 
-              {/* Address  */}
-              <div className="col-span-0 lg:col-span-4">
+            {/* Address  */}
+            <div className="col-span-0 lg:col-span-4">
               <FormLabel required>Address</FormLabel>
-              <input
+              <textarea
                 type="text"
                 name="user_address"
                 value={team.user_address}
                 onChange={(e) => onInputChange(e)}
                 className={inputClass}
                 required
+                rows={3}
+                multiline
               />
             </div>
-     
 
             {/* Mobile  */}
             <div>
-              <FormLabel>Mobile</FormLabel>
+              <FormLabel required>Mobile</FormLabel>
               <input
                 type="tel"
                 name="mobile"
                 value={team.mobile}
                 onChange={(e) => onInputChange(e)}
                 className={inputClass}
+                required
+                maxLength={10}
               />
             </div>
-                 {/* Email  */}
-                 <div>
+            {/* Email  */}
+            <div>
               <FormLabel required>Email</FormLabel>
               <input
                 type="email"
@@ -313,8 +310,8 @@ const onInputChange = (e) => {
                 required
               />
             </div>
-                {/* Salary  */}
-                <div>
+            {/* Salary  */}
+            <div>
               <FormLabel>Salary</FormLabel>
               <input
                 type="tel"
@@ -344,140 +341,120 @@ const onInputChange = (e) => {
             </div>
             {/* Bank  */}
             <div>
-              <FormLabel required>Bank</FormLabel>
+              <FormLabel>Bank</FormLabel>
               <input
                 type="text"
                 name="user_bank"
                 value={team.user_bank}
                 onChange={(e) => onInputChange(e)}
                 className={inputClass}
-                required
               />
             </div>
             {/* Bank Branch  */}
             <div>
-              <FormLabel required>Bank Branch</FormLabel>
+              <FormLabel>Bank Branch</FormLabel>
               <input
                 type="text"
                 name="user_bank_branch"
                 value={team.user_bank_branch}
                 onChange={(e) => onInputChange(e)}
                 className={inputClass}
-                required
               />
             </div>
             {/* Bank IFSC  */}
             <div>
-              <FormLabel required>Bank IFSC</FormLabel>
+              <FormLabel>Bank IFSC</FormLabel>
               <input
                 type="text"
                 name="user_ifsc_code"
                 value={team.user_ifsc_code}
                 onChange={(e) => onInputChange(e)}
                 className={inputClass}
-                required
               />
             </div>
             {/* Account No  */}
             <div>
-              <FormLabel required>Account No</FormLabel>
+              <FormLabel>Account No</FormLabel>
               <input
                 type="text"
                 name="user_account_no"
                 value={team.user_account_no}
                 onChange={(e) => onInputChange(e)}
                 className={inputClass}
-                required
               />
             </div>
             {/* Insurance  */}
             <div className="col-span-0 lg:col-span-2">
-              <FormLabel required>Insurance</FormLabel>
+              <FormLabel>Insurance</FormLabel>
               <input
                 type="text"
                 name="user_insurance"
                 value={team.user_insurance}
                 onChange={(e) => onInputChange(e)}
                 className={inputClass}
-                required
               />
             </div>
             {/* Insurance No  */}
             <div className="col-span-0 lg:col-span-2">
-              <FormLabel required>Insurance No</FormLabel>
+              <FormLabel>Insurance No</FormLabel>
               <input
                 type="text"
                 name="user_insurance_no"
                 value={team.user_insurance_no}
                 onChange={(e) => onInputChange(e)}
                 className={inputClass}
-                required
               />
             </div>
             {/* Photo */}
             <div>
-              <FormLabel required>Photo</FormLabel>
+              <FormLabel>Photo</FormLabel>
               <input
                 type="file"
                 name="user_image"
                 onChange={(e) => setSelectedFile1(e.target.files[0])}
-                required
-                  className="w-full px-3 py-1 text-xs border rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-500 border-blue-500 file:mr-4 file:py-1 file:px-2 file:rounded-lg file:border-0 file:text-xs  file:bg-[#E1F5FA] file:text-black  cursor-not-allowed  "
+                className="w-full px-3 py-1 text-xs border rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-500 border-blue-500 file:mr-4 file:py-1 file:px-2 file:rounded-lg file:border-0 file:text-xs  file:bg-[#E1F5FA] file:text-black  cursor-pointer  "
               />
-              
             </div>
             {/* Aadhar Card */}
             <div>
-              <FormLabel required>Aadhar Card</FormLabel>
+              <FormLabel>Aadhar Card</FormLabel>
               <input
                 type="file"
                 name="user_adhar_card"
-               
                 onChange={(e) => setSelectedFile2(e.target.files[0])}
-                required
-                  className="w-full px-3 py-1 text-xs border rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-500 border-blue-500 file:mr-4 file:py-1 file:px-2 file:rounded-lg file:border-0 file:text-xs  file:bg-[#E1F5FA] file:text-black  cursor-not-allowed  "
+                className="w-full px-3 py-1 text-xs border rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-500 border-blue-500 file:mr-4 file:py-1 file:px-2 file:rounded-lg file:border-0 file:text-xs  file:bg-[#E1F5FA] file:text-black  cursor-pointer "
               />
-              
             </div>
-              {/* PAN Card */}
-              <div>
-              <FormLabel required>PAN Card</FormLabel>
+            {/* PAN Card */}
+            <div>
+              <FormLabel>PAN Card</FormLabel>
               <input
                 type="file"
                 name="user_pan_card"
-         
                 onChange={(e) => setSelectedFile3(e.target.files[0])}
-                required
-                  className="w-full px-3 py-1 text-xs border rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-500 border-blue-500 file:mr-4 file:py-1 file:px-2 file:rounded-lg file:border-0 file:text-xs  file:bg-[#E1F5FA] file:text-black  cursor-not-allowed  "
+                className="w-full px-3 py-1 text-xs border rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-500 border-blue-500 file:mr-4 file:py-1 file:px-2 file:rounded-lg file:border-0 file:text-xs  file:bg-[#E1F5FA] file:text-black  cursor-pointer  "
               />
-              
             </div>
             {/* Pass Book */}
             <div>
-              <FormLabel required>Pass Book</FormLabel>
+              <FormLabel>Pass Book</FormLabel>
               <input
                 type="file"
                 name="user_passbook"
                 onChange={(e) => setSelectedFile4(e.target.files[0])}
-                required
-                  className="w-full px-3 py-1 text-xs border rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-500 border-blue-500 file:mr-4 file:py-1 file:px-2 file:rounded-lg file:border-0 file:text-xs  file:bg-[#E1F5FA] file:text-black  cursor-not-allowed  "
+                className="w-full px-3 py-1 text-xs border rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-500 border-blue-500 file:mr-4 file:py-1 file:px-2 file:rounded-lg file:border-0 file:text-xs  file:bg-[#E1F5FA] file:text-black  cursor-pointer  "
               />
-              
             </div>
             {/* Licence */}
             <div>
-              <FormLabel required>Licence</FormLabel>
+              <FormLabel>Licence</FormLabel>
               <input
                 type="file"
                 name="user_licence"
                 onChange={(e) => setSelectedFile5(e.target.files[0])}
-                required
-                  className="w-full px-3 py-1 text-xs border rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-500 border-blue-500 file:mr-4 file:py-1 file:px-2 file:rounded-lg file:border-0 file:text-xs  file:bg-[#E1F5FA] file:text-black  cursor-not-allowed  "
+                className="w-full px-3 py-1 text-xs border rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-500 border-blue-500 file:mr-4 file:py-1 file:px-2 file:rounded-lg file:border-0 file:text-xs  file:bg-[#E1F5FA] file:text-black  cursor-pointer  "
               />
-              
             </div>
-          
-           
           </div>
 
           {/* Form Actions */}

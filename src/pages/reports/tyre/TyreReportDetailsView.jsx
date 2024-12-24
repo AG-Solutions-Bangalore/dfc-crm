@@ -168,7 +168,7 @@ const TyreReportDetailsView = () => {
       pageSize: "A4",
       pageMargins: [10, 10, 10, 10],
       content: [
-        { text: "Tyre Report", style: "header", alignment: "center" },
+        { text: "TYRES DETAILS SUMMARY", style: "header", alignment: "center" },
         {
           table: {
             headerRows: 1,
@@ -314,20 +314,20 @@ const TyreReportDetailsView = () => {
                   <tbody>
                     {vechiles.map((item, index) => (
                       <tr key={index}>
-                        <td className="p-1 text-xs border border-black">
+                        <td className="p-1 text-xs border border-black px-2">
                           {item.tyre_sub_branch || "-"}
                         </td>
-                        <td className="p-1 text-xs border border-black">
+                        <td className="p-1 text-xs border border-black px-2">
                           {item.tyre_sub_no || "-"}
                         </td>
-                        <td className="p-1 text-xs border border-black">
+                        <td className="p-1 text-xs border border-black px-2">
                           {item.tyre_sub_type || "-"}
                         </td>
-                        <td className="p-1 text-xs border border-black">
+                        <td className="p-1 text-xs border border-black px-2">
                           {item.tyre_sub_make || "-"}
                         </td>
 
-                        <td className="p-1 text-xs border border-black">
+                        <td className="p-1 text-xs border border-black text-center">
                           {item.tyre_sub_status || "-"}
                         </td>
                       </tr>

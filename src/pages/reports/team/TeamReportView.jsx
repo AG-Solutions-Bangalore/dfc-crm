@@ -42,7 +42,7 @@ const printStyles = `
 const ServiceReportView = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [service, setService] = useState([]);
+  const [team, setTeam] = useState([]);
   const [loading, setLoading] = useState(true);
   const componentRef = React.useRef();
   const tableRef = useRef(null);
@@ -122,22 +122,18 @@ const ServiceReportView = () => {
       try {
         const token = localStorage.getItem("token");
         let data = {
-          service_date_from: localStorage.getItem("service_date_from"),
-          service_date_to: localStorage.getItem("service_date_to"),
-          service_garage: localStorage.getItem("service_garage"),
-          service_company: localStorage.getItem("service_company"),
-          service_branch: localStorage.getItem("service_branch"),
-          service_truck_no: localStorage.getItem("service_truck_no"),
+          user_branch: localStorage.getItem("user_branch"),
+          user_company: localStorage.getItem("user_company"),
         };
         const Response = await axios.post(
-          `${BASE_URL}/api/fetch-services-report`,
+          `${BASE_URL}/api/fetch-team-report`,
           data,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
 
-        setService(Response.data.services);
+        setTeam(Response.data.team);
         console.log(Response.data, "resposne");
         setLoading(false);
       } catch (error) {
@@ -155,26 +151,30 @@ const ServiceReportView = () => {
   const handleSavePDF = () => {
     const tableBody = [
       [
-        { text: "Date", bold: true },
-        { text: "Vehicle No", bold: true },
-        { text: "Company", bold: true },
-        { text: "Branch", bold: true },
-        { text: "Garage", bold: true },
-        { text: "Amount", bold: true },
-        { text: "No of Changes", bold: true },
+        "Full Name",
+        "Branch	",
+        "Company",
+        "Mobile",
+        "Email",
+        "Address",
+        "Salary",
+        "User Type",
+        "Status",
       ],
-      ...service.map((item) => [
-        moment(item.service_date).format("DD-MM-YYYY") || "-",
-        item.service_truck_no || "-",
-        item.service_company || "-",
-        item.service_branch || "-",
-        item.service_garage || "-",
-        item.service_amount
-          ? `₹${Number(item.service_amount).toLocaleString("en-IN", {
+      ...team.map((item) => [
+        item.full_name || "-",
+        item.user_branch || "-",
+        item.user_company || "-",
+        item.mobile || "-",
+        item.email || "-",
+        item.user_address || "-",
+        item.user_salary
+          ? `₹${Number(item.user_salary).toLocaleString("en-IN", {
               maximumFractionDigits: 2,
             })}`
           : "-",
-        item.service_count || "-",
+        item.user_type_id || "-",
+        item.user_status || "-",
       ]),
     ];
 
@@ -182,11 +182,21 @@ const ServiceReportView = () => {
       pageSize: "A4",
       pageMargins: [10, 10, 10, 10],
       content: [
-        { text: "Services Report", style: "header", alignment: "center" },
+        { text: "TEAM SUMMARY", style: "header", alignment: "center" },
         {
           table: {
             headerRows: 1,
-            widths: ["15%", "15%", "10%", "auto", "auto", "10%", "9%"], // Adjust column widths
+            widths: [
+              "auto",
+              "auto",
+              "auto",
+              "auto",
+              "auto",
+              "auto",
+              "10%",
+              "auto",
+              "10%",
+            ], // Adjust column widths
             body: tableBody,
           },
           layout: {
@@ -226,22 +236,18 @@ const ServiceReportView = () => {
     };
     toast.success("PDF Report is Downloaded Successfully");
 
-    pdfMake.createPdf(docDefinition).download("Service_report.pdf");
+    pdfMake.createPdf(docDefinition).download("Team_report.pdf");
   };
 
   const onSubmit = (e) => {
     e.preventDefault();
     let data = {
-      service_date_from: localStorage.getItem("service_date_from"),
-      service_date_to: localStorage.getItem("service_date_to"),
-      service_garage: localStorage.getItem("service_garage"),
-      service_company: localStorage.getItem("service_company"),
-      service_branch: localStorage.getItem("service_branch"),
-      service_truck_no: localStorage.getItem("service_truck_no"),
+      user_branch: localStorage.getItem("user_branch"),
+      user_company: localStorage.getItem("user_company"),
     };
 
     axios({
-      url: BASE_URL + "/api/download-services-report",
+      url: BASE_URL + "/api/download-team-report",
       method: "POST",
       data,
       headers: {
@@ -256,10 +262,10 @@ const ServiceReportView = () => {
         link.setAttribute("download", "team.csv");
         document.body.appendChild(link);
         link.click();
-        toast.success("team Report is Downloaded Successfully");
+        toast.success("Team is Downloaded Successfully");
       })
       .catch((err) => {
-        toast.error("Team Report is Not Downloaded");
+        toast.error("Team is Not Downloaded");
       });
   };
   return (
@@ -269,7 +275,7 @@ const ServiceReportView = () => {
           <h2 className="px-5 text-[black] text-lg flex flex-row justify-between items-center rounded-xl p-2">
             <div className="flex items-center gap-2">
               <IconInfoCircle className="w-4 h-4" />
-              <span> Services Summary</span>
+              <span> Team Summary</span>
             </div>
             <div className="flex items-center space-x-4">
               <IconFileTypeXls
@@ -289,7 +295,7 @@ const ServiceReportView = () => {
               />
               <IconArrowBack
                 className="cursor-pointer text-gray-600 hover:text-red-600"
-                onClick={() => navigate("/report-services-form")}
+                onClick={() => navigate("/report-team-form")}
                 title="Go Back"
               />
             </div>
@@ -302,20 +308,22 @@ const ServiceReportView = () => {
           >
             <div className="mb-4 width">
               <h3 className="text-xl font-bold mb-2 text-center">
-                SERVICES SUMMARY
+                TEAM SUMMARY
               </h3>
-              {service.length > 0 ? (
+              {team.length > 0 ? (
                 <table className="w-full border-collapse">
                   <thead>
                     <tr className="bg-gray-200">
                       {[
-                        "Date",
-                        "Vehicle No",
+                        "Full Name",
+                        "Branch	",
                         "Company",
-                        "Branch",
-                        "Garage",
-                        "Amount",
-                        "No of Changes",
+                        "Mobile",
+                        "Email",
+                        "Address",
+                        "Salary",
+                        "User Type",
+                        "Status",
                       ].map((header) => (
                         <th
                           key={header}
@@ -327,35 +335,41 @@ const ServiceReportView = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {service.map((item, index) => (
+                    {team.map((item, index) => (
                       <tr key={index}>
-                        <td className="p-1 text-xs border border-black text-center">
-                          {moment(item.service_date).format("DD-MM-YYYY")}
+                        <td className="p-1 text-xs border border-black text-start px-2">
+                          {item.full_name || "-"}
                         </td>
-                        <td className="p-1 text-xs border border-black text-center">
-                          {item.service_truck_no || "-"}
+                        <td className="p-1 text-xs border border-black text-start px-2">
+                          {item.user_branch || "-"}
                         </td>
-                        <td className="p-1 text-xs border border-black">
-                          {item.service_company || "-"}
+                        <td className="p-1 text-xs border border-black px-2">
+                          {item.user_company || "-"}
                         </td>
-                        <td className="p-1 text-xs border border-black">
-                          {item.service_branch || "-"}
+                        <td className="p-1 text-xs border border-black px-2">
+                          {item.mobile || "-"}
                         </td>
-                        <td className="p-1 text-xs border border-black">
-                          {item.service_garage || "-"}
+                        <td className="p-1 text-xs border border-black px-2">
+                          {item.email || "-"}
+                        </td>
+                        <td className="p-1 text-xs border border-black px-2">
+                          {item.user_address || "-"}
                         </td>
 
                         <td className="p-1 text-xs border border-black text-center">
                           <NumericFormat
-                            value={item.service_amount}
+                            value={item.user_salary}
                             displayType="text"
                             thousandSeparator={true}
                             prefix="₹"
                             thousandsGroupStyle="lakh"
                           />
                         </td>
-                        <td className="p-1 text-xs border border-black text-center">
-                          {item.service_count || "-"}
+                        <td className="p-1 text-xs border border-black text-start px-2">
+                          {item.user_type_id || "-"}
+                        </td>
+                        <td className="p-1 text-xs border border-black text-start px-2">
+                          {item.user_status || "-"}
                         </td>
                       </tr>
                     ))}

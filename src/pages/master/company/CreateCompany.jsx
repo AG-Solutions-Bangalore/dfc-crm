@@ -1,48 +1,48 @@
-import React, { useState } from 'react'
-import Layout from '../../../layout/Layout'
-import { useNavigate } from 'react-router-dom';
-import { toast } from 'sonner';
-import BASE_URL from '../../../base/BaseUrl';
-import axios from 'axios';
-import { IconArrowBack, IconInfoCircle } from '@tabler/icons-react';
+import React, { useState } from "react";
+import Layout from "../../../layout/Layout";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
+import BASE_URL from "../../../base/BaseUrl";
+import axios from "axios";
+import { IconArrowBack, IconInfoCircle } from "@tabler/icons-react";
 
 const CreateCompany = () => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
   const [company, setCompany] = useState({
     company_short: "",
-        company_name: "",
-        company_address: "",
-        company_mobile: "",
-        company_email: "",
-        company_gst: "",
-        company_pan: "",
+    company_name: "",
+    company_address: "",
+    company_mobile: "",
+    company_email: "",
+    company_gst: "",
+    company_pan: "",
   });
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const [loading, setLoading] = useState(false);
   const validateOnlyDigits = (inputtxt) => {
     var phoneno = /^\d+$/;
-    if(inputtxt.match(phoneno) || inputtxt.length==0){
-        return true;
-    }else{
-        return false;
+    if (inputtxt.match(phoneno) || inputtxt.length == 0) {
+      return true;
+    } else {
+      return false;
     }
-}
+  };
 
-const onInputChange = (e) => {
-    if(e.target.name=="company_mobile"){
-        if(validateOnlyDigits(e.target.value)){
-            setCompany({
-              ...company,
-              [e.target.name]: e.target.value,
-            });
-        }
-    }else{
+  const onInputChange = (e) => {
+    if (e.target.name == "company_mobile") {
+      if (validateOnlyDigits(e.target.value)) {
         setCompany({
-            ...company,
-            [e.target.name]: e.target.value,
+          ...company,
+          [e.target.name]: e.target.value,
         });
+      }
+    } else {
+      setCompany({
+        ...company,
+        [e.target.name]: e.target.value,
+      });
     }
-};
+  };
   const customStyles = {
     control: (provided) => ({
       ...provided,
@@ -68,13 +68,13 @@ const onInputChange = (e) => {
       return;
     }
     const data = {
-        company_short : company.company_short,
-            company_name : company.company_name,
-            company_address : company.company_address,
-            company_mobile: company.company_mobile,
-            company_email: company.company_email,
-            company_gst: company.company_gst,
-            company_pan: company.company_pan,
+      company_short: company.company_short,
+      company_name: company.company_name,
+      company_address: company.company_address,
+      company_mobile: company.company_mobile,
+      company_email: company.company_email,
+      company_gst: company.company_gst,
+      company_pan: company.company_pan,
     };
 
     setIsButtonDisabled(true);
@@ -113,7 +113,7 @@ const onInputChange = (e) => {
   const inputClass =
     "w-full px-3 py-2 text-xs border rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-500 border-blue-500";
   return (
-  <Layout>
+    <Layout>
       <div className=" bg-[#FFFFFF] p-2  rounded-lg  ">
         <div className="sticky top-0 p-2  mb-4 border-b-2 border-red-500 rounded-lg  bg-[#E1F5FA] ">
           <h2 className=" px-5 text-[black] text-lg   flex flex-row  justify-between items-center  rounded-xl p-2 ">
@@ -135,7 +135,7 @@ const onInputChange = (e) => {
         >
           <div className="grid grid-cols-1  md:grid-cols-1 lg:grid-cols-4   gap-6">
             {/* Company Short  */}
-             <div  className='col-span-0 lg:col-span-2'>
+            <div className="col-span-0 lg:col-span-2">
               <FormLabel required>Company Short</FormLabel>
               <input
                 type="text"
@@ -147,7 +147,7 @@ const onInputChange = (e) => {
               />
             </div>
             {/* Company Name  */}
-             <div  className='col-span-0 lg:col-span-2'>
+            <div className="col-span-0 lg:col-span-2">
               <FormLabel required>Company Name</FormLabel>
               <input
                 type="text"
@@ -159,22 +159,24 @@ const onInputChange = (e) => {
               />
             </div>
             {/* Company Address  */}
-             <div className='col-span-0 lg:col-span-4'>
+            <div className="col-span-0 lg:col-span-4">
               <FormLabel required>Company Address</FormLabel>
-              <input
+              <textarea
                 type="text"
                 name="company_address"
                 value={company.company_address}
                 onChange={(e) => onInputChange(e)}
                 className={inputClass}
                 required
+                rows={3}
+                multiline
+                fullWidth
               />
             </div>
 
-
             {/* Mobile  */}
             <div>
-              <FormLabel required >Mobile</FormLabel>
+              <FormLabel required>Mobile</FormLabel>
               <input
                 type="tel"
                 name="company_mobile"
@@ -182,9 +184,11 @@ const onInputChange = (e) => {
                 onChange={(e) => onInputChange(e)}
                 className={inputClass}
                 required
+                maxLength={10}
+
               />
             </div>
-           
+
             {/* Email  */}
             <div>
               <FormLabel required>Email</FormLabel>
@@ -200,32 +204,29 @@ const onInputChange = (e) => {
 
             {/* GST  */}
             <div>
-              <FormLabel >GST</FormLabel>
+              <FormLabel>GST</FormLabel>
               <input
                 type="text"
                 name="company_gst"
                 value={company.company_gst}
                 onChange={(e) => onInputChange(e)}
                 className={inputClass}
-                
+                maxLength={15}
               />
             </div>
-           
 
             {/* PAN NO  */}
             <div>
-              <FormLabel >Pan No</FormLabel>
+              <FormLabel>Pan No</FormLabel>
               <input
                 type="text"
                 name="company_pan"
                 value={company.company_pan}
                 onChange={(e) => onInputChange(e)}
                 className={inputClass}
-                
+                maxLength={10}
               />
             </div>
-           
-         
           </div>
 
           {/* Form Actions */}
@@ -250,8 +251,8 @@ const onInputChange = (e) => {
           </div>
         </form>
       </div>
-  </Layout>
-  )
-}
+    </Layout>
+  );
+};
 
-export default CreateCompany
+export default CreateCompany;

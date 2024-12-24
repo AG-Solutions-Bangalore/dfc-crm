@@ -20,10 +20,10 @@ const status = [
 const EditServiceType = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-   const [serviceTypes, setServiceTypes] = useState({
-          service_types: "",
-          service_types_status: "",
-      });
+  const [serviceTypes, setServiceTypes] = useState({
+    service_types: "",
+    service_types_status: "",
+  });
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const fetchServiceTypeEdit = async () => {
     try {
@@ -50,13 +50,12 @@ const EditServiceType = () => {
     fetchServiceTypeEdit();
   }, []);
 
-   
   const onInputChange = (e) => {
     setServiceTypes({
       ...serviceTypes,
       [e.target.name]: e.target.value,
     });
-};
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -68,8 +67,8 @@ const EditServiceType = () => {
       return;
     }
     const data = {
-        service_types : serviceTypes.service_types,
-            service_types_status : serviceTypes.service_types_status,
+      service_types: serviceTypes.service_types,
+      service_types_status: serviceTypes.service_types_status,
     };
 
     setIsButtonDisabled(true);
@@ -126,8 +125,9 @@ const EditServiceType = () => {
                 name="service_types"
                 value={serviceTypes.service_types}
                 onChange={(e) => onInputChange(e)}
-                className={inputClass}
+                className={`${inputClass} cursor-not-allowed opacity-50`}
                 required
+                disabled
               />
             </div>
             <div>

@@ -80,154 +80,12 @@ function TripReportForm() {
     }));
   };
 
-
-
   const onInputChange1 = (e) => {
     setTripDownload({
       ...downloadTrip,
       [e.target.name]: e.target.value,
     });
   };
-  // const fetchCompany = async () => {
-  //   try {
-  //     const theLoginToken = localStorage.getItem("token");
-  //     const response = await axios.get(`${BASE_URL}/api/web-fetch-company`, {
-  //       headers: {
-  //         Authorization: `Bearer ${theLoginToken}`,
-  //       },
-  //     });
-
-  //     console.log(response.data, "response");
-  //     setCompany(response.data.company || []);
-  //   } catch (error) {
-  //     console.error("Error fetching company:", error);
-  //   }
-  // };
-  // const fetchBranches = async () => {
-  //   try {
-  //     const theLoginToken = localStorage.getItem("token");
-  //     const response = await axios.get(`${BASE_URL}/api/web-fetch-branch`, {
-  //       headers: {
-  //         Authorization: `Bearer ${theLoginToken}`,
-  //       },
-  //     });
-
-  //     console.log(response.data, "response");
-  //     setBranch(response.data.branch || []);
-  //   } catch (error) {
-  //     console.error("Error fetching branches:", error);
-  //   }
-  // };
-
-  // const fetchVehicle = async () => {
-  //   try {
-  //     const theLoginToken = localStorage.getItem("token");
-  //     const response = await axios.get(
-  //       `${BASE_URL}/api/web-fetch-report-vehicle`,
-  //       {
-  //         headers: {
-  //           Authorization: `Bearer ${theLoginToken}`,
-  //         },
-  //       }
-  //     );
-
-  //     setVehicles(response.data.vehicles || []);
-  //   } catch (error) {
-  //     console.error("Error fetching Vehicle:", error);
-  //   }
-  // };
-  // const fetchVehicleNew = async () => {
-  //   try {
-  //     const theLoginToken = localStorage.getItem("token");
-  //     const response = await axios.get(
-  //       `${BASE_URL}/api/web-fetch-vehicles/${downloadTrip.trip_company}/${downloadTrip.trip_branch}`,
-  //       {
-  //         headers: {
-  //           Authorization: `Bearer ${theLoginToken}`,
-  //         },
-  //       }
-  //     );
-
-  //     console.log(response.data.vehicles, "vehiclesnew");
-  //     setVehiclesNew(response.data.vehicles || []);
-  //   } catch (error) {
-  //     console.error("Error fetching Vehiclenew:", error);
-  //   }
-  // };
-  // const fetchDrivers = async () => {
-  //   try {
-  //     const theLoginToken = localStorage.getItem("token");
-  //     const response = await axios.get(
-  //       `${BASE_URL}/api/web-fetch-assigning-tripdriver/${downloadTrip.trip_branch}`,
-  //       {
-  //         headers: {
-  //           Authorization: `Bearer ${theLoginToken}`,
-  //         },
-  //       }
-  //     );
-
-  //     console.log(response.data, "response");
-  //     setDriver(response.data.drivers || []);
-  //   } catch (error) {
-  //     console.error("Error fetching company:", error);
-  //   }
-  // };
-  // const fetchVendors = async () => {
-  //   try {
-  //     const theLoginToken = localStorage.getItem("token");
-  //     const response = await axios.get(
-  //       `${BASE_URL}/web-fetch-vendors/Diesel/${downloadTrip.trip_branch}`,
-  //       {
-  //         headers: {
-  //           Authorization: `Bearer ${theLoginToken}`,
-  //         },
-  //       }
-  //     );
-
-  //     console.log(response.data, "response");
-  //     setVendor(response.data.vendor || []);
-  //   } catch (error) {
-  //     console.error("Error fetching company:", error);
-  //   }
-  // };
-  // const fetchAgency = async () => {
-  //   try {
-  //     const theLoginToken = localStorage.getItem("token");
-  //     const response = await axios.get(
-  //       `${BASE_URL}/web-fetch-agencies/${downloadTrip.trip_branch}`,
-  //       {
-  //         headers: {
-  //           Authorization: `Bearer ${theLoginToken}`,
-  //         },
-  //       }
-  //     );
-
-  //     console.log(response.data, "response");
-  //     setAgency(response.data.agencies || []);
-  //   } catch (error) {
-  //     console.error("Error fetching company:", error);
-  //   }
-  // };
-  // useEffect(() => {
-  //   fetchBranches();
-  //   fetchCompany();
-  //   fetchVehicle();
-  //   fetchVendors();
-
-  //   fetchDrivers();
-  //   fetchVehicleNew();
-  //   fetchAgency();
-  // }, [downloadTrip.trip_branch, downloadTrip.trip_branch]);
-  // useEffect(() => {
-  //   fetchDrivers();
-  //   fetchVehicleNew();
-  //   fetchAgency();
-  // }, [downloadTrip.trip_branch, downloadTrip.trip_branch]);
-  // useEffect(() => {
-  // fetchDrivers();
-  // fetchVehicleNew();
-  //   fetchAgency();
-  // }, [downloadTrip.trip_branch]);
 
   //DOWNLOAD
 
@@ -336,6 +194,7 @@ function TripReportForm() {
       trip_agency: downloadTrip.trip_agency,
       trip_supplier: downloadTrip.trip_supplier,
       trip_status: downloadTrip.trip_status,
+      trip_full_vehicle: downloadTrip.trip_full_vehicle,
     };
     var v = document.getElementById("dowRecp").checkValidity();
     var v = document.getElementById("dowRecp").reportValidity();
@@ -355,7 +214,7 @@ function TripReportForm() {
           const url = window.URL.createObjectURL(new Blob([res.data]));
           const link = document.createElement("a");
           link.href = url;
-          link.setAttribute("download", "Services.csv");
+          link.setAttribute("download", "Trip.csv");
           document.body.appendChild(link);
           link.click();
           toast.success("Details Trip Report  is Downloaded Successfully");

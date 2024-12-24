@@ -25,6 +25,7 @@ const Sidebar = ({
           width: sidebarWidth,
           flexShrink: 0,
           borderRadius: "13px",
+          transition: "width 0.3s ease-in-out",
         }}
       >
         {/* ------------------------------------------- */}
@@ -45,6 +46,8 @@ const Sidebar = ({
               bottom: 10,
               borderRadius: "13px",
               height: "calc(100% - 25px)",
+              // backgroundColor: "red",
+              transition: "width 0.3s ease-in-out",
             },
           }}
           className="custom-scroll"
@@ -62,7 +65,7 @@ const Sidebar = ({
             {/* ------------------------------------------- */}
             {/* Logo */}
             {/* ------------------------------------------- */}
-            <Box px={2} pt={2}>
+            <Box px={2} pt={2} mb={4}>
               <Logo isCollapsed={isCollapsed} />
             </Box>
             <Box>
@@ -70,9 +73,9 @@ const Sidebar = ({
               {/* Sidebar Items */}
               {/* ------------------------------------------- */}
               <SidebarItems isCollapsed={isCollapsed} />
-              <Upgrade isCollapsed={isCollapsed} />
             </Box>
           </Box>
+          <Upgrade isCollapsed={isCollapsed} />
         </Drawer>
       </Box>
     );
@@ -94,7 +97,7 @@ const Sidebar = ({
       {/* ------------------------------------------- */}
       {/* Logo */}
       {/* ------------------------------------------- */}
-      <Box px={2} py={2}>
+      <Box px={2} py={2} mb={4}>
         <Logo />
       </Box>
       {/* ------------------------------------------- */}

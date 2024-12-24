@@ -111,9 +111,9 @@ function VechilesDetailsReportForm() {
         <hr />
         <div className="p-4">
           <form id="dowRecp" autoComplete="off">
-            <div className="grid grid-cols-1  gap-4">
+            <div className="grid grid-cols-1  md:grid-cols-2 gap-4">
               <SelectInput
-                label="Vendor Reg No"
+                label="Vehicle Reg No"
                 name="vehicle_reg_no"
                 value={
                   downloadVehicle.vehicle_reg_no
@@ -132,16 +132,15 @@ function VechilesDetailsReportForm() {
                 styles={customStyles}
                 isSearchable={true}
               />
-            </div>
 
-            <div className="flex justify-center py-4">
-              <button
-                className=" text-center text-sm font-[400 ] cursor-pointer hover:animate-pulse w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md ml-4"
-                onClick={handleDetailview}
-              >
-                {" "}
-                View
-              </button>
+              <div className="flex  py-4 mt-2">
+                <button
+                  className=" text-center text-sm font-[400 ] cursor-pointer hover:animate-pulse w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md ml-4"
+                  onClick={handleDetailview}
+                >
+                  View
+                </button>
+              </div>
             </div>
           </form>
         </div>

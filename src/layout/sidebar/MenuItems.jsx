@@ -20,26 +20,33 @@ import {
   IconDownload,
   IconPeace,
   IconBell,
+  IconTruckDelivery,
+  IconTruck,
+  IconSettings,
+  IconBuilding,
+  IconCircleDot,
+  IconPin,
+  IconTool,
 } from "@tabler/icons-react";
 
 import { uniqueId } from "lodash";
 
 const Menuitems = () => [
-  {
-    navlabel: true,
-    subheader: "Home",
-  },
+  // {
+  //   navlabel: true,
+  //   subheader: "Home",
+  // },
   {
     id: uniqueId(),
     title: "Dashboard",
     icon: IconLayoutDashboard,
     href: "/home",
   },
-  {
-    navlabel: true,
-    subheader: "Operation",
-  },
- 
+  // {
+  //   navlabel: true,
+  //   subheader: "Operation",
+  // },
+
   {
     id: uniqueId(),
     title: "Master",
@@ -48,43 +55,43 @@ const Menuitems = () => [
       {
         id: uniqueId(),
         title: "Comapany",
-        icon: IconListDetails,
+        icon: IconBuilding,
         href: "/master/company-list",
       },
       {
         id: uniqueId(),
         title: "Branch",
-        icon: IconUsers,
+        icon: IconPin,
         href: "/master/branch-list",
       },
       {
         id: uniqueId(),
         title: "Tyre Position",
-        icon: IconCash,
+        icon: IconCircleDot,
         href: "/master/tyreposition-list",
       },
       {
         id: uniqueId(),
         title: "Tyre Make",
-        icon: IconListDetails,
+        icon: IconCircleDot,
         href: "/master/tyremake-list",
       },
       {
         id: uniqueId(),
         title: "Service Type",
-        icon: IconUsers,
+        icon: IconTool,
         href: "/master/servicetype-list",
       },
       {
         id: uniqueId(),
         title: "Team",
-        icon: IconCash,
+        icon: IconUsers,
         href: "/master/team-list",
       },
       {
         id: uniqueId(),
         title: "Driver",
-        icon: IconListDetails,
+        icon: IconUsers,
         href: "/master/driver-list",
       },
       {
@@ -96,7 +103,7 @@ const Menuitems = () => [
       {
         id: uniqueId(),
         title: "Vendor",
-        icon: IconCash,
+        icon: IconUsers,
         href: "/master/vendor-list",
       },
     ],
@@ -104,30 +111,30 @@ const Menuitems = () => [
   {
     id: uniqueId(),
     title: "Vehicles",
-    icon: IconReceipt,
+    icon: IconTruck,
     href: "/vechiles-list",
   },
   {
     id: uniqueId(),
     title: "Tyre",
-    icon: IconSchool,
+    icon: IconSettings,
     subItems: [
       {
         id: uniqueId(),
         title: "Purchase",
-        icon: IconListDetails,
+        icon: IconRepeat,
         href: "/tyre/purchase-list",
       },
       {
         id: uniqueId(),
         title: "Stock",
-        icon: IconComponents,
+        icon: IconRepeat,
         href: "/tyre/stock-list",
       },
       {
         id: uniqueId(),
         title: "Assign Tyre",
-        icon: IconComponents,
+        icon: IconRepeat,
         href: "/tyre/assign-list",
       },
       {
@@ -147,19 +154,19 @@ const Menuitems = () => [
   {
     id: uniqueId(),
     title: "Service",
-    icon: IconReceipt,
+    icon: IconTool,
     href: "/service-list",
   },
   {
     id: uniqueId(),
     title: "Trip",
-    icon: IconReceipt,
+    icon: IconTruckDelivery,
     href: "/form-trip",
   },
-  {
-    navlabel: true,
-    subheader: "Summary",
-  },
+  // {
+  //   navlabel: true,
+  //   subheader: "Summary",
+  // },
   {
     id: uniqueId(),
     title: "Payment",
@@ -183,7 +190,6 @@ const Menuitems = () => [
         icon: IconCopy,
         href: "/payment/details-list",
       },
-      
     ],
   },
   {
@@ -265,7 +271,6 @@ const Menuitems = () => [
       },
     ],
   },
- 
 ];
 
 export default Menuitems;

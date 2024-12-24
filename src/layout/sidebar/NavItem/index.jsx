@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React, { memo } from "react";
 import Chip from "@mui/material/Chip";
 import List from "@mui/material/List";
 import ListItemButton from "@mui/material/ListItemButton";
@@ -9,9 +9,7 @@ import { styled, useTheme } from "@mui/material/styles";
 import { Link } from "react-router-dom";
 import { IconChevronDown, IconChevronUp } from "@tabler/icons-react";
 
-
-
-  const NavItem = memo(({ item, level, pathDirect,hideMenu, isCollapsed }) => {
+const NavItem = memo(({ item, level, pathDirect, hideMenu, isCollapsed }) => {
   const Icon = item.icon;
   const theme = useTheme();
   const itemIcon = <Icon stroke={1.5} size="1.3rem" />;
@@ -26,7 +24,7 @@ import { IconChevronDown, IconChevronUp } from "@tabler/icons-react";
     }
     return false;
   });
-  
+
   React.useEffect(() => {
     if (item?.subItems) {
       // Clear previous menu states
@@ -39,7 +37,7 @@ import { IconChevronDown, IconChevronUp } from "@tabler/icons-react";
       localStorage.setItem(`menu-${item.id}`, isExpanded);
     }
   }, [isExpanded, item?.id]);
-  
+
   const handleToggle = () => {
     setIsExpanded((prev) => !prev);
   };
@@ -336,8 +334,6 @@ import { IconChevronDown, IconChevronUp } from "@tabler/icons-react";
       )}
     </List>
   );
-})
+});
 
-
-export default NavItem
-
+export default NavItem;
