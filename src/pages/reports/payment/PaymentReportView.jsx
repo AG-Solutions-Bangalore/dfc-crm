@@ -159,7 +159,7 @@ const PaymentReportView = () => {
   const handleSavePDF = () => {
     // Table body structure
     const tableBody = [
-      ["Date", "Voucher", "Debit", "Credit", "Amount"], // Header row
+      ["Date", "Voucher", "Debit", "Credit", "Amount"],
       ...payment.map((item) => [
         moment(item.payment_details_date).format("DD-MM-YYYY"),
         item.payment_details_voucher_type || "-",
@@ -171,6 +171,22 @@ const PaymentReportView = () => {
             })}`
           : "-",
       ]),
+      [
+        { text: "Total:", colSpan: 4, alignment: "right", bold: true },
+        "",
+        "",
+        "",
+        `₹${(
+          Number(
+            payment.length > 0
+              ? payment.reduce(
+                  (sum, payment) => sum + payment.payment_details_amount,
+                  0
+                )
+              : 0
+          ) || 0
+        ).toLocaleString("en-IN", { maximumFractionDigits: 2 })}`,
+      ],
     ];
 
     const docDefinition = {
@@ -185,7 +201,7 @@ const PaymentReportView = () => {
         {
           table: {
             headerRows: 1,
-            widths: ["20%", "20%", "20%", "20%", "20%"],
+            widths: ["15%", "20%", "30%", "20%", "15%"],
             body: tableBody,
           },
           layout: {
@@ -350,6 +366,28 @@ const PaymentReportView = () => {
                         </td>
                       </tr>
                     ))}
+                    <tr className="bg-gray-100 font-bold">
+                      <td
+                        colSpan={4}
+                        className="p-1 text-xs border border-black text-right"
+                      >
+                        Total:
+                      </td>
+
+                      <td className="text-xs p-1 border border-black text-end">
+                        <NumericFormat
+                          value={payment.reduce(
+                            (sum, payment) =>
+                              sum + payment.payment_details_amount,
+                            0
+                          )}
+                          displayType="text"
+                          thousandSeparator={true}
+                          prefix="₹"
+                          thousandsGroupStyle="lakh"
+                        ></NumericFormat>
+                      </td>
+                    </tr>
                   </tbody>
                 </table>
               ) : (

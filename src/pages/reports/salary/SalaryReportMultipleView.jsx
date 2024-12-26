@@ -93,143 +93,6 @@ const SalaryReportMultipleView = () => {
     `,
   });
 
-  // const handleSavePDF = () => {
-  //   const tableBody = [
-  //     [
-  //       "Company",
-  //       "Branch",
-  //       "Vehicle",
-  //       "Driver",
-  //       "Total Trip",
-  //       "Total KM",
-  //       "Trip Amount",
-  //       "Hamali",
-  //       "Incentive",
-  //       "Advance",
-  //       "Net Payable",
-  //     ],
-  //     ...salary.map((item) => [
-  //       item.trip_company || "-",
-  //       item.trip_branch || "-",
-  //       item.trip_vehicle || "-",
-  //       item.trip_driver || "-",
-  //       item.trip_count || "-",
-  //       item.trip_km || "-",
-  //       item.trip_incentive_amount * item.trip_count || "-",
-  //       item.trip_hmali || "-",
-  //       item.trip_bata_amount || "-",
-  //       item.trip_advance || "-",
-  //       item.trip_incentive_amount * item.trip_count +
-  //         item.trip_bata_for_trip +
-  //         (item.trip_hmali - item.trip_advance) +
-  //         +item.trip_bata_amount +
-  //         +item.trip_driver_salary +
-  //         item.trip_bata_for_km * item.trip_km || "-",
-  //     ]),
-  //     [
-  //       { text: "Total:", colSpan: 5, alignment: "right", bold: true },
-  //       "",
-  //       "",
-  //       "",
-  //       "",
-  //       salarysummaryfooter.trip_count || "-",
-  //       salarysummaryfooter.trip_km || "-",
-  //       salarysummaryfooter.trip_incentive_amount
-  //         ? `₹${(
-  //             salarysummaryfooter.trip_incentive_amount *
-  //             salarysummaryfooter.trip_count
-  //           ).toLocaleString("en-IN", {
-  //             maximumFractionDigits: 2,
-  //           })}`
-  //         : "-",
-  //       salarysummaryfooter.trip_hmali
-  //         ? `₹${Number(salarysummaryfooter.trip_hmali).toLocaleString("en-IN", {
-  //             maximumFractionDigits: 2,
-  //           })}`
-  //         : "-",
-  //       salarysummaryfooter.trip_bata_amount
-  //         ? `₹${Number(salarysummaryfooter.trip_bata_amount).toLocaleString(
-  //             "en-IN",
-  //             {
-  //               maximumFractionDigits: 2,
-  //             }
-  //           )}`
-  //         : "-",
-  //       salarysummaryfooter.trip_advance
-  //         ? `₹${Number(salarysummaryfooter.trip_advance).toLocaleString(
-  //             "en-IN",
-  //             {
-  //               maximumFractionDigits: 2,
-  //             }
-  //           )}`
-  //         : "-",
-  //       `₹${(
-  //         (salarysummaryfooter.trip_incentive_amount /
-  //           salarysummaryfooter.trip_count) *
-  //           salarysummaryfooter.trip_count +
-  //         salarysummaryfooter.trip_bata_for_trip +
-  //         (salarysummaryfooter.trip_hmali - salarysummaryfooter.trip_advance) +
-  //         +(
-  //           salarysummaryfooter.trip_bata_amount /
-  //           salarysummaryfooter.trip_count
-  //         ) +
-  //         +(
-  //           salarysummaryfooter.trip_driver_salary /
-  //           salarysummaryfooter.trip_count
-  //         ) +
-  //         (salarysummaryfooter.trip_bata_for_km /
-  //           salarysummaryfooter.trip_count) *
-  //           salarysummaryfooter.trip_km
-  //       ).toLocaleString("en-IN", {
-  //         maximumFractionDigits: 2,
-  //       })}`,
-  //     ],
-  //   ];
-
-  //   const docDefinition = {
-  //     pageSize: "A4",
-  //     pageMargins: [10, 10, 10, 10],
-  //     content: [
-  //       { text: "Salary Report", style: "header", alignment: "center" },
-  //       {
-  //         table: {
-  //           headerRows: 1,
-  //           widths: [
-  //             "auto", // Adjust column widths based on content
-  //             "auto",
-  //             "auto",
-  //             "auto",
-  //             "auto",
-  //             "auto",
-  //             "auto",
-  //             "auto",
-  //             "auto",
-  //             "auto",
-  //             "auto",
-  //           ],
-  //           body: tableBody,
-  //         },
-  //         layout: {
-  //           fillColor: (rowIndex) => (rowIndex === 0 ? "#CCCCCC" : null), // Header background
-  //           hLineWidth: () => 0.3,
-  //           vLineWidth: () => 0.3,
-  //         },
-  //       },
-  //     ],
-  //     styles: {
-  //       header: {
-  //         fontSize: 12,
-  //         bold: true,
-  //         margin: [0, 0, 0, 10],
-  //       },
-  //     },
-  //     defaultStyle: {
-  //       fontSize: 7,
-  //     },
-  //   };
-
-  //   pdfMake.createPdf(docDefinition).download("salary_report.pdf");
-  // };
   const handleSavePDF = () => {
     const tableBody = [
       [
@@ -434,6 +297,8 @@ const SalaryReportMultipleView = () => {
 
   const onReportView = (e) => {
     e.preventDefault();
+    localStorage.setItem("trip_driver", e.target.innerText);
+
     let data = {
       trip_date_from: localStorage.getItem("trip_date_from"),
       trip_date_to: localStorage.getItem("trip_date_to"),
@@ -544,7 +409,7 @@ const SalaryReportMultipleView = () => {
                           {item.trip_vehicle || "-"}
                         </td>
 
-                        <td className="text-xs p-1 border border-black cursor-pointer">
+                        <td className="text-xs p-1 border border-black cursor-pointer text-blue-600">
                           <span onClick={(e) => onReportView(e)}>
                             {item.trip_driver}
                           </span>
@@ -556,7 +421,7 @@ const SalaryReportMultipleView = () => {
                         <td className="text-xs p-1 border border-black text-center">
                           {item.trip_km || "-"}
                         </td>
-                        <td className="text-xs p-1 border border-black text-center">
+                        <td className="text-xs p-1 border border-black text-end px-2">
                           <NumericFormat
                             value={item.trip_incentive_amount * item.trip_count}
                             displayType="text"
@@ -565,7 +430,7 @@ const SalaryReportMultipleView = () => {
                             thousandsGroupStyle="lakh"
                           ></NumericFormat>
                         </td>
-                        <td className="text-xs p-1 border border-black text-center">
+                        <td className="text-xs p-1 border border-black text-end px-2">
                           <NumericFormat
                             value={item.trip_hmali}
                             displayType="text"
@@ -574,7 +439,7 @@ const SalaryReportMultipleView = () => {
                             thousandsGroupStyle="lakh"
                           ></NumericFormat>
                         </td>
-                        <td className="text-xs p-1 border border-black text-center">
+                        <td className="text-xs p-1 border border-black text-end px-2">
                           <NumericFormat
                             value={item.trip_bata_amount}
                             displayType="text"
@@ -583,7 +448,7 @@ const SalaryReportMultipleView = () => {
                             thousandsGroupStyle="lakh"
                           ></NumericFormat>
                         </td>
-                        <td className="text-xs p-1 border border-black text-center">
+                        <td className="text-xs p-1 border border-black text-end px-2">
                           <NumericFormat
                             value={item.trip_advance}
                             displayType="text"
@@ -592,7 +457,7 @@ const SalaryReportMultipleView = () => {
                             thousandsGroupStyle="lakh"
                           ></NumericFormat>
                         </td>
-                        <td className="text-xs p-1 border border-black text-center">
+                        <td className="text-xs p-1 border border-black text-end px-2">
                           <NumericFormat
                             value={
                               item.trip_incentive_amount * item.trip_count +
@@ -635,7 +500,7 @@ const SalaryReportMultipleView = () => {
                           thousandsGroupStyle="lakh"
                         ></NumericFormat>
                       </td>
-                      <td className="text-xs p-1 border border-black text-center">
+                      <td className="text-xs p-1 border border-black text-end px-2">
                         <NumericFormat
                           value={salarysummaryfooter.trip_hmali}
                           displayType="text"
@@ -645,7 +510,7 @@ const SalaryReportMultipleView = () => {
                         ></NumericFormat>
                       </td>
 
-                      <td className="text-xs p-1 border border-black text-center">
+                      <td className="text-xs p-1 border border-black text-end px-2">
                         <NumericFormat
                           value={salarysummaryfooter.trip_bata_amount}
                           displayType="text"
@@ -654,7 +519,7 @@ const SalaryReportMultipleView = () => {
                           thousandsGroupStyle="lakh"
                         ></NumericFormat>
                       </td>
-                      <td className="text-xs p-1 border border-black text-center">
+                      <td className="text-xs p-1 border border-black text-end px-2">
                         <NumericFormat
                           value={salarysummaryfooter.trip_advance}
                           displayType="text"
@@ -663,7 +528,7 @@ const SalaryReportMultipleView = () => {
                           thousandsGroupStyle="lakh"
                         ></NumericFormat>
                       </td>
-                      <td className="text-xs p-1 border border-black text-center">
+                      <td className="text-xs p-1 border border-black text-end px-2">
                         <NumericFormat
                           value={
                             (salarysummaryfooter.trip_incentive_amount /
