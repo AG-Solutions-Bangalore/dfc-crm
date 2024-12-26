@@ -81,85 +81,65 @@ const SignIn = () => {
         position="top-right"
         reverseOrder={false}
       />
-      <div className="min-h-screen bg-blue-400 flex items-center justify-center">
-        <div className="max-w-5xl w-full bg-white shadow-lg rounded-2xl overflow-hidden  m-4 ">
-          <div className="flex flex-col lg:flex-row max-h-[582px]">
-            {/* Left Side - Image */}
-            <div className="lg:w-1/2 hidden lg:block">
-              <img
-                src={logo1}
-                alt="Login"
-                className="object-contain h-full w-full "
-              />
+
+      <div className="flex flex-col lg:flex-row h-screen">
+        {/* Left Side - Image */}
+
+        <div className="hidden  lg:block lg:w-[50%] xl:block xl:w-[70%] h-full">
+          <img src={logo1} alt="img 1" className="h-full w-full object-cover" />
+        </div>
+        {/* Right Side - Form */}
+        <div className="flex-1 flex items-center bg-blue-50 justify-center px-4 lg:px-8 py-12 h-full lg:w-1/2">
+          <div className="w-full max-w-md p-8 bg-white rounded-xl shadow-lg  shadow-blue-600 ">
+            <div className="flex justify-center mb-4">
+              <img src={logo} alt="Company Logo" className="w-35 h-35" />
             </div>
 
-            {/* Right Side - Form */}
-            <div className="flex-1 p-4 sm:px-0 md:px-16 flex flex-col mt-8 max-h-[682px]">
-              <div className="flex items-center justify-center mb-8">
-                <img src={logo} alt="Company Logo" className="w-32 h-35" />
+            <Typography
+              variant="h6"
+              className="text-center font-bold mb-6 text-blue-gray-800"
+            >
+              Sign into your account
+            </Typography>
+            <form onSubmit={handleSubmit} method="POST" className="space-y-6">
+              <div>
+                <FormLabel required>Username</FormLabel>
+                <input
+                  type="text"
+                  name="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className={inputClass}
+                  required
+                />
               </div>
-              <Typography
-                variant="h4"
-                className="text-center font-bold mb-6 text-blue-gray-800"
-              >
-                Sign into your account
-              </Typography>
-              <form onSubmit={handleSubmit} method="POST" className="space-y-6">
-                <div>
-                  <FormLabel required>Username</FormLabel>
-                  <input
-                    type="text"
-                    name="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className={inputClass}
-                    required
-                  />
-                </div>
-                <div>
-                  <FormLabel required>Password</FormLabel>
-                  <input
-                    type="password"
-                    name="email"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className={inputClass}
-                    required
-                  />
-                </div>
+              <div>
+                <FormLabel required>Password</FormLabel>
+                <input
+                  type="password"
+                  name="email"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className={inputClass}
+                  required
+                />
+              </div>
 
-                <div className="flex justify-center ">
-                  <button
-                    className=" text-center text-sm font-[400 ] cursor-pointer hover:animate-pulse w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md"
-                    type="submit"
-                    disabled={loading}
-                  >
-                    {" "}
-                    {loading ? "Checking..." : "Sign In"}
-                  </button>
-                </div>
-              </form>
-              <div
-                className="text-end mt-4"
-                onClick={handleForgetPasswordClick}
-              >
-                <Link className="text-sm text-gray-700 hover:text-blue-600">
-                  Forgot password?
-                </Link>
+              <div className="flex justify-center ">
+                <button
+                  className=" text-center text-sm font-[400 ] cursor-pointer hover:animate-pulse w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md"
+                  type="submit"
+                  disabled={loading}
+                >
+                  {" "}
+                  {loading ? "Checking..." : "Sign In"}
+                </button>
               </div>
-              {/* <div>
-                <h6 className="flex justify-center text-gray-600">
-                  Follow with us
-                </h6>
-                <div className="grid grid-cols-6 text-black">
-                  <CgFacebook className="text-black hover:bg-blue-700 cursor-pointer hover:text-white transition-colors duration-300 p-4 rounded-full w-14 h-14 flex items-center justify-center" />
-                  <TiSocialYoutubeCircular className="text-black hover:bg-red-500 hover:text-white cursor-pointer transition-colors duration-300 p-4 rounded-full w-14 h-14 flex items-center justify-center" />
-                  <FaTwitter className="text-black hover:bg-blue-500 hover:text-white cursor-pointer transition-colors duration-300 p-4 rounded-full w-14 h-14 flex items-center justify-center" />
-                  <TiSocialLinkedin className="text-black hover:bg-blue-500 hover:text-white cursor-pointer transition-colors duration-300 p-4 rounded-full w-14 h-14 flex items-center justify-center" />
-                  <FaInstagram className="text-black hover:bg-yellow-800 hover:text-white cursor-pointer transition-colors duration-300 p-4 rounded-full w-14 h-14 flex items-center justify-center" />
-                  <FaPinterest className="text-black hover:bg-red-500 hover:text-white cursor-pointer transition-colors duration-300 p-4 rounded-full w-14 h-14 flex items-center justify-center" />
-                </div>
-              </div> */}
+            </form>
+            <div className="text-end mt-4" onClick={handleForgetPasswordClick}>
+              <Link className="text-sm text-gray-700 hover:text-blue-600">
+                Forgot password?
+              </Link>
             </div>
           </div>
         </div>

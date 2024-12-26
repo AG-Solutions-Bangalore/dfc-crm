@@ -38,10 +38,10 @@ const ProfileDialog = ({
       onClose={handleClose}
       fullWidth
       maxWidth="md"
-      TransitionComponent={Slide} 
+      TransitionComponent={Slide}
       transitionDuration={500}
       sx={{
-        backdropFilter: "blur(4px)", 
+        backdropFilter: "blur(4px)",
       }}
     >
       <DialogContent>
@@ -86,7 +86,7 @@ const ProfileDialog = ({
                 onChange={handleChange}
                 fullWidth
                 disabled
-                className={`${inputClass} cursor-not-allowed`}
+                className={`${inputClass} cursor-not-allowed opacity-50`}
               />
             </div>
             <div>
@@ -113,7 +113,7 @@ const ProfileDialog = ({
                 onChange={handleChange}
                 fullWidth
                 disabled
-                className={`${inputClass} cursor-not-allowed`}
+                className={`${inputClass} cursor-not-allowed opacity-50`}
               />
             </div>
             <div>

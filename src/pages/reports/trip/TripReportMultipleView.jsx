@@ -179,8 +179,7 @@ const TripReportMultipleView = () => {
         item.trip_hsd_supplied || "-",
       ]),
       [
-        { text: "Total:", colSpan: 3, alignment: "right", bold: true }, // Config for total row
-        "",
+        { text: "Total:", colSpan: 4, alignment: "right", bold: true }, // Config for total row
         "",
         "",
         "",
@@ -204,7 +203,7 @@ const TripReportMultipleView = () => {
         {
           table: {
             headerRows: 1,
-            widths: ["auto", "auto", "auto", "auto", "auto", "auto", "auto"],
+            widths: ["16%", "20%", "12%", "24%", "8%", "10%", "10%"],
 
             body: tableBody,
           },

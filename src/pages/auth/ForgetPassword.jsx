@@ -32,7 +32,12 @@ const ForgetPassword = () => {
 
   const inputClass =
     "w-full px-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 border-green-500";
-
+  const FormLabel = ({ children, required }) => (
+    <label className="block text-sm font-semibold text-black mb-1 ">
+      {children}
+      {required && <span className="text-red-500 ml-1">*</span>}
+    </label>
+  );
   return (
     <>
       <Toaster
@@ -43,24 +48,20 @@ const ForgetPassword = () => {
         position="top-right"
         reverseOrder={false}
       />
-      <div className="w-full bg-white shadow-lg rounded-lg overflow-hidden min-h-screen">
-        <div className="flex flex-col lg:flex-row min-h-screen">
-          {/* Left Side - Image */}
-          <div className="lg:w-[75%] hidden lg:block">
-            <img
-              src={logo1}
-              alt="Reset Password"
-              className="object-cover min-h-80vh w-full"
-            />
-          </div>
+      <div className="flex flex-col lg:flex-row h-screen">
+        {/* Left Side - Image */}
+        <div className="hidden  lg:block lg:w-[50%] xl:block xl:w-[70%] h-full">
+          <img src={logo1} alt="img 1" className="h-full w-full object-cover" />
+        </div>
 
-          {/* Right Side - Form */}
-          <div className="flex-1 p-8 flex flex-col justify-center min-h-screen">
-            <div className="flex items-center justify-center mb-8">
-              <img src={logo} alt="Company Logo" className="w-32 h-35" />
+        {/* Right Side - Form */}
+        <div className="flex-1 flex items-center bg-blue-50 justify-center px-4 lg:px-8 py-12 h-full lg:w-1/2">
+          <div className="w-full max-w-md p-8 bg-white rounded-xl shadow-lg  shadow-blue-600 ">
+            <div className="flex justify-center mb-4">
+              <img src={logo} alt="Company Logo" className="w-35 h-35" />
             </div>
             <Typography
-              variant="h4"
+              variant="h6"
               className="text-center font-bold mb-6 text-blue-gray-800"
             >
               Reset Password
