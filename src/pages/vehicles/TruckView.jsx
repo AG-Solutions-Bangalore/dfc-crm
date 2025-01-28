@@ -297,47 +297,57 @@ const TruckView = () => {
   const oldServiceInfo = () => {
     return (
       <>
-          {serviceTypeFixed.length > 0 && (
+        {serviceTypeFixed.length > 0 && (
           <div className="mt-2">
             <div className="overflow-x-auto ">
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2">
                 {serviceTypeFixed.map((serviceType, index) => {
                   const hasData = service.some(
                     (serviceItem) =>
-                      serviceItem.service_sub_type === serviceType.service_types_fixed
+                      serviceItem.service_sub_type ===
+                      serviceType.service_types_fixed
                   );
-                
+
                   return (
-                  <div   key={index}>
-                    <div
-                    
-                      className="border  border-gray-300 hover:bg-gray-50 transition-colors duration-300"
-                    >
-                      <p  className={`p-1 text-xs border font-bold ${
-              hasData ? "bg-blue-200" : "bg-gray-200"
-            } border-black text-center`}>
-                        {serviceType.service_types_fixed}
-                      </p>
-                   
-                      <p className="p-2 text-xs border border-black text-center">
-                        {service.map((serviceItem) => {
-                          if (
-                            serviceItem.service_sub_type ===
-                            serviceType.service_types_fixed
-                          ) {
-                            return (
-                              <React.Fragment key={serviceItem.id}>
-                                <div>{serviceItem.service_sub_date}</div>
-                                <div><span className=" font-semibold">KM&nbsp;:&nbsp;</span>{serviceItem.service_sub_km}</div>
-                              </React.Fragment>
-                            );
-                          }
-                          return null;
-                        })}
-                      </p>
+                    <div key={index}>
+                      <div className="border  border-gray-300 hover:bg-gray-50 transition-colors duration-300">
+                        <p
+                          className={`p-1 text-xs border font-bold ${
+                            hasData ? "bg-blue-200" : "bg-gray-200"
+                          } border-black text-center`}
+                        >
+                          {serviceType.service_types_fixed}
+                        </p>
+
+                        <p className="p-2 text-xs border border-black text-center">
+                          {service.map((serviceItem) => {
+                            if (
+                              serviceItem.service_sub_type ===
+                              serviceType.service_types_fixed
+                            ) {
+                              return (
+                                <React.Fragment key={serviceItem.id}>
+                                  <div>
+                                    {moment(
+                                      serviceItem.service_sub_date
+                                    ).format("DD-MMM-YYYY")}
+                                  </div>
+                                  <div>
+                                    <span className=" font-semibold">
+                                      KM&nbsp;:&nbsp;
+                                    </span>
+                                    {serviceItem.service_sub_km}
+                                  </div>
+                                </React.Fragment>
+                              );
+                            }
+                            return null;
+                          })}
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                )})}
+                  );
+                })}
               </div>
             </div>
           </div>
@@ -414,7 +424,6 @@ const TruckView = () => {
             </table>
           </div>
         )}
-      
 
         {service.length <= 0 && (
           <div className="text-center">
