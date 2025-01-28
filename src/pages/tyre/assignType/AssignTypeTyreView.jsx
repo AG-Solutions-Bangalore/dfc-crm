@@ -239,7 +239,7 @@ const AssignTypeTyreView = () => {
           <h2 className=" px-5 text-[black] text-lg   flex flex-row  justify-between items-center  rounded-xl p-2 ">
             <div className="flex  items-center gap-2">
               <IconInfoCircle className="w-4 h-4" />
-              <span>Assign Tyre Vechile View </span>
+              <span>Stock Tyre Vechile View </span>
             </div>
             <div className="flex items-center space-x-4">
               <IconPrinter
