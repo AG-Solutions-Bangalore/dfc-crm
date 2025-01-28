@@ -88,7 +88,9 @@ const TruckView = () => {
   const [vehicle, setVehicle] = useState({}); //first one
   const [service, setService] = useState([]); //secodn one
   const [trip, setTrip] = useState({}); // third one
-  const [tyre, setTyre] = useState({}); //last one
+  const [tyre, setTyre] = useState({}); //fourth one
+  const [serviceTypeFixed, setServiceTypeFixed] = useState([]); //fifth one
+  const [oldService, setOldService] = useState([]); //last one
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("info");
 
@@ -177,8 +179,10 @@ const TruckView = () => {
 
         setVehicle(response.data.vehicle);
         setService(response.data.fullservices);
+        setServiceTypeFixed(response.data.servicesTypesFixed);
         setTrip(response.data.trip);
         setTyre(response.data.vehiceltyresub);
+        setOldService(response.data.historyservices);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching Vechile View details:", error);
@@ -290,6 +294,63 @@ const TruckView = () => {
     );
   };
 
+  const oldServiceInfo = () => {
+    return (
+      <>
+          {serviceTypeFixed.length > 0 && (
+          <div className="mt-2">
+            <div className="overflow-x-auto ">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2">
+                {serviceTypeFixed.map((serviceType, index) => {
+                  const hasData = service.some(
+                    (serviceItem) =>
+                      serviceItem.service_sub_type === serviceType.service_types_fixed
+                  );
+                
+                  return (
+                  <div   key={index}>
+                    <div
+                    
+                      className="border  border-gray-300 hover:bg-gray-50 transition-colors duration-300"
+                    >
+                      <p  className={`p-1 text-xs border font-bold ${
+              hasData ? "bg-blue-200" : "bg-gray-200"
+            } border-black text-center`}>
+                        {serviceType.service_types_fixed}
+                      </p>
+                   
+                      <p className="p-2 text-xs border border-black text-center">
+                        {service.map((serviceItem) => {
+                          if (
+                            serviceItem.service_sub_type ===
+                            serviceType.service_types_fixed
+                          ) {
+                            return (
+                              <React.Fragment key={serviceItem.id}>
+                                <div>{serviceItem.service_sub_date}</div>
+                                <div><span className=" font-semibold">KM&nbsp;:&nbsp;</span>{serviceItem.service_sub_km}</div>
+                              </React.Fragment>
+                            );
+                          }
+                          return null;
+                        })}
+                      </p>
+                    </div>
+                  </div>
+                )})}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {serviceTypeFixed.length <= 0 && (
+          <div className="text-center">
+            <h1>No Data Available</h1>
+          </div>
+        )}
+      </>
+    );
+  };
   const serviceInfo = () => {
     return (
       <>
@@ -353,30 +414,7 @@ const TruckView = () => {
             </table>
           </div>
         )}
-        {service.length > 0 && (
-          <div className="mt-2">
-            <div className="overflow-x-auto ">
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2">
-                {service.map((dataSumm, index) => (
-                  <div
-                    key={index}
-                    className="border border-gray-300  rounded-lg p-1 text-center shadow-sm hover:shadow-md transition-shadow duration-300"
-                  >
-                    <div className="font-[500] text-xs">
-                      <p className="">{dataSumm.service_sub_type}</p>
-                      <p className="text-gray-600 ">
-                        {moment(dataSumm.service_sub_date).format("DD-MM-YYYY")}
-                      </p>
-                      <p className="text-black font-semibold">
-                        {dataSumm.service_sub_km}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        )}
+      
 
         {service.length <= 0 && (
           <div className="text-center">
@@ -1024,13 +1062,15 @@ const TruckView = () => {
       case "info":
         return vechileInfo();
 
-      case "service":
+      case "services":
         return serviceInfo();
 
       case "trip":
         return tripInfo();
       case "tyre":
         return tyreInfo();
+      case "Service History":
+        return oldServiceInfo();
 
       default:
         return null;
@@ -1078,10 +1118,16 @@ const TruckView = () => {
                   Vehicle Info
                 </Tabs.Tab>
                 <Tabs.Tab
-                  value="service"
+                  value="Service History"
                   icon={<IconMessageCircle size={16} />}
                 >
-                  Service
+                  Service History
+                </Tabs.Tab>
+                <Tabs.Tab
+                  value="services"
+                  icon={<IconMessageCircle size={16} />}
+                >
+                  Services
                 </Tabs.Tab>
                 <Tabs.Tab value="trip" icon={<IconTruckDelivery size={16} />}>
                   Trip

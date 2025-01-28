@@ -90,7 +90,7 @@ const UnassignTypeTyreList = () => {
           {/* Header Section */}
           <div className="flex flex-col md:flex-row justify-between gap-4 items-center">
             <h1 className="border-b-2 font-[400] border-dashed border-orange-800 text-center md:text-left">
-              Unassign Tyre List
+              Stock Tyre List
             </h1>
            
           </div>
