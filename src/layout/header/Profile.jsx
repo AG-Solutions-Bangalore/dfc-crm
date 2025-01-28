@@ -10,13 +10,14 @@ import {
   ListItemText,
   Dialog,
 } from "@mui/material";
-import { useLocation, useNavigate } from "react-router-dom";
 import profile from "../../../public/user-1.jpg";
-import { IconMail, IconUser, IconCircleX } from "@tabler/icons-react";
+import { IconMail, IconUser } from "@tabler/icons-react";
 import Logout from "../../components/Logout";
 import axios from "axios";
 import BASE_URL from "../../base/BaseUrl";
 import { toast } from "sonner";
+import ProfileDialog from "./ProfileDialog";
+import ChangePasswordDialog from "./ChangePasswordDialog";
 
 const Profile = () => {
   const [anchorEl2, setAnchorEl2] = React.useState(null);
@@ -25,90 +26,93 @@ const Profile = () => {
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
   const [openDialog1, setOpenDialog1] = useState(false);
-  const [firstName, setFirstName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [email, setEmail] = useState("");
-  const [oldPassword, setOldPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const navigate = useNavigate();
   const token = localStorage.getItem("token");
-  const location = useLocation();
+  const [profileData, setProfileData] = useState({
+    full_name: "",
+    dl_no: "",
+    mobile: "",
+    dl_expiry: "",
+    email: "",
+    hazard_lice_no: "",
+    vehicle_type: "",
+    hazard_lice_expiry: "",
+    user_address: "",
+  });
+  const [forgotpassword, setForgotPassword] = useState({
+    old_password: "",
+    password: "",
+    conformpassword: "",
+  });
+  const getData = async () => {
+    try {
+      const res = await axios.get(`${BASE_URL}/api/web-fetch-profiles`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setProfileData(res.data.user);
+    } catch (error) {
+      console.error("Failed to fetch profile:", error);
+      toast.error("Failed to load profile data");
+    }
+  };
 
-  // const getData = async () => {
-  //   try {
-  //     const res = await axios.get(`${BASE_URL}/api/fetch-profile`, {
-  //       headers: {
-  //         Authorization: `Bearer ${token}`,
-  //       },
-  //     });
-  //     setFirstName(res.data.user.first_name || "");
-  //     setPhone(res.data.user.phone || "");
-  //     setEmail(res.data.user.email || "");
-  //   } catch (error) {
-  //     console.error("Failed to fetch profile:", error);
-  //     toast.error("Failed to load profile data");
-  //   }
-  // };
+  const onUpdateProfile = async (e) => {
+    e.preventDefault();
 
-  // const onUpdateProfile = async (e) => {
-  //   e.preventDefault();
-  //   if (!firstName || !phone || phone.length !== 10 || !email) {
-  //     toast.error("Please fill out all fields correctly.");
-  //     return;
-  //   }
+    setIsButtonDisabled(true);
+    const data = {
+      first_name: profileData.full_name,
+      vehicle_type: profileData.vehicle_type,
+      user_address: profileData.user_address,
+      dl_no: profileData.dl_no,
+      dl_expiry: profileData.dl_expiry,
+      hazard_lice_no: profileData.hazard_lice_no,
+      hazard_lice_expiry: profileData.hazard_lice_expiry,
+    };
+    try {
+      const res = await axios.post(`${BASE_URL}/api/web-update-profile`, data, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (res.status === 200) {
+        toast.success("Profile Updated Successfully!");
+        handleClose();
+      }
+    } catch (error) {
+      console.error("Profile update failed:", error);
+      toast.error("Profile not updated");
+    } finally {
+      setIsButtonDisabled(false);
+    }
+  };
 
-  //   setIsButtonDisabled(true);
+  const onChangePassword = async (e) => {
+    e.preventDefault();
+    if (forgotpassword.password !== forgotpassword.conformpassword) {
+      toast.error("Passwords do not match");
+      return;
+    }
+    if (forgotpassword.old_password === forgotpassword.password) {
+      toast.error("Old and new passwords cannot be the same");
+      return;
+    }
+    let data = {
+      old_password: forgotpassword.old_password,
+      password: forgotpassword.password,
+      username: localStorage.getItem("name"),
+    };
+    try {
+      await axios.post(`${BASE_URL}/api/web-change-password`, data, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      toast.success("Password Updated Successfully!");
 
-  //   try {
-  //     const res = await axios.post(
-  //       `${BASE_URL}/api/update-profile`,
-  //       { first_name: firstName, phone },
-  //       {
-  //         headers: { Authorization: `Bearer ${token}` },
-  //       }
-  //     );
-  //     if (res.status === 200) {
-  //       toast.success("Profile Updated Successfully!");
-  //       handleClose();
-  //     }
-  //   } catch (error) {
-  //     console.error("Profile update failed:", error);
-  //     toast.error("Profile not updated");
-  //   } finally {
-  //     setIsButtonDisabled(false);
-  //   }
-  // };
-
-  // const onChangePassword = async (e) => {
-  //   e.preventDefault();
-  //   if (newPassword !== confirmPassword) {
-  //     toast.error("Passwords do not match");
-  //     return;
-  //   }
-  //   if (oldPassword === newPassword) {
-  //     toast.error("Old and new passwords cannot be the same");
-  //     return;
-  //   }
-
-  //   try {
-  //     await axios.post(
-  //       `${BASE_URL}/api/change-password`,
-  //       { old_password: oldPassword, password: newPassword, confirm_password: confirmPassword },
-  //       {
-  //         headers: { Authorization: `Bearer ${token}` },
-  //       }
-  //     );
-  //     toast.success("Password Updated Successfully!");
-  //     setOldPassword("");
-  //     setNewPassword("");
-  //     setConfirmPassword("");
-  //     handleClose1();
-  //   } catch (error) {
-  //     console.error("Password change failed:", error);
-  //     toast.error("Invalid old password");
-  //   }
-  // };
+      handleClose1();
+    } catch (error) {
+      console.error("Password change failed:", error);
+      toast.error("Invalid old password");
+    }
+  };
 
   const handleClose = () => setOpenDialog(false);
   const handleClose1 = () => setOpenDialog1(false);
@@ -133,33 +137,61 @@ const Profile = () => {
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         sx={{ "& .MuiMenu-paper": { width: "200px" } }}
       >
-        <MenuItem onClick={() => { setOpenDialog(true); getData(); }}>
+        <MenuItem
+          onClick={() => {
+            console.log("Opening Profile Dialog...");
+            setOpenDialog(true);
+            getData();
+            setAnchorEl2(null);
+          }}
+        >
           <ListItemIcon>
             <IconUser width={20} />
           </ListItemIcon>
           <ListItemText>My Profile</ListItemText>
         </MenuItem>
-        <MenuItem onClick={() => setOpenDialog1(true)}>
+        <MenuItem
+          // onClick={() => setOpenDialog1(true)}
+          onClick={() => {
+            console.log("Opening Profile Dialog...");
+            setOpenDialog1(true);
+            setAnchorEl2(null);
+          }}
+        >
           <ListItemIcon>
             <IconMail width={20} />
           </ListItemIcon>
           <ListItemText>Change Password</ListItemText>
         </MenuItem>
         <Box mt={1} py={1} px={2}>
-          <Button onClick={handleOpenLogout} variant="outlined" color="primary" fullWidth>
+          <Button
+            onClick={handleOpenLogout}
+            variant="outlined"
+            color="primary"
+            fullWidth
+          >
             Logout
           </Button>
         </Box>
       </Menu>
       <Logout open={openModal} handleOpen={handleOpenLogout} />
       {/* Profile Dialog */}
-      <Dialog open={openDialog} onClose={handleClose}>
-        {/* Profile Form */}
-      </Dialog>
-      {/* Password Dialog */}
-      <Dialog open={openDialog1} onClose={handleClose1}>
-        {/* Password Change Form */}
-      </Dialog>
+      <ProfileDialog
+        open={openDialog}
+        handleClose={handleClose}
+        profile={profileData}
+        setProfile={setProfileData}
+        onUpdateProfile={onUpdateProfile}
+        isButtonDisabled={isButtonDisabled}
+      />
+
+      <ChangePasswordDialog
+        setForgotPassword={setForgotPassword}
+        open={openDialog1}
+        handleClose={handleClose1}
+        forgotpassword={forgotpassword}
+        onChangePassword={onChangePassword}
+      ></ChangePasswordDialog>
     </Box>
   );
 };

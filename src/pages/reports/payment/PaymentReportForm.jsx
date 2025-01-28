@@ -1,12 +1,11 @@
 import Layout from "../../../layout/Layout";
 import { useState, useEffect } from "react";
 import BASE_URL from "../../../base/BaseUrl";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import axios from "axios";
 import SelectInput from "../../../components/common/SelectField";
 import { useNavigate } from "react-router-dom";
 import { IconInfoCircle } from "@tabler/icons-react";
-import { FormLabel } from "@mui/material";
 import moment from "moment";
 
 function PaymentReportForm() {
@@ -74,7 +73,7 @@ function PaymentReportForm() {
           const url = window.URL.createObjectURL(new Blob([res.data]));
           const link = document.createElement("a");
           link.href = url;
-          link.setAttribute("download", "agencies.csv");
+          link.setAttribute("download", "Payment.csv");
           document.body.appendChild(link);
           link.click();
           toast.success("Payment is Downloaded Successfully");

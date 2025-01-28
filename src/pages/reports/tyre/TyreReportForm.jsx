@@ -1,13 +1,12 @@
 import Layout from "../../../layout/Layout";
 import { useState, useEffect } from "react";
 import BASE_URL from "../../../base/BaseUrl";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import axios from "axios";
 import SelectInput from "../../../components/common/SelectField";
 import { useNavigate } from "react-router-dom";
 import { IconInfoCircle } from "@tabler/icons-react";
 import moment from "moment";
-import { FormLabel } from "@mui/material";
 
 function TyreReportForm() {
   const navigate = useNavigate();
@@ -25,16 +24,6 @@ function TyreReportForm() {
     tyre_branch: "",
     tyre_supplier: "",
   });
-
-  // const onInputChange = (selectedOption, action) => {
-  //   console.log("Selected Option:", selectedOption);
-  //   console.log("Action:", action);
-
-  //   setDownloadTyre((prevState) => ({
-  //     ...prevState,
-  //     [action.name]: selectedOption ? selectedOption.value : "",
-  //   }));
-  // };
 
   const validateOnlyNumber = (inputtxt) => {
     var phoneno = /^\d*\.?\d*$/;
@@ -72,6 +61,12 @@ function TyreReportForm() {
     }
   };
 
+  const onInputChange1 = (e) => {
+    setDownloadTyre({
+      ...downloadTyre,
+      [e.target.name]: e.target.value,
+    });
+  };
   const fetchVendors = async () => {
     try {
       const theLoginToken = localStorage.getItem("token");
@@ -184,7 +179,6 @@ function TyreReportForm() {
     e.preventDefault();
 
     if (v) {
-      setIsButtonDisabled(true);
       axios({
         url: BASE_URL + "/api/download-tyre-details-report",
         method: "POST",
@@ -202,11 +196,9 @@ function TyreReportForm() {
           document.body.appendChild(link);
           link.click();
           toast.success("Report is Downloaded Successfully");
-          setIsButtonDisabled(false);
         })
         .catch((err) => {
           toast.error("Report is Not Downloaded");
-          setIsButtonDisabled(false);
         });
     }
   };
@@ -272,7 +264,7 @@ function TyreReportForm() {
                   type="date"
                   name="tyre_from_date"
                   value={downloadTyre.tyre_from_date}
-                  onChange={onInputChange}
+                  onChange={onInputChange1}
                   className={inputClass}
                   required
                 />
@@ -283,7 +275,7 @@ function TyreReportForm() {
                   type="date"
                   name="tyre_to_date"
                   value={downloadTyre.tyre_to_date}
-                  onChange={onInputChange}
+                  onChange={onInputChange1}
                   className={inputClass}
                   required
                 />
@@ -350,14 +342,13 @@ function TyreReportForm() {
                 isSearchable={true}
               />
               <div>
-                <FormLabel required>No of Tyres</FormLabel>
+                <FormLabel>No of Tyres</FormLabel>
                 <input
                   type="text"
                   name="tyre_count"
                   value={downloadTyre.tyre_count}
                   onChange={(e) => onInputChange(null, e)}
                   className={inputClass}
-                  required
                 />
               </div>
             </div>

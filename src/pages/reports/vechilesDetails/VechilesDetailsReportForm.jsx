@@ -1,7 +1,7 @@
 import Layout from "../../../layout/Layout";
 import { useState, useEffect } from "react";
 import BASE_URL from "../../../base/BaseUrl";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import axios from "axios";
 import SelectInput from "../../../components/common/SelectField";
 import { useNavigate } from "react-router-dom";
@@ -46,39 +46,39 @@ function VechilesDetailsReportForm() {
     VehicleReg();
   }, []);
   //DOWNLOAD
-  const onSubmit = (e) => {
-    e.preventDefault();
-    let data = {
-      vehicle_branch: downloadVehicle.vendor_branch,
-      vehicle_company: downloadVehicle.vehicle_reg_no,
-    };
-    var v = document.getElementById("dowRecp").checkValidity();
-    var v = document.getElementById("dowRecp").reportValidity();
+  // const onSubmit = (e) => {
+  //   e.preventDefault();
+  //   let data = {
+  //     vehicle_branch: downloadVehicle.vendor_branch,
+  //     vehicle_company: downloadVehicle.vehicle_reg_no,
+  //   };
+  //   var v = document.getElementById("dowRecp").checkValidity();
+  //   var v = document.getElementById("dowRecp").reportValidity();
 
-    if (v) {
-      axios({
-        url: BASE_URL + "/api/download-vendor-report",
-        method: "POST",
-        data,
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      })
-        .then((res) => {
-          console.log("data : ", res.data);
-          const url = window.URL.createObjectURL(new Blob([res.data]));
-          const link = document.createElement("a");
-          link.href = url;
-          link.setAttribute("download", "vehicle.csv");
-          document.body.appendChild(link);
-          link.click();
-          toast.success("Vendor is Downloaded Successfully");
-        })
-        .catch((err) => {
-          toast.error("Vendor is Not Downloaded");
-        });
-    }
-  };
+  //   if (v) {
+  //     axios({
+  //       url: BASE_URL + "/api/download-vendor-report",
+  //       method: "POST",
+  //       data,
+  //       headers: {
+  //         Authorization: `Bearer ${localStorage.getItem("token")}`,
+  //       },
+  //     })
+  //       .then((res) => {
+  //         console.log("data : ", res.data);
+  //         const url = window.URL.createObjectURL(new Blob([res.data]));
+  //         const link = document.createElement("a");
+  //         link.href = url;
+  //         link.setAttribute("download", "vehicle.csv");
+  //         document.body.appendChild(link);
+  //         link.click();
+  //         toast.success("Vendor is Downloaded Successfully");
+  //       })
+  //       .catch((err) => {
+  //         toast.error("Vendor is Not Downloaded");
+  //       });
+  //   }
+  // };
   const customStyles = {
     control: (provided) => ({
       ...provided,
@@ -111,9 +111,9 @@ function VechilesDetailsReportForm() {
         <hr />
         <div className="p-4">
           <form id="dowRecp" autoComplete="off">
-            <div className="grid grid-cols-1  gap-4">
+            <div className="grid grid-cols-1  md:grid-cols-2 gap-4">
               <SelectInput
-                label="Vendor Reg No"
+                label="Vehicle Reg No"
                 name="vehicle_reg_no"
                 value={
                   downloadVehicle.vehicle_reg_no
@@ -132,16 +132,15 @@ function VechilesDetailsReportForm() {
                 styles={customStyles}
                 isSearchable={true}
               />
-            </div>
 
-            <div className="flex justify-center py-4">
-              <button
-                className=" text-center text-sm font-[400 ] cursor-pointer hover:animate-pulse w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md ml-4"
-                onClick={handleDetailview}
-              >
-                {" "}
-                View
-              </button>
+              <div className="flex  py-4 mt-2">
+                <button
+                  className=" text-center text-sm font-[400 ] cursor-pointer hover:animate-pulse w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md ml-4"
+                  onClick={handleDetailview}
+                >
+                  View
+                </button>
+              </div>
             </div>
           </form>
         </div>

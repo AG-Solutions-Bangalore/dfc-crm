@@ -12,12 +12,10 @@ import Layout from "../../../layout/Layout";
 import { useReactToPrint } from "react-to-print";
 import SkeletonLoading from "../agencies/SkeletonLoading";
 import { IconFileTypePdf } from "@tabler/icons-react";
-import jsPDF from "jspdf";
-import html2canvas from "html2canvas";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import moment from "moment";
-import { NumericFormat } from "react-number-format";
-
+import pdfMake from "pdfmake/build/pdfmake";
+import pdfFonts from "pdfmake/build/vfs_fonts";
 const printStyles = `
   @media print {
 
@@ -160,46 +158,98 @@ const TripReportMultipleView = () => {
     return <SkeletonLoading />;
   }
   const handleSavePDF = () => {
-    const input = tableRef.current;
+    // Table body structure
+    const tableBody = [
+      [
+        "Company",
+        "Branch",
+        "Reg No",
+        "Driver",
+        "Total Trip",
+        "RT KM",
+        "HSD Supplied",
+      ], // Header row
+      ...trip.map((item) => [
+        item.trip_company || "-",
+        item.trip_branch || "-",
+        item.trip_vehicle || "-",
+        item.trip_driver || "-",
+        item.trip_total || "-",
+        item.trip_km || "-",
+        item.trip_hsd_supplied || "-",
+      ]),
+      [
+        { text: "Total:", colSpan: 4, alignment: "right", bold: true }, // Config for total row
+        "",
+        "",
+        "",
+        trip.length > 0
+          ? trip.reduce((sum, trip) => sum + trip.trip_total, 0)
+          : "-", // Total trip_total or "-"
+        trip.length > 0
+          ? trip.reduce((sum, trip) => sum + trip.trip_km, 0)
+          : "-", // Total trip_km or "-"
+        trip.length > 0
+          ? trip.reduce((sum, trip) => sum + trip.trip_hsd_supplied, 0)
+          : "-",
+      ],
+    ];
 
-    html2canvas(input, { scale: 2 })
-      .then((canvas) => {
-        const imgData = canvas.toDataURL("image/png");
+    const docDefinition = {
+      pageSize: "A4",
+      pageMargins: [10, 10, 10, 40],
+      content: [
+        { text: "Trip Report", style: "header", alignment: "center" },
+        {
+          table: {
+            headerRows: 1,
+            widths: ["16%", "20%", "12%", "24%", "8%", "10%", "10%"],
 
-        const pdf = new jsPDF("p", "mm", "a4");
+            body: tableBody,
+          },
+          layout: {
+            fillColor: (rowIndex) => (rowIndex === 0 ? "#CCCCCC" : null), // Header background color
+            hLineWidth: () => 0.3,
+            vLineWidth: () => 0.3,
+          },
+        },
+      ],
+      styles: {
+        header: {
+          fontSize: 12,
+          bold: true,
+          margin: [0, 0, 0, 10],
+        },
+        footerText: {
+          fontSize: 8,
+        },
+      },
+      defaultStyle: {
+        fontSize: 6,
+      },
+      footer: (currentPage, pageCount) => ({
+        columns: [
+          {
+            text: "DFC",
+            style: "footerText",
+            alignment: "left",
+            margin: [10, 0],
+          },
+          {
+            text: `Page ${currentPage} of ${pageCount}`,
+            style: "footerText",
+            alignment: "right",
+            margin: [0, 0, 10, 0],
+          },
+        ],
+        margin: [10, 0, 10, 10],
+      }),
+    };
+    toast.success("PDF is Downloaded Successfully");
 
-        const pdfWidth = pdf.internal.pageSize.getWidth();
-        const pdfHeight = pdf.internal.pageSize.getHeight();
-
-        const imgWidth = canvas.width;
-        const imgHeight = canvas.height;
-
-        const margin = 10;
-
-        const availableWidth = pdfWidth - 2 * margin;
-
-        const ratio = Math.min(
-          availableWidth / imgWidth,
-          pdfHeight / imgHeight
-        );
-
-        const imgX = margin;
-        const imgY = 0;
-
-        pdf.addImage(
-          imgData,
-          "PNG",
-          imgX,
-          imgY,
-          imgWidth * ratio,
-          imgHeight * ratio
-        );
-        pdf.save("invoice.pdf");
-      })
-      .catch((error) => {
-        console.error("Error generating PDF: ", error);
-      });
+    pdfMake.createPdf(docDefinition).download("trip_report.pdf");
   };
+
   const onSubmit = (e) => {
     e.preventDefault();
     let data = {
@@ -305,19 +355,19 @@ const TripReportMultipleView = () => {
                   <tbody>
                     {trip.map((item, index) => (
                       <tr key={index}>
-                        <td className="text-xs p-1 border border-black">
+                        <td className="text-xs p-1 border border-black px-2">
                           {item.trip_company || "-"}
                         </td>
 
-                        <td className="text-xs p-1 border border-black">
+                        <td className="text-xs p-1 border border-black px-2">
                           {item.trip_branch || "-"}
                         </td>
 
-                        <td className="text-xs p-1 border border-black text-center">
+                        <td className="text-xs p-1 border border-black px-2">
                           {item.trip_vehicle || "-"}
                         </td>
 
-                        <td className="text-xs p-1 border border-black">
+                        <td className="text-xs p-1 border border-black px-2">
                           {item.trip_driver || "-"}
                         </td>
 
@@ -334,6 +384,27 @@ const TripReportMultipleView = () => {
                         </td>
                       </tr>
                     ))}
+
+                    <tr className="bg-gray-100 font-bold">
+                      <td
+                        colSpan={4}
+                        className="p-1 text-xs border border-black text-right"
+                      >
+                        Total:
+                      </td>
+                      <td className="p-1 text-xs border border-black text-center">
+                        {trip.reduce((sum, trip) => sum + trip.trip_total, 0)}
+                      </td>
+                      <td className="p-1 text-xs border border-black text-center">
+                        {trip.reduce((sum, trip) => sum + trip.trip_km, 0)}
+                      </td>
+                      <td className="p-1 text-xs border border-black text-center">
+                        {trip.reduce(
+                          (sum, trip) => sum + trip.trip_hsd_supplied,
+                          0
+                        )}
+                      </td>
+                    </tr>
                   </tbody>
                 </table>
               ) : (

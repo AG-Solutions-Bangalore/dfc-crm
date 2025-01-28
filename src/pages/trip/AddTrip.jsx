@@ -339,7 +339,6 @@ const AddTrip = () => {
     </label>
   );
 
- 
   const inputClass =
     "w-full px-3 py-2 text-xs border rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-500 border-blue-500";
   return (
@@ -403,13 +402,15 @@ const AddTrip = () => {
             </div>
             {/* company  */}
             <div>
-              <FormLabel>Company</FormLabel>
+              <FormLabel required>Company</FormLabel>
               <input
                 type="text"
                 name="trip_company"
                 value={vehiclesOtherData.vehicle_company}
                 onChange={(e) => onInputChange(e)}
-                className={inputClass}
+                className={`${inputClass} cursor-not-allowed opacity-50`}
+                required
+                disabled
               />
             </div>
             {/* Branch  */}
@@ -419,8 +420,9 @@ const AddTrip = () => {
                 type="text"
                 name="trip_branch"
                 value={vehiclesOtherData.vehicle_branch}
-                onChange={(e) => onInputChange(e)}
-                className={inputClass}
+                className={`${inputClass} cursor-not-allowed opacity-50`}
+                required
+                disabled
               />
             </div>
             {/* Vechile Driver  */}
@@ -431,7 +433,9 @@ const AddTrip = () => {
                 name="vehicle_driver"
                 value={vehiclesDriver.vehicle_driver}
                 onChange={(e) => onInputChange(e)}
-                className={inputClass}
+                className={`${inputClass} cursor-not-allowed opacity-50`}
+                required
+                disabled
               />
             </div>
 
@@ -461,7 +465,7 @@ const AddTrip = () => {
             </div>
             {/* Agencies  */}
             <div>
-              <FormLabel>Agencies</FormLabel>
+              <FormLabel required>Agencies</FormLabel>
               <Select
                 name="trip_agency"
                 options={agency.map((option) => ({
@@ -478,6 +482,7 @@ const AddTrip = () => {
                       }
                     : null
                 }
+                required
                 placeholder="Select Agencies"
                 styles={customStyles}
                 isSearchable={true}
@@ -485,24 +490,28 @@ const AddTrip = () => {
             </div>
             {/* RT Km  */}
             <div>
-              <FormLabel>RT KM</FormLabel>
+              <FormLabel required>RT KM</FormLabel>
               <input
                 type="text"
                 name="trip_km"
                 value={agenciesRT.agency_rt_km}
                 onChange={(e) => onInputChange(e)}
-                className={inputClass}
+                className={`${inputClass} cursor-not-allowed opacity-50`}
+                required
+                disabled
               />
             </div>
             {/* Mileage  */}
             <div>
-              <FormLabel>Mileage</FormLabel>
+              <FormLabel required>Mileage</FormLabel>
               <input
                 type="text"
                 name="trip_mileage"
                 value={vehiclesOtherData.vehicle_mileage}
                 onChange={(e) => onInputChange(e)}
-                className={inputClass}
+                className={`${inputClass} cursor-not-allowed opacity-50`}
+                required
+                disabled
               />
             </div>
 
@@ -532,8 +541,8 @@ const AddTrip = () => {
             </div>
 
             {/* Fixed HSD  */}
-            <div >
-              <FormLabel>Fixed HSD</FormLabel>
+            <div>
+              <FormLabel required>Fixed HSD</FormLabel>
               <input
                 type="text"
                 name="trip_hsd"
@@ -543,7 +552,9 @@ const AddTrip = () => {
                   ) || ""
                 }
                 onChange={(e) => onInputChange(e)}
-                className={inputClass}
+                className={`${inputClass} cursor-not-allowed opacity-50`}
+                required
+                disabled
               />
             </div>
             {/* HSD Supplied  */}
@@ -558,7 +569,7 @@ const AddTrip = () => {
               />
             </div>
             {/* Advance  */}
-            <div >
+            <div>
               <FormLabel>Advance</FormLabel>
               <input
                 type="text"
@@ -571,12 +582,13 @@ const AddTrip = () => {
             {/* Remark  */}
             <div className=" col-span-0 lg:col-span-3">
               <FormLabel>Remarks</FormLabel>
-              <input
+              <textarea
                 type="text"
                 name="trip_remarks"
                 value={trip.trip_remarks}
                 onChange={(e) => onInputChange(e)}
                 className={inputClass}
+                rows={3}
               />
             </div>
           </div>

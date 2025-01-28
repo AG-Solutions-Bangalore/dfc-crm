@@ -1,13 +1,12 @@
 import Layout from "../../../layout/Layout";
 import { useState, useEffect } from "react";
 import BASE_URL from "../../../base/BaseUrl";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import axios from "axios";
 import SelectInput from "../../../components/common/SelectField";
 import { useNavigate } from "react-router-dom";
 import { IconInfoCircle } from "@tabler/icons-react";
 import moment from "moment";
-import { FormLabel } from "@mui/material";
 
 function ServiceReportForm() {
   const navigate = useNavigate();
@@ -173,20 +172,33 @@ function ServiceReportForm() {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       })
+        // .then((res) => {
+        //   console.log("data : ", res.data);
+        //   const url = window.URL.createObjectURL(new Blob([res.data]));
+        //   const link = document.createElement("a");
+        //   link.href = url;
+        //   link.setAttribute("download", "servicesDetails.csv");
+        //   document.body.appendChild(link);
+        //   link.click();
+        //   toast.success("servicesDetails is Downloaded Successfully");
+        //   setIsButtonDisabled(false);
+        // })
+        // .catch((err) => {
+        //   toast.error("servicesDetails is Not Downloaded");
+        // });
         .then((res) => {
           console.log("data : ", res.data);
           const url = window.URL.createObjectURL(new Blob([res.data]));
           const link = document.createElement("a");
           link.href = url;
-          link.setAttribute("download", "servicesDetails.csv");
+          link.setAttribute("download", "Services.csv");
           document.body.appendChild(link);
           link.click();
           toast.success("servicesDetails is Downloaded Successfully");
-          setIsButtonDisabled(false);
-        })
+      })
         .catch((err) => {
           toast.error("servicesDetails is Not Downloaded");
-        });
+      });
     }
   };
   const customStyles = {

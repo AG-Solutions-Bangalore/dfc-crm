@@ -12,9 +12,11 @@ import Layout from "../../../layout/Layout";
 import { useReactToPrint } from "react-to-print";
 import SkeletonLoading from "../agencies/SkeletonLoading";
 import { IconFileTypePdf } from "@tabler/icons-react";
-import jsPDF from "jspdf";
-import html2canvas from "html2canvas";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
+import moment from "moment";
+import { NumericFormat } from "react-number-format";
+import pdfMake from "pdfmake/build/pdfmake";
+import pdfFonts from "pdfmake/build/vfs_fonts";
 const printStyles = `
   @media print {
 
@@ -37,7 +39,7 @@ const printStyles = `
 
   }
 `;
-const TeamReportView = () => {
+const ServiceReportView = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [team, setTeam] = useState([]);
@@ -50,7 +52,7 @@ const TeamReportView = () => {
     pageStyle: `
           @page {
               size: A4;
-              margin: 2mm;
+              margin: 4mm;
           }
           @media print {
               body {
@@ -66,16 +68,9 @@ const TeamReportView = () => {
                   border: 1px solid #ddd;
                   padding: 4px;
               }
-              th {
-                  background-color: #f4f4f4;
-              }
-              .text-center {
-                  text-align: center;
-              }
-                  .margin-first{
-                  margin:10px
-                  }
-                  .trademark {
+
+
+.trademark {
   position: fixed;
   bottom: 0;
   width: 100%;
@@ -86,6 +81,16 @@ const TeamReportView = () => {
   color: gray;
 }
 
+              th {
+                  background-color: #f4f4f4;
+              }
+              .text-center {
+                  text-align: center;
+              }
+                  .margin-first{
+                  margin:10px
+                  }
+                  
           }
         `,
   });
@@ -112,7 +117,7 @@ const TeamReportView = () => {
     };
   }, []);
   useEffect(() => {
-    const fetchVehicleData = async () => {
+    const fetchServicesData = async () => {
       setLoading(true);
       try {
         const token = localStorage.getItem("token");
@@ -137,53 +142,103 @@ const TeamReportView = () => {
       }
     };
 
-    fetchVehicleData();
+    fetchServicesData();
   }, []);
 
   if (loading) {
     return <SkeletonLoading />;
   }
   const handleSavePDF = () => {
-    const input = tableRef.current;
+    const tableBody = [
+      [
+        "Full Name",
+        "Branch	",
+        "Company",
+        "Mobile",
+        "Email",
+        "Address",
+        "Salary",
+        "User Type",
+        "Status",
+      ],
+      ...team.map((item) => [
+        item.full_name || "-",
+        item.user_branch || "-",
+        item.user_company || "-",
+        item.mobile || "-",
+        item.email || "-",
+        item.user_address || "-",
+        item.user_salary
+          ? `₹${Number(item.user_salary).toLocaleString("en-IN", {
+              maximumFractionDigits: 2,
+            })}`
+          : "-",
+        item.user_type_id || "-",
+        item.user_status || "-",
+      ]),
+    ];
 
-    html2canvas(input, { scale: 2 })
-      .then((canvas) => {
-        const imgData = canvas.toDataURL("image/png");
+    const docDefinition = {
+      pageSize: "A4",
+      pageMargins: [10, 10, 10, 10],
+      content: [
+        { text: "TEAM SUMMARY", style: "header", alignment: "center" },
+        {
+          table: {
+            headerRows: 1,
+            widths: [
+              "auto",
+              "auto",
+              "auto",
+              "auto",
+              "auto",
+              "auto",
+              "10%",
+              "auto",
+              "10%",
+            ], // Adjust column widths
+            body: tableBody,
+          },
+          layout: {
+            fillColor: (rowIndex) => (rowIndex === 0 ? "#CCCCCC" : null), // Header background color
+            hLineWidth: () => 0.3,
+            vLineWidth: () => 0.3,
+          },
+        },
+      ],
+      styles: {
+        header: {
+          fontSize: 12,
+          bold: true,
+          margin: [0, 0, 0, 10],
+        },
+      },
+      defaultStyle: {
+        fontSize: 8,
+      },
+      footer: (currentPage, pageCount) => ({
+        columns: [
+          {
+            text: "DFC",
+            style: "footerText",
+            alignment: "left",
+            margin: [10, 0],
+          },
+          {
+            text: new Date().toLocaleDateString("en-GB"),
+            style: "footerText",
+            alignment: "right",
+            margin: [0, 0, 10, 0],
+          },
+        ],
+        margin: [10, 0, 10, 10],
+      }),
+    };
+    toast.success("PDF Report is Downloaded Successfully");
 
-        const pdf = new jsPDF("p", "mm", "a4");
-
-        const pdfWidth = pdf.internal.pageSize.getWidth();
-        const pdfHeight = pdf.internal.pageSize.getHeight();
-
-        const imgWidth = canvas.width;
-        const imgHeight = canvas.height;
-
-        const margin = 10;
-
-        const availableWidth = pdfWidth - 2 * margin;
-
-        const ratio = Math.min(
-          availableWidth / imgWidth,
-          pdfHeight / imgHeight
-        );
-
-        const imgX = margin;
-        const imgY = 0;
-
-        pdf.addImage(
-          imgData,
-          "PNG",
-          imgX,
-          imgY,
-          imgWidth * ratio,
-          imgHeight * ratio
-        );
-        pdf.save("invoice.pdf");
-      })
-      .catch((error) => {
-        console.error("Error generating PDF: ", error);
-      });
+    pdfMake.createPdf(docDefinition).download("Team_report.pdf");
   };
+
   const onSubmit = (e) => {
     e.preventDefault();
     let data = {
@@ -204,13 +259,13 @@ const TeamReportView = () => {
         const url = window.URL.createObjectURL(new Blob([res.data]));
         const link = document.createElement("a");
         link.href = url;
-        link.setAttribute("download", "Report.csv");
+        link.setAttribute("download", "team.csv");
         document.body.appendChild(link);
         link.click();
-        toast.success("Team Report is Downloaded Successfully");
+        toast.success("Team is Downloaded Successfully");
       })
       .catch((err) => {
-        toast.error("Team Report is Not Downloaded");
+        toast.error("Team is Not Downloaded");
       });
   };
   return (
@@ -261,7 +316,7 @@ const TeamReportView = () => {
                     <tr className="bg-gray-200">
                       {[
                         "Full Name",
-                        "Branch",
+                        "Branch	",
                         "Company",
                         "Mobile",
                         "Email",
@@ -282,31 +337,38 @@ const TeamReportView = () => {
                   <tbody>
                     {team.map((item, index) => (
                       <tr key={index}>
-                        <td className="p-1 text-xs  border border-black">
+                        <td className="p-1 text-xs border border-black text-start px-2">
                           {item.full_name || "-"}
                         </td>
-                        <td className="p-1 text-xs  border border-black">
+                        <td className="p-1 text-xs border border-black text-start px-2">
                           {item.user_branch || "-"}
                         </td>
-                        <td className="p-1 text-xs  border border-black">
+                        <td className="p-1 text-xs border border-black px-2">
                           {item.user_company || "-"}
                         </td>
-                        <td className="p-1 text-xs  border border-black text-center">
+                        <td className="p-1 text-xs border border-black px-2">
                           {item.mobile || "-"}
                         </td>
-                        <td className="p-1 text-xs  border border-black">
+                        <td className="p-1 text-xs border border-black px-2">
                           {item.email || "-"}
                         </td>
-                        <td className="p-1 text-xs  border border-black">
+                        <td className="p-1 text-xs border border-black px-2">
                           {item.user_address || "-"}
                         </td>
-                        <td className="p-1 text-xs  border border-black text-center">
-                          {item.user_salary || "-"}
+
+                        <td className="p-1 text-xs border border-black text-center">
+                          <NumericFormat
+                            value={item.user_salary}
+                            displayType="text"
+                            thousandSeparator={true}
+                            prefix="₹"
+                            thousandsGroupStyle="lakh"
+                          />
                         </td>
-                        <td className="p-1 text-xs  border border-black">
+                        <td className="p-1 text-xs border border-black text-start px-2">
                           {item.user_type_id || "-"}
                         </td>
-                        <td className="p-1 text-xs  border border-black">
+                        <td className="p-1 text-xs border border-black text-start px-2">
                           {item.user_status || "-"}
                         </td>
                       </tr>
@@ -315,7 +377,7 @@ const TeamReportView = () => {
                 </table>
               ) : (
                 <div className="text-center text-gray-500 py-4">
-                  No Team Data Available
+                  No Servive Data Available
                 </div>
               )}
             </div>
@@ -334,4 +396,4 @@ const TeamReportView = () => {
   );
 };
 
-export default TeamReportView;
+export default ServiceReportView;

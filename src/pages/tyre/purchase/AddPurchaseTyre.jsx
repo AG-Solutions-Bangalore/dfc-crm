@@ -40,7 +40,7 @@ const AddPurchaseTyre = () => {
   });
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const [fabric_inward_count, setCount] = useState(1);
-  const useTemplate = {tyre_sub_no:"", tyre_sub_type:"", tyre_sub_make:""};
+  const useTemplate = { tyre_sub_no: "", tyre_sub_type: "", tyre_sub_make: "" };
 
   const [users, setUsers] = useState([useTemplate]);
   const [loading, setLoading] = useState(false);
@@ -379,12 +379,14 @@ const AddPurchaseTyre = () => {
             {/* Remark  */}
             <div className=" col-span-0 lg:col-span-3">
               <FormLabel>Remarks</FormLabel>
-              <input
+              <textarea
                 type="text"
                 name="tyre_remarks"
                 value={tyre.tyre_remarks}
                 onChange={(e) => onInputChange(e)}
                 className={inputClass}
+                rows={3}
+                aria-multiline
               />
             </div>
           </div>
@@ -442,24 +444,22 @@ const AddPurchaseTyre = () => {
                   ))}
                 </select>
               </div>
-             <div>
-             <IconTrash
-                onClick={() => removeUser(index)}
-                className="cursor-pointer  translate-y-0 lg:translate-y-7  hover:text-red-600"
-              />
-             </div>
+              <div>
+                <IconTrash
+                  onClick={() => removeUser(index)}
+                  className="cursor-pointer  translate-y-0 lg:translate-y-7  hover:text-red-600"
+                />
+              </div>
             </div>
           ))}
-         <div>
-         <Button
-            className="text-center text-sm font-[400] cursor-pointer   flex items-center gap-1  text-white bg-blue-600 hover:bg-red-700 p-2 rounded-lg shadow-md"
-            onClick={(e) => addItem(e)}
-           >
-            <IconPlus
-              className="w-5 h-5"
-              /> Add More
-              </Button>
-         </div>
+          <div>
+            <Button
+              className="text-center text-sm font-[400] cursor-pointer   flex items-center gap-1  text-white bg-blue-600 hover:bg-red-700 p-2 rounded-lg shadow-md"
+              onClick={(e) => addItem(e)}
+            >
+              <IconPlus className="w-5 h-5" /> Add More
+            </Button>
+          </div>
           {/* Form Actions */}
           <div className="flex flex-wrap gap-4 justify-start">
             <button

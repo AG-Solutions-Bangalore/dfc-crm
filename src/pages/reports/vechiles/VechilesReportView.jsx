@@ -12,10 +12,10 @@ import Layout from "../../../layout/Layout";
 import { useReactToPrint } from "react-to-print";
 import SkeletonLoading from "../agencies/SkeletonLoading";
 import { IconFileTypePdf } from "@tabler/icons-react";
-import jsPDF from "jspdf";
-import html2canvas from "html2canvas";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import moment from "moment";
+import pdfMake from "pdfmake/build/pdfmake";
+import pdfFonts from "pdfmake/build/vfs_fonts";
 const printStyles = `
   @media print {
 
@@ -51,13 +51,13 @@ const VechilesReportView = () => {
     pageStyle: `
           @page {
               size: A4;
-              margin: 2mm;
+              margin: 5mm;
+              
           }
           @media print {
               body {
                   margin: 0;
                   font-size: 12px; 
-                  border: 1px solid #000;
                   min-height:100vh
               }
               table {
@@ -77,6 +77,18 @@ const VechilesReportView = () => {
                   .margin-first{
                   margin:10px
                   }
+                  .trademark {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  // padding: 0 10mm;
+  font-size: 8px;
+  color: gray;
+  margin-top:2mm
+}
+
           }
         `,
   });
@@ -135,45 +147,96 @@ const VechilesReportView = () => {
     return <SkeletonLoading />;
   }
   const handleSavePDF = () => {
-    const input = tableRef.current;
+    const tableBody = [
+      [
+        "Register No",
+        "Vendor Type",
+        "Company",
+        "Branch",
+        "Modal Year",
+        "Insurance Due",
+        "Permit Due",
+        "FC Due",
+      ], // Header row
+      ...vechiles.map((item) => [
+        item.reg_no || "-",
+        item.vehicle_type || "-",
+        item.vehicle_company || "-",
+        item.vehicle_branch || "-",
+        item.mfg_year || "-",
+        item.ins_due == null
+          ? ""
+          : moment(item.ins_due).format("DD-MM-YYYY") || "-",
+        item.permit_due == null
+          ? ""
+          : moment(item.permit_due).format("DD-MM-YYYY") || "-",
+        item.fc_due == null
+          ? ""
+          : moment(item.fc_due).format("DD-MM-YYYY") || "-",
+      ]),
+    ];
 
-    html2canvas(input, { scale: 2 })
-      .then((canvas) => {
-        const imgData = canvas.toDataURL("image/png");
+    const docDefinition = {
+      pageSize: "A4",
+      pageMargins: [10, 10, 10, 10],
+      content: [
+        { text: "VEHICLE SUMMARY", style: "header", alignment: "center" },
+        {
+          table: {
+            headerRows: 1,
+            widths: [
+              "15%",
+              "15%",
+              "10%",
+              "20%",
+              "10%",
+              "10%",
+              "10%",
+              "10%",
+              // "auto",
+              // "auto",
+              // "auto",
+            ],
+            body: tableBody,
+          },
+          layout: {
+            fillColor: (rowIndex) => (rowIndex === 0 ? "#CCCCCC" : null), // Header background
+            hLineWidth: () => 0.3,
+            vLineWidth: () => 0.3,
+          },
+        },
+      ],
+      styles: {
+        header: {
+          fontSize: 12,
+          bold: true,
+          margin: [0, 0, 0, 10],
+        },
+      },
+      defaultStyle: {
+        fontSize: 8,
+      },
+      footer: (currentPage, pageCount) => ({
+        columns: [
+          {
+            text: "DFC",
+            style: "footerText",
+            alignment: "left",
+            margin: [10, 0],
+          },
+          {
+            text: new Date().toLocaleDateString("en-GB"),
+            style: "footerText",
+            alignment: "right",
+            margin: [0, 0, 10, 0],
+          },
+        ],
+        margin: [10, 0, 10, 10],
+      }),
+    };
+    toast.success("PDF is Downloaded Successfully");
 
-        const pdf = new jsPDF("p", "mm", "a4");
-
-        const pdfWidth = pdf.internal.pageSize.getWidth();
-        const pdfHeight = pdf.internal.pageSize.getHeight();
-
-        const imgWidth = canvas.width;
-        const imgHeight = canvas.height;
-
-        const margin = 10;
-
-        const availableWidth = pdfWidth - 2 * margin;
-
-        const ratio = Math.min(
-          availableWidth / imgWidth,
-          pdfHeight / imgHeight
-        );
-
-        const imgX = margin;
-        const imgY = 0;
-
-        pdf.addImage(
-          imgData,
-          "PNG",
-          imgX,
-          imgY,
-          imgWidth * ratio,
-          imgHeight * ratio
-        );
-        pdf.save("invoice.pdf");
-      })
-      .catch((error) => {
-        console.error("Error generating PDF: ", error);
-      });
+    pdfMake.createPdf(docDefinition).download("vehicles_report.pdf");
   };
   const onSubmit = (e) => {
     e.preventDefault();
@@ -195,7 +258,7 @@ const VechilesReportView = () => {
         const url = window.URL.createObjectURL(new Blob([res.data]));
         const link = document.createElement("a");
         link.href = url;
-        link.setAttribute("download", "vehicle.csv");
+        link.setAttribute("download", "vehicles.csv");
         document.body.appendChild(link);
         link.click();
         toast.success("vehicle Report is Downloaded Successfully");
@@ -211,7 +274,7 @@ const VechilesReportView = () => {
           <h2 className="px-5 text-[black] text-lg flex flex-row justify-between items-center rounded-xl p-2">
             <div className="flex items-center gap-2">
               <IconInfoCircle className="w-4 h-4" />
-              <span> Vehicle Summary</span>
+              <span> Vehicles Summary</span>
             </div>
             <div className="flex items-center space-x-4">
               <IconFileTypeXls
@@ -272,38 +335,37 @@ const VechilesReportView = () => {
                   <tbody>
                     {vechiles.map((item, index) => (
                       <tr key={index}>
-                        <td className="p-1 text-xs border border-black text-center">
-                          {item.reg_no || "N/A"}
+                        <td className="p-1 text-xs border border-black text-center px-2">
+                          {item.reg_no || "-"}
                         </td>
-                        <td className="p-1 text-xs border border-black">
-                          {item.vehicle_type || "N/A"}
+                        <td className="p-1 text-xs border border-black px-2">
+                          {item.vehicle_type || "-"}
                         </td>
-                        <td className="p-1 text-xs border border-black">
-                          {item.vehicle_company || "N/A"}
+                        <td className="p-1 text-xs border border-black px-2">
+                          {item.vehicle_company || "-"}
                         </td>
-                        <td className="p-1 text-xs border border-black">
-                          {item.vehicle_branch || "N/A"}
+                        <td className="p-1 text-xs border border-black px-2">
+                          {item.vehicle_branch || "-"}
                         </td>
-                        <td className="p-1 text-xs border border-black text-center">
-                          {item.mfg_year || "N/A"}
+                        <td className="p-1 text-xs border border-black text-center px-2">
+                          {item.mfg_year || "-"}
                         </td>
 
-                        <td className="p-1 text-xs border border-black text-center">
+                        <td className="p-1 text-xs border border-black text-center px-2">
                           {item.ins_due == null
                             ? ""
-                            : moment(item.ins_due).format("DD-MM-YYYY") ||
-                              "N/A"}
+                            : moment(item.ins_due).format("DD-MM-YYYY") || "-"}
                         </td>
-                        <td className="p-1 text-xs border border-black text-center">
+                        <td className="p-1 text-xs border border-black text-center px-2">
                           {item.permit_due == null
                             ? ""
                             : moment(item.permit_due).format("DD-MM-YYYY") ||
-                              "N/A"}
+                              "-"}
                         </td>
-                        <td className="p-1 text-xs border border-black text-center">
+                        <td className="p-1 text-xs border border-black text-center px-2">
                           {item.fc_due == null
                             ? ""
-                            : moment(item.fc_due).format("DD-MM-YYYY") || "N/A"}
+                            : moment(item.fc_due).format("DD-MM-YYYY") || "-"}
                         </td>
                       </tr>
                     ))}
@@ -311,9 +373,17 @@ const VechilesReportView = () => {
                 </table>
               ) : (
                 <div className="text-center text-gray-500 py-4">
-                  No Tyre Data Available
+                  No Vehicle Data Available
                 </div>
               )}
+            </div>
+            <div className="hidden print:block">
+              <div className="trademark flex justify-between items-center mt-4 ">
+                <h2 className="text-xs font-medium px-1">DFC</h2>
+                <h2 className="text-xs font-medium px-5">
+                  {new Date().toLocaleDateString("en-GB")}{" "}
+                </h2>
+              </div>
             </div>
           </div>
         </div>

@@ -148,15 +148,16 @@ const CompanyEdit = () => {
         >
           <div className="grid grid-cols-1  md:grid-cols-1 lg:grid-cols-4   gap-6">
             {/* Company Short  */}
-            <div className="col-span-0 lg:col-span-2">
+            <div className="col-span-0 lg:col-span-2 ">
               <FormLabel required>Company Short</FormLabel>
               <input
                 type="text"
                 name="company_short"
                 value={company.company_short}
                 onChange={(e) => onInputChange(e)}
-                className={inputClass}
+                className={`${inputClass} cursor-not-allowed opacity-50`}
                 required
+                disabled
               />
             </div>
             {/* Company Name  */}
@@ -174,13 +175,15 @@ const CompanyEdit = () => {
             {/* Company Address  */}
             <div className="col-span-0 lg:col-span-3">
               <FormLabel required>Company Address</FormLabel>
-              <input
+              <textarea
                 type="text"
                 name="company_address"
                 value={company.company_address}
                 onChange={(e) => onInputChange(e)}
                 className={inputClass}
                 required
+                rows={3}
+                aria-multiline
               />
             </div>
 
@@ -260,7 +263,7 @@ const CompanyEdit = () => {
               className="text-center text-sm font-[400] cursor-pointer  w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md"
               disabled={isButtonDisabled}
             >
-              {isButtonDisabled ? "Sumbitting..." : "Sumbit"}
+              {isButtonDisabled ? "Updating..." : "Update"}
             </button>
 
             <button

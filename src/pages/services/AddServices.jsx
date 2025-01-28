@@ -13,6 +13,7 @@ import Select from "react-select";
 import moment from "moment";
 import { Button } from "@material-tailwind/react";
 import { toast } from "sonner";
+import { Opacity } from "@mui/icons-material";
 
 const AddServices = () => {
   const today = new Date();
@@ -180,7 +181,6 @@ const AddServices = () => {
     fetchGarage();
   }, [vehiclesOtherData.vehicle_branch]);
 
- 
   useEffect(() => {
     fetchServiceType();
   }, []);
@@ -378,7 +378,7 @@ const AddServices = () => {
             {/* vechile no  */}
 
             <div>
-              <FormLabel>Vechile No</FormLabel>
+              <FormLabel required>Vechile No</FormLabel>
               <Select
                 name="service_truck_no"
                 options={vehicles.map((option) => ({
@@ -386,6 +386,7 @@ const AddServices = () => {
                   label: option.reg_no,
                   name: "service_truck_no",
                 }))}
+                required
                 onChange={(e) => onInputChange(e)}
                 value={
                   service.service_truck_no
@@ -408,7 +409,7 @@ const AddServices = () => {
                 name="service_company"
                 value={vehiclesOtherData.vehicle_company}
                 onChange={(e) => onInputChange(e)}
-                className={inputClass}
+                className={`${inputClass} opacity-50 cursor-not-allowed`}
                 required
                 disabled
               />
@@ -421,7 +422,7 @@ const AddServices = () => {
                 name="service_branch"
                 value={vehiclesOtherData.vehicle_branch}
                 onChange={(e) => onInputChange(e)}
-                className={inputClass}
+                className={`${inputClass} opacity-50 cursor-not-allowed`}
                 required
                 disabled
               />

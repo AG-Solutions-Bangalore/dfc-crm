@@ -710,7 +710,7 @@ const AddTyre = () => {
                 name="vehicle_company"
                 value={vehicles.vehicle_company}
                 onChange={(e) => onInputChange(e)}
-                className={inputClass}
+                className={`${inputClass} cursor-not-allowed opacity-50`}
                 required
                 disabled
               />
@@ -724,7 +724,7 @@ const AddTyre = () => {
                 name="vehicle_agency_short"
                 value={vehicles.vehicle_agency_short}
                 onChange={(e) => onInputChange(e)}
-                className={inputClass}
+                className={`${inputClass} cursor-not-allowed opacity-50`}
                 disabled
               />
             </div>
@@ -738,7 +738,7 @@ const AddTyre = () => {
                 name="vehicle_type"
                 value={vehicles.vehicle_type}
                 onChange={(e) => onInputChange(e)}
-                className={inputClass}
+                className={`${inputClass} cursor-not-allowed opacity-50`}
                 required
                 disabled
               />
@@ -752,7 +752,7 @@ const AddTyre = () => {
                 name="vehicle_branch"
                 value={vehicles.vehicle_branch}
                 onChange={(e) => onInputChange(e)}
-                className={inputClass}
+                className={`${inputClass} cursor-not-allowed opacity-50`}
                 required
                 disabled
               />
@@ -766,7 +766,7 @@ const AddTyre = () => {
                 name="vehicle_driver"
                 value={vehicles.vehicle_driver}
                 onChange={(e) => onInputChange(e)}
-                className={inputClass}
+                className={`${inputClass} cursor-not-allowed opacity-50`}
                 disabled
               />
             </div>
@@ -778,7 +778,7 @@ const AddTyre = () => {
                 name="mfg_year"
                 value={vehicles.mfg_year}
                 onChange={(e) => onInputChange(e)}
-                className={inputClass}
+                className={`${inputClass} cursor-not-allowed opacity-50`}
                 required
                 disabled
               />
@@ -791,7 +791,7 @@ const AddTyre = () => {
                 name="vehicle_hsd"
                 value={vehicles.vehicle_hsd}
                 onChange={(e) => onInputChange(e)}
-                className={inputClass}
+                className={`${inputClass} cursor-not-allowed opacity-50`}
                 disabled
               />
             </div>
@@ -803,7 +803,7 @@ const AddTyre = () => {
                 name="vehicle_open_km"
                 value={vehicles.vehicle_open_km}
                 onChange={(e) => onInputChange(e)}
-                className={inputClass}
+                className={`${inputClass} cursor-not-allowed opacity-50`}
                 required
                 disabled
               />
@@ -817,7 +817,7 @@ const AddTyre = () => {
                 name="ins_due"
                 value={vehicles.ins_due}
                 onChange={(e) => onInputChange(e)}
-                className={inputClass}
+                className={`${inputClass} cursor-not-allowed opacity-50`}
                 disabled
               />
             </div>
@@ -841,7 +841,7 @@ const AddTyre = () => {
                 name="fc_due"
                 value={vehicles.fc_due}
                 onChange={(e) => onInputChange(e)}
-                className={inputClass}
+                className={`${inputClass} cursor-not-allowed opacity-50`}
                 disabled
               />
             </div>
@@ -854,7 +854,7 @@ const AddTyre = () => {
                 name="no_of_gas_cylinder"
                 value={vehicles.no_of_gas_cylinder}
                 onChange={(e) => onInputChange(e)}
-                className={inputClass}
+                className={`${inputClass} cursor-not-allowed opacity-50`}
                 disabled
               />
             </div>

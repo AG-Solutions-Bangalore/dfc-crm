@@ -177,7 +177,7 @@ const CreateVendor = () => {
               <span>Add Vendor </span>
             </div>
             <IconArrowBack
-              onClick={() => navigate("/master/agencies-list")}
+              onClick={() => navigate("/master/vendor-list")}
               className="cursor-pointer hover:text-red-600"
             />
           </h2>
@@ -188,9 +188,8 @@ const CreateVendor = () => {
           id="addIndiv"
           className="w-full max-w-7xl  rounded-lg mx-auto p-4 space-y-6 "
         >
-          <div className="grid grid-cols-1  md:grid-cols-1 lg:grid-cols-4   gap-6">
-            {/* Vendor  */}
-            <div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 ">
+            <div className="md:col-span-2">
               <FormLabel required>Vendor</FormLabel>
               <input
                 type="text"
@@ -220,6 +219,10 @@ const CreateVendor = () => {
                 ))}
               </select>
             </div>
+          </div>
+          <div className="grid grid-cols-1  md:grid-cols-1 lg:grid-cols-3   gap-6">
+            {/* Vendor  */}
+
             {/* Vendor Type  */}
             <div>
               <FormLabel required>Vendor Type</FormLabel>
@@ -247,86 +250,80 @@ const CreateVendor = () => {
 
             {/* Contact Person  */}
             <div>
-              <FormLabel required>Contact Person</FormLabel>
+              <FormLabel>Contact Person</FormLabel>
               <input
                 type="text"
                 name="vendor_contact_person"
                 value={vendor.vendor_contact_person}
                 onChange={(e) => onInputChange(e)}
                 className={inputClass}
-                required
               />
             </div>
-       
+
             {/*  Mobile  */}
             <div>
-              <FormLabel required> Mobile</FormLabel>
+              <FormLabel> Mobile</FormLabel>
               <input
                 type="tel"
                 name="vendor_mobile"
                 value={vendor.vendor_mobile}
                 onChange={(e) => onInputChange(e)}
                 className={inputClass}
-                required
+                maxLength={10}
               />
             </div>
             {/* Contact Email  */}
             <div>
-              <FormLabel required>Contact Email</FormLabel>
+              <FormLabel>Contact Email</FormLabel>
               <input
                 type="email"
                 name="vendor_email"
                 value={vendor.vendor_email}
                 onChange={(e) => onInputChange(e)}
                 className={inputClass}
-                required
               />
             </div>
 
-           
-
             {/* Gst  */}
             <div>
-              <FormLabel required>Gst</FormLabel>
+              <FormLabel>GST</FormLabel>
               <input
                 type="text"
                 name="vendor_gst"
                 value={vendor.vendor_gst}
                 onChange={(e) => onInputChange(e)}
                 className={inputClass}
-                required
+                maxLength={15}
               />
             </div>
 
             {/* Pan No  */}
             <div>
-              <FormLabel required>PAN No</FormLabel>
+              <FormLabel>PAN No</FormLabel>
               <input
                 type="text"
                 name="vendor_pan"
                 value={vendor.vendor_pan}
                 onChange={(e) => onInputChange(e)}
                 className={inputClass}
-                required
+                maxLength={10}
               />
             </div>
 
             {/* Address  */}
-            <div className="col-span-0 lg:col-span-4">
-              <FormLabel required>Address</FormLabel>
-              <input
-                type="text"
-                name="vendor_address"
-                value={vendor.vendor_address}
-                onChange={(e) => onInputChange(e)}
-                className={inputClass}
-                required
-              />
-            </div>
-
-           
           </div>
-
+          <div className="grid grid-cols-1">
+            <FormLabel>Address</FormLabel>
+            <textarea
+              type="text"
+              name="vendor_address"
+              value={vendor.vendor_address}
+              onChange={(e) => onInputChange(e)}
+              className={inputClass}
+              required
+              rows={3}
+            />
+          </div>
           {/* Form Actions */}
           <div className="flex flex-wrap gap-4 justify-start">
             <button
@@ -341,7 +338,7 @@ const CreateVendor = () => {
               type="button"
               className="text-center text-sm font-[400] cursor-pointer  w-36 text-white bg-red-600 hover:bg-red-400 p-2 rounded-lg shadow-md"
               onClick={() => {
-                navigate("/master/agencies-list");
+                navigate("/master/vendor-list");
               }}
             >
               Back

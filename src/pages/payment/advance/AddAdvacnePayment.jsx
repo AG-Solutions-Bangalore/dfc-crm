@@ -177,8 +177,9 @@ const AddAdvacnePayment = () => {
       payment_details_amount: payment.payment_details_amount,
       payment_details_credit: payment.payment_details_credit,
       payment_details_transaction: payment.payment_details_transaction,
+      payment_details_narration: payment.payment_details_narration,
     };
-
+    console.log(data);
     setIsButtonDisabled(true);
     axios({
       url: BASE_URL + "/api/web-create-payment-details",
@@ -270,7 +271,7 @@ const AddAdvacnePayment = () => {
 
             {/* debit  */}
             <div>
-              <FormLabel>Debit</FormLabel>
+              <FormLabel required>Debit</FormLabel>
               <Select
                 name="payment_details_debit"
                 options={debitData.map((option) => ({
@@ -280,18 +281,18 @@ const AddAdvacnePayment = () => {
                 }))}
                 onChange={(e) => onInputChange(e)}
                 value={
-                    payment.payment_details_debit 
-                      ? { 
-                          value: payment.payment_details_debit, 
-                          label: payment.payment_details_debit 
-                        } 
-                      : null
-                  }
+                  payment.payment_details_debit
+                    ? {
+                        value: payment.payment_details_debit,
+                        label: payment.payment_details_debit,
+                      }
+                    : null
+                }
+                required
                 placeholder="Select Debit"
                 styles={customStyles}
                 isSearchable={true}
               />
-              
             </div>
             {/* amount  */}
             <div>
@@ -344,27 +345,30 @@ const AddAdvacnePayment = () => {
               </select>
             </div>
             {/* Transaction details  */}
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <FormLabel >Transaction Details</FormLabel>
-              <input
+              <FormLabel>Transaction Details</FormLabel>
+              <textarea
                 type="text"
                 name="payment_details_transaction"
                 value={payment.payment_details_transaction}
                 onChange={(e) => onInputChange(e)}
                 className={inputClass}
-                
+                rows={3}
               />
             </div>
             {/* narration details  */}
             <div>
-              <FormLabel >Narration Details</FormLabel>
-              <input
+              <FormLabel>Narration Details</FormLabel>
+              <textarea
                 type="text"
                 name="payment_details_narration"
                 value={payment.payment_details_narration}
                 onChange={(e) => onInputChange(e)}
                 className={inputClass}
-                
+                rows={3}
               />
             </div>
           </div>

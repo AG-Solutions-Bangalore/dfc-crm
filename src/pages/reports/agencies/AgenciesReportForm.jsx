@@ -1,7 +1,7 @@
 import Layout from "../../../layout/Layout";
 import { useState, useEffect } from "react";
 import BASE_URL from "../../../base/BaseUrl";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import axios from "axios";
 import SelectInput from "../../../components/common/SelectField";
 import { useNavigate } from "react-router-dom";
@@ -104,44 +104,46 @@ function AgenciesReportForm() {
         <hr />
         <div className="p-4">
           <form id="dowRecp" autoComplete="off">
-            <div className="grid grid-cols-1  gap-4">
-              <SelectInput
-                label="Branch"
-                name="agency_branch"
-                value={
-                  downloadAgencies.agency_branch
-                    ? {
-                        value: downloadAgencies.agency_branch,
-                        label: downloadAgencies.agency_branch,
-                      }
-                    : null
-                }
-                options={agencies.map((item) => ({
-                  value: item.branch_name,
-                  label: item.branch_name,
-                }))}
-                onChange={onInputChange}
-                placeholder="Select Branch"
-                styles={customStyles}
-                isSearchable={true}
-              />
-            </div>
+            <div className="grid grid-cols-1 md:grid-cols-4  gap-4">
+              <div className="col-span-2">
+                <SelectInput
+                  label="Branch"
+                  name="agency_branch"
+                  value={
+                    downloadAgencies.agency_branch
+                      ? {
+                          value: downloadAgencies.agency_branch,
+                          label: downloadAgencies.agency_branch,
+                        }
+                      : null
+                  }
+                  options={agencies.map((item) => ({
+                    value: item.branch_name,
+                    label: item.branch_name,
+                  }))}
+                  onChange={onInputChange}
+                  placeholder="Select Branch"
+                  styles={customStyles}
+                  isSearchable={true}
+                />
+              </div>
 
-            <div className="flex justify-center py-4">
-              <button
-                className=" text-center text-sm font-[400 ] cursor-pointer hover:animate-pulse w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md"
-                onClick={onSubmit}
-              >
-                {" "}
-                Download
-              </button>
-              <button
-                className=" text-center text-sm font-[400 ] cursor-pointer hover:animate-pulse w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md ml-4"
-                onClick={handleview}
-              >
-                {" "}
-                View
-              </button>
+              <div className="flex justify-center py-4">
+                <button
+                  className=" text-center text-sm font-[400 ] cursor-pointer hover:animate-pulse w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md"
+                  onClick={onSubmit}
+                >
+                  {" "}
+                  Download
+                </button>
+                <button
+                  className=" text-center text-sm font-[400 ] cursor-pointer hover:animate-pulse w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md ml-4"
+                  onClick={handleview}
+                >
+                  {" "}
+                  View
+                </button>
+              </div>
             </div>
           </form>
         </div>

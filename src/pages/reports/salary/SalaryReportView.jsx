@@ -12,11 +12,11 @@ import Layout from "../../../layout/Layout";
 import { useReactToPrint } from "react-to-print";
 import SkeletonLoading from "../agencies/SkeletonLoading";
 import { IconFileTypePdf } from "@tabler/icons-react";
-import jsPDF from "jspdf";
-import html2canvas from "html2canvas";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import moment from "moment";
 import { NumericFormat } from "react-number-format";
+import html2pdf from "html2pdf.js";
+
 const printStyles = `
   @media print {
 
@@ -126,7 +126,8 @@ const SalaryReportView = () => {
         }
       });
     };
-
+  const todayback = moment().format("DD-MMM-YYYY");
+  const currentMonth = moment().month() + 1;
   useEffect(() => {
     const styleSheet = document.createElement("style");
     styleSheet.type = "text/css";
@@ -190,47 +191,25 @@ const SalaryReportView = () => {
   if (loading) {
     return <SkeletonLoading />;
   }
-  const handleSavePDF = () => {
-    const input = tableRef.current;
+  const handleSavePDF = async () => {
+    const element = componentRef.current;
+    const opt = {
+      margin: 0.2,
+      filename: "salary-report.pdf",
+      image: { type: "jpeg", quality: 0.98 },
+      html2canvas: { scale: 2, width: 800 },
+      jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
+    };
 
-    html2canvas(input, { scale: 2 })
-      .then((canvas) => {
-        const imgData = canvas.toDataURL("image/png");
-
-        const pdf = new jsPDF("p", "mm", "a4");
-
-        const pdfWidth = pdf.internal.pageSize.getWidth();
-        const pdfHeight = pdf.internal.pageSize.getHeight();
-
-        const imgWidth = canvas.width;
-        const imgHeight = canvas.height;
-
-        const margin = 10;
-
-        const availableWidth = pdfWidth - 2 * margin;
-
-        const ratio = Math.min(
-          availableWidth / imgWidth,
-          pdfHeight / imgHeight
-        );
-
-        const imgX = margin;
-        const imgY = 0;
-
-        pdf.addImage(
-          imgData,
-          "PNG",
-          imgX,
-          imgY,
-          imgWidth * ratio,
-          imgHeight * ratio
-        );
-        pdf.save("invoice.pdf");
-      })
-      .catch((error) => {
-        console.error("Error generating PDF: ", error);
-      });
+    try {
+      await html2pdf().set(opt).from(element).save(); 
+      toast.success("PDF is Downloaded Successfully");
+    } catch (error) {
+      console.error("PDF generation error:", error);
+      toast.error("Failed to download PDF.");
+    }
   };
+
   const onSubmit = (e) => {
     e.preventDefault();
     let data = {
@@ -301,11 +280,45 @@ const SalaryReportView = () => {
             ref={mergeRefs(componentRef, tableRef)}
             className="print-padding width margin-first"
           >
+            <div className="flex justify-center text-center px-4">
+              <h2 className="pt-1 sm:pt-2 md:pt-4 text-sm sm:text-base md:text-lg lg:text-xl font-bold">
+                <span className="block">
+                  {salarysummarytop.trip_company} -{" "}
+                  {salarysummarytop.trip_branch}
+                </span>
+                <span className="block">
+                  TRIP ACCOUNT OF DRIVER - ({salarysummarytop.trip_vehicle} -{" "}
+                  {salarysummarytop.trip_vehicle_type})
+                </span>
+              </h2>
+            </div>
+
+            <table
+              className="my-4"
+              style={{ width: "100%", textAlign: "center" }}
+            >
+              <tr>
+                <th>Date</th>
+                <th>Driver</th>
+                <th>Month</th>
+                <th>Year</th>
+                <th>Trip Count</th>
+                <th>KM Run</th>
+              </tr>
+              <tr>
+                <td> {todayback}</td>
+                <td>{salarysummarytop.trip_driver}</td>
+                <td>{currentMonth}</td>
+                <td>{salarysummarytop.trip_year}</td>
+                <td>{salarysummarytop.trip_count}</td>
+                <td>{salarysummarytop.trip_km}</td>
+              </tr>
+            </table>
             {/* //TABLE ONE........................................... */}
             <div className="mb-4 width">
-              <h3 className="text-xl font-bold mb-2 text-center">
+              {/* <h3 className="text-xl font-bold mb-2 text-center">
                 Salary Summary
-              </h3>
+              </h3> */}
               {salarysummary.length > 0 ? (
                 <table className="w-full border-collapse">
                   <thead>

@@ -1,11 +1,11 @@
 import Layout from "../../../layout/Layout";
 import { useState, useEffect } from "react";
 import BASE_URL from "../../../base/BaseUrl";
-import { toast } from "react-toastify";
 import axios from "axios";
 import SelectInput from "../../../components/common/SelectField";
 import { useNavigate } from "react-router-dom";
 import { IconInfoCircle } from "@tabler/icons-react";
+import { toast } from "sonner";
 
 function TeamReportForm() {
   const navigate = useNavigate();
@@ -64,7 +64,7 @@ function TeamReportForm() {
   const onSubmit = (e) => {
     e.preventDefault();
     let data = {
-      agency_branch: downloadTeam.agency_branch,
+      user_branch: downloadTeam.agency_branch,
       user_company: downloadTeam.user_company,
     };
     var v = document.getElementById("dowRecp").checkValidity();
@@ -84,13 +84,13 @@ function TeamReportForm() {
           const url = window.URL.createObjectURL(new Blob([res.data]));
           const link = document.createElement("a");
           link.href = url;
-          link.setAttribute("download", "agencies.csv");
+          link.setAttribute("download", "team.csv");
           document.body.appendChild(link);
           link.click();
-          toast.success("Agencies is Downloaded Successfully");
+          toast.success("Team is Downloaded Successfully");
         })
         .catch((err) => {
-          toast.error("Agencies is Not Downloaded");
+          toast.error("Team is Not Downloaded");
         });
     }
   };
@@ -129,26 +129,6 @@ function TeamReportForm() {
           <form id="dowRecp" autoComplete="off">
             <div className="grid grid-cols-1 md:grid-cols-2   gap-4">
               <SelectInput
-                label="Branch"
-                name="agency_branch"
-                value={
-                  downloadTeam.agency_branch
-                    ? {
-                        value: downloadTeam.agency_branch,
-                        label: downloadTeam.agency_branch,
-                      }
-                    : null
-                }
-                options={team.map((item) => ({
-                  value: item.branch_name,
-                  label: item.branch_name,
-                }))}
-                onChange={onInputChange}
-                placeholder="Select Branch"
-                styles={customStyles}
-                isSearchable={true}
-              />
-              <SelectInput
                 label="Company"
                 name="user_company"
                 value={
@@ -165,6 +145,26 @@ function TeamReportForm() {
                 }))}
                 onChange={onInputChange}
                 placeholder="Select Company"
+                styles={customStyles}
+                isSearchable={true}
+              />
+              <SelectInput
+                label="Branch"
+                name="agency_branch"
+                value={
+                  downloadTeam.agency_branch
+                    ? {
+                        value: downloadTeam.agency_branch,
+                        label: downloadTeam.agency_branch,
+                      }
+                    : null
+                }
+                options={team.map((item) => ({
+                  value: item.branch_name,
+                  label: item.branch_name,
+                }))}
+                onChange={onInputChange}
+                placeholder="Select Branch"
                 styles={customStyles}
                 isSearchable={true}
               />

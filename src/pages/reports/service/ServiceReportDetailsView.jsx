@@ -12,12 +12,11 @@ import Layout from "../../../layout/Layout";
 import { useReactToPrint } from "react-to-print";
 import SkeletonLoading from "../agencies/SkeletonLoading";
 import { IconFileTypePdf } from "@tabler/icons-react";
-import jsPDF from "jspdf";
-import html2canvas from "html2canvas";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import moment from "moment";
 import { NumericFormat } from "react-number-format";
-
+import pdfMake from "pdfmake/build/pdfmake";
+import pdfFonts from "pdfmake/build/vfs_fonts";
 const printStyles = `
   @media print {
 
@@ -154,45 +153,78 @@ const ServiceReportDetailsView = () => {
     return <SkeletonLoading />;
   }
   const handleSavePDF = () => {
-    const input = tableRef.current;
+    const tableBody = [
+      ["Date", "Vehicle No", "Service Type", "Amount", "Details"], // Header row
+      ...service.map((item) => [
+        moment(item.service_date).format("DD-MM-YYYY") || "-",
+        item.service_truck_no || "-",
+        item.service_sub_type || "-",
 
-    html2canvas(input, { scale: 2 })
-      .then((canvas) => {
-        const imgData = canvas.toDataURL("image/png");
+        item.service_sub_amount
+          ? `₹${Number(item.service_sub_amount).toLocaleString("en-IN", {
+              maximumFractionDigits: 2,
+            })}`
+          : "-",
+        item.service_sub_details || "-",
+      ]),
+    ];
 
-        const pdf = new jsPDF("p", "mm", "a4");
+    const docDefinition = {
+      pageSize: "A4",
+      pageMargins: [10, 10, 10, 40],
+      content: [
+        {
+          text: "SERVICES DETAILS SUMMARY",
+          style: "header",
+          alignment: "center",
+        },
+        {
+          table: {
+            headerRows: 1,
+            widths: ["15%", "15%", "15%", "10%", "40%"],
+            body: tableBody,
+          },
+          layout: {
+            fillColor: (rowIndex) => (rowIndex === 0 ? "#CCCCCC" : null),
+            hLineWidth: () => 0.3,
+            vLineWidth: () => 0.3,
+          },
+        },
+      ],
+      styles: {
+        header: {
+          fontSize: 12,
+          bold: true,
+          margin: [0, 0, 0, 10],
+        },
+        footerText: {
+          fontSize: 8,
+        },
+      },
+      defaultStyle: {
+        fontSize: 7,
+      },
+      footer: (currentPage, pageCount) => ({
+        columns: [
+          {
+            text: "DFC",
+            style: "footerText",
+            alignment: "left",
+            margin: [10, 0],
+          },
+          {
+            text: new Date().toLocaleDateString("en-GB"),
+            style: "footerText",
+            alignment: "right",
+            margin: [0, 0, 10, 0],
+          },
+        ],
+        margin: [10, 0, 10, 10],
+      }),
+    };
+    toast.success("services Report is Downloaded Successfully");
 
-        const pdfWidth = pdf.internal.pageSize.getWidth();
-        const pdfHeight = pdf.internal.pageSize.getHeight();
-
-        const imgWidth = canvas.width;
-        const imgHeight = canvas.height;
-
-        const margin = 10;
-
-        const availableWidth = pdfWidth - 2 * margin;
-
-        const ratio = Math.min(
-          availableWidth / imgWidth,
-          pdfHeight / imgHeight
-        );
-
-        const imgX = margin;
-        const imgY = 0;
-
-        pdf.addImage(
-          imgData,
-          "PNG",
-          imgX,
-          imgY,
-          imgWidth * ratio,
-          imgHeight * ratio
-        );
-        pdf.save("invoice.pdf");
-      })
-      .catch((error) => {
-        console.error("Error generating PDF: ", error);
-      });
+    pdfMake.createPdf(docDefinition).download("servicesdetails_report.pdf");
   };
   const onSubmit = (e) => {
     e.preventDefault();
@@ -296,14 +328,14 @@ const ServiceReportDetailsView = () => {
                           {moment(item.service_date).format("DD-MM-YYYY")}
                         </td>
 
-                        <td className="p-1 text-xs border border-black text-center">
+                        <td className="p-1 text-xs border border-black px-2">
                           {item.service_truck_no || "-"}
                         </td>
-                        <td className="p-1 text-xs border border-black">
+                        <td className="p-1 text-xs border border-black px-2">
                           {item.service_sub_type || "-"}
                         </td>
 
-                        <td className="p-1 text-xs border border-black text-center">
+                        <td className="p-1 text-xs border border-black text-end px-2">
                           <NumericFormat
                             value={item.service_sub_amount}
                             displayType="text"
@@ -312,7 +344,7 @@ const ServiceReportDetailsView = () => {
                             thousandsGroupStyle="lakh"
                           />
                         </td>
-                        <td className="p-1 text-xs border border-black">
+                        <td className="p-1 text-xs border border-black px-2">
                           {item.service_sub_details || "-"}
                         </td>
                       </tr>

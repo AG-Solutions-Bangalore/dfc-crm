@@ -137,7 +137,7 @@ const App = () => {
         />
 
         <Route path="/master/team-list" element={<TeamList />} />
-        <Route path="/master/team-edit" element={<EditTeam />} />
+        <Route path="/master/team-edit/:id" element={<EditTeam />} />
         <Route path="/master/createTeam" element={<CreateTeam />} />
 
         <Route path="/master/driver-list" element={<DriverList />} />

@@ -12,10 +12,11 @@ import Layout from "../../../layout/Layout";
 import { useReactToPrint } from "react-to-print";
 import SkeletonLoading from "../agencies/SkeletonLoading";
 import { IconFileTypePdf } from "@tabler/icons-react";
-import jsPDF from "jspdf";
-import html2canvas from "html2canvas";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import moment from "moment";
+import pdfMake from "pdfmake/build/pdfmake";
+import pdfFonts from "pdfmake/build/vfs_fonts";
+import { NumericFormat } from "react-number-format";
 const printStyles = `
   @media print {
 
@@ -39,9 +40,8 @@ const printStyles = `
   }
 `;
 const TyreReportView = () => {
-  const { id } = useParams();
   const navigate = useNavigate();
-  const [vechiles, setVechiles] = useState([]);
+  const [tyre, setTyre] = useState([]);
   const [loading, setLoading] = useState(true);
   const componentRef = React.useRef();
   const tableRef = useRef(null);
@@ -137,7 +137,7 @@ const TyreReportView = () => {
           }
         );
 
-        setVechiles(Response.data.tyre);
+        setTyre(Response.data.tyre);
         console.log(Response.data, "resposne");
         setLoading(false);
       } catch (error) {
@@ -153,45 +153,90 @@ const TyreReportView = () => {
     return <SkeletonLoading />;
   }
   const handleSavePDF = () => {
-    const input = tableRef.current;
+    const tableBody = [
+      [
+        "Date",
+        "Company	",
+        "Branch",
 
-    html2canvas(input, { scale: 2 })
-      .then((canvas) => {
-        const imgData = canvas.toDataURL("image/png");
+        "Supplier",
+        "Bill Ref",
+        "Amount",
+        "No of Tyres",
+      ], // Header row
+      ...tyre.map((item) => [
+        moment(item.tyre_date).format("DD-MM-YYYY") || "-",
+        item.tyre_company || "-",
+        item.tyre_branch || "-",
+        item.tyre_supplier || "-",
+        item.tyre_bill_ref || "-",
+        // item.tyre_bill_amount ? item.tyre_bill_amount.toLocaleString() : "-",
+        item.tyre_bill_amount
+          ? `₹${Number(item.tyre_bill_amount).toLocaleString("en-IN", {
+              maximumFractionDigits: 2,
+            })}`
+          : "-",
+        item.tyre_count || "-",
+      ]),
+    ];
 
-        const pdf = new jsPDF("p", "mm", "a4");
+    const docDefinition = {
+      pageSize: "A4",
+      pageMargins: [10, 10, 10, 10],
+      content: [
+        { text: "TYRE SUMMARY", style: "header", alignment: "center" },
+        {
+          table: {
+            headerRows: 1,
+            widths: [
+              "16%",
+              "16%",
+              "16%",
+              "16%",
+              "16%",
+              "10%",
+              "10%", // Equal widths
+            ],
+            body: tableBody,
+          },
+          layout: {
+            fillColor: (rowIndex) => (rowIndex === 0 ? "#CCCCCC" : null), // Header background
+            hLineWidth: () => 0.3,
+            vLineWidth: () => 0.3,
+          },
+        },
+      ],
+      styles: {
+        header: {
+          fontSize: 12,
+          bold: true,
+          margin: [0, 0, 0, 10],
+        },
+      },
+      defaultStyle: {
+        fontSize: 7,
+      },
+      footer: (currentPage, pageCount) => ({
+        columns: [
+          {
+            text: "DFC",
+            style: "footerText",
+            alignment: "left",
+            margin: [10, 0],
+          },
+          {
+            text: new Date().toLocaleDateString("en-GB"),
+            style: "footerText",
+            alignment: "right",
+            margin: [0, 0, 10, 0],
+          },
+        ],
+        margin: [10, 0, 10, 10],
+      }),
+    };
+    toast.success("PDF is Downloaded Successfully");
 
-        const pdfWidth = pdf.internal.pageSize.getWidth();
-        const pdfHeight = pdf.internal.pageSize.getHeight();
-
-        const imgWidth = canvas.width;
-        const imgHeight = canvas.height;
-
-        const margin = 10;
-
-        const availableWidth = pdfWidth - 2 * margin;
-
-        const ratio = Math.min(
-          availableWidth / imgWidth,
-          pdfHeight / imgHeight
-        );
-
-        const imgX = margin;
-        const imgY = 0;
-
-        pdf.addImage(
-          imgData,
-          "PNG",
-          imgX,
-          imgY,
-          imgWidth * ratio,
-          imgHeight * ratio
-        );
-        pdf.save("invoice.pdf");
-      })
-      .catch((error) => {
-        console.error("Error generating PDF: ", error);
-      });
+    pdfMake.createPdf(docDefinition).download("tyre_report.pdf");
   };
   const onSubmit = (e) => {
     e.preventDefault();
@@ -268,7 +313,7 @@ const TyreReportView = () => {
               <h3 className="text-xl font-bold mb-2 text-center">
                 TYRE SUMMARY
               </h3>
-              {vechiles.length > 0 ? (
+              {tyre.length > 0 ? (
                 <table className="w-full border-collapse">
                   <thead>
                     <tr className="bg-gray-200">
@@ -280,7 +325,6 @@ const TyreReportView = () => {
                         "Supplier",
                         "Bill Ref	",
                         "Amount",
-
                         "No of Tyres",
                       ].map((header) => (
                         <th
@@ -293,25 +337,31 @@ const TyreReportView = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {vechiles.map((item, index) => (
+                    {tyre.map((item, index) => (
                       <tr key={index}>
                         <td className="p-1 text-xs border border-black text-center">
                           {moment(item.tyre_date).format("DD-MM-YYYY")}
                         </td>
-                        <td className="p-1 text-xs border border-black">
+                        <td className="p-1 text-xs border border-black px-2">
                           {item.tyre_company || "-"}
                         </td>
-                        <td className="p-1 text-xs border border-black">
+                        <td className="p-1 text-xs border border-black px-2">
                           {item.tyre_branch || "-"}
                         </td>
-                        <td className="p-1 text-xs border border-black">
+                        <td className="p-1 text-xs border border-black px-2">
                           {item.tyre_supplier || "-"}
                         </td>
                         <td className="p-1 text-xs border border-black text-center">
                           {item.tyre_bill_ref || "-"}
                         </td>
-                        <td className="p-1 text-xs border border-black text-center">
-                          ₹{item.tyre_bill_amount || "0"}
+                        <td className="p-1 text-xs border border-black text-end px-2">
+                          <NumericFormat
+                            value={item.tyre_bill_amount}
+                            displayType="text"
+                            thousandSeparator={true}
+                            prefix="₹"
+                            thousandsGroupStyle="lakh"
+                          />
                         </td>
                         <td className="p-1 text-xs border border-black text-center">
                           {item.tyre_count || "-"}
