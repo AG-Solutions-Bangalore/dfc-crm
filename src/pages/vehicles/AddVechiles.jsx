@@ -108,10 +108,9 @@ const AddVechiles = () => {
   }, []);
 
   useEffect(() => {
-    if(vehicles.vehicle_branch && vehicles.vehicle_branch !== ''){
-        fetchDriver();
+    if (vehicles.vehicle_branch && vehicles.vehicle_branch !== "") {
+      fetchDriver();
     }
-   
   }, [vehicles.vehicle_branch]);
 
   const validateOnlyDigits = (inputtxt) => {
@@ -288,7 +287,7 @@ const AddVechiles = () => {
         >
           <div className="grid grid-cols-1  md:grid-cols-1 lg:grid-cols-5   gap-6">
             {/* Register No  */}
-             <div>
+            <div>
               <FormLabel required>Register No</FormLabel>
               <input
                 type="text"
@@ -299,7 +298,6 @@ const AddVechiles = () => {
                 required
               />
             </div>
-
 
             {/* company  */}
 
@@ -341,8 +339,8 @@ const AddVechiles = () => {
               </select>
             </div>
 
-                {/* branch  */}
-                <div>
+            {/* branch  */}
+            <div>
               <FormLabel required>Branch</FormLabel>
               <select
                 name="vehicle_branch"
@@ -360,10 +358,11 @@ const AddVechiles = () => {
               </select>
             </div>
 
-
-                {/* driver  */}
+            {/* driver  */}
             <div>
-              <FormLabel>Driver</FormLabel>
+              <FormLabel>
+                Driver <span className="text-red-500">*</span>
+              </FormLabel>
               <Select
                 name="vehicle_driver"
                 options={driver.map((option) => ({
@@ -371,9 +370,10 @@ const AddVechiles = () => {
                   label: option.full_name,
                   name: "vehicle_driver",
                 }))}
+                required
                 onChange={(e) => onInputChange(e)}
                 value={
-                    vehicles.vehicle_driver
+                  vehicles.vehicle_driver
                     ? {
                         value: vehicles.vehicle_driver,
                         label: vehicles.vehicle_driver,
@@ -385,7 +385,7 @@ const AddVechiles = () => {
                 isSearchable={true}
               />
             </div>
-                {/* modal year  */}
+            {/* modal year  */}
             <div>
               <FormLabel required>Modal Year</FormLabel>
               <input
@@ -423,22 +423,20 @@ const AddVechiles = () => {
             </div>
             {/* Present Km  */}
             <div>
-              <FormLabel >Present KM</FormLabel>
+              <FormLabel>Present KM</FormLabel>
               <input
                 type="tel"
                 name="vehicle_present_km"
                 value={vehicles.vehicle_present_km}
                 onChange={(e) => onInputChange(e)}
                 className={inputClass}
-               
               />
             </div>
             {/* present Date  */}
             <div>
-              <FormLabel >Present Km Due</FormLabel>
+              <FormLabel>Present Km Due</FormLabel>
               <input
                 type="date"
-                
                 name="vehicle_present_date"
                 value={vehicles.vehicle_present_date}
                 onChange={(e) => onInputChange(e)}
@@ -447,10 +445,9 @@ const AddVechiles = () => {
             </div>
             {/* Insurance due  */}
             <div>
-              <FormLabel >Insurance Due</FormLabel>
+              <FormLabel>Insurance Due</FormLabel>
               <input
                 type="date"
-                
                 name="ins_due"
                 value={vehicles.ins_due}
                 onChange={(e) => onInputChange(e)}
@@ -459,10 +456,9 @@ const AddVechiles = () => {
             </div>
             {/* Permit due  */}
             <div>
-              <FormLabel >Permit Due</FormLabel>
+              <FormLabel>Permit Due</FormLabel>
               <input
                 type="date"
-                
                 name="permit_due"
                 value={vehicles.permit_due}
                 onChange={(e) => onInputChange(e)}
@@ -471,19 +467,16 @@ const AddVechiles = () => {
             </div>
             {/* FC due  */}
             <div>
-              <FormLabel >FC Due</FormLabel>
+              <FormLabel>FC Due</FormLabel>
               <input
                 type="date"
-                
                 name="fc_due"
                 value={vehicles.fc_due}
                 onChange={(e) => onInputChange(e)}
                 className={inputClass}
               />
             </div>
-          
 
-          
             {/* Open HSD  */}
             <div>
               <FormLabel required>Open HSD</FormLabel>
@@ -498,20 +491,15 @@ const AddVechiles = () => {
             </div>
             {/* No of Gas Cylineder  */}
             <div>
-              <FormLabel >No of Gas Cylinder</FormLabel>
+              <FormLabel>No of Gas Cylinder</FormLabel>
               <input
                 type="tel"
                 name="no_of_gas_cylinder"
                 value={vehicles.no_of_gas_cylinder}
                 onChange={(e) => onInputChange(e)}
                 className={inputClass}
-                
               />
             </div>
-            
-    
-           
-         
           </div>
 
           {/* Form Actions */}
