@@ -197,6 +197,7 @@ const CompanyEdit = () => {
                 onChange={(e) => onInputChange(e)}
                 className={inputClass}
                 required
+                maxLength={10}
               />
             </div>
 
@@ -222,6 +223,7 @@ const CompanyEdit = () => {
                 value={company.company_gst}
                 onChange={(e) => onInputChange(e)}
                 className={inputClass}
+                maxLength={15}
               />
             </div>
 
@@ -234,6 +236,7 @@ const CompanyEdit = () => {
                 value={company.company_pan}
                 onChange={(e) => onInputChange(e)}
                 className={inputClass}
+                maxLength={10}
               />
             </div>
             {/* status  */}
