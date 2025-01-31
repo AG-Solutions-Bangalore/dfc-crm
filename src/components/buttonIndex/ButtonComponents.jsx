@@ -1,4 +1,4 @@
-import { Edit, Eye, Plus, PlusCircle, Truck, View } from "lucide-react";
+import { Edit, Eye, Plus, PlusCircle, Trash, Truck, View } from "lucide-react";
 import React from "react";
 import { checkPermission } from "./checkPermission";
 
@@ -25,7 +25,7 @@ export const VechilesEdit = ({ onClick, className }) => {
 
   return (
     <button onClick={onClick} className={className} title="Edit Vehicles">
-      <Edit className="h-4 w-4" />
+      <Edit className="h-4 w-4 text-blue-500" />
     </button>
   );
 };
@@ -42,9 +42,9 @@ export const VechilesView = ({ onClick, className }) => {
    
       onClick={onClick}
       className={className}
-      title="Edit Vehicles"
+      title="Side View"
     >
-      <Eye className="h-4 w-4" />
+      <Eye className="h-4 w-4 text-blue-500" />
     </button>
   );
 };
@@ -94,9 +94,9 @@ export const VechilesTruck = ({ onClick, className }) => {
    
       onClick={onClick}
       className={className}
-      title="Edit truck"
+      title="Truck View"
     >
-      <Truck className="h-4 w-4" />
+      <Truck className="h-4 w-4 text-blue-500" />
     </button>
   );
 };
@@ -175,7 +175,7 @@ export const MasterBranchEdit = ({ onClick, className }) => {
    
       onClick={onClick}
       className={className}
-      title="Edit Company"
+      title="Edit Branch"
     >
       <Edit className="h-4 w-4 text-blue-500" />
     </button>
@@ -195,7 +195,7 @@ export const MasterBranchCreate = ({ onClick, className }) => {
     <button onClick={onClick} className={className}>
       <Plus className="h-4 w-4 " />
       
-      Company
+      Branch
     </button>
   );
 };
@@ -215,7 +215,7 @@ export const MasterTyreMakeEdit = ({ onClick, className }) => {
    
       onClick={onClick}
       className={className}
-      title="Edit Company"
+      title="Edit Tyre Make"
     >
       <Edit className="h-4 w-4 text-blue-500" />
     </button>
@@ -235,7 +235,7 @@ export const MasterTyreMakeCreate = ({ onClick, className }) => {
     <button onClick={onClick} className={className}>
       <Plus className="h-4 w-4 " />
       
-      Company
+      Tyre Make
     </button>
   );
 };
@@ -256,7 +256,7 @@ export const MasterServiceTypeEdit = ({ onClick, className }) => {
    
       onClick={onClick}
       className={className}
-      title="Edit Company"
+      title="Edit Service Type"
     >
       <Edit className="h-4 w-4 text-blue-500" />
     </button>
@@ -276,7 +276,7 @@ export const MasterServiceTypeCreate = ({ onClick, className }) => {
     <button onClick={onClick} className={className}>
       <Plus className="h-4 w-4 " />
       
-      Company
+      Service Type
     </button>
   );
 };
@@ -297,7 +297,7 @@ export const MasterTeamEdit = ({ onClick, className }) => {
    
       onClick={onClick}
       className={className}
-      title="Edit Company"
+      title="Edit Team"
     >
       <Edit className="h-4 w-4 text-blue-500" />
     </button>
@@ -316,7 +316,7 @@ export const MasterTeamView = ({ onClick, className }) => {
    
       onClick={onClick}
       className={className}
-      title="View Company"
+      title="View Team"
     >
       <Eye  className="h-4 w-4 text-blue-500" />
     </button>
@@ -335,7 +335,7 @@ export const MasterTeamCreate = ({ onClick, className }) => {
     <button onClick={onClick} className={className}>
       <Plus className="h-4 w-4 " />
       
-      Company
+      Team
     </button>
   );
 };
@@ -362,7 +362,7 @@ export const MasterDriverEdit = ({ onClick, className }) => {
    
       onClick={onClick}
       className={className}
-      title="Edit Company"
+      title="Edit Driver"
     >
       <Edit className="h-4 w-4 text-blue-500" />
     </button>
@@ -381,7 +381,7 @@ export const MasterDriverView = ({ onClick, className }) => {
    
       onClick={onClick}
       className={className}
-      title="View Company"
+      title="View Driver"
     >
       <Eye  className="h-4 w-4 text-blue-500" />
     </button>
@@ -400,7 +400,7 @@ export const MasterDriverCreate = ({ onClick, className }) => {
     <button onClick={onClick} className={className}>
       <Plus className="h-4 w-4 " />
       
-      Company
+      Driver
     </button>
   );
 };
@@ -424,7 +424,7 @@ export const MasterAgenciesEdit = ({ onClick, className }) => {
    
       onClick={onClick}
       className={className}
-      title="Edit Company"
+      title="Edit Agencies"
     >
       <Edit className="h-4 w-4 text-blue-500" />
     </button>
@@ -443,7 +443,7 @@ export const MasterAgenciesView = ({ onClick, className }) => {
    
       onClick={onClick}
       className={className}
-      title="View Company"
+      title="View Agencies"
     >
       <Eye  className="h-4 w-4 text-blue-500" />
     </button>
@@ -462,7 +462,7 @@ export const MasterAgenciesCreate = ({ onClick, className }) => {
     <button onClick={onClick} className={className}>
       <Plus className="h-4 w-4 " />
       
-      Company
+      Agencies
     </button>
   );
 };
@@ -483,7 +483,7 @@ export const MasterVendorEdit = ({ onClick, className }) => {
    
       onClick={onClick}
       className={className}
-      title="Edit Company"
+      title="Edit Vendor"
     >
       <Edit className="h-4 w-4 text-blue-500" />
     </button>
@@ -502,7 +502,7 @@ export const MasterVendorView = ({ onClick, className }) => {
    
       onClick={onClick}
       className={className}
-      title="View Company"
+      title="View Vendor"
     >
       <Eye  className="h-4 w-4 text-blue-500" />
     </button>
@@ -521,34 +521,207 @@ export const MasterVendorCreate = ({ onClick, className }) => {
     <button onClick={onClick} className={className}>
       <Plus className="h-4 w-4 " />
       
-      Company
+      Vendor
     </button>
   );
 };
 MasterVendorCreate.page = "Vendor";
 
+/*------------------------------Master-Tyre--------------------------- */
+
+
+
+export const MasterPurchaseEdit = ({ onClick, className }) => {
+  const userId = localStorage.getItem("id") || "";
+  const staticPermissions = getStaticPermissions();
+  if (!checkPermission(userId, "MasterPurchaseEdit", staticPermissions)) {
+    return null;
+  }
+
+  return (
+    <button
+   
+      onClick={onClick}
+      className={className}
+      title="Edit Company"
+    >
+      <Edit className="h-4 w-4 text-blue-500" />
+    </button>
+  );
+};
+MasterPurchaseEdit.page = "Purchase";
+export const MasterPurchaseView = ({ onClick, className }) => {
+  const userId = localStorage.getItem("id") || "";
+  const staticPermissions = getStaticPermissions();
+  if (!checkPermission(userId, "MasterPurchaseView", staticPermissions)) {
+    return null;
+  }
+
+  return (
+    <button
+   
+      onClick={onClick}
+      className={className}
+      title="View Company"
+    >
+      <Eye  className="h-4 w-4 text-blue-500" />
+    </button>
+  );
+};
+MasterPurchaseView.page = "Purchase";
+
+export const MasterPurchaseCreate = ({ onClick, className }) => {
+  const userId = localStorage.getItem("id") || "";
+  const staticPermissions = getStaticPermissions();
+  if (!checkPermission(userId, "MasterPurchaseCreate", staticPermissions)) {
+    return null;
+  }
+
+  return (
+    <button onClick={onClick} className={className}>
+      <Plus className="h-4 w-4 " />
+      
+      Company
+    </button>
+  );
+};
+MasterPurchaseCreate.page = "Purchase";
+
+
+/*-----------------------------------Master-Fitted Tyre------------ */
 
 
 
 
 
 
+export const MasterFittedTyreView = ({ onClick, className }) => {
+  const userId = localStorage.getItem("id") || "";
+  const staticPermissions = getStaticPermissions();
+  if (!checkPermission(userId, "MasterFittedTyreView", staticPermissions)) {
+    return null;
+  }
+
+  return (
+    <button
+   
+      onClick={onClick}
+      className={className}
+      title="View Company"
+    >
+      <Eye  className="h-4 w-4 text-blue-500" />
+    </button>
+  );
+};
+MasterFittedTyreView.page = "Fitted Tyre";
+
+/*------------------Master-Under Inspec. --------------------- */
+
+
+
+
+export const MasterUnderInspectEdit = ({ onClick, className }) => {
+  const userId = localStorage.getItem("id") || "";
+  const staticPermissions = getStaticPermissions();
+  if (!checkPermission(userId, "MasterUnderInspectEdit", staticPermissions)) {
+    return null;
+  }
+
+  return (
+    <button
+   
+      onClick={onClick}
+      className={className}
+      title="Edit Company"
+    >
+      <Edit className="h-4 w-4 text-blue-500" />
+    </button>
+  );
+};
+MasterUnderInspectEdit.page = "Under Inspec.";
+
+export const MasterUnderInspectDelete = ({ onClick, className }) => {
+  const userId = localStorage.getItem("id") || "";
+  const staticPermissions = getStaticPermissions();
+  if (!checkPermission(userId, "MasterUnderInspectDelete", staticPermissions)) {
+    return null;
+  }
+
+  return (
+    <button
+   
+      onClick={onClick}
+      className={className}
+      title="Delete"
+    >
+      <Trash className="h-4 w-4 text-blue-500" />
+    </button>
+  );
+};
+MasterUnderInspectDelete.page = "Under Inspec.";
+
+
+/* --------------------------------Master-Trip-List----------------------- */
 
 
 
 
 
+export const MasterTripEdit = ({ onClick, className }) => {
+  const userId = localStorage.getItem("id") || "";
+  const staticPermissions = getStaticPermissions();
+  if (!checkPermission(userId, "MasterTripEdit", staticPermissions)) {
+    return null;
+  }
 
+  return (
+    <button
+   
+      onClick={onClick}
+      className={className}
+      title="Edit Company"
+    >
+      <Edit className="h-4 w-4 text-blue-500" />
+    </button>
+  );
+};
+MasterTripEdit.page = "Trip";
+export const MasterTripView = ({ onClick, className }) => {
+  const userId = localStorage.getItem("id") || "";
+  const staticPermissions = getStaticPermissions();
+  if (!checkPermission(userId, "MasterTripView", staticPermissions)) {
+    return null;
+  }
 
+  return (
+    <button
+   
+      onClick={onClick}
+      className={className}
+      title="View Company"
+    >
+      <Eye  className="h-4 w-4 text-blue-500" />
+    </button>
+  );
+};
+MasterTripView.page = "Trip";
 
+export const MasterTripCreate = ({ onClick, className }) => {
+  const userId = localStorage.getItem("id") || "";
+  const staticPermissions = getStaticPermissions();
+  if (!checkPermission(userId, "MasterTripCreate", staticPermissions)) {
+    return null;
+  }
 
-
-
-
-
-
-
-
+  return (
+    <button onClick={onClick} className={className}>
+      <Plus className="h-4 w-4 " />
+      
+      Trip
+    </button>
+  );
+};
+MasterTripCreate.page = "Trip";
 
 
 
@@ -1661,6 +1834,20 @@ export default {
   MasterVendorCreate,
   VechilesCreateTyre,
   VechilesTruck,
+  MasterPurchaseEdit,
+  MasterPurchaseView,
+  MasterPurchaseCreate,
+  MasterFittedTyreView,
+  MasterUnderInspectEdit,
+  MasterUnderInspectDelete,
+  MasterTripCreate,
+  MasterTripView,
+  MasterTripEdit,
+
+
+
+
+
 
 
 

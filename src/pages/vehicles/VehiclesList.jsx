@@ -15,6 +15,7 @@ import { MantineReactTable, useMantineReactTable } from "mantine-react-table";
 import { Tooltip } from "@mantine/core";
 import moment from "moment";
 import PartialVechileView from "./PartialVechileView";
+import { VechilesCreate, VechilesCreateTyre, VechilesEdit, VechilesTruck, VechilesView } from "../../components/buttonIndex/ButtonComponents";
 
 const VehiclesList = () => {
   const [vehiclesData, setVehiclesData] = useState(null);
@@ -220,7 +221,7 @@ const VehiclesList = () => {
           return (
             <div className="flex gap-2">
               
-              <div
+              {/* <div
                onClick={() => {
                 setSelectedVehicleId(id); 
                 setIsViewExpanded(true); 
@@ -229,16 +230,34 @@ const VehiclesList = () => {
                 title="Side View"
               >
                 <IconEye className="h-5 w-5 text-blue-500 cursor-pointer" />
-              </div>
-              <div
+              </div> */}
+<VechilesView
+ onClick={() => {
+  setSelectedVehicleId(id); 
+  setIsViewExpanded(true); 
+}}
+  className="flex items-center space-x-2"
+
+
+/>
+
+
+
+              {/* <div
                 onClick={() => navigate(`/vechile-edit/${id}`)}
                 className="flex items-center space-x-2"
                 title="Edit"
               >
                 <IconEdit className="h-5 w-5 text-blue-500 cursor-pointer" />
-              </div>
+              </div> */}
 
-
+            <VechilesEdit
+              onClick={() => navigate(`/vechile-edit/${id}`)}
+                className="flex items-center space-x-2"
+            
+            
+            
+            />
               {/* <div
                 onClick={() => navigate(`/vechile-view/${id}`)}
                 className="flex items-center space-x-2"
@@ -247,13 +266,17 @@ const VehiclesList = () => {
                 <IconEye className="h-5 w-5 text-blue-500 cursor-pointer" />
               </div> */}
                <a href={`/truckdetails-viewall/${id}`} target="_blank" rel="noopener noreferrer">
-              <div
-                  // onClick={() => navigate(`/truckdetails-viewall/${id}`)}
+              {/* <div
+                 
                 className="flex items-center space-x-2"
                 title="View"
               >
                 <IconTruck className="h-5 w-5 text-blue-500 cursor-pointer" />
-              </div>
+              </div> */}
+              <VechilesTruck
+                className="flex items-center space-x-2"
+              
+              />
               </a>
             </div>
           );
@@ -300,18 +323,30 @@ const VehiclesList = () => {
               Vehicles List
             </h1>
             <div className="flex flex-row items-center gap-2">
-              <button
+              {/* <button
                 onClick={() => navigate("/createVechiles")}
                 className=" flex flex-row items-center gap-1 text-center text-sm font-[400] cursor-pointer  w-[6rem] text-white bg-blue-600 hover:bg-red-700 p-2 rounded-lg shadow-md"
               >
                 <IconPlus className="w-4 h-4" /> Vehicles
-              </button>
-              <button
+              </button> */}
+
+              <VechilesCreate
+              
+                  onClick={() => navigate("/createVechiles")}
+                className=" flex flex-row items-center gap-1 text-center text-sm font-[400] cursor-pointer  w-[6rem] text-white bg-blue-600 hover:bg-red-700 p-2 rounded-lg shadow-md"
+              />
+              {/* <button
                 onClick={() => navigate("/createTyre")}
                 className=" flex flex-row items-center gap-1 text-center text-sm font-[400] cursor-pointer  w-[4rem] text-white bg-blue-600 hover:bg-red-700 p-2 rounded-lg shadow-md"
               >
                 <IconPlus className="w-4 h-4" /> Tyre
-              </button>
+              </button> */}
+
+              <VechilesCreateTyre
+               onClick={() => navigate("/createTyre")}
+                className=" flex flex-row items-center gap-1 text-center text-sm font-[400] cursor-pointer  w-[4rem] text-white bg-blue-600 hover:bg-red-700 p-2 rounded-lg shadow-md"
+              
+              />
               <div className="flex justify-center ">
                 <div className="inline-flex bg-gray-200 border border-gray-500 rounded-lg shadow-md">
                   <button
