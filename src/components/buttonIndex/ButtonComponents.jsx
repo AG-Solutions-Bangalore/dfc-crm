@@ -1,7 +1,6 @@
-import { Edit, Plus, PlusCircle } from "lucide-react";
+import { Edit, Eye, Plus, PlusCircle } from "lucide-react";
 import React from "react";
 import { checkPermission } from "./checkPermission";
-
 
 const getStaticPermissions = () => {
   const buttonPermissions = localStorage.getItem("buttonControl");
@@ -14,8 +13,9 @@ const getStaticPermissions = () => {
     );
     return [];
   }
-  
 };
+
+/*-------------------------Vechiles---------------- */
 export const VechilesEdit = ({ onClick, className }) => {
   const userId = localStorage.getItem("id") || "";
   const staticPermissions = getStaticPermissions();
@@ -24,12 +24,7 @@ export const VechilesEdit = ({ onClick, className }) => {
   }
 
   return (
-    <button
-   
-      onClick={onClick}
-      className={className}
-      title="Edit Vehicles"
-    >
+    <button onClick={onClick} className={className} title="Edit Vehicles">
       <Edit className="h-4 w-4" />
     </button>
   );
@@ -43,12 +38,7 @@ export const VechilesView = ({ onClick, className }) => {
   }
 
   return (
-    <button
-   
-      onClick={onClick}
-      className={className}
-      title="Edit Vehicles"
-    >
+    <button onClick={onClick} className={className} title="Edit Vehicles">
       <Edit className="h-4 w-4" />
     </button>
   );
@@ -65,14 +55,78 @@ export const VechilesCreate = ({ onClick, className }) => {
   return (
     <button onClick={onClick} className={className}>
       <Plus className="h-4 w-4 " />
-      
       Vehicles
     </button>
   );
 };
 VechilesCreate.page = "Vehicles";
+/*---------------Service--------------------------------- */
+export const ServiceCreate = ({ onClick, className }) => {
+  const userId = localStorage.getItem("id") || "";
+  const staticPermissions = getStaticPermissions();
+  if (!checkPermission(userId, "ServiceCreate", staticPermissions)) {
+    return null;
+  }
+
+  return (
+    <button onClick={onClick} className={className}>
+      <Plus className="h-4 w-4 " />
+      Service
+    </button>
+  );
+};
+ServiceCreate.page = "Service";
+
+export const ServiceEdit = ({ onClick, className }) => {
+  const userId = localStorage.getItem("id") || "";
+  const staticPermissions = getStaticPermissions();
+  if (!checkPermission(userId, "ServiceEdit", staticPermissions)) {
+    return null;
+  }
+
+  return (
+    <button onClick={onClick} className={className} title="Edit Vehicles">
+      <Edit className="h-4 w-4" />
+    </button>
+  );
+};
+ServiceEdit.page = "Service";
+export const ServiceView = ({ onClick, className }) => {
+  const userId = localStorage.getItem("id") || "";
+  const staticPermissions = getStaticPermissions();
+  if (!checkPermission(userId, "ServiceView", staticPermissions)) {
+    return null;
+  }
+
+  return (
+    <button onClick={onClick} className={className} title="Edit Vehicles">
+      <Eye className="h-4 w-4" />
+    </button>
+  );
+};
+ServiceView.page = "Service";
+
+/*---------------Payment--------------------------------- */
+export const PaymentBranchCreate = ({ onClick, className }) => {
+  const userId = localStorage.getItem("id") || "";
+  const staticPermissions = getStaticPermissions();
+  if (!checkPermission(userId, "PaymentBranchCreate", staticPermissions)) {
+    return null;
+  }
+
+  return (
+    <button onClick={onClick} className={className}>
+      <Plus className="h-4 w-4 " />
+      Branch Payment
+    </button>
+  );
+};
+PaymentBranchCreate.page = "Service";
 export default {
   VechilesEdit,
   VechilesCreate,
-  VechilesView
+  VechilesView,
+  ServiceCreate,
+  ServiceEdit,
+  ServiceView,
 };

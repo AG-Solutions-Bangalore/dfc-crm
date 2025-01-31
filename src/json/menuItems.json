@@ -82,7 +82,7 @@
       "title": "Payment",
       "subItems": [
         {
-          "title": "Branch",
+          "title": "PBranch",
           "href": "/payment/branch-list"
         },
         {
