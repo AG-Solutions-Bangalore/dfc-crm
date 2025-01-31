@@ -103,19 +103,19 @@
       "title": "Report",
       "subItems": [
         {
-          "title": "Agencies",
+          "title": "AgenciesR",
           "href": "/report-agencies-form"
         },
         {
-          "title": "Team",
+          "title": "TeamR",
           "href": "/report-team-form"
         },
         {
-          "title": "Driver",
+          "title": "DriverR",
           "href": "/report-driver-form"
         },
         {
-          "title": "Vendor",
+          "title": "VendorR",
           "href": "/report-vendor-form"
         },
         {
@@ -135,7 +135,7 @@
           "href": "/report-services-form"
         },
         {
-          "title": "Trip",
+          "title": "TripR",
           "href": "/report-trip-form"
         },
         {

@@ -543,7 +543,7 @@ export const MasterPurchaseEdit = ({ onClick, className }) => {
    
       onClick={onClick}
       className={className}
-      title="Edit Company"
+      title="Edit Purchase"
     >
       <Edit className="h-4 w-4 text-blue-500" />
     </button>
@@ -562,7 +562,7 @@ export const MasterPurchaseView = ({ onClick, className }) => {
    
       onClick={onClick}
       className={className}
-      title="View Company"
+      title="View Purchase"
     >
       <Eye  className="h-4 w-4 text-blue-500" />
     </button>
@@ -581,7 +581,7 @@ export const MasterPurchaseCreate = ({ onClick, className }) => {
     <button onClick={onClick} className={className}>
       <Plus className="h-4 w-4 " />
       
-      Company
+      Purchase Tyre
     </button>
   );
 };
@@ -607,7 +607,7 @@ export const MasterFittedTyreView = ({ onClick, className }) => {
    
       onClick={onClick}
       className={className}
-      title="View Company"
+      title="View Fitted Tyre"
     >
       <Eye  className="h-4 w-4 text-blue-500" />
     </button>
@@ -632,7 +632,7 @@ export const MasterUnderInspectEdit = ({ onClick, className }) => {
    
       onClick={onClick}
       className={className}
-      title="Edit Company"
+      title="Updated Tyre"
     >
       <Edit className="h-4 w-4 text-blue-500" />
     </button>
@@ -679,7 +679,7 @@ export const MasterTripEdit = ({ onClick, className }) => {
    
       onClick={onClick}
       className={className}
-      title="Edit Company"
+      title="Edit Trip"
     >
       <Edit className="h-4 w-4 text-blue-500" />
     </button>
@@ -698,7 +698,7 @@ export const MasterTripView = ({ onClick, className }) => {
    
       onClick={onClick}
       className={className}
-      title="View Company"
+      title="View Trip"
     >
       <Eye  className="h-4 w-4 text-blue-500" />
     </button>

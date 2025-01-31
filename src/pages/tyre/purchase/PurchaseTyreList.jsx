@@ -6,6 +6,7 @@ import BASE_URL from "../../../base/BaseUrl";
 import { IconEdit, IconEye, IconPlus } from "@tabler/icons-react";
 import { MantineReactTable, useMantineReactTable } from "mantine-react-table";
 import moment from "moment/moment";
+import { MasterPurchaseCreate, MasterPurchaseEdit, MasterPurchaseView } from "../../../components/buttonIndex/ButtonComponents";
 
 const PurchaseTyreList = () => {
   const [purchaseTyreData, setPurchaseTyreData] = useState(null);
@@ -108,20 +109,30 @@ const PurchaseTyreList = () => {
 
           return (
             <div className="flex gap-2">
-              <div
+              {/* <div
                 onClick={() => navigate(`/tyre/purchase-edit/${id}`)}
                 className="flex items-center space-x-2"
                 title="Edit"
               >
                 <IconEdit className="h-5 w-5 text-blue-500 cursor-pointer" />
-              </div>
-              <div
+              </div> */}
+              <MasterPurchaseEdit
+                  onClick={() => navigate(`/tyre/purchase-edit/${id}`)}
+                className="flex items-center space-x-2"
+              
+              />
+              {/* <div
                 onClick={() => navigate(`/tyre/purchase-view/${id}`)}
                 className="flex items-center space-x-2"
                 title="View"
               >
                 <IconEye className="h-5 w-5 text-blue-500 cursor-pointer" />
-              </div>
+              </div> */}
+              <MasterPurchaseView
+                 onClick={() => navigate(`/tyre/purchase-view/${id}`)}
+                className="flex items-center space-x-2"
+              
+              />
             </div>
           );
         },
@@ -153,12 +164,17 @@ const PurchaseTyreList = () => {
               Purchase Tyre List
             </h1>
             <div className="flex gap-2">
-              <button
+              {/* <button
                 onClick={() => navigate("/tyre/createPurchase")}
                 className=" flex flex-row items-center gap-1 text-center text-sm font-[400] cursor-pointer  w-[8rem] text-white bg-blue-600 hover:bg-red-700 p-2 rounded-lg shadow-md"
               >
                 <IconPlus className="w-4 h-4" /> Purchase Tyre
-              </button>
+              </button> */}
+              <MasterPurchaseCreate
+               onClick={() => navigate("/tyre/createPurchase")}
+                className=" flex flex-row items-center gap-1 text-center text-sm font-[400] cursor-pointer  w-[8rem] text-white bg-blue-600 hover:bg-red-700 p-2 rounded-lg shadow-md"
+              
+              />
             </div>
           </div>
         </div>
