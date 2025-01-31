@@ -1,15 +1,17 @@
 import { Typography } from "@material-tailwind/react";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import BASE_URL from "../../base/BaseUrl";
-import toast, { Toaster } from "react-hot-toast";
 import { FormLabel } from "@mui/material";
 import logo from "../../assets/Companylogo/dfc.png";
 import logo1 from "../../assets/Companylogo/logo1.jpg";
+import { ContextPanel } from "../../context/ContextPanel";
+import { toast } from "sonner";
 const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+    const { fetchPagePermission, fetchPermissions } = useContext(ContextPanel);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const handleForgetPasswordClick = () => {
@@ -30,17 +32,20 @@ const SignIn = () => {
 
       if (res.status === 200) {
         const token = res.data.UserInfo?.token;
-
-        localStorage.setItem("id", res.data.UserInfo.user.user_type_id);
-        localStorage.setItem("name", res.data.UserInfo.user.name);
-        localStorage.setItem("username", res.data.UserInfo.user.full_name);
-        localStorage.setItem(
-          "user_type_id",
-          res.data.UserInfo.user.user_type_id
-        );
-
+        const allUser = res.data?.userN;
         if (token) {
           localStorage.setItem("token", token);
+          localStorage.setItem("allUsers", JSON.stringify(allUser));
+          localStorage.setItem("id", res.data.UserInfo.user.id);
+          localStorage.setItem("name", res.data.UserInfo.user.name);
+          localStorage.setItem("username", res.data.UserInfo.user.full_name);
+          localStorage.setItem(
+            "user_type_id",
+            res.data.UserInfo.user.user_type_id
+          );
+          await fetchPermissions();
+          await fetchPagePermission();
+
           navigate("/home");
         } else {
           toast.error("Login Failed, Token not received.");
@@ -65,22 +70,7 @@ const SignIn = () => {
   );
   return (
     <>
-      <Toaster
-        toastOptions={{
-          success: {
-            style: {
-              background: "green",
-            },
-          },
-          error: {
-            style: {
-              background: "red",
-            },
-          },
-        }}
-        position="top-right"
-        reverseOrder={false}
-      />
+     
 
       <div className="flex flex-col lg:flex-row h-screen">
         {/* Left Side - Image */}
