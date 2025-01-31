@@ -6,6 +6,7 @@ import axios from "axios";
 import BASE_URL from "../../../base/BaseUrl";
 import { IconEdit, IconEye, IconPlus } from "@tabler/icons-react";
 import ViewCompany from "./ViewCompany";
+import { MasterCompanyCreate, MasterCompanyEdit, MasterCompanyView } from "../../../components/buttonIndex/ButtonComponents";
 
 const CompanyList = () => {
   const [companyData, setCompanyData] = useState(null);
@@ -100,14 +101,18 @@ const CompanyList = () => {
 
           return (
             <div className="flex gap-2">
-              <div
+              {/* <div
                 onClick={() => navigate(`/master/company-edit/${id}`)}
                 className="flex items-center space-x-2"
                 title="Edit"
               >
                 <IconEdit className="h-5 w-5 text-blue-500 cursor-pointer" />
-              </div>
-              <div
+              </div> */}
+              <MasterCompanyEdit
+              onClick={() => navigate(`/master/company-edit/${id}`)}
+                className="flex items-center space-x-2"
+              />
+              {/* <div
                 onClick={() => {
                   setSelectedVehicleId(id);
                   setIsViewExpanded(true);
@@ -116,7 +121,15 @@ const CompanyList = () => {
                 title="View"
               >
                 <IconEye className="h-5 w-5 text-blue-500 cursor-pointer" />
-              </div>
+              </div> */}
+              <MasterCompanyView
+                onClick={() => {
+                  setSelectedVehicleId(id);
+                  setIsViewExpanded(true);
+                }}
+                className="flex items-center space-x-2"
+              
+              />
             </div>
           );
         },
@@ -149,12 +162,17 @@ const CompanyList = () => {
               Company List
             </h1>
             <div className="flex gap-2">
-              <button
+              {/* <button
                 onClick={() => navigate("/master/createCompany")}
                 className=" flex flex-row items-center gap-1 text-center text-sm font-[400] cursor-pointer  w-[7rem] text-white bg-blue-600 hover:bg-red-700 p-2 rounded-lg shadow-md"
               >
                 <IconPlus className="w-4 h-4" /> Company
-              </button>
+              </button> */}
+              <MasterCompanyCreate
+               onClick={() => navigate("/master/createCompany")}
+                className=" flex flex-row items-center gap-1 text-center text-sm font-[400] cursor-pointer  w-[7rem] text-white bg-blue-600 hover:bg-red-700 p-2 rounded-lg shadow-md"
+              
+              />
             </div>
           </div>
         </div>

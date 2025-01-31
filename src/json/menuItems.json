@@ -79,10 +79,10 @@
       "href": "/form-trip"
     },
     {
-      "title": "Payment",
+      "title": "Payments",
       "subItems": [
         {
-          "title": "Branch",
+          "title": "ToBranch",
           "href": "/payment/branch-list"
         },
         {
