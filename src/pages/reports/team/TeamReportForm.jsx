@@ -6,6 +6,10 @@ import SelectInput from "../../../components/common/SelectField";
 import { useNavigate } from "react-router-dom";
 import { IconInfoCircle } from "@tabler/icons-react";
 import { toast } from "sonner";
+import {
+  ReportTeamDownload,
+  ReportTeamView,
+} from "../../../components/buttonIndex/ButtonComponents";
 
 function TeamReportForm() {
   const navigate = useNavigate();
@@ -170,7 +174,7 @@ function TeamReportForm() {
               />
             </div>
 
-            <div className="flex justify-center py-4">
+            {/* <div className="flex justify-center py-4">
               <button
                 className=" text-center text-sm font-[400 ] cursor-pointer hover:animate-pulse w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md"
                 onClick={onSubmit}
@@ -185,6 +189,21 @@ function TeamReportForm() {
                 {" "}
                 View
               </button>
+            </div> */}
+
+            <div className="flex justify-center py-4">
+              <ReportTeamDownload
+                className=" text-center text-sm font-[400 ] cursor-pointer hover:animate-pulse w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md"
+                onClick={onSubmit}
+              >
+                {" "}
+              </ReportTeamDownload>
+              <ReportTeamView
+                className=" text-center text-sm font-[400 ] cursor-pointer hover:animate-pulse w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md ml-4"
+                onClick={handleview}
+              >
+                {" "}
+              </ReportTeamView>
             </div>
           </form>
         </div>

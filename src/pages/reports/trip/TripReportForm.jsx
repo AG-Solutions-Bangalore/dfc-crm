@@ -7,6 +7,7 @@ import SelectInput from "../../../components/common/SelectField";
 import { useNavigate } from "react-router-dom";
 import { IconInfoCircle } from "@tabler/icons-react";
 import moment from "moment";
+import { ReportTripRDetailsDownload, ReportTripRDetailsView, ReportTripRDownload, ReportTripRView } from "../../../components/buttonIndex/ButtonComponents";
 const vehicleType = [
   {
     value: "6W Truck",
@@ -498,7 +499,7 @@ function TripReportForm() {
               />
             </div>
 
-            <div className="flex flex-wrap justify-center gap-4 py-4">
+            {/* <div className="flex flex-wrap justify-center gap-4 py-4">
               <button
                 className="text-center text-sm font-medium cursor-pointer hover:animate-pulse w-full sm:w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md"
                 onClick={onSubmit}
@@ -523,6 +524,33 @@ function TripReportForm() {
               >
                 Details View
               </button>
+            </div> */}
+
+            <div className="flex flex-wrap justify-center gap-4 py-4">
+              <ReportTripRDownload
+                className="text-center text-sm font-medium cursor-pointer hover:animate-pulse w-full sm:w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md"
+                onClick={onSubmit}
+              >
+                Download
+              </ReportTripRDownload>
+              <ReportTripRView
+                className="text-center text-sm font-medium cursor-pointer hover:animate-pulse w-full sm:w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md"
+                onClick={handleview}
+              >
+                View
+              </ReportTripRView>
+              <ReportTripRDetailsDownload
+                className="text-center text-sm font-medium cursor-pointer hover:animate-pulse w-full sm:w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md"
+                onClick={onDetailSubmit}
+              >
+                Details Download
+              </ReportTripRDetailsDownload>
+              <ReportTripRDetailsView
+                className="text-center text-sm font-medium cursor-pointer hover:animate-pulse w-full sm:w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md"
+                onClick={handleview1}
+              >
+                Details View
+              </ReportTripRDetailsView>
             </div>
           </form>
         </div>

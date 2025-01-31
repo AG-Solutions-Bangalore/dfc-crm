@@ -6,6 +6,10 @@ import { useNavigate } from "react-router-dom";
 import BASE_URL from "../../../base/BaseUrl";
 import axios from "axios";
 import moment from "moment/moment";
+import {
+  PaymentDetailsCreate,
+  PaymentDetailsEdit,
+} from "../../../components/buttonIndex/ButtonComponents";
 
 const DetailsPaymentList = () => {
   const [deatailPaymentData, setDeatailPaymentData] = useState(null);
@@ -89,13 +93,10 @@ const DetailsPaymentList = () => {
 
           return (
             <div className="flex gap-2">
-              <div
+              <PaymentDetailsEdit
                 onClick={() => navigate(`/payment/edit-details/${id}`)}
-                className="flex items-center space-x-2"
-                title="Edit"
-              >
-                <IconEdit className="h-5 w-5 text-blue-500 cursor-pointer" />
-              </div>
+                className=" text-blue-500 cursor-pointer"
+              ></PaymentDetailsEdit>
             </div>
           );
         },
@@ -127,13 +128,19 @@ const DetailsPaymentList = () => {
             <h1 className="border-b-2 font-[400] border-dashed border-orange-800 text-center md:text-left">
               Payment Details List
             </h1>
-            <div className="flex gap-2">
+            {/* <div className="flex gap-2">
               <button
                 onClick={() => navigate("/payment/createDetails")}
                 className=" flex flex-row items-center gap-1 text-center text-sm font-[400] cursor-pointer  w-[7rem] text-white bg-blue-600 hover:bg-red-700 p-2 rounded-lg shadow-md"
               >
                 <IconPlus className="w-4 h-4" /> Payment
               </button>
+            </div> */}
+            <div className="flex gap-2">
+              <PaymentDetailsCreate
+                onClick={() => navigate("/payment/createDetails")}
+                className=" flex flex-row items-center gap-1 text-center text-sm font-[400] cursor-pointer  w-[7rem] text-white bg-blue-600 hover:bg-red-700 p-2 rounded-lg shadow-md"
+              ></PaymentDetailsCreate>
             </div>
           </div>
         </div>
