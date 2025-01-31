@@ -1,4 +1,5 @@
 import { Route, Routes } from "react-router-dom";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Home from "./pages/dashboard/Home";
 import SignIn from "./pages/auth/SignIn";
 import SIgnUp from "./pages/auth/SIgnUp";
@@ -96,10 +97,15 @@ import SalaryReportView from "./pages/reports/salary/SalaryReportView";
 import VehicleReportView from "./pages/reports/vechilesDetails/VehicleReportView";
 import TruckView from "./pages/vehicles/TruckView";
 import ChangeSpkm from "./pages/vehicles/ChangeSpkm";
-
+import ManagementDashboard from "./pages/userManagement/ManagementDashboard";
+import UserPage from "./pages/userManagement/UserPage";
+import CreatePage from "./pages/userManagement/CreatePage";
+import CreateButton from "./pages/userManagement/CreateButton";
+const queryClient = new QueryClient()
 const App = () => {
   return (
     <>
+     <QueryClientProvider client={queryClient}>
       <Toaster richColors position="top-right" />
       <Routes>
         <Route path="/" element={<SignIn />} />
@@ -275,7 +281,15 @@ const App = () => {
           path="/report-payment-form/view"
           element={<PaymentReportView />}
         />
+
+        {/* user management route  */}
+
+           <Route path="/userManagement" element={<UserPage />} />
+                <Route path="/management-dashboard/:id" element={<ManagementDashboard />} />
+                <Route path="/page-management" element={<CreatePage />} />
+                <Route path="/button-management" element={<CreateButton />} />
       </Routes>
+      </QueryClientProvider>
     </>
   );
 };
