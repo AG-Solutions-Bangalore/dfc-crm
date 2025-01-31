@@ -6,6 +6,10 @@ import axios from "axios";
 import BASE_URL from "../../../base/BaseUrl";
 import { MantineReactTable, useMantineReactTable } from "mantine-react-table";
 import moment from "moment/moment";
+import {
+  PaymentBranchCreate,
+  PaymentBranchEdit,
+} from "../../../components/buttonIndex/ButtonComponents";
 
 const BranchPaymentList = () => {
   const [branchPaymentData, setBranchPaymentData] = useState(null);
@@ -75,13 +79,20 @@ const BranchPaymentList = () => {
 
           return (
             <div className="flex gap-2">
-              <div
+              {/* <div
                 onClick={() => navigate(`/payment/edit-branchpay/${id}`)}
                 className="flex items-center space-x-2"
                 title="Edit"
               >
                 <IconEdit className="h-5 w-5 text-blue-500 cursor-pointer" />
-              </div>
+              </div> */}
+              <PaymentBranchEdit
+                onClick={() => navigate(`/payment/edit-branchpay/${id}`)}
+                className="h-5 w-5 text-blue-500 cursor-pointer"
+                // title="Edit"
+              >
+                {/* <IconEdit className="h-5 w-5 text-blue-500 cursor-pointer" /> */}
+              </PaymentBranchEdit>
             </div>
           );
         },
@@ -113,13 +124,19 @@ const BranchPaymentList = () => {
             <h1 className="border-b-2 font-[400] border-dashed border-orange-800 text-center md:text-left">
               Branch Payment List
             </h1>
-            <div className="flex gap-2">
+            {/* <div className="flex gap-2">
               <button
                 onClick={() => navigate("/payment/createBranchPay")}
                 className=" flex flex-row items-center gap-1 text-center text-sm font-[400] cursor-pointer  w-[9rem] text-white bg-blue-600 hover:bg-red-700 p-2 rounded-lg shadow-md"
               >
                 <IconPlus className="w-4 h-4" /> Branch Payment
               </button>
+            </div> */}
+            <div className="flex gap-2">
+              <PaymentBranchCreate
+                onClick={() => navigate("/payment/createBranchPay")}
+                className=" flex flex-row items-center gap-1 text-center text-sm font-[400] cursor-pointer  w-[9rem] text-white bg-blue-600 hover:bg-red-700 p-2 rounded-lg shadow-md"
+              ></PaymentBranchCreate>
             </div>
           </div>
         </div>

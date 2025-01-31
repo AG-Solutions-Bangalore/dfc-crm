@@ -116,6 +116,7 @@ const ManagementDashboard = () => {
       () => [...new Set(pagePermissions.map((p) => p.page))],
       [pagePermissions]
     );
+    console.log("")
   
   
   

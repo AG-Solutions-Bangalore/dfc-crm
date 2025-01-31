@@ -1581,7 +1581,7 @@ export const ServiceEdit = ({ onClick, className }) => {
   }
 
   return (
-    <button onClick={onClick} className={className} title="Edit Vehicles">
+    <button onClick={onClick} className={className} title="Edit Service">
       <Edit className="h-4 w-4" />
     </button>
   );
@@ -1595,14 +1595,14 @@ export const ServiceView = ({ onClick, className }) => {
   }
 
   return (
-    <button onClick={onClick} className={className} title="Edit Vehicles">
-      <Eye className="h-4 w-4" />
+    <button onClick={onClick} className={className} title="View Service">
+      <View className="h-4 w-4" />
     </button>
   );
 };
 ServiceView.page = "Service";
 
-/*---------------Payment--------------------------------- */
+/*---------------Payment branch--------------------------------- */
 export const PaymentBranchCreate = ({ onClick, className }) => {
   const userId = localStorage.getItem("id") || "";
   const staticPermissions = getStaticPermissions();
@@ -1613,11 +1613,309 @@ export const PaymentBranchCreate = ({ onClick, className }) => {
   return (
     <button onClick={onClick} className={className}>
       <Plus className="h-4 w-4 " />
-      Branch Payment
+      Branch Payment  
     </button>
   );
 };
-PaymentBranchCreate.page = "Service";
+PaymentBranchCreate.page = "ToBranch";
+export const PaymentBranchEdit = ({ onClick, className }) => {
+  const userId = localStorage.getItem("id") || "";
+  const staticPermissions = getStaticPermissions();
+  if (!checkPermission(userId, "PaymentBranchEdit", staticPermissions)) {
+    return null;
+  }
+
+  return (
+    <button onClick={onClick} className={className} title="Edit Payment">
+      <Edit className="h-4 w-4" />
+    </button>
+  );
+};
+PaymentBranchEdit.page = "ToBranch";
+/*---------------Payment advance--------------------------------- */
+export const PaymentAdvanceCreate = ({ onClick, className }) => {
+  const userId = localStorage.getItem("id") || "";
+  const staticPermissions = getStaticPermissions();
+  if (!checkPermission(userId, "PaymentAdvanceCreate", staticPermissions)) {
+    return null;
+  }
+
+  return (
+    <button onClick={onClick} className={className}>
+      <Plus className="h-4 w-4 " />
+      Advance
+    </button>
+  );
+};
+PaymentAdvanceCreate.page = "Advance";
+export const PaymentAdvanceEdit = ({ onClick, className }) => {
+  const userId = localStorage.getItem("id") || "";
+  const staticPermissions = getStaticPermissions();
+  if (!checkPermission(userId, "PaymentAdvanceEdit", staticPermissions)) {
+    return null;
+  }
+
+  return (
+    <button onClick={onClick} className={className} title="Edit">
+      <Edit className="h-4 w-4" />
+    </button>
+  );
+};
+PaymentAdvanceEdit.page = "Advance";
+/*---------------Payment Details--------------------------------- */
+export const PaymentDetailsCreate = ({ onClick, className }) => {
+  const userId = localStorage.getItem("id") || "";
+  const staticPermissions = getStaticPermissions();
+  if (!checkPermission(userId, "PaymentDetailsCreate", staticPermissions)) {
+    return null;
+  }
+
+  return (
+    <button onClick={onClick} className={className}>
+      <Plus className="h-4 w-4 " />
+      Payment
+    </button>
+  );
+};
+PaymentDetailsCreate.page = "Details";
+export const PaymentDetailsEdit = ({ onClick, className }) => {
+  const userId = localStorage.getItem("id") || "";
+  const staticPermissions = getStaticPermissions();
+  if (!checkPermission(userId, "PaymentDetailsEdit", staticPermissions)) {
+    return null;
+  }
+
+  return (
+    <button onClick={onClick} className={className} title="Edit">
+      <Edit className="h-4 w-4" />
+    </button>
+  );
+};
+PaymentDetailsEdit.page = "Details";
+/*---------------Todo--------------------------------- */
+export const TodoCreate = ({ onClick, className }) => {
+  const userId = localStorage.getItem("id") || "";
+  const staticPermissions = getStaticPermissions();
+  if (!checkPermission(userId, "TodoCreate", staticPermissions)) {
+    return null;
+  }
+
+  return (
+    <button onClick={onClick} className={className}>
+      <Plus className="h-4 w-4 " />
+      Todo
+    </button>
+  );
+};
+TodoCreate.page = "Todo";
+export const TodoEdit = ({ onClick, className }) => {
+  const userId = localStorage.getItem("id") || "";
+  const staticPermissions = getStaticPermissions();
+  if (!checkPermission(userId, "TodoEdit", staticPermissions)) {
+    return null;
+  }
+
+  return (
+    <button onClick={onClick} className={className} title="Edit">
+      <Edit className="h-4 w-4" />
+    </button>
+  );
+};
+TodoEdit.page = "Todo";
+/*---------------ReportAgencies--------------------------------- */
+export const ReportAgenciesDownload = ({ onClick, className }) => {
+  const userId = localStorage.getItem("id") || "";
+  const staticPermissions = getStaticPermissions();
+  if (!checkPermission(userId, "ReportAgenciesDownload", staticPermissions)) {
+    return null;
+  }
+
+  return (
+    <button onClick={onClick} className={className}>
+      Download
+    </button>
+  );
+};
+ReportAgenciesDownload.page = "Agencies";
+export const ReportAgenciesView = ({ onClick, className }) => {
+  const userId = localStorage.getItem("id") || "";
+  const staticPermissions = getStaticPermissions();
+  if (!checkPermission(userId, "ReportAgenciesView", staticPermissions)) {
+    return null;
+  }
+
+  return (
+    <button onClick={onClick} className={className}>
+      View
+    </button>
+  );
+};
+ReportAgenciesView.page = "Agencies";
+// /*---------------ReportAgencies--------------------------------- */
+// export const ReportAgenciesDownload = ({ onClick, className }) => {
+//   const userId = localStorage.getItem("id") || "";
+//   const staticPermissions = getStaticPermissions();
+//   if (!checkPermission(userId, "ReportAgenciesDownload", staticPermissions)) {
+//     return null;
+//   }
+
+//   return (
+//     <button onClick={onClick} className={className}>
+//       Download
+//     </button>
+//   );
+// };
+// ReportAgenciesDownload.page = "Agencies";
+// export const ReportAgenciesView = ({ onClick, className }) => {
+//   const userId = localStorage.getItem("id") || "";
+//   const staticPermissions = getStaticPermissions();
+//   if (!checkPermission(userId, "ReportAgenciesView", staticPermissions)) {
+//     return null;
+//   }
+
+//   return (
+//     <button onClick={onClick} className={className}>
+//       View
+//     </button>
+//   );
+// };
+// ReportAgenciesView.page = "Agencies";
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1752,9 +2050,17 @@ export default {
   ServiceCreate,
   ServiceEdit,
   ServiceView,
+  PaymentBranchCreate,
+  PaymentBranchEdit,
+  PaymentAdvanceCreate,
+  PaymentAdvanceEdit,
+  PaymentDetailsCreate,
+  PaymentDetailsEdit,
 
-
-
+  TodoCreate,
+  TodoEdit,
+  ReportAgenciesDownload,
+  ReportAgenciesView
 };
 
 
