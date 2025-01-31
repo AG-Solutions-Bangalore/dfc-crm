@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import BASE_URL from "../../base/BaseUrl";
 import moment from "moment/moment";
+import { TodoCreate, TodoEdit } from "../../components/buttonIndex/ButtonComponents";
 
 const TodoList = () => {
   const [todoData, setTodoData] = useState(null);
@@ -71,13 +72,18 @@ const TodoList = () => {
 
           return (
             <div className="flex gap-2">
-              <div
+              {/* <div
                 onClick={() => navigate(`/edit-todo/${id}`)}
                 className="flex items-center space-x-2"
                 title="Edit"
               >
                 <IconEdit className="h-5 w-5 text-blue-500 cursor-pointer" />
-              </div>
+              </div> */}
+              <TodoEdit
+                onClick={() => navigate(`/edit-todo/${id}`)}
+                className="h-5 w-5 text-blue-500 cursor-pointer"                title="Edit"
+              >
+              </TodoEdit>
             </div>
           );
         },
@@ -109,13 +115,21 @@ const TodoList = () => {
             <h1 className="border-b-2 font-[400] border-dashed border-orange-800 text-center md:text-left">
               Todo List
             </h1>
-            <div className="flex gap-2">
+            {/* <div className="flex gap-2">
               <button
                 className=" flex flex-row items-center gap-1 text-center text-sm font-[400] cursor-pointer  w-[5rem] text-white bg-blue-600 hover:bg-red-700 p-2 rounded-lg shadow-md"
                 onClick={() => navigate(`/createTodo`)}
               >
                 <IconPlus className="w-4 h-4" /> Todo
               </button>
+            </div> */}
+            <div className="flex gap-2">
+              <TodoCreate
+                className=" flex flex-row items-center gap-1 text-center text-sm font-[400] cursor-pointer  w-[5rem] text-white bg-blue-600 hover:bg-red-700 p-2 rounded-lg shadow-md"
+                onClick={() => navigate(`/createTodo`)}
+              >
+                <IconPlus className="w-4 h-4" /> Todo
+              </TodoCreate>
             </div>
           </div>
         </div>
