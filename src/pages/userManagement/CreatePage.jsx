@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import BASE_URL from "../../base/BaseUrl";
 import Layout from "../../layout/Layout";
 import { ContextPanel } from "../../context/ContextPanel";
+import { useNavigate } from "react-router-dom";
 
 
 const CreatePage = () => {
@@ -16,6 +17,7 @@ const CreatePage = () => {
   const [userIds, setUserIds] = useState("1,773");
   const [status, setStatus] = useState("Active");
   const [availablePages, setAvailablePages] = useState([]);
+  const navigate = useNavigate()
  const {fetchPagePermission} = useContext(ContextPanel)
   const flattenMenuItems = (items) => {
     let flattened = [];
