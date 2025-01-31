@@ -6,6 +6,11 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import BASE_URL from "../../base/BaseUrl";
 import moment from "moment/moment";
+import {
+  ServiceCreate,
+  ServiceEdit,
+  ServiceView,
+} from "../../components/buttonIndex/ButtonComponents";
 
 const ServicesList = () => {
   const [serviceData, setServiceData] = useState(null);
@@ -113,20 +118,29 @@ const ServicesList = () => {
 
           return (
             <div className="flex gap-2">
-              <div
+              {/* <div
                 onClick={() => navigate(`/service-edit/${id}`)}
                 className="flex items-center space-x-2"
                 title="Edit"
               >
                 <IconEdit className="h-5 w-5 text-blue-500 cursor-pointer" />
-              </div>
-              <div
+              </div> */}
+              <ServiceEdit
+                onClick={() => navigate(`/service-edit/${id}`)}
+                className=" h-5 w-5 text-blue-500"
+              />
+              {/* <div
                 onClick={() => navigate(`/service-view/${id}`)}
                 className="flex items-center space-x-2"
                 title="View"
               >
                 <IconEye className="h-5 w-5 text-blue-500 cursor-pointer" />
-              </div>
+              </div> */}
+
+              <ServiceView
+                onClick={() => navigate(`/service-view/${id}`)}
+                className=" h-5 w-5 text-blue-500"
+              />
             </div>
           );
         },
@@ -159,12 +173,16 @@ const ServicesList = () => {
               Service List
             </h1>
             <div className="flex gap-2">
-              <button
+              {/* <button
                 onClick={() => navigate("/createService")}
                 className=" flex flex-row items-center gap-1 text-center text-sm font-[400] cursor-pointer  w-[7rem] text-white bg-blue-600 hover:bg-red-700 p-2 rounded-lg shadow-md"
               >
                 <IconPlus className="w-4 h-4" /> Service
-              </button>
+              </button> */}
+              <ServiceCreate
+                onClick={() => navigate("/createService")}
+                className=" flex flex-row items-center justify-center gap-1 text-center text-sm font-[400] cursor-pointer  w-[7rem] text-white bg-blue-600 hover:bg-red-700 p-2 rounded-lg shadow-md"
+              />
             </div>
           </div>
         </div>
