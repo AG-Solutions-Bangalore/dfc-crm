@@ -7,6 +7,7 @@ import SelectInput from "../../../components/common/SelectField";
 import { useNavigate } from "react-router-dom";
 import { IconInfoCircle } from "@tabler/icons-react";
 import moment from "moment";
+import { ReportTyreDetailsDownload, ReportTyreDetailsView, ReportTyreDownload, ReportTyreView } from "../../../components/buttonIndex/ButtonComponents";
 
 function TyreReportForm() {
   const navigate = useNavigate();
@@ -353,7 +354,7 @@ function TyreReportForm() {
               </div>
             </div>
 
-            <div className="flex flex-wrap justify-center gap-4 py-4">
+            {/* <div className="flex flex-wrap justify-center gap-4 py-4">
               <button
                 className="text-center text-sm font-medium cursor-pointer hover:animate-pulse w-full sm:w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md"
                 onClick={onSubmit}
@@ -378,6 +379,31 @@ function TyreReportForm() {
               >
                 Details View
               </button>
+            </div> */}
+            <div className="flex flex-wrap justify-center gap-4 py-4">
+              <ReportTyreDownload
+                className="text-center text-sm font-medium cursor-pointer hover:animate-pulse w-full sm:w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md"
+                onClick={onSubmit}
+              >
+              </ReportTyreDownload>
+              <ReportTyreView
+                className="text-center text-sm font-medium cursor-pointer hover:animate-pulse w-full sm:w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md"
+                onClick={handleview}
+              >
+           
+              </ReportTyreView>
+              <ReportTyreDetailsDownload
+                className="text-center text-sm font-medium cursor-pointer hover:animate-pulse w-full sm:w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md"
+                onClick={onDetailSubmit}
+              >
+              
+              </ReportTyreDetailsDownload>
+              <ReportTyreDetailsView
+                className="text-center text-sm font-medium cursor-pointer hover:animate-pulse w-full sm:w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md"
+                onClick={handleDetailview}
+              >
+         
+              </ReportTyreDetailsView>
             </div>
           </form>
         </div>

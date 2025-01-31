@@ -6,6 +6,7 @@ import BASE_URL from '../../../base/BaseUrl';
 import { MantineReactTable, useMantineReactTable } from 'mantine-react-table';
 import { IconEdit, IconEye, IconPlus } from '@tabler/icons-react';
 import ViewDriver from './ViewDriver';
+import { MasterDriverCreate, MasterDriverEdit, MasterDriverView } from '../../../components/buttonIndex/ButtonComponents';
 
 const DriverList = () => {
   const [driverData, setDriverData] = useState(null);
@@ -82,14 +83,19 @@ const DriverList = () => {
           return (
             <div className="flex gap-2">
               
-              <div
+              {/* <div
                 onClick={()=>navigate(`/master/driver-edit/${id}`)}
                 className="flex items-center space-x-2"
                 title="Edit"
               >
                 <IconEdit className="h-5 w-5 text-blue-500 cursor-pointer" />
-              </div>
-              <div
+              </div> */}
+              <MasterDriverEdit
+               onClick={()=>navigate(`/master/driver-edit/${id}`)}
+                className="flex items-center space-x-2"
+              
+              />
+              {/* <div
                  onClick={() => {
                   setSelectedVehicleId(id); 
                   setIsViewExpanded(true); 
@@ -98,7 +104,15 @@ const DriverList = () => {
                 title="View"
               >
                 <IconEye className="h-5 w-5 text-blue-500 cursor-pointer" />
-              </div>
+              </div> */}
+              <MasterDriverView
+               onClick={() => {
+                setSelectedVehicleId(id); 
+                setIsViewExpanded(true); 
+              }}
+              className="flex items-center space-x-2"
+              
+              />
               
               
             </div>
@@ -134,13 +148,19 @@ const DriverList = () => {
               Driver List
             </h1>
             <div className="flex gap-2">
-              <button
+              {/* <button
               onClick={()=>navigate('/master/createDriver')}
                 className=" flex flex-row items-center gap-1 text-center text-sm font-[400] cursor-pointer  w-[7rem] text-white bg-blue-600 hover:bg-red-700 p-2 rounded-lg shadow-md"
               
               >
                 <IconPlus className='w-4 h-4'/> Driver
-              </button>
+              </button> */}
+              <MasterDriverCreate
+               onClick={()=>navigate('/master/createDriver')}
+                className=" flex flex-row items-center gap-1 text-center text-sm font-[400] cursor-pointer  w-[5rem] text-white bg-blue-600 hover:bg-red-700 p-2 rounded-lg shadow-md"
+              
+              
+              />
               </div>
           </div>
         </div>
