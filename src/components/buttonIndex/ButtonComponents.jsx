@@ -435,7 +435,12 @@ export const MasterPurchaseEdit = ({ onClick, className }) => {
   }
 
   return (
-    <button onClick={onClick} className={className} title="Edit Company">
+    <button
+   
+      onClick={onClick}
+      className={className}
+      title="Edit Purchase"
+    >
       <Edit className="h-4 w-4 text-blue-500" />
     </button>
   );
@@ -449,8 +454,13 @@ export const MasterPurchaseView = ({ onClick, className }) => {
   }
 
   return (
-    <button onClick={onClick} className={className} title="View Company">
-      <Eye className="h-4 w-4 text-blue-500" />
+    <button
+   
+      onClick={onClick}
+      className={className}
+      title="View Purchase"
+    >
+      <Eye  className="h-4 w-4 text-blue-500" />
     </button>
   );
 };
@@ -466,7 +476,8 @@ export const MasterPurchaseCreate = ({ onClick, className }) => {
   return (
     <button onClick={onClick} className={className}>
       <Plus className="h-4 w-4 " />
-      Company
+      
+      Purchase Tyre
     </button>
   );
 };
@@ -482,8 +493,13 @@ export const MasterFittedTyreView = ({ onClick, className }) => {
   }
 
   return (
-    <button onClick={onClick} className={className} title="View Company">
-      <Eye className="h-4 w-4 text-blue-500" />
+    <button
+   
+      onClick={onClick}
+      className={className}
+      title="View Fitted Tyre"
+    >
+      <Eye  className="h-4 w-4 text-blue-500" />
     </button>
   );
 };
@@ -499,7 +515,12 @@ export const MasterUnderInspectEdit = ({ onClick, className }) => {
   }
 
   return (
-    <button onClick={onClick} className={className} title="Edit Company">
+    <button
+   
+      onClick={onClick}
+      className={className}
+      title="Updated Tyre"
+    >
       <Edit className="h-4 w-4 text-blue-500" />
     </button>
   );
@@ -531,7 +552,12 @@ export const MasterTripEdit = ({ onClick, className }) => {
   }
 
   return (
-    <button onClick={onClick} className={className} title="Edit Company">
+    <button
+   
+      onClick={onClick}
+      className={className}
+      title="Edit Trip"
+    >
       <Edit className="h-4 w-4 text-blue-500" />
     </button>
   );
@@ -545,8 +571,13 @@ export const MasterTripView = ({ onClick, className }) => {
   }
 
   return (
-    <button onClick={onClick} className={className} title="View Company">
-      <Eye className="h-4 w-4 text-blue-500" />
+    <button
+   
+      onClick={onClick}
+      className={className}
+      title="View Trip"
+    >
+      <Eye  className="h-4 w-4 text-blue-500" />
     </button>
   );
 };

@@ -62,9 +62,25 @@ const iconComponents = {
 
 
 const mapItems = (items) => {
-  console.log("iconComponents", iconComponents);
-console.log("Payment Icon:", iconComponents["Payment"]);
-console.log("Report Icon:", iconComponents["Report"]);
+
+
+  /* 
+  
+  logic to page management 
+  1. get the data form local stroage 
+  2. get the usrId from local stroage 
+  3. import the menuItems.json file and compare with Four condition
+    a. title = page
+    b. href = url
+    c. userId( from local storage (id)) = userIds.includes(userId)
+    d. status Active 
+
+  4. if All condution Meet than filtered the json 
+  
+  
+  
+  
+  */
 
   return items.map(item => ({
     id: uniqueId(),

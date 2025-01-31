@@ -19,6 +19,7 @@ import {
   DialogFooter,
 } from "@material-tailwind/react";
 import { IconTrash } from "@tabler/icons-react";
+import { MasterUnderInspectDelete, MasterUnderInspectEdit } from "../../../components/buttonIndex/ButtonComponents";
 const InspectionTyreList = () => {
   const [inspectionTyreData, setInspectionTyreData] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -145,20 +146,29 @@ const InspectionTyreList = () => {
 
           return (
             <div className="flex gap-2">
-              <div
+              {/* <div
                 onClick={(e) => handleTyreUpdate(e, id)}
                 className="flex items-center space-x-2"
                 title="Update Tyre"
               >
                 <IconEdit className="h-5 w-5 text-blue-500 cursor-pointer" />
-              </div>
-              <div
+              </div> */}
+              <MasterUnderInspectEdit
+                 onClick={(e) => handleTyreUpdate(e, id)}
+                className="flex items-center space-x-2"
+              
+              />
+              {/* <div
                 onClick={(e) => handleTyreDead(e, id)}
                 className="flex items-center space-x-2"
                 title="Tyre Dead"
               >
                 <IconTrash className="h-5 w-5 text-blue-500 cursor-pointer" />
-              </div>
+              </div> */}
+              <MasterUnderInspectDelete
+              onClick={(e) => handleTyreDead(e, id)}
+                className="flex items-center space-x-2"
+              />
             </div>
           );
         },

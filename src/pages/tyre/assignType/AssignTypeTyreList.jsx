@@ -5,6 +5,7 @@ import axios from 'axios';
 import BASE_URL from '../../../base/BaseUrl';
 import { IconEye } from '@tabler/icons-react';
 import { MantineReactTable, useMantineReactTable } from 'mantine-react-table';
+import { MasterFittedTyreView } from '../../../components/buttonIndex/ButtonComponents';
 
 const AssignTypeTyreList = () => {
   const [assignTypeTyreData, setAssignTypeTyreData] = useState(null);
@@ -76,14 +77,18 @@ const AssignTypeTyreList = () => {
             <div className="flex gap-2">
               
              
-              <div
+              {/* <div
                 onClick={()=>navigate(`/tyre/assign-view/${id}`)}
                 className="flex items-center space-x-2"
                 title="View"
               >
                 <IconEye className="h-5 w-5 text-blue-500 cursor-pointer" />
-              </div>
+              </div> */}
+              <MasterFittedTyreView
+               onClick={()=>navigate(`/tyre/assign-view/${id}`)}
+                className="flex items-center space-x-2"
               
+              />
               
             </div>
           );

@@ -7,6 +7,7 @@ import axios from "axios";
 import BASE_URL from "../../base/BaseUrl";
 import ViewTrip from "./ViewTrip";
 import moment from "moment/moment";
+import { MasterTripCreate, MasterTripEdit, MasterTripView } from "../../components/buttonIndex/ButtonComponents";
 
 const TripList = () => {
   const [tripData, setTripData] = useState(null);
@@ -211,14 +212,19 @@ const TripList = () => {
 
           return (
             <div className="flex gap-2">
-              <div
+              {/* <div
                 onClick={() => navigate(`/edit-trip/${id}`)}
                 className="flex items-center space-x-2"
                 title="Edit"
               >
                 <IconEdit className="h-5 w-5 text-blue-500 cursor-pointer " />
-              </div>
-              <div
+              </div> */}
+              <MasterTripEdit
+               onClick={() => navigate(`/edit-trip/${id}`)}
+                className="flex items-center space-x-2"
+              
+              />
+              {/* <div
                 onClick={() => {
                   setSelectedVehicleId(id);
                   setIsViewExpanded(true);
@@ -227,7 +233,14 @@ const TripList = () => {
                 title="View"
               >
                 <IconEye className="h-5 w-5 text-blue-500 cursor-pointer" />
-              </div>
+              </div> */}
+              <MasterTripView
+                 onClick={() => {
+                  setSelectedVehicleId(id);
+                  setIsViewExpanded(true);
+                }}
+                className="flex items-center space-x-2"
+              />
             </div>
           );
         },
@@ -260,12 +273,17 @@ const TripList = () => {
               Trip List
             </h1>
             <div className="flex gap-2">
-              <button
+              {/* <button
                 className=" flex flex-row items-center gap-1 text-center text-sm font-[400] cursor-pointer  w-[5rem] text-white bg-blue-600 hover:bg-red-700 p-2 rounded-lg shadow-md"
                 onClick={() => navigate(`/createTrip`)}
               >
                 <IconPlus className="w-4 h-4" /> Trip
-              </button>
+              </button> */}
+              <MasterTripCreate
+                className=" flex flex-row items-center gap-1 text-center text-sm font-[400] cursor-pointer  w-[5rem] text-white bg-blue-600 hover:bg-red-700 p-2 rounded-lg shadow-md"
+                onClick={() => navigate(`/createTrip`)}
+              
+              />
             </div>
           </div>
         </div>
