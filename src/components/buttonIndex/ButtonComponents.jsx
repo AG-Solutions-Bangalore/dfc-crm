@@ -1239,9 +1239,7 @@ export default {
   MasterTripView,
   MasterTripEdit,
 
-  ServiceCreate,
-  ServiceEdit,
-  ServiceView,
+  
   PaymentBranchCreate,
   PaymentBranchEdit,
   PaymentAdvanceCreate,
