@@ -151,5 +151,9 @@
     {
       "title": "User Management",
       "href": "/userManagement"
+    },
+    {
+      "title": "User Type",
+      "href": "/user-type"
     }
   ]

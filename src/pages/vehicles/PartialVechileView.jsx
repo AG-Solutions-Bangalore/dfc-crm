@@ -11,6 +11,7 @@ import {
 import BASE_URL from "../../base/BaseUrl";
 import { CheckCircleIcon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { VechilesPVGototyre } from "../../components/buttonIndex/ButtonComponents";
 
 const DetailRow = ({ label, value }) => (
   <div className="flex justify-between py-2 border-b last:border-b-0">
@@ -175,7 +176,13 @@ const PartialVechileView = ({ vehicleId }) => {
             <DetailRow label="Vechile Status" value={vehicle?.vehicle_status} />
             {}
             <DetailRow label="Total Tyres" value={renderTyreIcons()} />
-            <button  className="p-1 border text-black bg-orange-500 text-[10px] border-black rounded-lg"   onClick={() => window.open(`/vechile-view/${vehicleId}`, '_blank')} >Go to Tyre Page</button>
+
+            {/* <button  className="p-1 border text-black bg-orange-500 text-[10px] border-black rounded-lg"   onClick={() => window.open(`/vechile-view/${vehicleId}`, '_blank')} >Go to Tyre Page</button> */}
+            <VechilesPVGototyre
+            className="p-1 border text-black bg-orange-500 text-[10px] border-black rounded-lg"   onClick={() => window.open(`/vechile-view/${vehicleId}`, '_blank')}
+            
+            />
+
           </div>
 
           <div>

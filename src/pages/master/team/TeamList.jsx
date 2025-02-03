@@ -67,7 +67,7 @@ const TeamList = () => {
           const userType = row.original.user_type_id;
 
           return (
-            <span>{userType == "3" ? "Branch Manager" : "Branch User"}</span>
+            <span>{userType == "3" ? "Office" : "Branch Manager"}</span>
           );
         },
       },

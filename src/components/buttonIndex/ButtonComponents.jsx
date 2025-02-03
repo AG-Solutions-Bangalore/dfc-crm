@@ -75,6 +75,21 @@ export const VechilesCreateTyre = ({ onClick, className }) => {
   );
 };
 VechilesCreateTyre.page = "Vehicles";
+export const VechilesPVGototyre = ({ onClick, className }) => {
+  const userId = localStorage.getItem("id") || "";
+  const staticPermissions = getStaticPermissions();
+  if (!checkPermission(userId, "VechilesPVGototyre", staticPermissions)) {
+    return null;
+  }
+
+  return (
+    <button onClick={onClick} className={className}>
+     
+     Go to Tyre Page
+    </button>
+  );
+};
+VechilesPVGototyre .page = "Vehicles";
 
 export const VechilesTruck = ({ onClick, className }) => {
   const userId = localStorage.getItem("id") || "";
@@ -779,7 +794,7 @@ export const ReportAgenciesDownload = ({ onClick, className }) => {
     </button>
   );
 };
-ReportAgenciesDownload.page = "Agencies";
+ReportAgenciesDownload.page = "AgenciesR";
 export const ReportAgenciesView = ({ onClick, className }) => {
   const userId = localStorage.getItem("id") || "";
   const staticPermissions = getStaticPermissions();
@@ -793,7 +808,7 @@ export const ReportAgenciesView = ({ onClick, className }) => {
     </button>
   );
 };
-ReportAgenciesView.page = "Agencies";
+ReportAgenciesView.page = "AgenciesR";
 // /*---------------ReportTeamR--------------------------------- */
 export const ReportTeamDownload = ({ onClick, className }) => {
   const userId = localStorage.getItem("id") || "";
@@ -1203,6 +1218,7 @@ export default {
   VechilesEdit,
   VechilesCreate,
   VechilesView,
+  VechilesPVGototyre,
   ServiceCreate,
   ServiceEdit,
   ServiceView,

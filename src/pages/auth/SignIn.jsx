@@ -33,6 +33,7 @@ const SignIn = () => {
       if (res.status === 200) {
         const token = res.data.UserInfo?.token;
         const allUser = res.data?.userN;
+        const userType = res.data?.UserInfo?.user?.user_type_id
         if (token) {
           localStorage.setItem("token", token);
           localStorage.setItem("allUsers", JSON.stringify(allUser));
@@ -45,8 +46,18 @@ const SignIn = () => {
           );
           await fetchPermissions();
           await fetchPagePermission();
-
-          navigate("/home");
+          
+          switch (userType) {
+            case 3:
+            case 4:
+              navigate("/vehicles-list");
+              break;
+            case 2:
+            case 5:
+            default:
+              navigate("/home");
+              break;
+          }
         } else {
           toast.error("Login Failed, Token not received.");
         }

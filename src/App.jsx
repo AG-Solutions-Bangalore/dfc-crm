@@ -101,6 +101,8 @@ import ManagementDashboard from "./pages/userManagement/ManagementDashboard";
 import UserPage from "./pages/userManagement/UserPage";
 import CreatePage from "./pages/userManagement/CreatePage";
 import CreateButton from "./pages/userManagement/CreateButton";
+import UserTypeList from "./pages/userType/UserTypeList";
+import EditUserType from "./pages/userType/EditUserType";
 const queryClient = new QueryClient()
 const App = () => {
   return (
@@ -288,6 +290,11 @@ const App = () => {
                 <Route path="/management-dashboard/:id" element={<ManagementDashboard />} />
                 <Route path="/page-management" element={<CreatePage />} />
                 <Route path="/button-management" element={<CreateButton />} />
+
+
+                {/* usertype  */}
+                <Route path="/user-type" element={<UserTypeList />} />
+                <Route path="/edit-user-type/:id" element={<EditUserType />} />
       </Routes>
       </QueryClientProvider>
     </>
