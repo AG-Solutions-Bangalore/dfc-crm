@@ -159,7 +159,7 @@ const App = () => {
         <Route path="/master/createVendor" element={<CreateVendor />} />
 
         {/* vechiles  */}
-        <Route path="/vechiles-list" element={<VehiclesList />} />
+        <Route path="/vehicles-list" element={<VehiclesList />} />
         <Route path="/createVechiles" element={<AddVechiles />} />
         <Route path="/createTyre" element={<AddTyre />} />
         <Route path="/vechile-edit/:id" element={<EditVechiles />} />

@@ -68,7 +68,7 @@ const UserPage = () => {
 
   return (
     <Layout>
-      <div className="container mx-auto p-6">
+      <div className=" ">
         <div className="bg-white rounded-lg shadow-lg p-6">
           {/* Search and Filter Section */}
           <div className="flex gap-4 mb-6">
