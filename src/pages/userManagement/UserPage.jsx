@@ -116,12 +116,12 @@ const UserPage = () => {
                 </MenuItem>
               </MenuList>
             </Menu>
-            <Button variant="outlined" onClick={()=>navigate('/page-management')} className="flex items-center gap-2">
+            {/* <Button variant="outlined" onClick={()=>navigate('/page-management')} className="flex items-center gap-2">
               + Page
             </Button>
             <Button variant="outlined" onClick={()=>navigate('/button-management')} className="flex items-center gap-2">
               + Button
-            </Button>
+            </Button> */}
           </div>
           <div className="overflow-x-auto">
             <table className="min-w-full">
