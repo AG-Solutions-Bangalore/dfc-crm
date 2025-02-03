@@ -9,11 +9,11 @@ import { IconArrowBack, IconInfoCircle } from "@tabler/icons-react";
 const userType = [
   {
     value: "3",
-    label: "Branch Manager",
+    label: "Office",
   },
   {
     value: "4",
-    label: "Branch User",
+    label: "Branch Manager",
   },
 ];
 

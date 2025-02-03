@@ -212,7 +212,7 @@ const ViewVechile = () => {
               />
               <IconArrowBack
                 className="cursor-pointer text-gray-600 hover:text-red-600"
-                onClick={() => navigate("/vechiles-list")}
+                onClick={() => navigate("/vehicles-list")}
                 title="Go Back"
               />
             </div>

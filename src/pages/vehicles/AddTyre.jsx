@@ -664,7 +664,7 @@ const AddTyre = () => {
               <span>Add Tyre </span>
             </div>
             <IconArrowBack
-              onClick={() => navigate("/vechiles-list")}
+              onClick={() => navigate("/vehicles-list")}
               className="cursor-pointer hover:text-red-600"
             />
           </h2>
@@ -1606,7 +1606,7 @@ const AddTyre = () => {
               type="button"
               className="text-center text-sm font-[400] cursor-pointer  w-36 text-white bg-red-600 hover:bg-red-400 p-2 rounded-lg shadow-md"
               onClick={() => {
-                navigate("/vechiles-list");
+                navigate("/vehicles-list");
               }}
             >
               Back

@@ -102,12 +102,12 @@ const UserPage = () => {
                 <MenuItem
                   onClick={() => setFilters({ ...filters, userType: 3 })}
                 >
-                  Branch Manager
+                  Office
                 </MenuItem>
                 <MenuItem
                   onClick={() => setFilters({ ...filters, userType: 4 })}
                 >
-                  Branch User
+                  Branch Manager
                 </MenuItem>
                 <MenuItem
                   onClick={() => setFilters({ ...filters, userType: 5 })}
@@ -161,11 +161,11 @@ const UserPage = () => {
                         } capitalize`}
                       >
                         {user.user_type_id === 3
-                          ? "Branch Manager"
+                          ? "Office"
                           : user.user_type_id === 2
                           ? "Admin"
                           : user.user_type_id === 4
-                          ? "Branch User"
+                          ? "Branch Manager"
                           : user.user_type_id === 5
                           ? "Superadmin"
                           : "N/A"}

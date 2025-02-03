@@ -186,6 +186,7 @@ const ManagementDashboard = () => {
     activePages: pagePermissions.filter(p => p.userIds.includes(userId.toString())).length,
     activeButtons: buttonPermissions.filter(p => p.userIds.includes(userId.toString())).length,
   }), [pages, buttonPermissions, pagePermissions, userId]);
+
   const handleButtonPermissionChange = async (button, isChecked, permissionId) => {
     try {
       const currentPermission = buttonPermissions.find((permission) => permission.id === permissionId);
@@ -278,8 +279,8 @@ const ManagementDashboard = () => {
   const getUserTypeInfo = (userTypeId) => {
     const types = {
       2: { label: "Admin", classes: "bg-blue-100 text-blue-800" },
-      3: { label: "Branch Manager", classes: "bg-red-100 text-red-800" },
-      4: { label: "Branch User", classes: "bg-green-100 text-green-800" },
+      3: { label: "Office", classes: "bg-red-100 text-red-800" },
+      4: { label: "Branch Manager", classes: "bg-green-100 text-green-800" },
       5: { label: "Superadmin", classes: "bg-purple-100 text-purple-800" },
     };
     return types[userTypeId] || { label: "N/A", classes: "bg-gray-100 text-gray-800" };
