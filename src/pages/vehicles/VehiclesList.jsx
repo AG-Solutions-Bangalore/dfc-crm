@@ -265,7 +265,7 @@ const VehiclesList = () => {
               >
                 <IconEye className="h-5 w-5 text-blue-500 cursor-pointer" />
               </div> */}
-               <a href={`/truckdetails-viewall/${id}`} target="_blank" rel="noopener noreferrer">
+               <a href={`/truckdetails-viewall/${id}`}  rel="noopener noreferrer">
               {/* <div
                  
                 className="flex items-center space-x-2"
