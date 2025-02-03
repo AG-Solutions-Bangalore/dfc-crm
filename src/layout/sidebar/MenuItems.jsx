@@ -28,10 +28,8 @@ import {
   IconPin,
   IconTool,
 } from "@tabler/icons-react";
-
 import { uniqueId } from "lodash";
 import menuItems from "../../json/menuItems.json";
-
 
 const iconComponents = {
   Dashboard: IconLayoutDashboard,
@@ -56,41 +54,62 @@ const iconComponents = {
   Payment: IconTruckDelivery,
   Todo: IconReceipt,
   Report: IconReceipt,
-  "User Management": IconReceipt
+  "User Management": IconReceipt,
 };
 
+const isItemAllowed = (item, pageControl, userId) => {
+  const itemHref = item.href?.replace(/^\//, ""); 
 
+  return pageControl.some((control) => {
+    return (
+      control.page === item.title &&
+      control.url === itemHref &&
+      control.userIds.includes(userId) &&
+      control.status === "Active"
+    );
+  });
+};
+
+const filterMenuItems = (items, pageControl, userId) => {
+  if (!items) return [];
+
+  return items.reduce((acc, item) => {
+    if (item.subItems) {
+      const filteredSubItems = filterMenuItems(
+        item.subItems,
+        pageControl,
+        userId
+      );
+      if (filteredSubItems.length > 0) {
+        acc.push({
+          ...item,
+          subItems: filteredSubItems,
+        });
+      }
+    } else if (isItemAllowed(item, pageControl, userId)) {
+      acc.push(item);
+    }
+    return acc;
+  }, []);
+};
 
 const mapItems = (items) => {
-
-
-  /* 
-  
-  logic to page management 
-  1. get the data form local stroage 
-  2. get the usrId from local stroage 
-  3. import the menuItems.json file and compare with Four condition
-    a. title = page
-    b. href = url
-    c. userId( from local storage (id)) = userIds.includes(userId)
-    d. status Active 
-
-  4. if All condution Meet than filtered the json 
-  
-  
-  
-  
-  */
-
-  return items.map(item => ({
+  return items.map((item) => ({
     id: uniqueId(),
     title: item.title,
     icon: iconComponents[item.title] || IconSettings,
     href: item.href || undefined,
-    subItems: item.subItems ? mapItems(item.subItems) : undefined
+    subItems: item.subItems ? mapItems(item.subItems) : undefined,
   }));
 };
 
-const Menuitems = () => mapItems(menuItems);
+const MenuItems = () => {
+  const pageControl = JSON.parse(localStorage.getItem("pageControl") || "[]");
+  const userId = localStorage.getItem("id");
 
-export default Menuitems;
+  const filteredItems = filterMenuItems(menuItems, pageControl, userId);
+
+  return mapItems(filteredItems);
+};
+
+export default MenuItems;
