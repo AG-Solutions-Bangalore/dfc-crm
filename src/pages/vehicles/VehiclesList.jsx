@@ -15,7 +15,13 @@ import { MantineReactTable, useMantineReactTable } from "mantine-react-table";
 import { Tooltip } from "@mantine/core";
 import moment from "moment";
 import PartialVechileView from "./PartialVechileView";
-import { VechilesCreate, VechilesCreateTyre, VechilesEdit, VechilesTruck, VechilesView } from "../../components/buttonIndex/ButtonComponents";
+import {
+  VechilesCreate,
+  VechilesCreateTyre,
+  VechilesEdit,
+  VechilesTruck,
+  VechilesView,
+} from "../../components/buttonIndex/ButtonComponents";
 
 const VehiclesList = () => {
   const [vehiclesData, setVehiclesData] = useState(null);
@@ -220,7 +226,6 @@ const VehiclesList = () => {
 
           return (
             <div className="flex gap-2">
-              
               {/* <div
                onClick={() => {
                 setSelectedVehicleId(id); 
@@ -231,17 +236,13 @@ const VehiclesList = () => {
               >
                 <IconEye className="h-5 w-5 text-blue-500 cursor-pointer" />
               </div> */}
-<VechilesView
- onClick={() => {
-  setSelectedVehicleId(id); 
-  setIsViewExpanded(true); 
-}}
-  className="flex items-center space-x-2"
-
-
-/>
-
-
+              <VechilesView
+                onClick={() => {
+                  setSelectedVehicleId(id);
+                  setIsViewExpanded(true);
+                }}
+                className="flex items-center space-x-2"
+              />
 
               {/* <div
                 onClick={() => navigate(`/vechile-edit/${id}`)}
@@ -251,13 +252,10 @@ const VehiclesList = () => {
                 <IconEdit className="h-5 w-5 text-blue-500 cursor-pointer" />
               </div> */}
 
-            <VechilesEdit
-              onClick={() => navigate(`/vechile-edit/${id}`)}
+              <VechilesEdit
+                onClick={() => navigate(`/vechile-edit/${id}`)}
                 className="flex items-center space-x-2"
-            
-            
-            
-            />
+              />
               {/* <div
                 onClick={() => navigate(`/vechile-view/${id}`)}
                 className="flex items-center space-x-2"
@@ -265,18 +263,15 @@ const VehiclesList = () => {
               >
                 <IconEye className="h-5 w-5 text-blue-500 cursor-pointer" />
               </div> */}
-               <a href={`/truckdetails-viewall/${id}`}  rel="noopener noreferrer">
-              {/* <div
+              <a href={`/truckdetails-viewall/${id}`} rel="noopener noreferrer">
+                {/* <div
                  
                 className="flex items-center space-x-2"
                 title="View"
               >
                 <IconTruck className="h-5 w-5 text-blue-500 cursor-pointer" />
               </div> */}
-              <VechilesTruck
-                className="flex items-center space-x-2"
-              
-              />
+                <VechilesTruck className="flex items-center space-x-2" />
               </a>
             </div>
           );
@@ -310,7 +305,6 @@ const VehiclesList = () => {
     enableStickyHeader: true,
     enableStickyFooter: true,
     mantineTableContainerProps: { sx: { maxHeight: "400px" } },
-   
   });
 
   return (
@@ -331,8 +325,7 @@ const VehiclesList = () => {
               </button> */}
 
               <VechilesCreate
-              
-                  onClick={() => navigate("/createVechiles")}
+                onClick={() => navigate("/createVechiles")}
                 className=" flex flex-row items-center gap-1 text-center text-sm font-[400] cursor-pointer  w-[6rem] text-white bg-blue-600 hover:bg-red-700 p-2 rounded-lg shadow-md"
               />
               {/* <button
@@ -343,9 +336,8 @@ const VehiclesList = () => {
               </button> */}
 
               <VechilesCreateTyre
-               onClick={() => navigate("/createTyre")}
+                onClick={() => navigate("/createTyre")}
                 className=" flex flex-row items-center gap-1 text-center text-sm font-[400] cursor-pointer  w-[4rem] text-white bg-blue-600 hover:bg-red-700 p-2 rounded-lg shadow-md"
-              
               />
               <div className="flex justify-center ">
                 <div className="inline-flex bg-gray-200 border border-gray-500 rounded-lg shadow-md">
@@ -381,22 +373,21 @@ const VehiclesList = () => {
           </div>
         </div>
 
-
-
         {/* layout change  */}
         <div className=" flex w-full  gap-2 relative ">
-        <div  className={`
+          <div
+            className={`
             ${isViewExpanded ? "w-[70%]" : "w-full"} 
             transition-all duration-300 ease-in-out  
             pr-4
-          `}>
-          <MantineReactTable table={table} />
-        </div>
+          `}
+          >
+            <MantineReactTable table={table} />
+          </div>
 
-
-            {isViewExpanded && (
-                  <div
-                    className={`
+          {isViewExpanded && (
+            <div
+              className={`
                       w-[30%] 
                        p-4
                       border-l 
@@ -415,23 +406,23 @@ const VehiclesList = () => {
                           : "opacity-0 translate-x-full"
                       }
                     `}
-                  >
-                    <div className="flex justify-end ml-2 ">
-                      <button
-                        title="close"
-                        className="text-black font-[700] cursor-pointer hover:text-red-900"
-                        onClick={() => {
-                          setIsViewExpanded(false);
-                          setSelectedVehicleId(null);
-                        }}
-                      >
-                        ✕
-                      </button>
-                    </div>
-                    <PartialVechileView vehicleId={selectedVehicleId}  />
-                  </div>
-                )}
-      </div>
+            >
+              <div className="flex justify-end ml-2 ">
+                <button
+                  title="close"
+                  className="text-black font-[700] cursor-pointer hover:text-red-900"
+                  onClick={() => {
+                    setIsViewExpanded(false);
+                    setSelectedVehicleId(null);
+                  }}
+                >
+                  ✕
+                </button>
+              </div>
+              <PartialVechileView vehicleId={selectedVehicleId} />
+            </div>
+          )}
+        </div>
       </div>
     </Layout>
   );

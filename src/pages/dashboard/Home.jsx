@@ -153,7 +153,7 @@ const Home = () => {
             label="Vehicles"
             color="orange"
             value={dashboardData.vehicles}
-            link={"/vechiles-list"}
+            link={"/vehicles-list"}
           />
           <DashboardCard
             icon={Building}
