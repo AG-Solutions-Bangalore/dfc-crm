@@ -529,7 +529,7 @@ const AddTyre = () => {
     }).then((res) => {
       toast.success("Vechile Tyre Created Sucessfully");
 
-      navigate("/vechiles-list");
+      navigate("/vehicles-list");
       setVehicles({
         reg_no: "",
         mfg_year: "",

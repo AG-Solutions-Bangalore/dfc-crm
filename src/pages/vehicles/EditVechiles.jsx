@@ -278,7 +278,7 @@ const EditVechiles = () => {
     }).then((res) => {
       toast.success("Vechile Updated Sucessfully");
 
-      navigate("/vechiles-list");
+      navigate("/vehicles-list");
     });
   };
 
