@@ -302,32 +302,41 @@ const AddServices = () => {
     };
 
     setIsButtonDisabled(true);
-    axios({
-      url: BASE_URL + "/api/web-create-services",
-      method: "POST",
-      data,
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    }).then((res) => {
-      toast.success("Services Created Sucessfully");
-
-      navigate("/service-list");
-      setService({
-        service_date: todayback,
-        service_year: "2023-24",
-        service_company: "",
-        service_branch: "",
-        service_truck_no: "",
-        service_garage: "",
-        service_km: "",
-        service_pre_km: "",
-        service_amount: "",
-        service_remarks: "",
-        service_count: "",
-        service_sub_data: "",
+    try {
+      const res = await axios({
+        url: BASE_URL + "/api/web-create-services",
+        method: "POST",
+        data,
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
       });
-    });
+  
+      if (res.data.code == 200) {
+        toast.success(res.data.msg);
+        navigate("/service-list");
+        setService({
+          service_date: todayback,
+          service_year: "2023-24",
+          service_company: "",
+          service_branch: "",
+          service_truck_no: "",
+          service_garage: "",
+          service_km: "",
+          service_pre_km: "",
+          service_amount: "",
+          service_remarks: "",
+          service_count: "",
+          service_sub_data: "",
+        });
+      } else {
+        toast.error(res.data.msg);
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.msg || "Something went wrong!");
+    } finally {
+      setIsButtonDisabled(false);
+    }
   };
 
   const FormLabel = ({ children, required }) => (

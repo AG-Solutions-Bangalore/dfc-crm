@@ -188,18 +188,25 @@ const EditTeam = () => {
     data.append("user_licence", selectedFile5);
 
     setIsButtonDisabled(true);
-    axios({
-      url: BASE_URL + `/api/web-update-team/${id}?_method=PUT`,
-      method: "POST",
-      data,
+   
+  try {
+    const res = await axios.post(`${BASE_URL}/api/web-update-team/${id}?_method=PUT`, data, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
-    }).then((res) => {
-      toast.success("Team Updated Sucessfully");
-
-      navigate("/master/team-list");
     });
+
+    if (res.data.code == 200) {
+      toast.success(res.data.msg);
+      navigate("/master/team-list");
+    } else {
+      toast.error(res.data.msg);
+    }
+  } catch (error) {
+    toast.error(error.response?.data?.msg || "Something went wrong!");
+  } finally {
+    setIsButtonDisabled(false);
+  }
   };
 
   const FormLabel = ({ children, required }) => (

@@ -519,79 +519,88 @@ const AddTyre = () => {
     };
 
     setIsButtonDisabled(true);
-    axios({
-      url: BASE_URL + "/api/web-create-vehicles-tyre-assign",
-      method: "POST",
-      data,
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    }).then((res) => {
-      toast.success("Vechile Tyre Created Sucessfully");
-
-      navigate("/vehicles-list");
-      setVehicles({
-        reg_no: "",
-        mfg_year: "",
-        ins_due: "",
-        permit_due: "",
-        vehicle_branch: "",
-        fc_due: "",
-        vehicle_type: "",
-        vehicle_company: "",
-        bata_for_km: "",
-        bata_for_trip: "",
-        incentive_for_km: "",
-        incentive_for_trip: "",
-        no_of_gas_cylinder: "",
-        vehicle_agency_short: "",
-        vehicle_driver: "",
-        vehicle_hsd: "",
-        vehicle_open_km: "",
-        tyre_assign_1_front_left_no: "",
-        tyre_assign_1_front_left_date: todayback,
-        tyre_assign_1_front_left_km: "",
-        tyre_assign_2_front_right_no: "",
-        tyre_assign_2_front_right_date: todayback,
-        tyre_assign_2_front_right_km: "",
-        tyre_assign_3_back_left_no: "",
-        tyre_assign_3_back_left_date: todayback,
-        tyre_assign_3_back_left_km: "",
-        tyre_assign_4_back_left_no: "",
-        tyre_assign_4_back_left_date: todayback,
-        tyre_assign_4_back_left_km: "",
-        tyre_assign_5_back_right_no: "",
-        tyre_assign_5_back_right_date: todayback,
-        tyre_assign_5_back_right_km: "",
-        tyre_assign_6_back_right_no: "",
-        tyre_assign_6_back_right_date: todayback,
-        tyre_assign_6_back_right_km: "",
-        tyre_assign_3_back_housing_left_no: "",
-        tyre_assign_3_back_housing_left_date: todayback,
-        tyre_assign_3_back_housing_left_km: "",
-        tyre_assign_4_back_housing_left_no: "",
-        tyre_assign_4_back_housing_left_date: todayback,
-        tyre_assign_4_back_housing_left_km: "",
-        tyre_assign_5_back_dummy_left_no: "",
-        tyre_assign_5_back_dummy_left_date: todayback,
-        tyre_assign_5_back_dummy_left_km: "",
-        tyre_assign_6_back_dummy_left_no: "",
-        tyre_assign_6_back_dummy_left_date: todayback,
-        tyre_assign_6_back_dummy_left_km: "",
-        tyre_assign_7_back_housing_right_no: "",
-        tyre_assign_7_back_housing_right_date: todayback,
-        tyre_assign_7_back_housing_right_km: "",
-        tyre_assign_8_back_housing_right_no: "",
-        tyre_assign_8_back_housing_right_date: todayback,
-        tyre_assign_8_back_housing_right_km: "",
-        tyre_assign_9_back_dummy_right_no: "",
-        tyre_assign_9_back_dummy_right_date: todayback,
-        tyre_assign_9_back_dummy_right_km: "",
-        tyre_assign_10_back_dummy_right_no: "",
-        tyre_assign_10_back_dummy_right_date: "",
-        tyre_assign_10_back_dummy_right_km: "",
+    try {
+      const res = await axios({
+        url: BASE_URL + "/api/web-create-vehicles-tyre-assign",
+        method: "POST",
+        data,
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
       });
-    });
+  
+      if (res.data.code == 200) {
+        toast.success(res.data.msg);
+        navigate("/vehicles-list");
+        setVehicles({
+          reg_no: "",
+          mfg_year: "",
+          ins_due: "",
+          permit_due: "",
+          vehicle_branch: "",
+          fc_due: "",
+          vehicle_type: "",
+          vehicle_company: "",
+          bata_for_km: "",
+          bata_for_trip: "",
+          incentive_for_km: "",
+          incentive_for_trip: "",
+          no_of_gas_cylinder: "",
+          vehicle_agency_short: "",
+          vehicle_driver: "",
+          vehicle_hsd: "",
+          vehicle_open_km: "",
+          tyre_assign_1_front_left_no: "",
+          tyre_assign_1_front_left_date: todayback,
+          tyre_assign_1_front_left_km: "",
+          tyre_assign_2_front_right_no: "",
+          tyre_assign_2_front_right_date: todayback,
+          tyre_assign_2_front_right_km: "",
+          tyre_assign_3_back_left_no: "",
+          tyre_assign_3_back_left_date: todayback,
+          tyre_assign_3_back_left_km: "",
+          tyre_assign_4_back_left_no: "",
+          tyre_assign_4_back_left_date: todayback,
+          tyre_assign_4_back_left_km: "",
+          tyre_assign_5_back_right_no: "",
+          tyre_assign_5_back_right_date: todayback,
+          tyre_assign_5_back_right_km: "",
+          tyre_assign_6_back_right_no: "",
+          tyre_assign_6_back_right_date: todayback,
+          tyre_assign_6_back_right_km: "",
+          tyre_assign_3_back_housing_left_no: "",
+          tyre_assign_3_back_housing_left_date: todayback,
+          tyre_assign_3_back_housing_left_km: "",
+          tyre_assign_4_back_housing_left_no: "",
+          tyre_assign_4_back_housing_left_date: todayback,
+          tyre_assign_4_back_housing_left_km: "",
+          tyre_assign_5_back_dummy_left_no: "",
+          tyre_assign_5_back_dummy_left_date: todayback,
+          tyre_assign_5_back_dummy_left_km: "",
+          tyre_assign_6_back_dummy_left_no: "",
+          tyre_assign_6_back_dummy_left_date: todayback,
+          tyre_assign_6_back_dummy_left_km: "",
+          tyre_assign_7_back_housing_right_no: "",
+          tyre_assign_7_back_housing_right_date: todayback,
+          tyre_assign_7_back_housing_right_km: "",
+          tyre_assign_8_back_housing_right_no: "",
+          tyre_assign_8_back_housing_right_date: todayback,
+          tyre_assign_8_back_housing_right_km: "",
+          tyre_assign_9_back_dummy_right_no: "",
+          tyre_assign_9_back_dummy_right_date: todayback,
+          tyre_assign_9_back_dummy_right_km: "",
+          tyre_assign_10_back_dummy_right_no: "",
+          tyre_assign_10_back_dummy_right_date: "",
+          tyre_assign_10_back_dummy_right_km: "",
+        });
+      } else {
+        toast.error(res.data.msg);
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.msg || "Something went wrong!");
+    } finally {
+      setIsButtonDisabled(false);
+    }
   };
 
   const FormLabel = ({ children, required }) => (

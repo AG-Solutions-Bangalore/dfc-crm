@@ -36,21 +36,30 @@ const CreateServiceType = () => {
      };
  
      setIsButtonDisabled(true);
-     axios({
-       url: BASE_URL + "/api/web-create-service-types",
-       method: "POST",
-       data,
-       headers: {
-         Authorization: `Bearer ${localStorage.getItem("token")}`,
-       },
-     }).then((res) => {
-       toast.success("Service Type Created Sucessfully");
-      
-       navigate('/master/servicetype-list')
-       setServiceTypes({
-        service_types: "",
-       });
-     });
+     try {
+      const res = await axios({
+        url: BASE_URL + "/api/web-create-service-types",
+        method: "POST",
+        data,
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+  
+      if (res.data.code == 200) {
+        toast.success(res.data.msg);
+        navigate('/master/servicetype-list')
+         setServiceTypes({
+          service_types: "",
+         });
+      } else {
+        toast.error(res.data.msg);
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.msg || "Something went wrong!");
+    } finally {
+      setIsButtonDisabled(false);
+    }
    };
  
    const FormLabel = ({ children, required }) => (

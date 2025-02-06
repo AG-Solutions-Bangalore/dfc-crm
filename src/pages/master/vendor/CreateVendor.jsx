@@ -131,29 +131,38 @@ const CreateVendor = () => {
     };
 
     setIsButtonDisabled(true);
-    axios({
-      url: BASE_URL + "/api/web-create-vendor",
-      method: "POST",
-      data,
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    }).then((res) => {
-      toast.success("Vendor Created Sucessfully");
-
-      navigate("/master/vendor-list");
-      setVendor({
-        vendor_name: "",
-        vendor_type: "",
-        vendor_contact_person: "",
-        vendor_mobile: "",
-        vendor_email: "",
-        vendor_address: "",
-        vendor_gst: "",
-        vendor_pan: "",
-        vendor_branch: "",
+    try {
+      const res = await axios({
+        url: BASE_URL + "/api/web-create-vendor",
+        method: "POST",
+        data,
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
       });
-    });
+  
+      if (res.data.code == 200) {
+        toast.success(res.data.msg);
+        navigate("/master/vendor-list");
+        setVendor({
+          vendor_name: "",
+          vendor_type: "",
+          vendor_contact_person: "",
+          vendor_mobile: "",
+          vendor_email: "",
+          vendor_address: "",
+          vendor_gst: "",
+          vendor_pan: "",
+          vendor_branch: "",
+        });
+      } else {
+        toast.error(res.data.msg);
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.msg || "Something went wrong!");
+    } finally {
+      setIsButtonDisabled(false);
+    }
   };
 
   const FormLabel = ({ children, required }) => (

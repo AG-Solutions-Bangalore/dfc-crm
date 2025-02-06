@@ -219,30 +219,39 @@ const AddPurchaseTyre = () => {
     };
 
     setIsButtonDisabled(true);
-    axios({
-      url: BASE_URL + "/api/web-create-tyre",
-      method: "POST",
-      data,
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    }).then((res) => {
-      toast.success("Advance Created Sucessfully");
-
-      navigate("/tyre/purchase-list");
-      setTyre({
-        tyre_date: todayback,
-        tyre_year: "2023-24",
-        tyre_supplier: "",
-        tyre_company: "",
-        tyre_branch: "",
-        tyre_bill_ref: "",
-        tyre_bill_amount: "",
-        tyre_remarks: "",
-        tyre_count: "",
-        tyre_sub_data: "",
+    try {
+      const res = await axios({
+        url: BASE_URL + "/api/web-create-tyre",
+        method: "POST",
+        data,
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
       });
-    });
+  
+      if (res.data.code == 200) {
+        toast.success(res.data.msg);
+        navigate("/tyre/purchase-list");
+        setTyre({
+          tyre_date: todayback,
+          tyre_year: "2023-24",
+          tyre_supplier: "",
+          tyre_company: "",
+          tyre_branch: "",
+          tyre_bill_ref: "",
+          tyre_bill_amount: "",
+          tyre_remarks: "",
+          tyre_count: "",
+          tyre_sub_data: "",
+        });
+      } else {
+        toast.error(res.data.msg);
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.msg || "Something went wrong!");
+    } finally {
+      setIsButtonDisabled(false);
+    }
   };
 
   const FormLabel = ({ children, required }) => (

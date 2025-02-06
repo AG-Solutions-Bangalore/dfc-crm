@@ -152,39 +152,48 @@ const CreateTeam = () => {
     data.append("user_licence", selectedFile5);
 
     setIsButtonDisabled(true);
-    axios({
-      url: BASE_URL + "/api/web-create-team",
-      method: "POST",
-      data,
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    }).then((res) => {
-      toast.success("Team Created Sucessfully");
-
-      navigate("/master/team-list");
-      setTeam({
-        full_name: "",
-        email: "",
-        mobile: "",
-        user_company: "",
-        user_salary: "",
-        user_type_id: "",
-        user_address: "",
-        user_branch: "",
-        user_insurance: "",
-        user_insurance_no: "",
-        user_bank: "",
-        user_bank_branch: "",
-        user_account_no: "",
-        user_ifsc_code: "",
-        user_image: "",
-        user_adhar_card: "",
-        user_pan_card: "",
-        user_passbook: "",
-        user_licence: "",
+    try {
+      const res = await axios({
+        url: BASE_URL + "/api/web-create-team",
+        method: "POST",
+        data,
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
       });
-    });
+  
+      if (res.data.code == 200) {
+        toast.success(res.data.msg);
+        navigate("/master/team-list");
+        setTeam({
+          full_name: "",
+          email: "",
+          mobile: "",
+          user_company: "",
+          user_salary: "",
+          user_type_id: "",
+          user_address: "",
+          user_branch: "",
+          user_insurance: "",
+          user_insurance_no: "",
+          user_bank: "",
+          user_bank_branch: "",
+          user_account_no: "",
+          user_ifsc_code: "",
+          user_image: "",
+          user_adhar_card: "",
+          user_pan_card: "",
+          user_passbook: "",
+          user_licence: "",
+        });
+      } else {
+        toast.error(res.data.msg);
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.msg || "Something went wrong!");
+    } finally {
+      setIsButtonDisabled(false);
+    }
   };
 
   const FormLabel = ({ children, required }) => (
