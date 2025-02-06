@@ -93,6 +93,24 @@ const SalaryReportMultipleView = () => {
     `,
   });
 
+  const totalValue = salary.reduce((sum, salarysummaryfooter) => {
+    return (
+      sum +
+      (Number(salarysummaryfooter.trip_incentive_amount) /
+        Number(salarysummaryfooter.trip_count)) *
+        Number(salarysummaryfooter.trip_count) +
+      Number(salarysummaryfooter.trip_bata_for_trip) +
+      (Number(salarysummaryfooter.trip_hmali) -
+        Number(salarysummaryfooter.trip_advance)) +
+      Number(salarysummaryfooter.trip_bata_amount) /
+        Number(salarysummaryfooter.trip_count) +
+      Number(salarysummaryfooter.trip_driver_salary) /
+        Number(salarysummaryfooter.trip_count) +
+      (Number(salarysummaryfooter.trip_bata_for_km) /
+        Number(salarysummaryfooter.trip_count)) *
+        Number(salarysummaryfooter.trip_km)
+    );
+  }, 0);
   const handleSavePDF = () => {
     const tableBody = [
       [
@@ -145,40 +163,27 @@ const SalaryReportMultipleView = () => {
         "",
         "",
         "",
-        salarysummaryfooter.trip_count || "-",
-        salarysummaryfooter.trip_km || "-",
-        `₹${(
-          (salarysummaryfooter.trip_incentive_amount || 0) *
-          (salarysummaryfooter.trip_count || 0)
-        ).toLocaleString("en-IN", { maximumFractionDigits: 2 })}`,
-        `₹${(Number(salarysummaryfooter.trip_hmali) || 0).toLocaleString(
-          "en-IN",
-          { maximumFractionDigits: 2 }
-        )}`,
-        `₹${(Number(salarysummaryfooter.trip_bata_amount) || 0).toLocaleString(
-          "en-IN",
-          { maximumFractionDigits: 2 }
-        )}`,
-        `₹${(Number(salarysummaryfooter.trip_advance) || 0).toLocaleString(
-          "en-IN",
-          { maximumFractionDigits: 2 }
-        )}`,
+        salary.reduce((sum, salaryItem) => sum + salaryItem.trip_count, 0) ||
+          "-", // Ensure this returns a value or "-"
+        salary.reduce((sum, salaryItem) => sum + salaryItem.trip_km, 0) || "-", // Ensure this returns a value or "-"
+        `₹${salary
+          .reduce(
+            (sum, salary) =>
+              sum + salary.trip_incentive_amount * salary.trip_count,
+            0
+          )
+          .toLocaleString("en-IN", { maximumFractionDigits: 2 })}`,
+        `₹${salary
+          .reduce((sum, salary) => sum + Number(salary.trip_hmali), 0)
+          .toLocaleString("en-IN", { maximumFractionDigits: 2 })}`,
+        `₹${salary
+          .reduce((sum, salary) => sum + Number(salary.trip_bata_amount), 0)
+          .toLocaleString("en-IN", { maximumFractionDigits: 2 })}`,
+        `₹${salary
+          .reduce((sum, salary) => sum + Number(salary.trip_advance), 0)
+          .toLocaleString("en-IN", { maximumFractionDigits: 2 })}`,
 
-        `₹${(
-          ((salarysummaryfooter.trip_incentive_amount || 0) /
-            (salarysummaryfooter.trip_count || 1)) *
-            (salarysummaryfooter.trip_count || 0) +
-          (salarysummaryfooter.trip_bata_for_trip || 0) +
-          ((salarysummaryfooter.trip_hmali || 0) -
-            (salarysummaryfooter.trip_advance || 0)) +
-          (salarysummaryfooter.trip_bata_amount || 0) /
-            (salarysummaryfooter.trip_count || 1) +
-          (salarysummaryfooter.trip_driver_salary || 0) /
-            (salarysummaryfooter.trip_count || 1) +
-          ((salarysummaryfooter.trip_bata_for_km || 0) /
-            (salarysummaryfooter.trip_count || 1)) *
-            (salarysummaryfooter.trip_km || 0)
-        ).toLocaleString("en-IN", { maximumFractionDigits: 2 })}`,
+        `₹${totalValue.toLocaleString("en-IN", { maximumFractionDigits: 2 })}`,
       ],
     ];
 
@@ -483,17 +488,25 @@ const SalaryReportMultipleView = () => {
                         Total:
                       </td>
                       <td className="text-xs p-1 border border-black text-center">
-                        {salarysummaryfooter.trip_count}
+                        {salary.reduce(
+                          (sum, salary) => sum + salary.trip_count,
+                          0
+                        )}
                       </td>
                       <td className="text-xs p-1 border border-black text-center">
-                        {salarysummaryfooter.trip_km}
+                        {salary.reduce(
+                          (sum, salary) => sum + salary.trip_km,
+                          0
+                        )}
                       </td>
                       <td className="text-xs p-1 border border-black text-center">
                         <NumericFormat
-                          value={
-                            salarysummaryfooter.trip_incentive_amount *
-                            salarysummaryfooter.trip_count
-                          }
+                          value={salary.reduce(
+                            (sum, salary) =>
+                              sum +
+                              salary.trip_incentive_amount * salary.trip_count,
+                            0
+                          )} //
                           displayType="text"
                           thousandSeparator={true}
                           prefix="₹"
@@ -502,7 +515,10 @@ const SalaryReportMultipleView = () => {
                       </td>
                       <td className="text-xs p-1 border border-black text-end px-2">
                         <NumericFormat
-                          value={salarysummaryfooter.trip_hmali}
+                          value={salary.reduce(
+                            (sum, salary) => sum + Number(salary.trip_hmali),
+                            0
+                          )}
                           displayType="text"
                           thousandSeparator={true}
                           prefix="₹"
@@ -512,7 +528,11 @@ const SalaryReportMultipleView = () => {
 
                       <td className="text-xs p-1 border border-black text-end px-2">
                         <NumericFormat
-                          value={salarysummaryfooter.trip_bata_amount}
+                          value={salary.reduce(
+                            (sum, salary) =>
+                              sum + Number(salary.trip_bata_amount),
+                            0
+                          )}
                           displayType="text"
                           thousandSeparator={true}
                           prefix="₹"
@@ -521,7 +541,10 @@ const SalaryReportMultipleView = () => {
                       </td>
                       <td className="text-xs p-1 border border-black text-end px-2">
                         <NumericFormat
-                          value={salarysummaryfooter.trip_advance}
+                          value={salary.reduce(
+                            (sum, salary) => sum + Number(salary.trip_advance),
+                            0
+                          )}
                           displayType="text"
                           thousandSeparator={true}
                           prefix="₹"
@@ -530,25 +553,7 @@ const SalaryReportMultipleView = () => {
                       </td>
                       <td className="text-xs p-1 border border-black text-end px-2">
                         <NumericFormat
-                          value={
-                            (salarysummaryfooter.trip_incentive_amount /
-                              salarysummaryfooter.trip_count) *
-                              salarysummaryfooter.trip_count +
-                            salarysummaryfooter.trip_bata_for_trip +
-                            (salarysummaryfooter.trip_hmali -
-                              salarysummaryfooter.trip_advance) +
-                            +(
-                              salarysummaryfooter.trip_bata_amount /
-                              salarysummaryfooter.trip_count
-                            ) +
-                            +(
-                              salarysummaryfooter.trip_driver_salary /
-                              salarysummaryfooter.trip_count
-                            ) +
-                            (salarysummaryfooter.trip_bata_for_km /
-                              salarysummaryfooter.trip_count) *
-                              salarysummaryfooter.trip_km
-                          }
+                          value={totalValue}
                           displayType="text"
                           thousandSeparator={true}
                           prefix="₹"
