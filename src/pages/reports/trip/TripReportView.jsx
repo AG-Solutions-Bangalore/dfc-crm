@@ -160,6 +160,25 @@ const TripReportView = () => {
   if (loading) {
     return <SkeletonLoading />;
   }
+  const TotalTripKm = trip.map((item) => item.trip_km);
+
+  const TotalTripKmValue = TotalTripKm.reduce((acc, val) => acc + val, 0);
+
+  const TotalTripHsd = trip.map((item) => item.trip_hsd);
+
+  const TotalTripHsdValue = TotalTripHsd.reduce((acc, val) => acc + val, 0);
+  const TotalTripAdvance = trip.map((item) => Number(item.trip_advance));
+
+  const TotalTripAdvaanceValue = TotalTripAdvance.reduce(
+    (acc, val) => acc + val,
+    0
+  );
+  const TotalTripsupplied = trip.map((item) => Number(item.trip_hsd_supplied));
+
+  const TotalTripSuppliedValue = TotalTripsupplied.reduce(
+    (acc, val) => acc + val,
+    0
+  );
 
   const handleSavePDF = () => {
     // Table body structure
@@ -202,14 +221,14 @@ const TripReportView = () => {
         "",
         "",
         "",
-        tripsummaryfooter.trip_km || "-",
-        tripsummaryfooter.trip_hsd || "-",
+        TotalTripKmValue || "-",
+        TotalTripHsdValue || "-",
         tripsummaryfooter.trip_advance
-          ? `₹${Number(tripsummaryfooter.trip_advance).toLocaleString("en-IN", {
+          ? `₹${Number(TotalTripAdvaanceValue).toLocaleString("en-IN", {
               maximumFractionDigits: 2,
             })}`
           : "-",
-        tripsummaryfooter.trip_hsd_supplied || "-",
+        TotalTripSuppliedValue || "-",
         "",
         "",
         "",
@@ -321,6 +340,7 @@ const TripReportView = () => {
         toast.error("trip Report is Not Downloaded");
       });
   };
+
   return (
     <Layout>
       <div className="bg-[#FFFFFF] p-2 rounded-lg ">
@@ -455,14 +475,14 @@ const TripReportView = () => {
                         Total:
                       </td>
                       <td className="p-1 text-xs border border-black">
-                        {tripsummaryfooter.trip_km}
+                        {trip.reduce((sum, trip) => sum + trip.trip_km, 0)}
                       </td>
                       <td className="p-1 text-xs border border-black">
-                        {tripsummaryfooter.trip_hsd}
+                        {trip.reduce((sum, trip) => sum + trip.trip_hsd, 0)}
                       </td>
                       <td className="p-1 text-xs border border-black">
                         <NumericFormat
-                          value={tripsummaryfooter.trip_advance}
+                          value={TotalTripAdvaanceValue}
                           displayType="text"
                           thousandSeparator={true}
                           prefix="₹"
@@ -470,7 +490,10 @@ const TripReportView = () => {
                         ></NumericFormat>
                       </td>
                       <td className="p-1 text-xs border border-black">
-                        {tripsummaryfooter.trip_hsd_supplied}
+                        {trip.reduce(
+                          (sum, trip) => sum + Number(trip.trip_hsd_supplied),
+                          0
+                        )}
                       </td>
                       <td
                         colSpan={4}
@@ -478,38 +501,6 @@ const TripReportView = () => {
                       ></td>
                     </tr>
                   </tbody>
-                  {/* <tfoot>
-                    <tr className="bg-gray-100 font-bold">
-                      <td
-                        colSpan={5}
-                        className="p-1 text-xs border border-black text-right"
-                      >
-                        Total:
-                      </td>
-                      <td className="p-1 text-xs border border-black">
-                        {tripsummaryfooter.trip_km}
-                      </td>
-                      <td className="p-1 text-xs border border-black">
-                        {tripsummaryfooter.trip_hsd}
-                      </td>
-                      <td className="p-1 text-xs border border-black">
-                        <NumericFormat
-                          value={tripsummaryfooter.trip_advance}
-                          displayType="text"
-                          thousandSeparator={true}
-                          prefix="₹"
-                          thousandsGroupStyle="lakh"
-                        ></NumericFormat>
-                      </td>
-                      <td className="p-1 text-xs border border-black">
-                        {tripsummaryfooter.trip_hsd_supplied}
-                      </td>
-                      <td
-                        colSpan={4}
-                        className="p-1 text-xs border border-black"
-                      ></td>
-                    </tr>
-                  </tfoot> */}
                 </table>
               ) : (
                 <div className="text-center text-gray-500 py-4">
