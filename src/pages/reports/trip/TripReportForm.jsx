@@ -7,7 +7,12 @@ import SelectInput from "../../../components/common/SelectField";
 import { useNavigate } from "react-router-dom";
 import { IconInfoCircle } from "@tabler/icons-react";
 import moment from "moment";
-import { ReportTripRDetailsDownload, ReportTripRDetailsView, ReportTripRDownload, ReportTripRView } from "../../../components/buttonIndex/ButtonComponents";
+import {
+  ReportTripRDetailsDownload,
+  ReportTripRDetailsView,
+  ReportTripRDownload,
+  ReportTripRView,
+} from "../../../components/buttonIndex/ButtonComponents";
 const vehicleType = [
   {
     value: "6W Truck",
@@ -249,7 +254,6 @@ function TripReportForm() {
   );
 
   const handleview = () => {
-    navigate("/report-trip-form/view");
     localStorage.setItem("trip_date_from", downloadTrip.trip_date_from);
     localStorage.setItem("trip_date_to", downloadTrip.trip_date_to);
     localStorage.setItem("trip_company", downloadTrip.trip_company);
@@ -261,9 +265,9 @@ function TripReportForm() {
     localStorage.setItem("trip_agency", downloadTrip.trip_agency);
     localStorage.setItem("trip_supplier", downloadTrip.trip_supplier);
     localStorage.setItem("trip_status", downloadTrip.trip_status);
+    navigate("/report-trip-form/view");
   };
   const handleview1 = () => {
-    navigate("/report-trip-form/multiple/view");
     localStorage.setItem("trip_date_from", downloadTrip.trip_date_from);
     localStorage.setItem("trip_date_to", downloadTrip.trip_date_to);
     localStorage.setItem("trip_company", downloadTrip.trip_company);
@@ -275,6 +279,7 @@ function TripReportForm() {
     localStorage.setItem("trip_agency", downloadTrip.trip_agency);
     localStorage.setItem("trip_supplier", downloadTrip.trip_supplier);
     localStorage.setItem("trip_status", downloadTrip.trip_status);
+    navigate("/report-trip-form/multiple/view");
   };
   return (
     <Layout>

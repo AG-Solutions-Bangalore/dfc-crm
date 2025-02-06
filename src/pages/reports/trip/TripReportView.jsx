@@ -47,6 +47,19 @@ const TripReportView = () => {
   const [loading, setLoading] = useState(true);
   const componentRef = React.useRef();
   const tableRef = useRef(null);
+  const tripData = {
+    trip_date_from: localStorage.getItem("trip_date_from"),
+    trip_date_to: localStorage.getItem("trip_date_to"),
+    trip_company: localStorage.getItem("trip_company"),
+    trip_branch: localStorage.getItem("trip_branch"),
+    trip_vehicle: localStorage.getItem("trip_vehicle"),
+    trip_full_vehicle: localStorage.getItem("trip_full_vehicle"),
+    trip_vehicle_type: localStorage.getItem("trip_vehicle_type"),
+    trip_driver: localStorage.getItem("trip_driver"),
+    trip_agency: localStorage.getItem("trip_agency"),
+    trip_supplier: localStorage.getItem("trip_supplier"),
+    trip_status: localStorage.getItem("trip_status"),
+  };
 
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
@@ -122,23 +135,10 @@ const TripReportView = () => {
       setLoading(true);
       try {
         const token = localStorage.getItem("token");
-        let data = {
-          trip_date_from: localStorage.getItem("trip_date_from"),
-          trip_date_to: localStorage.getItem("trip_date_to"),
-          trip_company: localStorage.getItem("trip_company"),
-          trip_branch: localStorage.getItem("trip_branch"),
-          trip_vehicle: localStorage.getItem("trip_vehicle"),
-          trip_full_vehicle: localStorage.getItem("trip_full_vehicle"),
-          trip_vehicle_type: localStorage.getItem("trip_vehicle_type"),
-          trip_driver: localStorage.getItem("trip_driver"),
-          trip_agency: localStorage.getItem("trip_agency"),
-          trip_supplier: localStorage.getItem("trip_supplier"),
-          trip_status: localStorage.getItem("trip_status"),
-        };
 
         const Response = await axios.post(
           `${BASE_URL}/api/fetch-trip-report`,
-          data,
+          tripData,
           {
             headers: { Authorization: `Bearer ${token}` },
           }

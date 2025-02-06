@@ -7,7 +7,12 @@ import SelectInput from "../../../components/common/SelectField";
 import { useNavigate } from "react-router-dom";
 import { IconInfoCircle } from "@tabler/icons-react";
 import moment from "moment";
-import { ReportSalaryMultipleDownload, ReportSalaryMultipleView, ReportSalarySingleDownload, ReportSalarySingleView } from "../../../components/buttonIndex/ButtonComponents";
+import {
+  ReportSalaryMultipleDownload,
+  ReportSalaryMultipleView,
+  ReportSalarySingleDownload,
+  ReportSalarySingleView,
+} from "../../../components/buttonIndex/ButtonComponents";
 
 function SalaryReportForm() {
   const navigate = useNavigate();
@@ -320,25 +325,19 @@ function SalaryReportForm() {
               <ReportSalarySingleDownload
                 className="text-center text-sm font-medium cursor-pointer hover:animate-pulse w-full sm:w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md"
                 onClick={onSubmit}
-              >
-             
-              </ReportSalarySingleDownload>
+              ></ReportSalarySingleDownload>
               <ReportSalarySingleView
                 className="text-center text-sm font-medium cursor-pointer hover:animate-pulse w-full sm:w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md"
                 onClick={handleview}
-              >
-
-              </ReportSalarySingleView>
+              ></ReportSalarySingleView>
               <ReportSalaryMultipleDownload
                 className="text-center text-sm font-medium cursor-pointer hover:animate-pulse w-full sm:w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md"
                 onClick={onDetailSubmit}
-              >
-              </ReportSalaryMultipleDownload>
+              ></ReportSalaryMultipleDownload>
               <ReportSalaryMultipleView
                 className="text-center text-sm font-medium cursor-pointer hover:animate-pulse w-full sm:w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md"
                 onClick={handleMultipleview}
-              >
-              </ReportSalaryMultipleView>
+              ></ReportSalaryMultipleView>
             </div>
           </form>
         </div>

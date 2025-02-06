@@ -39,7 +39,7 @@ const printStyles = `
 
   }
 `;
-const ServiceReportView = () => {
+const TeamReportView = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [team, setTeam] = useState([]);
@@ -396,4 +396,4 @@ const ServiceReportView = () => {
   );
 };
 
-export default ServiceReportView;
+export default TeamReportView;
