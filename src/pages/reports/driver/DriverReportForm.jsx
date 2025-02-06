@@ -6,7 +6,10 @@ import axios from "axios";
 import SelectInput from "../../../components/common/SelectField";
 import { useNavigate } from "react-router-dom";
 import { IconInfoCircle } from "@tabler/icons-react";
-import { ReportDriverDownload, ReportTeamView } from "../../../components/buttonIndex/ButtonComponents";
+import {
+  ReportDriverDownload,
+  ReportTeamView,
+} from "../../../components/buttonIndex/ButtonComponents";
 
 function DriverReportForm() {
   const navigate = useNavigate();

@@ -202,7 +202,7 @@ const SalaryReportView = () => {
     };
 
     try {
-      await html2pdf().set(opt).from(element).save(); 
+      await html2pdf().set(opt).from(element).save();
       toast.success("PDF is Downloaded Successfully");
     } catch (error) {
       console.error("PDF generation error:", error);
