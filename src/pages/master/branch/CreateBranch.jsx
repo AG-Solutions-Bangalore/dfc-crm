@@ -146,30 +146,39 @@ const CreateBranch = () => {
     };
 
     setIsButtonDisabled(true);
-    axios({
-      url: BASE_URL + "/api/web-create-branch",
-      method: "POST",
-      data,
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    }).then((res) => {
-      toast.success("Branch Created Sucessfully");
-
-      navigate("/master/branch-list");
-      setBranch({
-        branch_name: "",
-        branch_salary_type: "",
-        branch_bata_for_km_6W: "",
-        branch_bata_for_km_10W: "",
-        branch_salary_6W: "",
-        branch_salary_10W: "",
-        branch_incentive_6W: "",
-        branch_incentive_10W: "",
-        branch_bata_for_trip_6W: "",
-        branch_bata_for_trip_10W: "",
+    try {
+      const res = await axios({
+        url: BASE_URL + "/api/web-create-branch",
+        method: "POST",
+        data,
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
       });
-    });
+  
+      if (res.data.code == 200) {
+        toast.success(res.data.msg);
+        navigate("/master/branch-list");
+        setBranch({
+          branch_name: "",
+          branch_salary_type: "",
+          branch_bata_for_km_6W: "",
+          branch_bata_for_km_10W: "",
+          branch_salary_6W: "",
+          branch_salary_10W: "",
+          branch_incentive_6W: "",
+          branch_incentive_10W: "",
+          branch_bata_for_trip_6W: "",
+          branch_bata_for_trip_10W: "",
+        });
+      } else {
+        toast.error(res.data.msg);
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.msg || "Something went wrong!");
+    } finally {
+      setIsButtonDisabled(false);
+    }
   };
 
   const FormLabel = ({ children, required }) => (

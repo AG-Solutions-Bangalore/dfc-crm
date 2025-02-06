@@ -88,23 +88,32 @@ const AddBranchPayment = () => {
       };
   
       setIsButtonDisabled(true);
-      axios({
-        url: BASE_URL + "/api/web-create-payment",
-        method: "POST",
-        data,
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      }).then((res) => {
-        toast.success("Branch Created Sucessfully");
-       
-        navigate('/payment/branch-list')
-        setPayment({
-            payment_date: todayback,
-            payment_branch: "",
-            payment_amount: "",
+      try {
+        const res = await axios({
+          url: BASE_URL + "/api/web-create-payment",
+          method: "POST",
+          data,
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
         });
-      });
+    
+        if (res.data.code == 200) {
+          toast.success(res.data.msg);
+          navigate('/payment/branch-list')
+            setPayment({
+                payment_date: todayback,
+                payment_branch: "",
+                payment_amount: "",
+            });
+        } else {
+          toast.error(res.data.msg);
+        }
+      } catch (error) {
+        toast.error(error.response?.data?.msg || "Something went wrong!");
+      } finally {
+        setIsButtonDisabled(false);
+      }
     };
   
     const FormLabel = ({ children, required }) => (

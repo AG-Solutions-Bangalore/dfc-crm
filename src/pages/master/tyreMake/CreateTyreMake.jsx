@@ -35,21 +35,30 @@ const CreateTyreMake = () => {
       };
   
       setIsButtonDisabled(true);
-      axios({
-        url: BASE_URL + "/api/web-create-tyre-make",
-        method: "POST",
-        data,
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      }).then((res) => {
-        toast.success("TyreMake Created Sucessfully");
-       
-        navigate('/master/tyremake-list')
-        setTyreMake({
-            tyre_make: "",
+      try {
+        const res = await axios({
+          url: BASE_URL + "/api/web-create-tyre-make",
+          method: "POST",
+          data,
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
         });
-      });
+    
+        if (res.data.code == 200) {
+          toast.success(res.data.msg);
+          navigate('/master/tyremake-list')
+            setTyreMake({
+                tyre_make: "",
+            });
+        } else {
+          toast.error(res.data.msg);
+        }
+      } catch (error) {
+        toast.error(error.response?.data?.msg || "Something went wrong!");
+      } finally {
+        setIsButtonDisabled(false);
+      }
     };
   
     const FormLabel = ({ children, required }) => (

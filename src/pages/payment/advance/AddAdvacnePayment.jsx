@@ -181,29 +181,38 @@ const AddAdvacnePayment = () => {
     };
     console.log(data);
     setIsButtonDisabled(true);
-    axios({
-      url: BASE_URL + "/api/web-create-payment-details",
-      method: "POST",
-      data,
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    }).then((res) => {
-      toast.success("Advance Created Sucessfully");
-
-      navigate("/payment/advance-list");
-      setPayment({
-        payment_details_date: todayback,
-        payment_details_type: "",
-        payment_details_company: "",
-        payment_details_voucher_type: "Advance",
-        payment_details_debit: "",
-        payment_details_amount: "",
-        payment_details_credit: "",
-        payment_details_transaction: "",
-        payment_details_narration: "",
+    try {
+      const res = await axios({
+        url: BASE_URL + "/api/web-create-payment-details",
+        method: "POST",
+        data,
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
       });
-    });
+  
+      if (res.data.code == 200) {
+        toast.success(res.data.msg);
+        navigate("/payment/advance-list");
+        setPayment({
+          payment_details_date: todayback,
+          payment_details_type: "",
+          payment_details_company: "",
+          payment_details_voucher_type: "Advance",
+          payment_details_debit: "",
+          payment_details_amount: "",
+          payment_details_credit: "",
+          payment_details_transaction: "",
+          payment_details_narration: "",
+        });
+      } else {
+        toast.error(res.data.msg);
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.msg || "Something went wrong!");
+    } finally {
+      setIsButtonDisabled(false);
+    }
   };
 
   const FormLabel = ({ children, required }) => (

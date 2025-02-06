@@ -178,35 +178,44 @@ const CreateAgencies = () => {
     };
 
     setIsButtonDisabled(true);
-    axios({
-      url: BASE_URL + "/api/web-create-agencies",
-      method: "POST",
-      data,
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    }).then((res) => {
-      toast.success("Agency Created Sucessfully");
-
-      navigate("/master/agencies-list");
-      setAgency({
-        agency_short: "",
-        agency_name: "",
-        agency_contact_person: "",
-        agency_mobile: "",
-        agency_email: "",
-        agency_rt_km: "",
-        agency_city: "",
-        agency_state: "",
-        agency_branch: "",
-        agency_bata_for_trip_6W: "",
-        agency_bata_for_trip_10W: "",
-        agency_hmali: "",
-        agency_hmali_10W: "",
-        agency_mileage_for_trip_6W: "",
-        agency_mileage_for_trip_10W: "",
+    try {
+      const res = await axios({
+        url: BASE_URL + "/api/web-create-agencies",
+        method: "POST",
+        data,
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
       });
-    });
+  
+      if (res.data.code == 200) {
+        toast.success(res.data.msg);
+        navigate("/master/agencies-list");
+        setAgency({
+          agency_short: "",
+          agency_name: "",
+          agency_contact_person: "",
+          agency_mobile: "",
+          agency_email: "",
+          agency_rt_km: "",
+          agency_city: "",
+          agency_state: "",
+          agency_branch: "",
+          agency_bata_for_trip_6W: "",
+          agency_bata_for_trip_10W: "",
+          agency_hmali: "",
+          agency_hmali_10W: "",
+          agency_mileage_for_trip_6W: "",
+          agency_mileage_for_trip_10W: "",
+        });
+      } else {
+        toast.error(res.data.msg);
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.msg || "Something went wrong!");
+    } finally {
+      setIsButtonDisabled(false);
+    }
   };
 
   const FormLabel = ({ children, required }) => (

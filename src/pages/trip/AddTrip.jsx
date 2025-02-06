@@ -301,35 +301,44 @@ const AddTrip = () => {
     };
 
     setIsButtonDisabled(true);
-    axios({
-      url: BASE_URL + "/api/web-create-trip",
-      method: "POST",
-      data,
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    }).then((res) => {
-      toast.success("Trip Created Sucessfully");
-
-      navigate("/trip-list");
-      setTrip({
-        trip_date: todayback,
-        trip_year: "2023-24",
-        trip_branch: "",
-        trip_company: "",
-        trip_driver: "",
-        vehicle_driver: "",
-        trip_vehicle: "",
-        trip_agency: "",
-        trip_hsd: "",
-        trip_advance: "",
-        trip_mileage: "",
-        trip_hsd_supplied: "",
-        trip_supplier: "",
-        trip_remarks: "",
-        trip_km: "",
+    try {
+      const res = await axios({
+        url: BASE_URL + "/api/web-create-trip",
+        method: "POST",
+        data,
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
       });
-    });
+  
+      if (res.data.code == 200) {
+        toast.success(res.data.msg);
+        navigate("/trip-list");
+        setTrip({
+          trip_date: todayback,
+          trip_year: "2023-24",
+          trip_branch: "",
+          trip_company: "",
+          trip_driver: "",
+          vehicle_driver: "",
+          trip_vehicle: "",
+          trip_agency: "",
+          trip_hsd: "",
+          trip_advance: "",
+          trip_mileage: "",
+          trip_hsd_supplied: "",
+          trip_supplier: "",
+          trip_remarks: "",
+          trip_km: "",
+        });
+      } else {
+        toast.error(res.data.msg);
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.msg || "Something went wrong!");
+    } finally {
+      setIsButtonDisabled(false);
+    }
   };
 
   const FormLabel = ({ children, required }) => (

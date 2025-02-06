@@ -230,18 +230,25 @@ const EditServices = () => {
     };
 
     setIsButtonDisabled(true);
-    axios({
-      url: BASE_URL + `/api/web-update-services/${id}`,
-      method: "PUT",
-      data,
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    }).then((res) => {
-      toast.success("Services Updated Sucessfully");
-
-      navigate("/service-list");
-    });
+    try {
+      const res = await axios.put(`${BASE_URL}/api/web-update-services/${id}`, data, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+  
+      if (res.data.code == 200) {
+        toast.success(res.data.msg);
+        navigate("/service-list");
+      } else {
+        toast.error(res.data.msg);
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.msg || "Something went wrong!");
+    } finally {
+      setIsButtonDisabled(false);
+    }
+  
   };
 
   const FormLabel = ({ children, required }) => (

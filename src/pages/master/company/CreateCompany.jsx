@@ -78,27 +78,37 @@ const CreateCompany = () => {
     };
 
     setIsButtonDisabled(true);
-    axios({
-      url: BASE_URL + "/api/web-create-company",
-      method: "POST",
-      data,
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    }).then((res) => {
-      toast.success("Company Created Sucessfully");
-
-      navigate("/master/company-list");
-      setCompany({
-        company_short: "",
-        company_name: "",
-        company_address: "",
-        company_mobile: "",
-        company_email: "",
-        company_gst: "",
-        company_pan: "",
+    
+    try {
+      const res = await axios({
+        url: BASE_URL + "/api/web-create-company",
+        method: "POST",
+        data,
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
       });
-    });
+  
+      if (res.data.code == 200) {
+        toast.success(res.data.msg);
+        navigate("/master/company-list");
+        setCompany({
+          company_short: "",
+          company_name: "",
+          company_address: "",
+          company_mobile: "",
+          company_email: "",
+          company_gst: "",
+          company_pan: "",
+        });
+      } else {
+        toast.error(res.data.msg);
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.msg || "Something went wrong!");
+    } finally {
+      setIsButtonDisabled(false);
+    }
   };
 
   const FormLabel = ({ children, required }) => (
@@ -211,6 +221,7 @@ const CreateCompany = () => {
                 value={company.company_gst}
                 onChange={(e) => onInputChange(e)}
                 className={inputClass}
+                
                 maxLength={15}
               />
             </div>
@@ -224,7 +235,7 @@ const CreateCompany = () => {
                 value={company.company_pan}
                 onChange={(e) => onInputChange(e)}
                 className={inputClass}
-                maxLength={10}
+                maxLength={12}
               />
             </div>
           </div>
