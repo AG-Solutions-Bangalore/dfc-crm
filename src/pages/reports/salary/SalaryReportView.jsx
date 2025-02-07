@@ -16,6 +16,10 @@ import { toast } from "sonner";
 import moment from "moment";
 import { NumericFormat } from "react-number-format";
 import html2pdf from "html2pdf.js";
+import {
+  ReportDate,
+  ReportTitle,
+} from "../../../components/common/ReportTitle";
 
 const printStyles = `
   @media print {
@@ -883,10 +887,8 @@ const SalaryReportView = () => {
             </div>
             <div className="hidden print:block">
               <div className="trademark flex justify-between items-center mt-4 ">
-                <h2 className="text-xs font-medium px-1">DFC</h2>
-                <h2 className="text-xs font-medium px-5">
-                  {new Date().toLocaleDateString("en-GB")}{" "}
-                </h2>
+                <h2 className="text-xs font-medium px-1">{ReportTitle}</h2>
+                <h2 className="text-xs font-medium px-5">{ReportDate} </h2>
               </div>
             </div>
           </div>

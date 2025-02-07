@@ -10,6 +10,8 @@ import {
   PaymentAdvanceCreate,
   PaymentAdvanceEdit,
 } from "../../../components/buttonIndex/ButtonComponents";
+import { CreateButton } from "../../../components/common/ButtonColors";
+import { encryptId } from "../../../components/common/EncryptionDecryption";
 
 const AdvancePaymentList = () => {
   const [advancePaymentData, setAdvancePaymentData] = useState(null);
@@ -96,7 +98,14 @@ const AdvancePaymentList = () => {
                 <IconEdit className="h-5 w-5 text-blue-500 cursor-pointer" />
               </div> */}
               <PaymentAdvanceEdit
-                onClick={() => navigate(`/payment/edit-advance/${id}`)}
+                // onClick={() => navigate(`/payment/edit-advance/${id}`)}
+                onClick={() => {
+                  const encryptedId = encryptId(id);
+
+                  navigate(
+                    `/payment/edit-advance/${encodeURIComponent(encryptedId)}`
+                  );
+                }}
                 className="h-5 w-5 text-blue-500 cursor-pointer"
               ></PaymentAdvanceEdit>
             </div>
@@ -141,7 +150,7 @@ const AdvancePaymentList = () => {
             <div className="flex gap-2">
               <PaymentAdvanceCreate
                 onClick={() => navigate("/payment/createAdvance")}
-                className=" flex flex-row items-center gap-1 text-center text-sm font-[400] cursor-pointer  w-[7rem] text-white bg-blue-600 hover:bg-red-700 p-2 rounded-lg shadow-md"
+                className={CreateButton}
               ></PaymentAdvanceCreate>
             </div>
           </div>

@@ -13,6 +13,7 @@ import {
   ReportTyreDownload,
   ReportTyreView,
 } from "../../../components/buttonIndex/ButtonComponents";
+import { CreateButton } from "../../../components/common/ButtonColors";
 
 function TyreReportForm() {
   const navigate = useNavigate();
@@ -387,19 +388,19 @@ function TyreReportForm() {
             </div> */}
             <div className="flex flex-wrap justify-center gap-4 py-4">
               <ReportTyreDownload
-                className="text-center text-sm font-medium cursor-pointer hover:animate-pulse w-full sm:w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md"
+                className={`${CreateButton} mx-4`}
                 onClick={onSubmit}
               ></ReportTyreDownload>
               <ReportTyreView
-                className="text-center text-sm font-medium cursor-pointer hover:animate-pulse w-full sm:w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md"
+                className={`${CreateButton} `}
                 onClick={handleview}
               ></ReportTyreView>
               <ReportTyreDetailsDownload
-                className="text-center text-sm font-medium cursor-pointer hover:animate-pulse w-full sm:w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md"
+                className={`${CreateButton} mx-4 w-[170px]`}
                 onClick={onDetailSubmit}
               ></ReportTyreDetailsDownload>
               <ReportTyreDetailsView
-                className="text-center text-sm font-medium cursor-pointer hover:animate-pulse w-full sm:w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md"
+                className={`${CreateButton} `}
                 onClick={handleDetailview}
               ></ReportTyreDetailsView>
             </div>

@@ -6,25 +6,33 @@ import BASE_URL from "../../../base/BaseUrl";
 import { IconEdit, IconEye, IconPlus } from "@tabler/icons-react";
 import { MantineReactTable, useMantineReactTable } from "mantine-react-table";
 import ViewVendor from "./ViewVendor";
-import { MasterVendorCreate, MasterVendorEdit, MasterVendorView } from "../../../components/buttonIndex/ButtonComponents";
+import {
+  MasterVendorCreate,
+  MasterVendorEdit,
+  MasterVendorView,
+} from "../../../components/buttonIndex/ButtonComponents";
+import { CreateButton } from "../../../components/common/ButtonColors";
+import { encryptId } from "../../../components/common/EncryptionDecryption";
 
 const VendorList = () => {
   const [vendorData, setVendorData] = useState(null);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const [isViewExpanded, setIsViewExpanded] = useState(false);
-    const [selectedVehicleId, setSelectedVehicleId] = useState(null);
-
+  const [selectedVehicleId, setSelectedVehicleId] = useState(null);
 
   const fetchVendorData = async () => {
     try {
       setLoading(true);
       const token = localStorage.getItem("token");
-      const response = await axios.get(`${BASE_URL}/api/web-fetch-vendor-list`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axios.get(
+        `${BASE_URL}/api/web-fetch-vendor-list`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       setVendorData(response.data?.vendor);
     } catch (error) {
@@ -43,8 +51,7 @@ const VendorList = () => {
       {
         accessorKey: "vendor_name",
         header: "Vendor Name",
-        size:150,
-       
+        size: 150,
       },
       {
         accessorKey: "vendor_type",
@@ -61,7 +68,7 @@ const VendorList = () => {
         header: "Mobile",
         size: 150,
       },
-      
+
       {
         accessorKey: "vendor_status",
         header: "Status",
@@ -77,7 +84,6 @@ const VendorList = () => {
 
           return (
             <div className="flex gap-2">
-              
               {/* <div
                 onClick={()=>navigate(`/master/vendor-edit/${id}`)}
                 className="flex items-center space-x-2"
@@ -86,9 +92,15 @@ const VendorList = () => {
                 <IconEdit className="h-5 w-5 text-blue-500 cursor-pointer" />
               </div> */}
               <MasterVendorEdit
-                   onClick={()=>navigate(`/master/vendor-edit/${id}`)}
+                // onClick={() => navigate(`/master/vendor-edit/${id}`)}
+                onClick={() => {
+                  const encryptedId = encryptId(id);
+
+                  navigate(
+                    `/master/vendor-edit/${encodeURIComponent(encryptedId)}`
+                  );
+                }}
                 className="flex items-center space-x-2"
-              
               />
               {/* <div
                  onClick={() => {
@@ -103,15 +115,11 @@ const VendorList = () => {
 
               <MasterVendorView
                 onClick={() => {
-                  setSelectedVehicleId(id); 
-                  setIsViewExpanded(true); 
+                  setSelectedVehicleId(id);
+                  setIsViewExpanded(true);
                 }}
                 className="flex items-center space-x-2"
-              
-              
               />
-              
-              
             </div>
           );
         },
@@ -130,7 +138,7 @@ const VendorList = () => {
     enableStickyHeader: true,
     enableStickyFooter: true,
     mantineTableContainerProps: { sx: { maxHeight: "400px" } },
- 
+
     initialState: { columnVisibility: { address: false } },
   });
 
@@ -150,25 +158,26 @@ const VendorList = () => {
                 <IconPlus className="w-4 h-4" /> Vendor
               </button> */}
               <MasterVendorCreate
-              
-                   onClick={()=>navigate('/master/createVendor')}
-              className=" flex flex-row items-center gap-1 text-center text-sm font-[400] cursor-pointer  w-[5rem] text-white bg-blue-600 hover:bg-red-700 p-2 rounded-lg shadow-md"
+                onClick={() => navigate("/master/createVendor")}
+                className={CreateButton}
               />
             </div>
           </div>
         </div>
         <div className=" flex w-full  gap-2 relative ">
-        <div className={`
+          <div
+            className={`
             ${isViewExpanded ? "w-[70%]" : "w-full"} 
             transition-all duration-300 ease-in-out  
             pr-4
-          `}>
-          <MantineReactTable table={table} />
-        </div>
+          `}
+          >
+            <MantineReactTable table={table} />
+          </div>
 
-        {isViewExpanded && (
-                  <div
-                    className={`
+          {isViewExpanded && (
+            <div
+              className={`
                       w-[30%] 
                        p-4
                       border-l 
@@ -187,24 +196,22 @@ const VendorList = () => {
                           : "opacity-0 translate-x-full"
                       }
                     `}
-                  >
-                    <div className="flex justify-end ml-2 ">
-                      <button
-                        title="close"
-                        className="text-black font-[700] cursor-pointer hover:text-red-900"
-                        onClick={() => {
-                          setIsViewExpanded(false);
-                          setSelectedVehicleId(null);
-                        }}
-                      >
-                        ✕
-                      </button>
-                    </div>
-                    <ViewVendor vendorId={selectedVehicleId}  />
-                  </div>
-                )}
-
-
+            >
+              <div className="flex justify-end ml-2 ">
+                <button
+                  title="close"
+                  className="text-black font-[700] cursor-pointer hover:text-red-900"
+                  onClick={() => {
+                    setIsViewExpanded(false);
+                    setSelectedVehicleId(null);
+                  }}
+                >
+                  ✕
+                </button>
+              </div>
+              <ViewVendor vendorId={selectedVehicleId} />
+            </div>
+          )}
         </div>
       </div>
     </Layout>

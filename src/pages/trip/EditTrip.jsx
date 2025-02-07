@@ -7,6 +7,8 @@ import axios from "axios";
 import BASE_URL from "../../base/BaseUrl";
 import { IconArrowBack, IconInfoCircle } from "@tabler/icons-react";
 import Select from "react-select";
+import { BackButton, CreateButton } from "../../components/common/ButtonColors";
+import { decryptId } from "../../components/common/EncryptionDecryption";
 
 const status = [
   {
@@ -36,6 +38,7 @@ const status = [
 ];
 const EditTrip = () => {
   const { id } = useParams();
+  const decryptedId = decryptId(id);
 
   const navigate = useNavigate();
   const [trip, setTrip] = useState({
@@ -70,7 +73,7 @@ const EditTrip = () => {
       setLoading(true);
       const token = localStorage.getItem("token");
       const response = await axios.get(
-        `${BASE_URL}/api/web-fetch-trip-by-id/${id}`,
+        `${BASE_URL}/api/web-fetch-trip-by-id/${decryptedId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -329,12 +332,16 @@ const EditTrip = () => {
 
     setIsButtonDisabled(true);
     try {
-      const res = await axios.put(`${BASE_URL}/api/web-update-trip/${id}`, data, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
-  
+      const res = await axios.put(
+        `${BASE_URL}/api/web-update-trip/${decryptedId}`,
+        data,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+
       if (res.data.code == 200) {
         toast.success(res.data.msg);
         navigate(-1);
@@ -346,7 +353,6 @@ const EditTrip = () => {
     } finally {
       setIsButtonDisabled(false);
     }
-  
   };
 
   const FormLabel = ({ children, required }) => (
@@ -637,7 +643,7 @@ const EditTrip = () => {
           <div className="flex flex-wrap gap-4 justify-start">
             <button
               type="submit"
-              className="text-center text-sm font-[400] cursor-pointer  w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md"
+              className={CreateButton}
               disabled={isButtonDisabled}
             >
               {isButtonDisabled ? "Updatting..." : "Update"}
@@ -645,7 +651,7 @@ const EditTrip = () => {
 
             <button
               type="button"
-              className="text-center text-sm font-[400] cursor-pointer  w-36 text-white bg-red-600 hover:bg-red-400 p-2 rounded-lg shadow-md"
+              className={BackButton}
               onClick={() => {
                 navigate(-1);
               }}

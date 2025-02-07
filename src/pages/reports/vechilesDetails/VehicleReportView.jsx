@@ -13,6 +13,7 @@ import moment from "moment";
 import { useReactToPrint } from "react-to-print";
 import html2pdf from "html2pdf.js";
 import { toast } from "sonner";
+import { ReportDate, ReportTitle } from "../../../components/common/ReportTitle";
 const SkeletonLoading = () => {
   return (
     <Layout>
@@ -832,10 +833,8 @@ const VehicleReportView = () => {
             </div>
             <div className="hidden print:block">
               <div className="trademark flex justify-between items-center mt-4 ">
-                <h2 className="text-xs font-medium px-1">DFC</h2>
-                <h2 className="text-xs font-medium px-5">
-                  {new Date().toLocaleDateString("en-GB")}{" "}
-                </h2>
+                <h2 className="text-xs font-medium px-1">{ReportTitle}</h2>
+                <h2 className="text-xs font-medium px-5">{ReportDate} </h2>
               </div>
             </div>
           </div>

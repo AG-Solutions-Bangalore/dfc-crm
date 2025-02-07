@@ -22,6 +22,8 @@ import {
   VechilesTruck,
   VechilesView,
 } from "../../components/buttonIndex/ButtonComponents";
+import { CreateButton } from "../../components/common/ButtonColors";
+import { encryptId } from "../../components/common/EncryptionDecryption";
 
 const VehiclesList = () => {
   const [vehiclesData, setVehiclesData] = useState(null);
@@ -236,6 +238,14 @@ const VehiclesList = () => {
               >
                 <IconEye className="h-5 w-5 text-blue-500 cursor-pointer" />
               </div> */}
+              {/* <VechilesView
+                onClick={() => {
+                  setSelectedVehicleId(id);
+                  setIsViewExpanded(true);
+                }}
+                
+                className="flex items-center space-x-2"
+              /> */}
               <VechilesView
                 onClick={() => {
                   setSelectedVehicleId(id);
@@ -253,8 +263,13 @@ const VehiclesList = () => {
               </div> */}
 
               <VechilesEdit
-                onClick={() => navigate(`/vechile-edit/${id}`)}
+                // onClick={() => navigate(`/vechile-edit/${id}`)}
                 className="flex items-center space-x-2"
+                onClick={() => {
+                  const encryptedId = encryptId(id);
+
+                  navigate(`/vechile-edit/${encodeURIComponent(encryptedId)}`);
+                }}
               />
               {/* <div
                 onClick={() => navigate(`/vechile-view/${id}`)}
@@ -263,7 +278,13 @@ const VehiclesList = () => {
               >
                 <IconEye className="h-5 w-5 text-blue-500 cursor-pointer" />
               </div> */}
-              <a href={`/truckdetails-viewall/${id}`} rel="noopener noreferrer">
+              {/* <a href={`/truckdetails-viewall/${id}`} rel="noopener noreferrer"> */}
+              <a
+                href={`/truckdetails-viewall/${encodeURIComponent(
+                  encryptId(id)
+                )}`}
+                rel="noopener noreferrer"
+              >
                 {/* <div
                  
                 className="flex items-center space-x-2"
@@ -326,7 +347,7 @@ const VehiclesList = () => {
 
               <VechilesCreate
                 onClick={() => navigate("/createVechiles")}
-                className=" flex flex-row items-center gap-1 text-center text-sm font-[400] cursor-pointer  w-[6rem] text-white bg-blue-600 hover:bg-red-700 p-2 rounded-lg shadow-md"
+                className={CreateButton}
               />
               {/* <button
                 onClick={() => navigate("/createTyre")}
@@ -337,7 +358,7 @@ const VehiclesList = () => {
 
               <VechilesCreateTyre
                 onClick={() => navigate("/createTyre")}
-                className=" flex flex-row items-center gap-1 text-center text-sm font-[400] cursor-pointer  w-[4rem] text-white bg-blue-600 hover:bg-red-700 p-2 rounded-lg shadow-md"
+                className={CreateButton}
               />
               <div className="flex justify-center ">
                 <div className="inline-flex bg-gray-200 border border-gray-500 rounded-lg shadow-md">

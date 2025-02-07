@@ -12,6 +12,8 @@ import {
   MasterTripEdit,
   MasterTripView,
 } from "../../components/buttonIndex/ButtonComponents";
+import { CreateButton } from "../../components/common/ButtonColors";
+import { encryptId } from "../../components/common/EncryptionDecryption";
 
 const TripList = () => {
   const [tripData, setTripData] = useState(null);
@@ -231,7 +233,12 @@ const TripList = () => {
                 <IconEdit className="h-5 w-5 text-blue-500 cursor-pointer " />
               </div> */}
               <MasterTripEdit
-                onClick={() => navigate(`/edit-trip/${id}`)}
+                // onClick={() => navigate(`/edit-trip/${id}`)}
+                onClick={() => {
+                  const encryptedId = encryptId(id);
+
+                  navigate(`/edit-trip/${encodeURIComponent(encryptedId)}`);
+                }}
                 className="flex items-center space-x-2"
               />
               {/* <div
@@ -290,7 +297,7 @@ const TripList = () => {
                 <IconPlus className="w-4 h-4" /> Trip
               </button> */}
               <MasterTripCreate
-                className=" flex flex-row items-center gap-1 text-center text-sm font-[400] cursor-pointer  w-[5rem] text-white bg-blue-600 hover:bg-red-700 p-2 rounded-lg shadow-md"
+                className={CreateButton}
                 onClick={() => navigate(`/createTrip`)}
               />
             </div>

@@ -13,6 +13,7 @@ import {
   ReportServicesDownload,
   ReportServicesView,
 } from "../../../components/buttonIndex/ButtonComponents";
+import { CreateButton } from "../../../components/common/ButtonColors";
 
 function ServiceReportForm() {
   const navigate = useNavigate();
@@ -370,19 +371,19 @@ function ServiceReportForm() {
             </div> */}
             <div className="flex flex-wrap justify-center gap-4 py-4">
               <ReportServicesDownload
-                className="text-center text-sm font-medium cursor-pointer hover:animate-pulse w-full sm:w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md"
+                className={`${CreateButton} mx-4`}
                 onClick={onSubmit}
               ></ReportServicesDownload>
               <ReportServicesView
-                className="text-center text-sm font-medium cursor-pointer hover:animate-pulse w-full sm:w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md"
+                className={`${CreateButton} `}
                 onClick={handleview}
               ></ReportServicesView>
               <ReportServicesDetailsDownload
-                className="text-center text-sm font-medium cursor-pointer hover:animate-pulse w-full sm:w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md"
+                className={`${CreateButton} mx-4 w-[170px]`}
                 onClick={onDetailSubmit}
               ></ReportServicesDetailsDownload>
               <ReportServicesDetailsView
-                className="text-center text-sm font-medium cursor-pointer hover:animate-pulse w-full sm:w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md"
+                className={`${CreateButton} `}
                 onClick={handleview1}
               ></ReportServicesDetailsView>
             </div>

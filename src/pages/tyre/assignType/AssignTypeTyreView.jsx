@@ -10,6 +10,7 @@ import BASE_URL from "../../../base/BaseUrl";
 import Layout from "../../../layout/Layout";
 import moment from "moment";
 import { useReactToPrint } from "react-to-print";
+import { decryptId } from "../../../components/common/EncryptionDecryption";
 
 const SkeletonLoading = () => {
   return (
@@ -76,6 +77,8 @@ const SkeletonLoading = () => {
 
 const AssignTypeTyreView = () => {
   const { id } = useParams();
+  const decryptedId = decryptId(id);
+
   const navigate = useNavigate();
   const [vehicle, setVehicle] = useState({});
   const [tyre, setTyre] = useState({});
@@ -120,7 +123,7 @@ const AssignTypeTyreView = () => {
         const token = localStorage.getItem("token");
 
         const vehicleResponse = await axios.get(
-          `${BASE_URL}/api/web-fetch-tyre-vehicle-by/${id}`,
+          `${BASE_URL}/api/web-fetch-tyre-vehicle-by/${decryptedId}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }

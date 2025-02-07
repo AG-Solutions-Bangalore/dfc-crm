@@ -11,6 +11,7 @@ import {
   ReportPaymentDownload,
   ReportPaymentView,
 } from "../../../components/buttonIndex/ButtonComponents";
+import { CreateButton } from "../../../components/common/ButtonColors";
 
 function PaymentReportForm() {
   const navigate = useNavigate();
@@ -23,29 +24,14 @@ function PaymentReportForm() {
     payment_details_credit: " ",
   });
 
-  // const onInputChange = (selectedOption, action) => {
-  //   console.log("Selected Option:", selectedOption);
-  //   console.log("Action:", action);
+  const onInputChange = (selectedOption, action) => {
+    console.log("Selected Option:", selectedOption);
+    console.log("Action:", action);
 
-  //   setPaymentDetailsDownload((prevState) => ({
-  //     ...prevState,
-  //     [action.name]: selectedOption ? selectedOption.value : "",
-  //   }));
-  // };
-
-  const onInputChange = (eventOrOption, action) => {
-    if (action) {
-      setPaymentDetailsDownload((prevState) => ({
-        ...prevState,
-        [action.name]: eventOrOption ? eventOrOption.value : "",
-      }));
-    } else {
-      const { name, value } = eventOrOption.target;
-      setPaymentDetailsDownload((prevState) => ({
-        ...prevState,
-        [name]: value,
-      }));
-    }
+    setPaymentDetailsDownload((prevState) => ({
+      ...prevState,
+      [action.name]: selectedOption ? selectedOption.value : "",
+    }));
   };
 
   const fetchBranches = async () => {
@@ -217,13 +203,13 @@ function PaymentReportForm() {
             </div> */}
             <div className="flex justify-center py-4">
               <ReportPaymentDownload
-                className=" text-center text-sm font-[400 ] cursor-pointer hover:animate-pulse w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md"
+                className={`${CreateButton} mx-4`}
                 onClick={onSubmit}
               >
                 {" "}
               </ReportPaymentDownload>
               <ReportPaymentView
-                className=" text-center text-sm font-[400 ] cursor-pointer hover:animate-pulse w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md ml-4"
+                className={`${CreateButton}`}
                 onClick={handleview}
               ></ReportPaymentView>
             </div>

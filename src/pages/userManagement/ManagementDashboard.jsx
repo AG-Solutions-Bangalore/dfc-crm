@@ -7,7 +7,7 @@ import { ContextPanel } from "../../context/ContextPanel";
 import BASE_URL from "../../base/BaseUrl";
 import Layout from "../../layout/Layout";
 import { ChevronDown, ChevronUp } from "lucide-react";
-
+//sajid
 
 const StatsCard = ({ title, value, bgColor }) => (
   <div className={`${bgColor} rounded-lg p-2 shadow-sm`}>
@@ -331,3 +331,5 @@ const ManagementDashboard = () => {
 };
 
 export default ManagementDashboard;
+
+//sajid 

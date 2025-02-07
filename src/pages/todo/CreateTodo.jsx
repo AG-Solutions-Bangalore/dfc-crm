@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import BASE_URL from "../../base/BaseUrl";
 import axios from "axios";
 import { toast } from "sonner";
+import { BackButton, CreateButton } from "../../components/common/ButtonColors";
 
 const CreateTodo = () => {
   const navigate = useNavigate();
@@ -59,31 +60,25 @@ const CreateTodo = () => {
     };
 
     setIsButtonDisabled(true);
-    try {
-      const res = await axios({
-        url: BASE_URL + "/api/web-create-todo",
-        method: "POST",
-        data,
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
-  
+    axios({
+      url: BASE_URL + "/api/web-create-todo",
+      method: "POST",
+      data,
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    }).then((res) => {
       if (res.data.code == 200) {
         toast.success(res.data.msg);
-        navigate("/todo-list");
-        setTodo({
-          todo_branch: "",
-          todo_description: "",
-        });
-      } else {
+      } else if (res.data.code == 400) {
         toast.error(res.data.msg);
       }
-    } catch (error) {
-      toast.error(error.response?.data?.msg || "Something went wrong!");
-    } finally {
-      setIsButtonDisabled(false);
-    }
+      navigate("/todo-list");
+      setTodo({
+        todo_branch: "",
+        todo_description: "",
+      });
+    });
   };
 
   const FormLabel = ({ children, required }) => (
@@ -154,7 +149,8 @@ const CreateTodo = () => {
           <div className="flex flex-wrap gap-4 justify-start">
             <button
               type="submit"
-              className="text-center text-sm font-[400] cursor-pointer  w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md"
+              
+              className={CreateButton}
               disabled={isButtonDisabled}
             >
               {isButtonDisabled ? "Sumbitting..." : "Sumbit"}
@@ -162,7 +158,7 @@ const CreateTodo = () => {
 
             <button
               type="button"
-              className="text-center text-sm font-[400] cursor-pointer  w-36 text-white bg-red-600 hover:bg-red-400 p-2 rounded-lg shadow-md"
+              className={BackButton}
               onClick={() => {
                 navigate("/todo-list");
               }}
