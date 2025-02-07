@@ -5,6 +5,11 @@ import BASE_URL from "../../../base/BaseUrl";
 import axios from "axios";
 import { toast } from "sonner";
 import { IconArrowBack, IconInfoCircle } from "@tabler/icons-react";
+import {
+  BackButton,
+  CreateButton,
+} from "../../../components/common/ButtonColors";
+import { decryptId } from "../../../components/common/EncryptionDecryption";
 
 const status = [
   {
@@ -30,6 +35,8 @@ const userType = [
 
 const EditTeam = () => {
   const { id } = useParams();
+  const decryptedId = decryptId(id);
+
   const navigate = useNavigate();
   const [team, setTeam] = useState({
     full_name: "",
@@ -67,7 +74,7 @@ const EditTeam = () => {
       setLoading(true);
       const token = localStorage.getItem("token");
       const response = await axios.get(
-        `${BASE_URL}/api/web-fetch-team-by-id/${id}`,
+        `${BASE_URL}/api/web-fetch-team-by-id/${decryptedId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -188,25 +195,21 @@ const EditTeam = () => {
     data.append("user_licence", selectedFile5);
 
     setIsButtonDisabled(true);
-   
-  try {
-    const res = await axios.post(`${BASE_URL}/api/web-update-team/${id}?_method=PUT`, data, {
+    axios({
+      url: BASE_URL + `/api/web-update-team/${decryptedId}?_method=PUT`,
+      method: "POST",
+      data,
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
-    });
-
-    if (res.data.code == 200) {
-      toast.success(res.data.msg);
+    }).then((res) => {
+      if (res.data.code == 200) {
+        toast.success(res.data.msg);
+      } else if (res.data.code == 400) {
+        toast.error(res.data.msg);
+      }
       navigate("/master/team-list");
-    } else {
-      toast.error(res.data.msg);
-    }
-  } catch (error) {
-    toast.error(error.response?.data?.msg || "Something went wrong!");
-  } finally {
-    setIsButtonDisabled(false);
-  }
+    });
   };
 
   const FormLabel = ({ children, required }) => (
@@ -479,7 +482,6 @@ const EditTeam = () => {
                 type="file"
                 name="user_pan_card"
                 onChange={(e) => setSelectedFile3(e.target.files[0])}
-                
                 className="w-full px-3 py-1 text-xs border rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-500 border-blue-500 file:mr-4 file:py-1 file:px-2 file:rounded-lg file:border-0 file:text-xs  file:bg-[#E1F5FA] file:text-black  cursor-pointer  "
               />
               <span className="text-[11px] p-1 ml-2 text-red-900">
@@ -518,7 +520,7 @@ const EditTeam = () => {
           <div className="flex flex-wrap gap-4 justify-start">
             <button
               type="submit"
-              className="text-center text-sm font-[400] cursor-pointer  w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md"
+              className={CreateButton}
               disabled={isButtonDisabled}
             >
               {isButtonDisabled ? "Updatting..." : "Update"}
@@ -526,7 +528,7 @@ const EditTeam = () => {
 
             <button
               type="button"
-              className="text-center text-sm font-[400] cursor-pointer  w-36 text-white bg-red-600 hover:bg-red-400 p-2 rounded-lg shadow-md"
+              className={BackButton}
               onClick={() => {
                 navigate("/master/team-list");
               }}

@@ -40,6 +40,7 @@ import VechilesDetailsReportForm from "./pages/reports/vechilesDetails/VechilesD
 import VehicleReportView from "./pages/reports/vechilesDetails/VehicleReportView";
 import VendorReportView from "./pages/reports/vendor/VendorReportView";
 import VendorReportForm from "./pages/reports/vendor/VendorReportForm";
+import DisableRightClick from "./components/common/DisableRightClick";
 
 // Pages (Profile)
 const Profile = lazy(() => import("./pages/profile/Profile"));
@@ -188,6 +189,7 @@ const App = () => {
       <Toaster richColors position="top-right" />
 
       <Suspense fallback={<LoadingSpinner />}>
+        <DisableRightClick />
         <Routes>
           {/* Auth Routes */}
           <Route path="/" element={<SignIn />} />

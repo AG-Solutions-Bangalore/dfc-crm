@@ -12,6 +12,11 @@ import {
   DialogFooter,
   DialogHeader,
 } from "@material-tailwind/react";
+import {
+  BackButton,
+  CreateButton,
+} from "../../../components/common/ButtonColors";
+import { decryptId } from "../../../components/common/EncryptionDecryption";
 
 const details_type = [
   {
@@ -34,6 +39,7 @@ const details_type = [
 
 const EditAdvancePayment = () => {
   const { id } = useParams();
+  const decryptedId = decryptId(id);
 
   const navigate = useNavigate();
   const [payment, setPayment] = useState({
@@ -61,7 +67,7 @@ const EditAdvancePayment = () => {
       setLoading(true);
       const token = localStorage.getItem("token");
       const response = await axios.get(
-        `${BASE_URL}/api/web-fetch-payment-details-by-id/${id}`,
+        `${BASE_URL}/api/web-fetch-payment-details-by-id/${decryptedId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -207,24 +213,21 @@ const EditAdvancePayment = () => {
     };
 
     setIsButtonDisabled(true);
-    try {
-      const res = await axios.put(`${BASE_URL}/api/web-update-payment-details/${id}`, data, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
-  
+    axios({
+      url: BASE_URL + `/api/web-update-payment-details/${decryptedId}`,
+      method: "PUT",
+      data,
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    }).then((res) => {
       if (res.data.code == 200) {
         toast.success(res.data.msg);
-        navigate("/payment/advance-list");
-      } else {
+      } else if (res.data.code == 400) {
         toast.error(res.data.msg);
       }
-    } catch (error) {
-      toast.error(error.response?.data?.msg || "Something went wrong!");
-    } finally {
-      setIsButtonDisabled(false);
-    }
+      navigate("/payment/advance-list");
+    });
   };
 
   const FormLabel = ({ children, required }) => (
@@ -236,7 +239,7 @@ const EditAdvancePayment = () => {
   const onDelete = (e) => {
     e.preventDefault();
     let data = {
-      payment_details_id: id,
+      payment_details_id: decryptedId,
     };
 
     var v = document.getElementById("addIndiv").checkValidity();
@@ -441,7 +444,7 @@ const EditAdvancePayment = () => {
           <div className="flex flex-wrap gap-4 justify-start">
             <button
               type="submit"
-              className="text-center text-sm font-[400] cursor-pointer  w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md"
+              className={CreateButton}
               disabled={isButtonDisabled}
             >
               {isButtonDisabled ? "Updating..." : "Update"}
@@ -449,7 +452,7 @@ const EditAdvancePayment = () => {
 
             <button
               type="button"
-              className="text-center text-sm font-[400] cursor-pointer  w-36 text-white bg-orange-600 hover:bg-oran ge-400 p-2 rounded-lg shadow-md"
+              className={BackButton}
               onClick={() => {
                 setOpenDialog(true);
               }}
@@ -458,7 +461,7 @@ const EditAdvancePayment = () => {
             </button>
             <button
               type="button"
-              className="text-center text-sm font-[400] cursor-pointer  w-36 text-white bg-red-600 hover:bg-red-400 p-2 rounded-lg shadow-md"
+              className={BackButton}
               onClick={() => {
                 navigate("/payment/advance-list");
               }}
@@ -480,14 +483,14 @@ const EditAdvancePayment = () => {
 
         <DialogFooter>
           <button
-            className="text-center text-sm font-[400] cursor-pointer hover:animate-pulse w-36 text-white bg-red-600 hover:bg-red-400 p-2 rounded-lg shadow-md mr-2"
+            className={`${BackButton} mx-2`}
             onClick={() => setOpenDialog(false)}
             aria-label="Cancel logout"
           >
             <span>Cancel</span>
           </button>
           <button
-            className="text-center text-sm font-[400] cursor-pointer hover:animate-pulse w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md"
+            className={CreateButton}
             onClick={onDelete}
             aria-label="Confirm logout"
           >

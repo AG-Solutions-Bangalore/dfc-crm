@@ -6,7 +6,13 @@ import BASE_URL from "../../../base/BaseUrl";
 import { IconEdit, IconEye, IconPlus } from "@tabler/icons-react";
 import { MantineReactTable, useMantineReactTable } from "mantine-react-table";
 import moment from "moment/moment";
-import { MasterPurchaseCreate, MasterPurchaseEdit, MasterPurchaseView } from "../../../components/buttonIndex/ButtonComponents";
+import {
+  MasterPurchaseCreate,
+  MasterPurchaseEdit,
+  MasterPurchaseView,
+} from "../../../components/buttonIndex/ButtonComponents";
+import { CreateButton } from "../../../components/common/ButtonColors";
+import { encryptId } from "../../../components/common/EncryptionDecryption";
 
 const PurchaseTyreList = () => {
   const [purchaseTyreData, setPurchaseTyreData] = useState(null);
@@ -117,9 +123,15 @@ const PurchaseTyreList = () => {
                 <IconEdit className="h-5 w-5 text-blue-500 cursor-pointer" />
               </div> */}
               <MasterPurchaseEdit
-                  onClick={() => navigate(`/tyre/purchase-edit/${id}`)}
+                // onClick={() => navigate(`/tyre/purchase-edit/${id}`)}
+                onClick={() => {
+                  const encryptedId = encryptId(id);
+
+                  navigate(
+                    `/tyre/purchase-edit/${encodeURIComponent(encryptedId)}`
+                  );
+                }}
                 className="flex items-center space-x-2"
-              
               />
               {/* <div
                 onClick={() => navigate(`/tyre/purchase-view/${id}`)}
@@ -129,9 +141,8 @@ const PurchaseTyreList = () => {
                 <IconEye className="h-5 w-5 text-blue-500 cursor-pointer" />
               </div> */}
               <MasterPurchaseView
-                 onClick={() => navigate(`/tyre/purchase-view/${id}`)}
+                onClick={() => navigate(`/tyre/purchase-view/${id}`)}
                 className="flex items-center space-x-2"
-              
               />
             </div>
           );
@@ -171,9 +182,8 @@ const PurchaseTyreList = () => {
                 <IconPlus className="w-4 h-4" /> Purchase Tyre
               </button> */}
               <MasterPurchaseCreate
-               onClick={() => navigate("/tyre/createPurchase")}
-                className=" flex flex-row items-center gap-1 text-center text-sm font-[400] cursor-pointer  w-[8rem] text-white bg-blue-600 hover:bg-red-700 p-2 rounded-lg shadow-md"
-              
+                onClick={() => navigate("/tyre/createPurchase")}
+                className={`${CreateButton} w-full`}
               />
             </div>
           </div>

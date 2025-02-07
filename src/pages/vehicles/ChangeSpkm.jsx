@@ -6,6 +6,7 @@ import axios from "axios";
 import { toast } from "sonner";
 import { IconArrowBack, IconInfoCircle } from "@tabler/icons-react";
 import moment from "moment/moment";
+import { CreateButton } from "../../components/common/ButtonColors";
 
 const ChangeSpkm = () => {
   const { id } = useParams();
@@ -201,13 +202,13 @@ const ChangeSpkm = () => {
                   type="submit"
                   disabled={isButtonDisabled}
                   className={`
-                          px-6 py-2 rounded-lg text-white transition-colors duration-300
-                          ${
-                            isButtonDisabled
-                              ? "bg-gray-400 cursor-not-allowed"
-                              : "bg-blue-500 hover:bg-blue-600"
-                          }
-                        `}
+                    ${CreateButton} px-6 py-2 rounded-lg text-white transition-colors duration-300 w-52
+                    ${
+                      isButtonDisabled
+                        ? "bg-gray-400 cursor-not-allowed"
+                        : "bg-blue-500 hover:bg-blue-600"
+                    }
+                  `}
                 >
                   Update Present Km
                 </button>

@@ -19,6 +19,7 @@ import moment from "moment";
 import axios from "axios";
 import BASE_URL from "../../base/BaseUrl";
 import { Tabs } from "@mantine/core";
+import { decryptId } from "../../components/common/EncryptionDecryption";
 
 // Skeleton Loader Component
 const SkeletonLoader = () => {
@@ -84,6 +85,7 @@ const TruckView = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const printRef = useRef(null);
+  const decryptedId = decryptId(id);
 
   const [vehicle, setVehicle] = useState({}); //first one
   const [service, setService] = useState([]); //secodn one
@@ -171,7 +173,7 @@ const TruckView = () => {
       try {
         const token = localStorage.getItem("token");
         const response = await axios.get(
-          `${BASE_URL}/api/fetch-vehicle-detail-id/${id}`,
+          `${BASE_URL}/api/fetch-vehicle-detail-id/${decryptedId}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -1095,7 +1097,10 @@ const TruckView = () => {
           <h2 className="px-5 text-black text-lg flex flex-row justify-between items-center rounded-xl p-2">
             <div className="flex items-center gap-2">
               <IconInfoCircle className="w-4 h-4" />
-              <span>Vehicle Details  &nbsp;  <strong className="text-blue-700">{vehicle.reg_no}</strong> </span>
+              <span>
+                Vehicle Details &nbsp;{" "}
+                <strong className="text-blue-700">{vehicle.reg_no}</strong>{" "}
+              </span>
             </div>
             <div className="flex items-center space-x-4">
               <IconPrinter

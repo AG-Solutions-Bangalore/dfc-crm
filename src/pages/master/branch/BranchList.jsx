@@ -5,7 +5,12 @@ import axios from "axios";
 import BASE_URL from "../../../base/BaseUrl";
 import { IconEdit, IconPlus } from "@tabler/icons-react";
 import { MantineReactTable, useMantineReactTable } from "mantine-react-table";
-import { MasterBranchCreate, MasterBranchEdit } from "../../../components/buttonIndex/ButtonComponents";
+import {
+  MasterBranchCreate,
+  MasterBranchEdit,
+} from "../../../components/buttonIndex/ButtonComponents";
+import { CreateButton } from "../../../components/common/ButtonColors";
+import { encryptId } from "../../../components/common/EncryptionDecryption";
 
 const BranchList = () => {
   const [branchData, setBranchData] = useState(null);
@@ -215,7 +220,14 @@ const BranchList = () => {
                 <IconEdit className="h-5 w-5 text-blue-500 cursor-pointer" />
               </div> */}
               <MasterBranchEdit
-               onClick={() => navigate(`/master/branch-edit/${id}`)}
+                // onClick={() => navigate(`/master/branch-edit/${id}`)}
+                onClick={() => {
+                  const encryptedId = encryptId(id);
+
+                  navigate(
+                    `/master/branch-edit/${encodeURIComponent(encryptedId)}`
+                  );
+                }}
                 className="flex items-center space-x-2"
               />
             </div>
@@ -257,9 +269,8 @@ const BranchList = () => {
                 <IconPlus className="w-4 h-4" /> Branch
               </button> */}
               <MasterBranchCreate
-               onClick={() => navigate("/master/CreateBranch")}
-                className=" flex flex-row items-center gap-1 text-center text-sm font-[400] cursor-pointer  w-[5rem] text-white bg-blue-600 hover:bg-red-700 p-2 rounded-lg shadow-md"
-              
+                onClick={() => navigate("/master/CreateBranch")}
+                className={CreateButton}
               />
             </div>
           </div>

@@ -10,6 +10,8 @@ import {
   PaymentBranchCreate,
   PaymentBranchEdit,
 } from "../../../components/buttonIndex/ButtonComponents";
+import { CreateButton } from "../../../components/common/ButtonColors";
+import { encryptId } from "../../../components/common/EncryptionDecryption";
 
 const BranchPaymentList = () => {
   const [branchPaymentData, setBranchPaymentData] = useState(null);
@@ -87,7 +89,14 @@ const BranchPaymentList = () => {
                 <IconEdit className="h-5 w-5 text-blue-500 cursor-pointer" />
               </div> */}
               <PaymentBranchEdit
-                onClick={() => navigate(`/payment/edit-branchpay/${id}`)}
+                // onClick={() => navigate(`/payment/edit-branchpay/${id}`)}
+                onClick={() => {
+                  const encryptedId = encryptId(id);
+
+                  navigate(
+                    `/payment/edit-branchpay/${encodeURIComponent(encryptedId)}`
+                  );
+                }}
                 className="h-5 w-5 text-blue-500 cursor-pointer"
                 // title="Edit"
               >
@@ -135,7 +144,7 @@ const BranchPaymentList = () => {
             <div className="flex gap-2">
               <PaymentBranchCreate
                 onClick={() => navigate("/payment/createBranchPay")}
-                className=" flex flex-row items-center gap-1 text-center text-sm font-[400] cursor-pointer  w-[9rem] text-white bg-blue-600 hover:bg-red-700 p-2 rounded-lg shadow-md"
+                className={`${CreateButton} w-full`}
               ></PaymentBranchCreate>
             </div>
           </div>

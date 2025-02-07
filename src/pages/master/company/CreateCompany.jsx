@@ -5,6 +5,10 @@ import { toast } from "sonner";
 import BASE_URL from "../../../base/BaseUrl";
 import axios from "axios";
 import { IconArrowBack, IconInfoCircle } from "@tabler/icons-react";
+import {
+  BackButton,
+  CreateButton,
+} from "../../../components/common/ButtonColors";
 
 const CreateCompany = () => {
   const navigate = useNavigate();
@@ -78,37 +82,30 @@ const CreateCompany = () => {
     };
 
     setIsButtonDisabled(true);
-    
-    try {
-      const res = await axios({
-        url: BASE_URL + "/api/web-create-company",
-        method: "POST",
-        data,
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
-  
+    axios({
+      url: BASE_URL + "/api/web-create-company",
+      method: "POST",
+      data,
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    }).then((res) => {
       if (res.data.code == 200) {
         toast.success(res.data.msg);
-        navigate("/master/company-list");
-        setCompany({
-          company_short: "",
-          company_name: "",
-          company_address: "",
-          company_mobile: "",
-          company_email: "",
-          company_gst: "",
-          company_pan: "",
-        });
-      } else {
+      } else if (res.data.code == 400) {
         toast.error(res.data.msg);
       }
-    } catch (error) {
-      toast.error(error.response?.data?.msg || "Something went wrong!");
-    } finally {
-      setIsButtonDisabled(false);
-    }
+      navigate("/master/company-list");
+      setCompany({
+        company_short: "",
+        company_name: "",
+        company_address: "",
+        company_mobile: "",
+        company_email: "",
+        company_gst: "",
+        company_pan: "",
+      });
+    });
   };
 
   const FormLabel = ({ children, required }) => (
@@ -195,7 +192,6 @@ const CreateCompany = () => {
                 className={inputClass}
                 required
                 maxLength={10}
-
               />
             </div>
 
@@ -221,7 +217,6 @@ const CreateCompany = () => {
                 value={company.company_gst}
                 onChange={(e) => onInputChange(e)}
                 className={inputClass}
-                
                 maxLength={15}
               />
             </div>
@@ -235,7 +230,7 @@ const CreateCompany = () => {
                 value={company.company_pan}
                 onChange={(e) => onInputChange(e)}
                 className={inputClass}
-                maxLength={12}
+                maxLength={10}
               />
             </div>
           </div>
@@ -244,7 +239,7 @@ const CreateCompany = () => {
           <div className="flex flex-wrap gap-4 justify-start">
             <button
               type="submit"
-              className="text-center text-sm font-[400] cursor-pointer  w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md"
+              className={CreateButton}
               disabled={isButtonDisabled}
             >
               {isButtonDisabled ? "Sumbitting..." : "Sumbit"}
@@ -252,7 +247,7 @@ const CreateCompany = () => {
 
             <button
               type="button"
-              className="text-center text-sm font-[400] cursor-pointer  w-36 text-white bg-red-600 hover:bg-red-400 p-2 rounded-lg shadow-md"
+              className={BackButton}
               onClick={() => {
                 navigate("/master/company-list");
               }}

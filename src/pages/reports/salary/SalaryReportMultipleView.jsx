@@ -16,38 +16,32 @@ import { toast } from "sonner";
 import { NumericFormat } from "react-number-format";
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
+import {
+  ReportDate,
+  ReportTitle,
+} from "../../../components/common/ReportTitle";
 
 const printStyles = `
-      @page {
-        size: A4;
-        margin: 7mm 2mm;
-        margin-top: 2mm;
+  @media print {
+
+
+
+
+    /* Print content with 20px margin */
+    .print-content {
+      margin: 10px !important; /* Apply 20px margin to the printed content */
+  padding: 3px;
       }
-      @media print {
-        body {
-          margin: 0;
-          font-size: 12px;
-          min-height: 100vh;
-        }
-        table {
-          width: 100%;
-          border-collapse: collapse;
-        }
-        th, td {
-          border: 1px solid #ddd;
-          padding: 4px;
-        }
-        .page-break {
-          page-break-before: always;
-          margin-top: 10mm;
-        }
-        th {
-          background-color: #f4f4f4;
-        }
-        .text-center {
-          text-align: center;
-        }
-      }
+
+.page-break {
+      page-break-before: always;
+      margin-top: 10mm;
+    }
+
+
+
+
+  }
 `;
 
 const SalaryReportMultipleView = () => {
@@ -215,6 +209,24 @@ const SalaryReportMultipleView = () => {
       defaultStyle: {
         fontSize: 7,
       },
+
+      footer: (currentPage, pageCount) => ({
+        columns: [
+          {
+            text: ReportTitle,
+            style: "footerText",
+            alignment: "left",
+            margin: [10, 0],
+          },
+          {
+            text: ReportDate,
+            style: "footerText",
+            alignment: "right",
+            margin: [0, 0, 10, 0],
+          },
+        ],
+        margin: [10, 0, 10, 10],
+      }),
     };
     toast.success("PDF is Downloaded Successfully");
 
@@ -569,12 +581,10 @@ const SalaryReportMultipleView = () => {
                 <p>No salary data available.</p>
               )}
             </div>
-            <div className="hidden print:block  page-break">
+            <div className="hidden print:block">
               <div className="trademark flex justify-between items-center mt-4 ">
-                <h2 className="text-xs font-medium px-1">DFC</h2>
-                <h2 className="text-xs font-medium px-5">
-                  {new Date().toLocaleDateString("en-GB")}{" "}
-                </h2>
+                <h2 className="text-xs font-medium px-1">{ReportTitle}</h2>
+                <h2 className="text-xs font-medium px-5">{ReportDate} </h2>
               </div>
             </div>
           </div>

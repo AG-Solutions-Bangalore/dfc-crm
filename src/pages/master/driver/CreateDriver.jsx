@@ -5,6 +5,10 @@ import axios from "axios";
 import BASE_URL from "../../../base/BaseUrl";
 import { toast } from "sonner";
 import { IconArrowBack, IconInfoCircle } from "@tabler/icons-react";
+import {
+  BackButton,
+  CreateButton,
+} from "../../../components/common/ButtonColors";
 
 const vehicleType = [
   {
@@ -151,51 +155,45 @@ const CreateDriver = () => {
     data.append("user_licence", selectedFile5);
 
     setIsButtonDisabled(true);
-    try {
-      const res = await axios({
-        url: BASE_URL + "/api/web-create-driver",
-        method: "POST",
-        data,
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
-  
+    axios({
+      url: BASE_URL + "/api/web-create-driver",
+      method: "POST",
+      data,
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    }).then((res) => {
       if (res.data.code == 200) {
         toast.success(res.data.msg);
-        navigate("/master/driver-list");
-        setDriver({
-          full_name: "",
-          email: "",
-          mobile: "",
-          user_company: "",
-          vehicle_type: "",
-          user_address: "",
-          dl_no: "",
-          dl_expiry: "",
-          hazard_lice_no: "",
-          hazard_lice_expiry: "",
-          user_branch: "",
-          user_insurance: "",
-          user_insurance_no: "",
-          user_bank: "",
-          user_bank_branch: "",
-          user_account_no: "",
-          user_ifsc_code: "",
-          user_image: "",
-          user_adhar_card: "",
-          user_pan_card: "",
-          user_passbook: "",
-          user_licence: "",
-        });
-      } else {
+      } else if (res.data.code == 400) {
         toast.error(res.data.msg);
       }
-    } catch (error) {
-      toast.error(error.response?.data?.msg || "Something went wrong!");
-    } finally {
-      setIsButtonDisabled(false);
-    }
+      navigate("/master/driver-list");
+      setDriver({
+        full_name: "",
+        email: "",
+        mobile: "",
+        user_company: "",
+        vehicle_type: "",
+        user_address: "",
+        dl_no: "",
+        dl_expiry: "",
+        hazard_lice_no: "",
+        hazard_lice_expiry: "",
+        user_branch: "",
+        user_insurance: "",
+        user_insurance_no: "",
+        user_bank: "",
+        user_bank_branch: "",
+        user_account_no: "",
+        user_ifsc_code: "",
+        user_image: "",
+        user_adhar_card: "",
+        user_pan_card: "",
+        user_passbook: "",
+        user_licence: "",
+      });
+    });
   };
 
   const FormLabel = ({ children, required }) => (
@@ -506,7 +504,7 @@ const CreateDriver = () => {
           <div className="flex flex-wrap gap-4 justify-start">
             <button
               type="submit"
-              className="text-center text-sm font-[400] cursor-pointer  w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md"
+              className={CreateButton}
               disabled={isButtonDisabled}
             >
               {isButtonDisabled ? "Sumbitting..." : "Sumbit"}
@@ -514,7 +512,7 @@ const CreateDriver = () => {
 
             <button
               type="button"
-              className="text-center text-sm font-[400] cursor-pointer  w-36 text-white bg-red-600 hover:bg-red-400 p-2 rounded-lg shadow-md"
+              className={BackButton}
               onClick={() => {
                 navigate("/master/driver-list");
               }}

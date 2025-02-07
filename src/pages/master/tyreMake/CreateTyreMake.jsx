@@ -1,79 +1,72 @@
-import React, { useState } from 'react'
-import Layout from '../../../layout/Layout'
-import { toast } from 'sonner';
-import { useNavigate } from 'react-router-dom';
-import BASE_URL from '../../../base/BaseUrl';
-import axios from 'axios';
-import { IconArrowBack, IconInfoCircle } from '@tabler/icons-react';
+import React, { useState } from "react";
+import Layout from "../../../layout/Layout";
+import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
+import BASE_URL from "../../../base/BaseUrl";
+import axios from "axios";
+import { IconArrowBack, IconInfoCircle } from "@tabler/icons-react";
+import { BackButton, CreateButton } from "../../../components/common/ButtonColors";
 
 const CreateTyreMake = () => {
-    const navigate = useNavigate();
-     const [tyreMake, setTyreMake] = useState({
-            tyre_make: "",
-        });
-    const [isButtonDisabled, setIsButtonDisabled] = useState(false);
-  
+  const navigate = useNavigate();
+  const [tyreMake, setTyreMake] = useState({
+    tyre_make: "",
+  });
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
-    const onInputChange = (e) => {
-        setTyreMake({
-          ...tyreMake,
-          [e.target.name]: e.target.value,
-        });
+  const onInputChange = (e) => {
+    setTyreMake({
+      ...tyreMake,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const form = document.getElementById("addIndiv");
+    if (!form.checkValidity()) {
+      toast.error("Fill all required");
+      setIsButtonDisabled(false);
+
+      return;
+    }
+    const data = {
+      tyre_make: tyreMake.tyre_make,
     };
-  
-    const handleSubmit = async (e) => {
-      e.preventDefault();
-      const form = document.getElementById("addIndiv");
-      if (!form.checkValidity()) {
-        toast.error("Fill all required");
-        setIsButtonDisabled(false);
-  
-        return;
+
+    setIsButtonDisabled(true);
+    axios({
+      url: BASE_URL + "/api/web-create-tyre-make",
+      method: "POST",
+      data,
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    }).then((res) => {
+      if (res.data.code == 200) {
+        toast.success(res.data.msg);
+      } else if (res.data.code == 400) {
+        toast.error(res.data.msg);
       }
-      const data = {
-        tyre_make : tyreMake.tyre_make,
-      };
-  
-      setIsButtonDisabled(true);
-      try {
-        const res = await axios({
-          url: BASE_URL + "/api/web-create-tyre-make",
-          method: "POST",
-          data,
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        });
-    
-        if (res.data.code == 200) {
-          toast.success(res.data.msg);
-          navigate('/master/tyremake-list')
-            setTyreMake({
-                tyre_make: "",
-            });
-        } else {
-          toast.error(res.data.msg);
-        }
-      } catch (error) {
-        toast.error(error.response?.data?.msg || "Something went wrong!");
-      } finally {
-        setIsButtonDisabled(false);
-      }
-    };
-  
-    const FormLabel = ({ children, required }) => (
-      <label className="block text-sm font-semibold text-black mb-1 ">
-        {children}
-        {required && <span className="text-red-500 ml-1">*</span>}
-      </label>
-    );
-  
-  
-    const inputClass =
-      "w-full px-3 py-2 text-xs border rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-500 border-blue-500";
+      navigate("/master/tyremake-list");
+      setTyreMake({
+        tyre_make: "",
+      });
+    });
+  };
+
+  const FormLabel = ({ children, required }) => (
+    <label className="block text-sm font-semibold text-black mb-1 ">
+      {children}
+      {required && <span className="text-red-500 ml-1">*</span>}
+    </label>
+  );
+
+  const inputClass =
+    "w-full px-3 py-2 text-xs border rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-500 border-blue-500";
   return (
-<Layout>
- <div className=" bg-[#FFFFFF] p-2  rounded-lg  ">
+    <Layout>
+      <div className=" bg-[#FFFFFF] p-2  rounded-lg  ">
         <div className="sticky top-0 p-2  mb-4 border-b-2 border-red-500 rounded-lg  bg-[#E1F5FA] ">
           <h2 className=" px-5 text-[black] text-lg   flex flex-row  justify-between items-center  rounded-xl p-2 ">
             <div className="flex  items-center gap-2">
@@ -93,8 +86,7 @@ const CreateTyreMake = () => {
           className="w-full max-w-7xl  rounded-lg mx-auto p-4 space-y-6 "
         >
           <div className="grid grid-cols-1  md:grid-cols-1 lg:grid-cols-1 gap-6">
-           
-            <div >
+            <div>
               <FormLabel required>Tyre Make</FormLabel>
               <input
                 type="text"
@@ -111,15 +103,15 @@ const CreateTyreMake = () => {
           <div className="flex flex-wrap gap-4 justify-start">
             <button
               type="submit"
-              className="text-center text-sm font-[400] cursor-pointer  w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md"
+              className={CreateButton}
               disabled={isButtonDisabled}
             >
-              {isButtonDisabled ? "Sumbitting..." : "Sumbit"} 
+              {isButtonDisabled ? "Sumbitting..." : "Sumbit"}
             </button>
 
             <button
               type="button"
-              className="text-center text-sm font-[400] cursor-pointer  w-36 text-white bg-red-600 hover:bg-red-400 p-2 rounded-lg shadow-md"
+              className={BackButton}
               onClick={() => {
                 navigate("/master/tyremake-list");
               }}
@@ -129,8 +121,8 @@ const CreateTyreMake = () => {
           </div>
         </form>
       </div>
-</Layout>
-  )
-}
+    </Layout>
+  );
+};
 
-export default CreateTyreMake
+export default CreateTyreMake;

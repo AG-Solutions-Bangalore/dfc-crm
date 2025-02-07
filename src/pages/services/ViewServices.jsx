@@ -10,6 +10,8 @@ import BASE_URL from "../../base/BaseUrl";
 import { useReactToPrint } from "react-to-print";
 import moment from "moment";
 import axios from "axios";
+import { ReportDate, ReportTitle } from "../../components/common/ReportTitle";
+import { decryptId } from "../../components/common/EncryptionDecryption";
 
 // Skeleton Loader Component
 const SkeletonLoader = () => {
@@ -72,6 +74,8 @@ const SkeletonLoader = () => {
 };
 const ViewServices = () => {
   const { id } = useParams();
+  const decryptedId = decryptId(id);
+
   const navigate = useNavigate();
   const componentRef = useRef(null);
 
@@ -174,7 +178,7 @@ const ViewServices = () => {
         const token = localStorage.getItem("token");
 
         const response = await axios.get(
-          `${BASE_URL}/api/web-fetch-services-by-id/${id}`,
+          `${BASE_URL}/api/web-fetch-services-by-id/${decryptedId}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -312,10 +316,8 @@ const ViewServices = () => {
           </table>
           <div className="hidden print:block">
             <div className="trademark flex justify-between items-center mt-4 ">
-              <h2 className="text-xs font-medium px-1">DFC</h2>
-              <h2 className="text-xs font-medium px-5">
-                {new Date().toLocaleDateString("en-GB")}{" "}
-              </h2>
+              <h2 className="text-xs font-medium px-1">{ReportTitle}</h2>
+              <h2 className="text-xs font-medium px-5">{ReportDate} </h2>
             </div>
           </div>
         </div>

@@ -222,44 +222,38 @@ const AddVechiles = () => {
     };
 
     setIsButtonDisabled(true);
-    try {
-      const res = await axios({
-        url: BASE_URL + "/api/web-create-vehicles",
-        method: "POST",
-        data,
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
-  
+    axios({
+      url: BASE_URL + "/api/web-create-vehicles",
+      method: "POST",
+      data,
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    }).then((res) => {
       if (res.data.code == 200) {
         toast.success(res.data.msg);
-        navigate("/vehicles-list");
-        setVehicles({
-          reg_no: "",
-          mfg_year: "",
-          ins_due: "",
-          permit_due: "",
-          vehicle_branch: "",
-          fc_due: "",
-          vehicle_type: "",
-          vehicle_company: "",
-          no_of_gas_cylinder: "",
-          vehicle_driver: "",
-          vehicle_mileage: "",
-          vehicle_open_km: "",
-          vehicle_hsd_open: "",
-          vehicle_present_km: "",
-          vehicle_present_date: "",
-        });
-      } else {
+      } else if (res.data.code == 400) {
         toast.error(res.data.msg);
       }
-    } catch (error) {
-      toast.error(error.response?.data?.msg || "Something went wrong!");
-    } finally {
-      setIsButtonDisabled(false);
-    }
+      navigate("/vehicles-list");
+      setVehicles({
+        reg_no: "",
+        mfg_year: "",
+        ins_due: "",
+        permit_due: "",
+        vehicle_branch: "",
+        fc_due: "",
+        vehicle_type: "",
+        vehicle_company: "",
+        no_of_gas_cylinder: "",
+        vehicle_driver: "",
+        vehicle_mileage: "",
+        vehicle_open_km: "",
+        vehicle_hsd_open: "",
+        vehicle_present_km: "",
+        vehicle_present_date: "",
+      });
+    });
   };
 
   const FormLabel = ({ children, required }) => (

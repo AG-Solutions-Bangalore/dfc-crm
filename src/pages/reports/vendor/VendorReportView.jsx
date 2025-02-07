@@ -15,6 +15,7 @@ import { IconFileTypePdf } from "@tabler/icons-react";
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 import { toast } from "sonner";
+import { ReportDate, ReportTitle } from "../../../components/common/ReportTitle";
 const printStyles = `
   @media print {
 
@@ -192,13 +193,13 @@ const VendorReportView = () => {
       footer: (currentPage, pageCount) => ({
         columns: [
           {
-            text: "DFC",
+            text: ReportTitle,
             style: "footerText",
             alignment: "left",
             margin: [10, 0],
           },
           {
-            text: new Date().toLocaleDateString("en-GB"),
+            text: ReportDate,
             style: "footerText",
             alignment: "right",
             margin: [0, 0, 10, 0],
@@ -332,9 +333,9 @@ const VendorReportView = () => {
             </div>
             <div className="hidden print:block">
               <div className="trademark flex justify-between items-center mt-4 ">
-                <h2 className="text-xs font-medium px-1">DFC</h2>
+                <h2 className="text-xs font-medium px-1">{ReportTitle}</h2>
                 <h2 className="text-xs font-medium px-5">
-                  {new Date().toLocaleDateString("en-GB")}{" "}
+                  {ReportDate}{" "}
                 </h2>
               </div>
             </div>

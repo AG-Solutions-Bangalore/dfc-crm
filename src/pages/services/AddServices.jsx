@@ -14,6 +14,7 @@ import moment from "moment";
 import { Button } from "@material-tailwind/react";
 import { toast } from "sonner";
 import { Opacity } from "@mui/icons-material";
+import { BackButton, CreateButton } from "../../components/common/ButtonColors";
 
 const AddServices = () => {
   const today = new Date();
@@ -302,41 +303,35 @@ const AddServices = () => {
     };
 
     setIsButtonDisabled(true);
-    try {
-      const res = await axios({
-        url: BASE_URL + "/api/web-create-services",
-        method: "POST",
-        data,
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
-  
+    axios({
+      url: BASE_URL + "/api/web-create-services",
+      method: "POST",
+      data,
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    }).then((res) => {
       if (res.data.code == 200) {
         toast.success(res.data.msg);
-        navigate("/service-list");
-        setService({
-          service_date: todayback,
-          service_year: "2023-24",
-          service_company: "",
-          service_branch: "",
-          service_truck_no: "",
-          service_garage: "",
-          service_km: "",
-          service_pre_km: "",
-          service_amount: "",
-          service_remarks: "",
-          service_count: "",
-          service_sub_data: "",
-        });
-      } else {
+      } else if (res.data.code == 400) {
         toast.error(res.data.msg);
       }
-    } catch (error) {
-      toast.error(error.response?.data?.msg || "Something went wrong!");
-    } finally {
-      setIsButtonDisabled(false);
-    }
+      navigate("/service-list");
+      setService({
+        service_date: todayback,
+        service_year: "2023-24",
+        service_company: "",
+        service_branch: "",
+        service_truck_no: "",
+        service_garage: "",
+        service_km: "",
+        service_pre_km: "",
+        service_amount: "",
+        service_remarks: "",
+        service_count: "",
+        service_sub_data: "",
+      });
+    });
   };
 
   const FormLabel = ({ children, required }) => (
@@ -592,18 +587,19 @@ const AddServices = () => {
             </div>
           ))}
           <div>
-            <Button
-              className="text-center text-sm font-[400] cursor-pointer   flex items-center gap-1  text-white bg-blue-600 hover:bg-red-700 p-2 rounded-lg shadow-md"
+            <button
+              className={CreateButton}
+              type="button"
               onClick={(e) => addItem(e)}
             >
               <IconPlus className="w-5 h-5" /> Add More
-            </Button>
+            </button>
           </div>
           {/* Form Actions */}
           <div className="flex flex-wrap gap-4 justify-start">
             <button
               type="submit"
-              className="text-center text-sm font-[400] cursor-pointer  w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md"
+              className={CreateButton}
               disabled={isButtonDisabled}
             >
               {isButtonDisabled ? "Sumbitting..." : "Sumbit"}
@@ -611,7 +607,7 @@ const AddServices = () => {
 
             <button
               type="button"
-              className="text-center text-sm font-[400] cursor-pointer  w-36 text-white bg-red-600 hover:bg-red-400 p-2 rounded-lg shadow-md"
+              className={BackButton}
               onClick={() => {
                 navigate("/service-list");
               }}

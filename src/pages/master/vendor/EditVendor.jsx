@@ -5,6 +5,11 @@ import { toast } from "sonner";
 import { IconArrowBack, IconInfoCircle } from "@tabler/icons-react";
 import BASE_URL from "../../../base/BaseUrl";
 import axios from "axios";
+import {
+  BackButton,
+  CreateButton,
+} from "../../../components/common/ButtonColors";
+import { decryptId } from "../../../components/common/EncryptionDecryption";
 
 const status = [
   {
@@ -58,6 +63,8 @@ const VType_2 = [
 const EditVendor = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const decryptedId = decryptId(id);
+
   const [vendor, setVendor] = useState({
     vendor_name: "",
     vendor_type: "",
@@ -80,7 +87,7 @@ const EditVendor = () => {
       setLoading(true);
       const token = localStorage.getItem("token");
       const response = await axios.get(
-        `${BASE_URL}/api/web-fetch-vendor-by-id/${id}`,
+        `${BASE_URL}/api/web-fetch-vendor-by-id/${decryptedId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -164,24 +171,21 @@ const EditVendor = () => {
     };
 
     setIsButtonDisabled(true);
-    try {
-      const res = await axios.put(`${BASE_URL}/api/web-update-vendor/${id}`, data, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
-  
+    axios({
+      url: BASE_URL + `/api/web-update-vendor/${decryptedId}`,
+      method: "PUT",
+      data,
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    }).then((res) => {
       if (res.data.code == 200) {
         toast.success(res.data.msg);
-        navigate("/master/vendor-list");
-      } else {
+      } else if (res.data.code == 400) {
         toast.error(res.data.msg);
       }
-    } catch (error) {
-      toast.error(error.response?.data?.msg || "Something went wrong!");
-    } finally {
-      setIsButtonDisabled(false);
-    }
+      navigate("/master/vendor-list");
+    });
   };
 
   const FormLabel = ({ children, required }) => (
@@ -373,7 +377,7 @@ const EditVendor = () => {
           <div className="flex flex-wrap gap-4 justify-start">
             <button
               type="submit"
-              className="text-center text-sm font-[400] cursor-pointer  w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md"
+              className={CreateButton}
               disabled={isButtonDisabled}
             >
               {isButtonDisabled ? "Updating..." : "Update"}
@@ -381,7 +385,7 @@ const EditVendor = () => {
 
             <button
               type="button"
-              className="text-center text-sm font-[400] cursor-pointer  w-36 text-white bg-red-600 hover:bg-red-400 p-2 rounded-lg shadow-md"
+              className={BackButton}
               onClick={() => {
                 navigate("/master/vendor-list");
               }}

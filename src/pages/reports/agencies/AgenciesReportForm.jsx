@@ -10,6 +10,7 @@ import {
   ReportAgenciesDownload,
   ReportAgenciesView,
 } from "../../../components/buttonIndex/ButtonComponents";
+import { CreateButton } from "../../../components/common/ButtonColors";
 
 function AgenciesReportForm() {
   const navigate = useNavigate();
@@ -151,14 +152,14 @@ function AgenciesReportForm() {
 
               <div className="flex justify-center py-4 mt-2">
                 <ReportAgenciesDownload
-                  className=" text-center text-sm font-[400 ] cursor-pointer hover:animate-pulse w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md"
+                  className={`${CreateButton} mx-4`}
                   onClick={onSubmit}
                 >
                   {" "}
                   Download
                 </ReportAgenciesDownload>
                 <ReportAgenciesView
-                  className=" text-center text-sm font-[400 ] cursor-pointer hover:animate-pulse w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md ml-4"
+                  className={CreateButton}
                   onClick={handleview}
                 >
                   {" "}

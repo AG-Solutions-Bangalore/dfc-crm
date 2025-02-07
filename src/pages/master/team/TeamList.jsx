@@ -6,7 +6,13 @@ import BASE_URL from "../../../base/BaseUrl";
 import { IconEdit, IconEye, IconPlus } from "@tabler/icons-react";
 import { MantineReactTable, useMantineReactTable } from "mantine-react-table";
 import ViewTeam from "./ViewTeam";
-import { MasterTeamCreate, MasterTeamEdit, MasterTeamView } from "../../../components/buttonIndex/ButtonComponents";
+import {
+  MasterTeamCreate,
+  MasterTeamEdit,
+  MasterTeamView,
+} from "../../../components/buttonIndex/ButtonComponents";
+import { CreateButton } from "../../../components/common/ButtonColors";
+import { encryptId } from "../../../components/common/EncryptionDecryption";
 
 const TeamList = () => {
   const [teamData, setTeamData] = useState(null);
@@ -66,9 +72,7 @@ const TeamList = () => {
         Cell: ({ row }) => {
           const userType = row.original.user_type_id;
 
-          return (
-            <span>{userType == "3" ? "Office" : "Branch Manager"}</span>
-          );
+          return <span>{userType == "3" ? "Office" : "Branch Manager"}</span>;
         },
       },
       {
@@ -99,10 +103,17 @@ const TeamList = () => {
                 <IconEdit className="h-5 w-5 text-blue-500 cursor-pointer" />
               </div> */}
               <MasterTeamEdit
-               onClick={() => navigate(`/master/team-edit/${id}`)}
+                // onClick={() => navigate(`/master/team-edit/${id}`)}
+                onClick={() => {
+                  const encryptedId = encryptId(id);
+
+                  navigate(
+                    `/master/team-edit/${encodeURIComponent(encryptedId)}`
+                  );
+                }}
                 className="flex items-center space-x-2"
-              
               />
+
               {/* <div
                 onClick={() => {
                   setSelectedVehicleId(id);
@@ -114,12 +125,11 @@ const TeamList = () => {
                 <IconEye className="h-5 w-5 text-blue-500 cursor-pointer" />
               </div> */}
               <MasterTeamView
-              onClick={() => {
-                setSelectedVehicleId(id);
-                setIsViewExpanded(true);
-              }}
-              className="flex items-center space-x-2"
-              
+                onClick={() => {
+                  setSelectedVehicleId(id);
+                  setIsViewExpanded(true);
+                }}
+                className="flex items-center space-x-2"
               />
             </div>
           );
@@ -161,8 +171,7 @@ const TeamList = () => {
               </button> */}
               <MasterTeamCreate
                 onClick={() => navigate("/master/createTeam")}
-                className=" flex flex-row items-center gap-1 text-center text-sm font-[400] cursor-pointer  w-[5rem] text-white bg-blue-600 hover:bg-red-700 p-2 rounded-lg shadow-md"
-              
+                className={CreateButton}
               />
             </div>
           </div>

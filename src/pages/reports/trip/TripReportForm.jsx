@@ -13,6 +13,7 @@ import {
   ReportTripRDownload,
   ReportTripRView,
 } from "../../../components/buttonIndex/ButtonComponents";
+import { CreateButton } from "../../../components/common/ButtonColors";
 const vehicleType = [
   {
     value: "6W Truck",
@@ -254,6 +255,7 @@ function TripReportForm() {
   );
 
   const handleview = () => {
+    navigate("/report-trip-form/view");
     localStorage.setItem("trip_date_from", downloadTrip.trip_date_from);
     localStorage.setItem("trip_date_to", downloadTrip.trip_date_to);
     localStorage.setItem("trip_company", downloadTrip.trip_company);
@@ -265,9 +267,9 @@ function TripReportForm() {
     localStorage.setItem("trip_agency", downloadTrip.trip_agency);
     localStorage.setItem("trip_supplier", downloadTrip.trip_supplier);
     localStorage.setItem("trip_status", downloadTrip.trip_status);
-    navigate("/report-trip-form/view");
   };
   const handleview1 = () => {
+    navigate("/report-trip-form/multiple/view");
     localStorage.setItem("trip_date_from", downloadTrip.trip_date_from);
     localStorage.setItem("trip_date_to", downloadTrip.trip_date_to);
     localStorage.setItem("trip_company", downloadTrip.trip_company);
@@ -279,7 +281,6 @@ function TripReportForm() {
     localStorage.setItem("trip_agency", downloadTrip.trip_agency);
     localStorage.setItem("trip_supplier", downloadTrip.trip_supplier);
     localStorage.setItem("trip_status", downloadTrip.trip_status);
-    navigate("/report-trip-form/multiple/view");
   };
   return (
     <Layout>
@@ -533,25 +534,25 @@ function TripReportForm() {
 
             <div className="flex flex-wrap justify-center gap-4 py-4">
               <ReportTripRDownload
-                className="text-center text-sm font-medium cursor-pointer hover:animate-pulse w-full sm:w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md"
+                className={`${CreateButton} mx-4 `}
                 onClick={onSubmit}
               >
                 Download
               </ReportTripRDownload>
               <ReportTripRView
-                className="text-center text-sm font-medium cursor-pointer hover:animate-pulse w-full sm:w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md"
+                className={`${CreateButton} `}
                 onClick={handleview}
               >
                 View
               </ReportTripRView>
               <ReportTripRDetailsDownload
-                className="text-center text-sm font-medium cursor-pointer hover:animate-pulse w-full sm:w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md"
+                className={`${CreateButton} mx-4 w-[170px]`}
                 onClick={onDetailSubmit}
               >
                 Details Download
               </ReportTripRDetailsDownload>
               <ReportTripRDetailsView
-                className="text-center text-sm font-medium cursor-pointer hover:animate-pulse w-full sm:w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md"
+                className={`${CreateButton} `}
                 onClick={handleview1}
               >
                 Details View

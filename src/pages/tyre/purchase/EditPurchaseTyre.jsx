@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import axios from "axios";
 import BASE_URL from "../../../base/BaseUrl";
 import { IconArrowBack, IconInfoCircle } from "@tabler/icons-react";
+import { decryptId } from "../../../components/common/EncryptionDecryption";
 
 const TMake = [
   {
@@ -20,6 +21,8 @@ const TMake = [
 
 const EditPurchaseTyre = () => {
   const { id } = useParams();
+  const decryptedId = decryptId(id);
+
   const navigate = useNavigate();
   const [tyre, setTyre] = useState({
     tyre_date: "",
@@ -52,7 +55,7 @@ const EditPurchaseTyre = () => {
       setLoading(true);
       const token = localStorage.getItem("token");
       const response = await axios.get(
-        `${BASE_URL}/api/web-fetch-tyre-by-id/${id}`,
+        `${BASE_URL}/api/web-fetch-tyre-by-id/${decryptedId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -227,24 +230,21 @@ const EditPurchaseTyre = () => {
     };
 
     setIsButtonDisabled(true);
-    try {
-      const res = await axios.put(`${BASE_URL}/api/web-update-tyre/${id}`, data, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
-  
+    axios({
+      url: BASE_URL + `/api/web-update-tyre/${decryptedId}`,
+      method: "PUT",
+      data,
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    }).then((res) => {
       if (res.data.code == 200) {
         toast.success(res.data.msg);
-        navigate("/tyre/purchase-list");
-      } else {
+      } else if (res.data.code == 400) {
         toast.error(res.data.msg);
       }
-    } catch (error) {
-      toast.error(error.response?.data?.msg || "Something went wrong!");
-    } finally {
-      setIsButtonDisabled(false);
-    }
+      navigate("/tyre/purchase-list");
+    });
   };
 
   const FormLabel = ({ children, required }) => (

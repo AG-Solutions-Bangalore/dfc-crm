@@ -5,9 +5,13 @@ import { IconArrowBack, IconInfoCircle } from "@tabler/icons-react";
 import axios from "axios";
 import BASE_URL from "../../base/BaseUrl";
 import { toast } from "sonner";
+import { BackButton, CreateButton } from "../../components/common/ButtonColors";
+import { decryptId } from "../../components/common/EncryptionDecryption";
 
 const EditTodo = () => {
   const { id } = useParams();
+  const decryptedId = decryptId(id);
+
   const navigate = useNavigate();
   const [todo, setTodo] = useState({
     todo_branch: "",
@@ -21,7 +25,7 @@ const EditTodo = () => {
       setLoading(true);
       const token = localStorage.getItem("token");
       const response = await axios.get(
-        `${BASE_URL}/api/web-fetch-todo-by-id/${id}`,
+        `${BASE_URL}/api/web-fetch-todo-by-id/${decryptedId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -81,24 +85,21 @@ const EditTodo = () => {
     };
 
     setIsButtonDisabled(true);
-    try {
-      const res = await axios.put(`${BASE_URL}/api/web-update-todo/${id}`, data, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
-  
+    axios({
+      url: BASE_URL + `/api/web-update-todo/${decryptedId}`,
+      method: "PUT",
+      data,
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    }).then((res) => {
       if (res.data.code == 200) {
         toast.success(res.data.msg);
-        navigate("/todo-list");
-      } else {
+      } else if (res.data.code == 400) {
         toast.error(res.data.msg);
       }
-    } catch (error) {
-      toast.error(error.response?.data?.msg || "Something went wrong!");
-    } finally {
-      setIsButtonDisabled(false);
-    }
+      navigate("/todo-list");
+    });
   };
 
   const FormLabel = ({ children, required }) => (
@@ -169,7 +170,7 @@ const EditTodo = () => {
           <div className="flex flex-wrap gap-4 justify-start">
             <button
               type="submit"
-              className="text-center text-sm font-[400] cursor-pointer  w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md"
+              className={CreateButton}
               disabled={isButtonDisabled}
             >
               {isButtonDisabled ? "Updating..." : "Update"}
@@ -177,7 +178,7 @@ const EditTodo = () => {
 
             <button
               type="button"
-              className="text-center text-sm font-[400] cursor-pointer  w-36 text-white bg-red-600 hover:bg-red-400 p-2 rounded-lg shadow-md"
+              className={BackButton}
               onClick={() => {
                 navigate("/todo-list");
               }}

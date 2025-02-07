@@ -7,6 +7,11 @@ import { IconInfoCircle } from "@tabler/icons-react";
 import { IconArrowBack } from "@tabler/icons-react";
 import BASE_URL from "../../../base/BaseUrl";
 import axios from "axios";
+import {
+  BackButton,
+  CreateButton,
+} from "../../../components/common/ButtonColors";
+import { decryptId } from "../../../components/common/EncryptionDecryption";
 
 const details_type = [
   {
@@ -29,6 +34,8 @@ const details_type = [
 
 const EditDetailsPayment = () => {
   const { id } = useParams();
+  const decryptedId = decryptId(id);
+
   const navigate = useNavigate();
   const [payment, setPayment] = useState({
     payment_details_date: "",
@@ -55,7 +62,7 @@ const EditDetailsPayment = () => {
       setLoading(true);
       const token = localStorage.getItem("token");
       const response = await axios.get(
-        `${BASE_URL}/api/web-fetch-payment-details-by-id/${id}`,
+        `${BASE_URL}/api/web-fetch-payment-details-by-id/${decryptedId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -227,24 +234,21 @@ const EditDetailsPayment = () => {
     };
 
     setIsButtonDisabled(true);
-    try {
-      const res = await axios.put(`${BASE_URL}/api/web-update-payment/${id}`, data, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
-  
+    axios({
+      url: BASE_URL + `/api/web-update-payment-details/${decryptedId}`,
+      method: "PUT",
+      data,
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    }).then((res) => {
       if (res.data.code == 200) {
         toast.success(res.data.msg);
-        navigate("/payment/details-list");
-      } else {
+      } else if (res.data.code == 400) {
         toast.error(res.data.msg);
       }
-    } catch (error) {
-      toast.error(error.response?.data?.msg || "Something went wrong!");
-    } finally {
-      setIsButtonDisabled(false);
-    }
+      navigate("/payment/details-list");
+    });
   };
 
   const FormLabel = ({ children, required }) => (
@@ -439,7 +443,7 @@ const EditDetailsPayment = () => {
           <div className="flex flex-wrap gap-4 justify-start">
             <button
               type="submit"
-              className="text-center text-sm font-[400] cursor-pointer  w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md"
+              className={CreateButton}
               disabled={isButtonDisabled}
             >
               {isButtonDisabled ? "Updating..." : "Update"}
@@ -447,7 +451,7 @@ const EditDetailsPayment = () => {
 
             <button
               type="button"
-              className="text-center text-sm font-[400] cursor-pointer  w-36 text-white bg-red-600 hover:bg-red-400 p-2 rounded-lg shadow-md"
+              className={BackButton}
               onClick={() => {
                 navigate("/payment/details-list");
               }}

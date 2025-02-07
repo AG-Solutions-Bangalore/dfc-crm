@@ -6,7 +6,13 @@ import axios from "axios";
 import BASE_URL from "../../../base/BaseUrl";
 import { IconEdit, IconEye, IconPlus } from "@tabler/icons-react";
 import ViewCompany from "./ViewCompany";
-import { MasterCompanyCreate, MasterCompanyEdit, MasterCompanyView } from "../../../components/buttonIndex/ButtonComponents";
+import {
+  MasterCompanyCreate,
+  MasterCompanyEdit,
+  MasterCompanyView,
+} from "../../../components/buttonIndex/ButtonComponents";
+import { encryptId } from "../../../components/common/EncryptionDecryption";
+import { CreateButton } from "../../../components/common/ButtonColors";
 
 const CompanyList = () => {
   const [companyData, setCompanyData] = useState(null);
@@ -108,8 +114,18 @@ const CompanyList = () => {
               >
                 <IconEdit className="h-5 w-5 text-blue-500 cursor-pointer" />
               </div> */}
-              <MasterCompanyEdit
+              {/* <MasterCompanyEdit
               onClick={() => navigate(`/master/company-edit/${id}`)}
+                className="flex items-center space-x-2"
+              /> */}
+              <MasterCompanyEdit
+                onClick={() => {
+                  const encryptedId = encryptId(id);
+
+                  navigate(
+                    `/master/company-edit/${encodeURIComponent(encryptedId)}`
+                  );
+                }}
                 className="flex items-center space-x-2"
               />
               {/* <div
@@ -128,7 +144,6 @@ const CompanyList = () => {
                   setIsViewExpanded(true);
                 }}
                 className="flex items-center space-x-2"
-              
               />
             </div>
           );
@@ -169,9 +184,8 @@ const CompanyList = () => {
                 <IconPlus className="w-4 h-4" /> Company
               </button> */}
               <MasterCompanyCreate
-               onClick={() => navigate("/master/createCompany")}
-                className=" flex flex-row items-center gap-1 text-center text-sm font-[400] cursor-pointer  w-[7rem] text-white bg-blue-600 hover:bg-red-700 p-2 rounded-lg shadow-md"
-              
+                onClick={() => navigate("/master/createCompany")}
+                className={CreateButton}
               />
             </div>
           </div>

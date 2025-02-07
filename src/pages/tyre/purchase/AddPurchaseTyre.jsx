@@ -8,6 +8,7 @@ import { IconInfoCircle, IconPlus, IconTrash } from "@tabler/icons-react";
 import { IconArrowBack } from "@tabler/icons-react";
 import Select from "react-select";
 import { Button } from "@material-tailwind/react";
+import { BackButton, CreateButton } from "../../../components/common/ButtonColors";
 const TMake = [
   {
     value: "Nylon",
@@ -219,39 +220,33 @@ const AddPurchaseTyre = () => {
     };
 
     setIsButtonDisabled(true);
-    try {
-      const res = await axios({
-        url: BASE_URL + "/api/web-create-tyre",
-        method: "POST",
-        data,
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
-  
+    axios({
+      url: BASE_URL + "/api/web-create-tyre",
+      method: "POST",
+      data,
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    }).then((res) => {
       if (res.data.code == 200) {
         toast.success(res.data.msg);
-        navigate("/tyre/purchase-list");
-        setTyre({
-          tyre_date: todayback,
-          tyre_year: "2023-24",
-          tyre_supplier: "",
-          tyre_company: "",
-          tyre_branch: "",
-          tyre_bill_ref: "",
-          tyre_bill_amount: "",
-          tyre_remarks: "",
-          tyre_count: "",
-          tyre_sub_data: "",
-        });
-      } else {
+      } else if (res.data.code == 400) {
         toast.error(res.data.msg);
       }
-    } catch (error) {
-      toast.error(error.response?.data?.msg || "Something went wrong!");
-    } finally {
-      setIsButtonDisabled(false);
-    }
+      navigate("/tyre/purchase-list");
+      setTyre({
+        tyre_date: todayback,
+        tyre_year: "2023-24",
+        tyre_supplier: "",
+        tyre_company: "",
+        tyre_branch: "",
+        tyre_bill_ref: "",
+        tyre_bill_amount: "",
+        tyre_remarks: "",
+        tyre_count: "",
+        tyre_sub_data: "",
+      });
+    });
   };
 
   const FormLabel = ({ children, required }) => (
@@ -462,18 +457,19 @@ const AddPurchaseTyre = () => {
             </div>
           ))}
           <div>
-            <Button
-              className="text-center text-sm font-[400] cursor-pointer   flex items-center gap-1  text-white bg-blue-600 hover:bg-red-700 p-2 rounded-lg shadow-md"
+            <button
+              type="button"
+              className={CreateButton}
               onClick={(e) => addItem(e)}
             >
               <IconPlus className="w-5 h-5" /> Add More
-            </Button>
+            </button>
           </div>
           {/* Form Actions */}
           <div className="flex flex-wrap gap-4 justify-start">
             <button
               type="submit"
-              className="text-center text-sm font-[400] cursor-pointer  w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md"
+              className={CreateButton}
               disabled={isButtonDisabled}
             >
               {isButtonDisabled ? "Sumbitting..." : "Sumbit"}
@@ -481,7 +477,7 @@ const AddPurchaseTyre = () => {
 
             <button
               type="button"
-              className="text-center text-sm font-[400] cursor-pointer  w-36 text-white bg-red-600 hover:bg-red-400 p-2 rounded-lg shadow-md"
+              className={BackButton}
               onClick={() => {
                 navigate("/tyre/purchase-list");
               }}
