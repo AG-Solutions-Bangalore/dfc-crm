@@ -24,14 +24,20 @@ function PaymentReportForm() {
     payment_details_credit: " ",
   });
 
-  const onInputChange = (selectedOption, action) => {
-    console.log("Selected Option:", selectedOption);
-    console.log("Action:", action);
+  // const onInputChange = (selectedOption, action) => {
+  //   console.log("Selected Option:", selectedOption);
+  //   console.log("Action:", action);
 
-    setPaymentDetailsDownload((prevState) => ({
-      ...prevState,
-      [action.name]: selectedOption ? selectedOption.value : "",
-    }));
+  //   setPaymentDetailsDownload((prevState) => ({
+  //     ...prevState,
+  //     [action.name]: selectedOption ? selectedOption.value : "",
+  //   }));
+  // };
+  const onInputChange = (e) => {
+    setPaymentDetailsDownload({
+      ...downloadPaymentDetails,
+      [e.target.name]: e.target.value,
+    });
   };
 
   const fetchBranches = async () => {

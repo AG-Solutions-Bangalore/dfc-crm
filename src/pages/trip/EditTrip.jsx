@@ -376,7 +376,7 @@ const EditTrip = () => {
               <span>Edit Trip </span>
             </div>
             <IconArrowBack
-              onClick={() => navigate("/trip-list")}
+              onClick={() => navigate(-1)}
               className="cursor-pointer hover:text-red-600"
             />
           </h2>
