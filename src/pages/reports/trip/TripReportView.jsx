@@ -21,6 +21,7 @@ import {
   ReportDate,
   ReportTitle,
 } from "../../../components/common/ReportTitle";
+import { encryptId } from "../../../components/common/EncryptionDecryption";
 const printStyles = `
   @media print {
 
@@ -425,9 +426,19 @@ const TripReportView = () => {
                           {item.trip_branch || "-"}
                         </td>
                         <td className="p-1 text-xs border border-black text-blue-500 text-center">
-                          <Link to={"/edit-trip/" + item.id}>
+                          <span
+                            // to={"/edit-trip/" + item.id}
+                            className="cursor-pointer"
+                            onClick={() => {
+                              const encryptedId = encryptId(item.id);
+
+                              navigate(
+                                `/edit-trip/${encodeURIComponent(encryptedId)}`
+                              );
+                            }}
+                          >
                             {item.trip_vehicle}
-                          </Link>
+                          </span>
                         </td>
                         <td className="p-1 text-xs border border-black">
                           {item.trip_driver || "-"}
