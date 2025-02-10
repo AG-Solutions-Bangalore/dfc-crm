@@ -189,7 +189,7 @@ const App = () => {
       <Toaster richColors position="top-right" />
 
       <Suspense fallback={<LoadingSpinner />}>
-        <DisableRightClick />
+        {/* <DisableRightClick /> */}
         <Routes>
           {/* Auth Routes */}
           <Route path="/" element={<SignIn />} />
