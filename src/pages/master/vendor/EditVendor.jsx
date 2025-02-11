@@ -230,7 +230,7 @@ const EditVendor = () => {
                 name="vendor_name"
                 value={vendor.vendor_name}
                 onChange={(e) => onInputChange(e)}
-                className={`${inputClass} cursor-not-allowed opacity-50`}
+                className={`${inputClass} cursor-not-allowed  `}
                 required
               />
             </div>

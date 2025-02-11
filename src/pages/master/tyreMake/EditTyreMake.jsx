@@ -135,7 +135,7 @@ const EditTyreMake = () => {
                 name="tyre_make"
                 value={tyreMake.tyre_make}
                 onChange={(e) => onInputChange(e)}
-                className={`${inputClass} cursor-not-allowed opacity-50`}
+                className={`${inputClass} cursor-not-allowed  `}
                 required
                 disabled
               />

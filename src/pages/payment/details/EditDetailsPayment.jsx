@@ -292,7 +292,7 @@ const EditDetailsPayment = () => {
                 name="payment_details_date"
                 value={payment.payment_details_date}
                 onChange={(e) => onInputChange(e)}
-                className={`${inputClass} opacity-50 cursor-not-allowed`}
+                className={`${inputClass}   cursor-not-allowed`}
                 disabled
               />
             </div>

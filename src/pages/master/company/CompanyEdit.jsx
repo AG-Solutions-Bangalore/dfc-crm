@@ -165,7 +165,7 @@ const CompanyEdit = () => {
                 name="company_short"
                 value={company.company_short}
                 onChange={(e) => onInputChange(e)}
-                className={`${inputClass} cursor-not-allowed opacity-50`}
+                className={`${inputClass} cursor-not-allowed  `}
                 required
                 disabled
               />

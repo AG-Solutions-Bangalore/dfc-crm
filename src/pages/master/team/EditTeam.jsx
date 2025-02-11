@@ -254,7 +254,7 @@ const EditTeam = () => {
                 name="full_name"
                 value={team.full_name}
                 onChange={(e) => onInputChange(e)}
-                className={`${inputClass} cursor-not-allowed opacity-50`}
+                className={`${inputClass} cursor-not-allowed  `}
                 required
               />
             </div>

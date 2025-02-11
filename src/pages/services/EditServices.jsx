@@ -293,7 +293,7 @@ const EditServices = () => {
                 name="service_date"
                 value={service.service_date}
                 onChange={(e) => onInputChange(e)}
-                className={`${inputClass} opacity-50 cursor-not-allowed`}
+                className={`${inputClass}   cursor-not-allowed`}
                 disabled
               />
             </div>
@@ -305,7 +305,7 @@ const EditServices = () => {
                 name="service_company"
                 value={service.service_company}
                 onChange={(e) => onInputChange(e)}
-                className={`${inputClass} opacity-50 cursor-not-allowed`}
+                className={`${inputClass}   cursor-not-allowed`}
                 required
                 disabled
               />
@@ -319,7 +319,7 @@ const EditServices = () => {
                 name="service_branch"
                 value={service.service_branch}
                 onChange={(e) => onInputChange(e)}
-                className={`${inputClass} opacity-50 cursor-not-allowed`}
+                className={`${inputClass}   cursor-not-allowed`}
                 required
                 disabled
               />
@@ -334,7 +334,7 @@ const EditServices = () => {
                 name="service_truck_no"
                 value={service.service_truck_no}
                 onChange={(e) => onInputChange(e)}
-                className={`${inputClass} opacity-50 cursor-not-allowed`}
+                className={`${inputClass}   cursor-not-allowed`}
                 required
                 disabled
               />

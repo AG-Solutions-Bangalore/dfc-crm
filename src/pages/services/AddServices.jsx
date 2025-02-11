@@ -413,7 +413,7 @@ const AddServices = () => {
                 name="service_company"
                 value={vehiclesOtherData.vehicle_company}
                 onChange={(e) => onInputChange(e)}
-                className={`${inputClass} opacity-50 cursor-not-allowed`}
+                className={`${inputClass}   cursor-not-allowed`}
                 required
                 disabled
               />
@@ -426,7 +426,7 @@ const AddServices = () => {
                 name="service_branch"
                 value={vehiclesOtherData.vehicle_branch}
                 onChange={(e) => onInputChange(e)}
-                className={`${inputClass} opacity-50 cursor-not-allowed`}
+                className={`${inputClass}   cursor-not-allowed`}
                 required
                 disabled
               />

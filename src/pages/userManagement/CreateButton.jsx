@@ -295,7 +295,7 @@ const CreateButton = () => {
           <button
             onClick={handleSubmit}
             disabled={!selectedItems.length || createMutation.isLoading}
-            className="mt-6 bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md flex items-center gap-2 disabled:opacity-50"
+            className="mt-6 bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md flex items-center gap-2 disabled:opacity-60"
           >
             <Plus size={20} />
             Create
