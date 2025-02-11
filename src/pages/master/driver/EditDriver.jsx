@@ -251,7 +251,7 @@ const EditDriver = () => {
                 name="full_name"
                 value={driver.full_name}
                 onChange={(e) => onInputChange(e)}
-                className={`${inputClass} cursor-not-allowed opacity-50`}
+                className={`${inputClass} cursor-not-allowed  `}
                 required
               />
             </div>

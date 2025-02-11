@@ -249,7 +249,7 @@ const BrandEdit = () => {
                 name="branch_name"
                 value={branch.branch_name}
                 onChange={(e) => onInputChange(e)}
-                className={`${inputClass} cursor-not-allowed opacity-50`}
+                className={`${inputClass} cursor-not-allowed  `}
                 required
                 disabled
               />

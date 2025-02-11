@@ -135,7 +135,7 @@ const EditServiceType = () => {
                 name="service_types"
                 value={serviceTypes.service_types}
                 onChange={(e) => onInputChange(e)}
-                className={`${inputClass} cursor-not-allowed opacity-50`}
+                className={`${inputClass} cursor-not-allowed  `}
                 required
                 disabled
               />

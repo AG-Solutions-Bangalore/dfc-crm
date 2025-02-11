@@ -167,7 +167,7 @@ const EditBranchPayment = () => {
                 name="payment_date"
                 value={payment.payment_date}
                 onChange={(e) => onInputChange(e)}
-                className={`${inputClass} cursor-not-allowed opacity-50`}
+                className={`${inputClass} cursor-not-allowed  `}
               />
             </div>
             <div>

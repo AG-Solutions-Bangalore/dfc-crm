@@ -408,7 +408,7 @@ const EditTrip = () => {
                 name="trip_company"
                 value={trip.trip_company}
                 onChange={(e) => onInputChange(e)}
-                className={`${inputClass} cursor-not-allowed opacity-50`}
+                className={`${inputClass} cursor-not-allowed  `}
                 required
                 disabled
               />
@@ -421,7 +421,7 @@ const EditTrip = () => {
                 name="trip_branch"
                 value={trip.trip_branch}
                 onChange={(e) => onInputChange(e)}
-                className={`${inputClass} cursor-not-allowed opacity-50`}
+                className={`${inputClass} cursor-not-allowed  `}
                 required
                 disabled
               />
@@ -549,7 +549,7 @@ const EditTrip = () => {
                 name="trip_km"
                 value={agenciesRT.agency_rt_km}
                 onChange={(e) => onInputChange(e)}
-                className={`${inputClass} cursor-not-allowed opacity-50`}
+                className={`${inputClass} cursor-not-allowed  `}
                 required
                 disabled
               />
@@ -566,7 +566,7 @@ const EditTrip = () => {
                   ) || ""
                 }
                 onChange={(e) => onInputChange(e)}
-                className={`${inputClass} cursor-not-allowed opacity-50`}
+                className={`${inputClass} cursor-not-allowed  `}
                 required
                 disabled
               />
@@ -579,7 +579,7 @@ const EditTrip = () => {
                 name="trip_mileage"
                 value={vehiclesOtherData.vehicle_mileage}
                 onChange={(e) => onInputChange(e)}
-                className={`${inputClass} cursor-not-allowed opacity-50`}
+                className={`${inputClass} cursor-not-allowed  `}
                 required
                 disabled
               />

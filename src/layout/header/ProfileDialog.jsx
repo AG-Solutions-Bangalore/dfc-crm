@@ -86,7 +86,7 @@ const ProfileDialog = ({
                 onChange={handleChange}
                 fullWidth
                 disabled
-                className={`${inputClass} cursor-not-allowed opacity-50`}
+                className={`${inputClass} cursor-not-allowed  `}
               />
             </div>
             <div>
@@ -113,7 +113,7 @@ const ProfileDialog = ({
                 onChange={handleChange}
                 fullWidth
                 disabled
-                className={`${inputClass} cursor-not-allowed opacity-50`}
+                className={`${inputClass} cursor-not-allowed  `}
               />
             </div>
             <div>

@@ -418,7 +418,7 @@ const AddTrip = () => {
                 name="trip_company"
                 value={vehiclesOtherData.vehicle_company}
                 onChange={(e) => onInputChange(e)}
-                className={`${inputClass} cursor-not-allowed opacity-50`}
+                className={`${inputClass} cursor-not-allowed  `}
                 required
                 disabled
               />
@@ -430,7 +430,7 @@ const AddTrip = () => {
                 type="text"
                 name="trip_branch"
                 value={vehiclesOtherData.vehicle_branch}
-                className={`${inputClass} cursor-not-allowed opacity-50`}
+                className={`${inputClass} cursor-not-allowed  `}
                 required
                 disabled
               />
@@ -443,7 +443,7 @@ const AddTrip = () => {
                 name="vehicle_driver"
                 value={vehiclesDriver.vehicle_driver}
                 onChange={(e) => onInputChange(e)}
-                className={`${inputClass} cursor-not-allowed opacity-50`}
+                className={`${inputClass} cursor-not-allowed  `}
                 required
                 disabled
               />
@@ -506,7 +506,7 @@ const AddTrip = () => {
                 name="trip_km"
                 value={agenciesRT.agency_rt_km}
                 onChange={(e) => onInputChange(e)}
-                className={`${inputClass} cursor-not-allowed opacity-50`}
+                className={`${inputClass} cursor-not-allowed  `}
                 required
                 disabled
               />
@@ -519,7 +519,7 @@ const AddTrip = () => {
                 name="trip_mileage"
                 value={vehiclesOtherData.vehicle_mileage}
                 onChange={(e) => onInputChange(e)}
-                className={`${inputClass} cursor-not-allowed opacity-50`}
+                className={`${inputClass} cursor-not-allowed  `}
                 required
                 disabled
               />
@@ -562,7 +562,7 @@ const AddTrip = () => {
                   ) || ""
                 }
                 onChange={(e) => onInputChange(e)}
-                className={`${inputClass} cursor-not-allowed opacity-50`}
+                className={`${inputClass} cursor-not-allowed  `}
                 required
                 disabled
               />
