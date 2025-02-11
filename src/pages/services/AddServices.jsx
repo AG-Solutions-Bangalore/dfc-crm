@@ -567,14 +567,13 @@ const AddServices = () => {
 
               {/* Description */}
               <div>
-                <FormLabel required>Description</FormLabel>
+                <FormLabel>Description</FormLabel>
                 <input
                   type="text"
                   name="service_sub_details"
                   value={user.service_sub_details}
                   onChange={(e) => onChange(e, index)}
                   className={inputClass}
-                  required
                 />
               </div>
 
