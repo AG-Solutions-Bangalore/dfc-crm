@@ -546,7 +546,7 @@ function TripReportForm() {
                 View
               </ReportTripRView>
               <ReportTripRDetailsDownload
-                className={`${CreateButton} mx-4 w-[190px]`}
+                className={`${CreateButton} mx-4 w-[200px]`}
                 onClick={onDetailSubmit}
               >
                 Details Download
