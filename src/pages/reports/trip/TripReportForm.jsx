@@ -108,7 +108,6 @@ function TripReportForm() {
       console.error(`Error fetching data from ${url}:`, error);
     }
   };
-
   useEffect(() => {
     fetchData(`${BASE_URL}/api/web-fetch-company`, setCompany, "company");
     fetchData(`${BASE_URL}/api/web-fetch-branch`, setBranch, "branch");
@@ -125,12 +124,12 @@ function TripReportForm() {
         "drivers"
       );
       fetchData(
-        `${BASE_URL}/web-fetch-vendors/Diesel/${downloadTrip.trip_branch}`,
+        `${BASE_URL}/api/web-fetch-vendors/Diesel/${downloadTrip.trip_branch}`,
         setVendor,
         "vendor"
       );
       fetchData(
-        `${BASE_URL}/web-fetch-agencies/${downloadTrip.trip_branch}`,
+        `${BASE_URL}/api/web-fetch-agencies/${downloadTrip.trip_branch}`,
         setAgency,
         "agencies"
       );
@@ -505,33 +504,6 @@ function TripReportForm() {
               />
             </div>
 
-            {/* <div className="flex flex-wrap justify-center gap-4 py-4">
-              <button
-                className="text-center text-sm font-medium cursor-pointer hover:animate-pulse w-full sm:w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md"
-                onClick={onSubmit}
-              >
-                Download
-              </button>
-              <button
-                className="text-center text-sm font-medium cursor-pointer hover:animate-pulse w-full sm:w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md"
-                onClick={handleview}
-              >
-                View
-              </button>
-              <button
-                className="text-center text-sm font-medium cursor-pointer hover:animate-pulse w-full sm:w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md"
-                onClick={onDetailSubmit}
-              >
-                Details Download
-              </button>
-              <button
-                className="text-center text-sm font-medium cursor-pointer hover:animate-pulse w-full sm:w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md"
-                onClick={handleview1}
-              >
-                Details View
-              </button>
-            </div> */}
-
             <div className="flex flex-wrap justify-center gap-4 py-4">
               <ReportTripRDownload
                 className={`${CreateButton} mx-4 `}
@@ -546,7 +518,7 @@ function TripReportForm() {
                 View
               </ReportTripRView>
               <ReportTripRDetailsDownload
-                className={`${CreateButton} mx-4 w-[200px]`}
+                className={`${CreateButton} mx-4 w-[220px]`}
                 onClick={onDetailSubmit}
               >
                 Details Download
