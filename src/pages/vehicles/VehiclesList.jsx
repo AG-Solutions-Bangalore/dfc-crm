@@ -263,7 +263,6 @@ const VehiclesList = () => {
               </div> */}
 
               <VechilesEdit
-                // onClick={() => navigate(`/vechile-edit/${id}`)}
                 className="flex items-center space-x-2"
                 onClick={() => {
                   const encryptedId = encryptId(id);
@@ -271,29 +270,27 @@ const VehiclesList = () => {
                   navigate(`/vechile-edit/${encodeURIComponent(encryptedId)}`);
                 }}
               />
-              {/* <div
-                onClick={() => navigate(`/vechile-view/${id}`)}
-                className="flex items-center space-x-2"
-                title="View"
-              >
-                <IconEye className="h-5 w-5 text-blue-500 cursor-pointer" />
-              </div> */}
-              {/* <a href={`/truckdetails-viewall/${id}`} rel="noopener noreferrer"> */}
-              <a
+
+              {/* <a
                 href={`/truckdetails-viewall/${encodeURIComponent(
                   encryptId(id)
                 )}`}
                 rel="noopener noreferrer"
               >
-                {/* <div
-                 
-                className="flex items-center space-x-2"
-                title="View"
-              >
-                <IconTruck className="h-5 w-5 text-blue-500 cursor-pointer" />
-              </div> */}
+      
                 <VechilesTruck className="flex items-center space-x-2" />
-              </a>
+              </a> */}
+
+              <VechilesTruck
+                className="flex items-center space-x-2"
+                onClick={() => {
+                  const encryptedId = encryptId(id);
+
+                  navigate(
+                    `/truckdetails-viewall/${encodeURIComponent(encryptedId)}`
+                  );
+                }}
+              />
             </div>
           );
         },
