@@ -229,7 +229,7 @@ const Home = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
           <TableSection
-            title="Ideal Vehicles"
+            title="Idle Vehicles"
             columns={["Reg No", "Company", "Branch"]}
             data={dashboardData.vehiclesIdeal}
             renderRow={(item, index) => (
