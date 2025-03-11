@@ -322,9 +322,9 @@ function SalaryReportForm() {
                 Multiple View
               </button>
             </div> */}
-            <div className="flex flex-wrap justify-center gap-4 py-4">
+            <div className="flex flex-wrap justify-center gap-4 mt-4">
               <ReportSalarySingleDownload
-                className={`${CreateButton} mx-4 w-[200px]`}
+                className={`${CreateButton} mx-4 w-40`}
                 onClick={onSubmit}
               ></ReportSalarySingleDownload>
               <ReportSalarySingleView
@@ -332,7 +332,7 @@ function SalaryReportForm() {
                 onClick={handleview}
               ></ReportSalarySingleView>
               <ReportSalaryMultipleDownload
-                className={`${CreateButton} mx-4 w-[200px]`}
+                className={`${CreateButton} mx-4 w-40`}
                 onClick={onDetailSubmit}
               ></ReportSalaryMultipleDownload>
               <ReportSalaryMultipleView

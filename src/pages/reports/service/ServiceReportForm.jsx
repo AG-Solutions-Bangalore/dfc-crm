@@ -369,7 +369,7 @@ function ServiceReportForm() {
                 Details View
               </button>
             </div> */}
-            <div className="flex flex-wrap justify-center gap-4 py-4">
+            <div className="flex flex-wrap justify-center gap-4 mt-4">
               <ReportServicesDownload
                 className={`${CreateButton} mx-4`}
                 onClick={onSubmit}
@@ -379,7 +379,7 @@ function ServiceReportForm() {
                 onClick={handleview}
               ></ReportServicesView>
               <ReportServicesDetailsDownload
-                className={`${CreateButton} mx-4 w-[200px]`}
+                className={`${CreateButton} mx-4 w-40`}
                 onClick={onDetailSubmit}
               ></ReportServicesDetailsDownload>
               <ReportServicesDetailsView

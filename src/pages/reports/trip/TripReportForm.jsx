@@ -504,7 +504,7 @@ function TripReportForm() {
               />
             </div>
 
-            <div className="flex flex-wrap justify-center gap-4 py-4">
+            <div className="flex flex-wrap justify-center gap-4 mt-4">
               <ReportTripRDownload
                 className={`${CreateButton} mx-4 `}
                 onClick={onSubmit}
@@ -518,7 +518,7 @@ function TripReportForm() {
                 View
               </ReportTripRView>
               <ReportTripRDetailsDownload
-                className={`${CreateButton} mx-4 w-[220px]`}
+                className={`${CreateButton} mx-4 w-40`}
                 onClick={onDetailSubmit}
               >
                 Details Download

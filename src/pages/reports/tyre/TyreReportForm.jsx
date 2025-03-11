@@ -360,33 +360,7 @@ function TyreReportForm() {
               </div>
             </div>
 
-            {/* <div className="flex flex-wrap justify-center gap-4 py-4">
-              <button
-                className="text-center text-sm font-medium cursor-pointer hover:animate-pulse w-full sm:w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md"
-                onClick={onSubmit}
-              >
-                Download
-              </button>
-              <button
-                className="text-center text-sm font-medium cursor-pointer hover:animate-pulse w-full sm:w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md"
-                onClick={handleview}
-              >
-                View
-              </button>
-              <button
-                className="text-center text-sm font-medium cursor-pointer hover:animate-pulse w-full sm:w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md"
-                onClick={onDetailSubmit}
-              >
-                Details Download
-              </button>
-              <button
-                className="text-center text-sm font-medium cursor-pointer hover:animate-pulse w-full sm:w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md"
-                onClick={handleDetailview}
-              >
-                Details View
-              </button>
-            </div> */}
-            <div className="flex flex-wrap justify-center gap-4 py-4">
+            <div className="flex flex-wrap justify-center gap-4 mt-4">
               <ReportTyreDownload
                 className={`${CreateButton} mx-4`}
                 onClick={onSubmit}
@@ -396,7 +370,7 @@ function TyreReportForm() {
                 onClick={handleview}
               ></ReportTyreView>
               <ReportTyreDetailsDownload
-                className={`${CreateButton} mx-4 w-[200px]`}
+                className={`${CreateButton} mx-4 w-40`}
                 onClick={onDetailSubmit}
               ></ReportTyreDetailsDownload>
               <ReportTyreDetailsView
