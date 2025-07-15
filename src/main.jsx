@@ -9,7 +9,7 @@ import AppProvider from "./context/ContextPanel.jsx";
 
 
 createRoot(document.getElementById("root")).render(
-  <StrictMode>
+  // <StrictMode>
     <BrowserRouter>
     <AppProvider>
         <ThemeProvider theme={baselightTheme}>
@@ -18,5 +18,5 @@ createRoot(document.getElementById("root")).render(
         </AppProvider>
      
     </BrowserRouter>
-  </StrictMode>
+  // </StrictMode>
 );

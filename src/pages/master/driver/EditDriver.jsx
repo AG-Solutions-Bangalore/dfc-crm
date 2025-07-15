@@ -332,9 +332,9 @@ const EditDriver = () => {
               />
             </div>
 
-            {/* Vechile  */}
+            {/* Vehicle  */}
             <div>
-              <FormLabel required>Vechile</FormLabel>
+              <FormLabel required>Vehicle</FormLabel>
               <select
                 name="vehicle_type"
                 value={driver.vehicle_type}
@@ -342,7 +342,7 @@ const EditDriver = () => {
                 required
                 className={inputClassSelect}
               >
-                <option value="">Select Vechile </option>
+                <option value="">Select Vehicle </option>
                 {vehicleType.map((option) => (
                   <option key={option.value} value={option.value}>
                     {option.value}

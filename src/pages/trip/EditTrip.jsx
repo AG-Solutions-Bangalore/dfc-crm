@@ -106,7 +106,7 @@ const EditTrip = () => {
 
       setvehiclesOtherData(response.data?.vehiclesOtherData);
     } catch (error) {
-      console.error("Error fetching setvechile other  data", error);
+      console.error("Error fetching setVehicle other  data", error);
     } finally {
       setLoading(false);
     }
@@ -429,7 +429,7 @@ const EditTrip = () => {
             {/* Vechile No  */}
 
             <div>
-              <FormLabel required>Vechile No</FormLabel>
+              <FormLabel required>Vehicle No</FormLabel>
               <Select
                 name="trip_vehicle"
                 options={vehicles.map((option) => ({
@@ -446,7 +446,7 @@ const EditTrip = () => {
                       }
                     : null
                 }
-                placeholder="Select Vechile No"
+                placeholder="Select Vehicle No"
                 styles={customStyles}
                 isSearchable={true}
               />

@@ -172,7 +172,7 @@ const PartialVechileView = ({ vehicleId }) => {
             <DetailRow label="Branch" value={vehicle?.vehicle_branch} />
             <DetailRow label="Company" value={vehicle?.vehicle_company} />
             <DetailRow label="Vehicle Type" value={vehicle?.vehicle_type} />
-            <DetailRow label="Modal Year" value={vehicle?.mfg_year} />
+            <DetailRow label="Model Year" value={vehicle?.mfg_year} />
             <DetailRow label="Vechile Status" value={vehicle?.vehicle_status} />
             {}
             <DetailRow label="Total Tyres" value={renderTyreIcons()} />

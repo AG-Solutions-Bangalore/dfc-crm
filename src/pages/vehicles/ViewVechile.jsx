@@ -135,7 +135,7 @@ const ViewVechile = () => {
 
         setLoading(false);
       } catch (error) {
-        console.error("Error fetching Vechile View details:", error);
+        console.error("Error fetching Vehicle View details:", error);
         setLoading(false);
       }
     };
@@ -157,7 +157,7 @@ const ViewVechile = () => {
 
         setLoading(false);
       } catch (error) {
-        console.error("Error fetching Vechile tyre View details:", error);
+        console.error("Error fetching Vehicle tyre View details:", error);
         setLoading(false);
       }
     };
@@ -202,7 +202,7 @@ const ViewVechile = () => {
           <h2 className="px-5 text-black text-lg flex flex-row justify-between items-center rounded-xl p-2">
             <div className="flex items-center gap-2">
               <IconInfoCircle className="w-4 h-4" />
-              <span>Vechile View </span>
+              <span>Vehicle View </span>
             </div>
             <div className="flex items-center space-x-4">
               <IconPrinter
@@ -225,17 +225,17 @@ const ViewVechile = () => {
               {vehicle.reg_no}
             </h1>
             <div className="block print:hidden">
-            <button
-              onClick={toggleInfo}
-              className="p-1 border  bg-orange-500 text-xs border-black rounded-lg hover:bg-orange-600 transition-colors flex items-center gap-1"
-            >
-              View Info
-              <IconChevronRight
-                className={`w-4 h-4 transition-transform duration-300 ${
-                  isInfoVisible ? "rotate-90" : ""
-                }`}
-              />
-            </button>
+              <button
+                onClick={toggleInfo}
+                className="p-1 border  bg-orange-500 text-xs border-black rounded-lg hover:bg-orange-600 transition-colors flex items-center gap-1"
+              >
+                View Info
+                <IconChevronRight
+                  className={`w-4 h-4 transition-transform duration-300 ${
+                    isInfoVisible ? "rotate-90" : ""
+                  }`}
+                />
+              </button>
             </div>
           </div>
           {/* Sliding Info Panel */}
@@ -265,7 +265,7 @@ const ViewVechile = () => {
                         <td>{vehicle?.vehicle_type}</td>
                       </tr>
                       <tr>
-                        <td className="font-semibold w-1/3 py-2">Modal Year</td>
+                        <td className="font-semibold w-1/3 py-2">Model Year</td>
                         <td>{vehicle?.mfg_year}</td>
                       </tr>
                       <tr>
@@ -353,7 +353,7 @@ const ViewVechile = () => {
                     </tr>
                     <tr className="border-b">
                       <td className="font-semibold w-1/3 print:py-0 py-2">
-                        Modal Year
+                        Model Year
                       </td>
                       <td>{vehicle?.mfg_year}</td>
                     </tr>
