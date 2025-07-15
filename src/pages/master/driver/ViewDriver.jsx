@@ -122,7 +122,7 @@ const ViewDriver = ({ driverId }) => {
               color="blue-gray"
               className="mb-2 border-b pb-1"
             >
-              Vechile Information
+              Vehicle Information
             </Typography>
             <DetailRow label="DL No" value={driver?.dl_no} />
             <DetailRow

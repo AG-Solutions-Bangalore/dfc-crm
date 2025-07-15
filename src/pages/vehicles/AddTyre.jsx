@@ -114,7 +114,7 @@ const AddTyre = () => {
 
       setVehicles(response.data?.vehiclesData);
     } catch (error) {
-      console.error("Error fetching vechile details data", error);
+      console.error("Error fetching Vehicle details data", error);
     } finally {
       setLoading(false);
     }
@@ -735,7 +735,7 @@ const AddTyre = () => {
             {/* vechile type  */}
 
             <div>
-              <FormLabel required>Vechile Type</FormLabel>
+              <FormLabel required>Vehicle Type</FormLabel>
               <input
                 type="text"
                 name="vehicle_type"
@@ -773,9 +773,9 @@ const AddTyre = () => {
                 disabled
               />
             </div>
-            {/* modal year  */}
+            {/* Model year  */}
             <div>
-              <FormLabel required>Modal Year</FormLabel>
+              <FormLabel required>Model Year</FormLabel>
               <input
                 type="text"
                 name="mfg_year"

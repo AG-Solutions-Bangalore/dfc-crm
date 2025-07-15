@@ -1,25 +1,24 @@
-import React, { useEffect, useRef, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import Layout from "../../layout/Layout";
+import { Tabs } from "@mantine/core";
 import {
   IconArrowBack,
-  IconChevronRight,
-  IconEdit,
   IconEditCircle,
   IconInfoCircle,
   IconMessageCircle,
-  IconPhoto,
   IconPrinter,
   IconSettings,
   IconTruck,
   IconTruckDelivery,
 } from "@tabler/icons-react";
-import { useReactToPrint } from "react-to-print";
-import moment from "moment";
 import axios from "axios";
+import moment from "moment";
+import React, { useEffect, useRef, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { useReactToPrint } from "react-to-print";
 import BASE_URL from "../../base/BaseUrl";
-import { Tabs } from "@mantine/core";
 import { decryptId } from "../../components/common/EncryptionDecryption";
+import Layout from "../../layout/Layout";
+import { FormLabel } from "@mui/material";
+import { toast } from "sonner";
 
 // Skeleton Loader Component
 const SkeletonLoader = () => {
@@ -95,8 +94,13 @@ const TruckView = () => {
   const [oldService, setOldService] = useState([]); //last one
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("info");
+  const [loadingkm, setLodingKm] = useState(false); //last one
 
-  // Print handler using react-to-print
+  const [vehicleskm, setVehiclesKm] = useState({
+    reg_no: vehicle.reg_no,
+    vehicle_present_km: vehicle.vehicle_present_km,
+    vehicle_present_date: vehicle.vehicle_present_date,
+  });
   const handlePrint = useReactToPrint({
     content: () => printRef.current,
     pageStyle: `
@@ -168,32 +172,40 @@ const TruckView = () => {
     `,
   });
 
-  useEffect(() => {
-    const fetchTyreDetails = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        const response = await axios.get(
-          `${BASE_URL}/api/fetch-vehicle-detail-id/${decryptedId}`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
-
-        setVehicle(response.data.vehicle);
-        setService(response.data.fullservices);
-        setServiceTypeFixed(response.data.servicesTypesFixed);
-        setTrip(response.data.trip);
-        setTyre(response.data.vehiceltyresub);
-        setOldService(response.data.historyservices);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching Vechile View details:", error);
-        setLoading(false);
+  const fetchTyreDetails = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.get(
+        `${BASE_URL}/api/fetch-vehicle-detail-id/${decryptedId}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      const vehicledata = response.data.vehicle;
+      setVehicle(vehicledata);
+      if (vehicledata?.reg_no) {
+        setVehiclesKm({
+          reg_no: vehicledata.reg_no,
+          vehicle_present_km: vehicledata.vehicle_present_km || "",
+          vehicle_present_date: vehicledata.vehicle_present_date || "",
+        });
       }
-    };
-
-    fetchTyreDetails();
-  }, [id]);
+      setService(response.data.fullservices);
+      setServiceTypeFixed(response.data.servicesTypesFixed);
+      setTrip(response.data.trip);
+      setTyre(response.data.vehiceltyresub);
+      setOldService(response.data.historyservices);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching Vehicle View details:", error);
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
+    if (decryptedId) {
+      fetchTyreDetails();
+    }
+  }, [decryptedId]);
 
   const vechileInfo = () => {
     return (
@@ -227,13 +239,13 @@ const TruckView = () => {
                 </tr>
                 <tr className="border-b">
                   <td className="font-semibold w-1/3 text-xs print:py-0 py-3">
-                    Modal Year
+                    Model Year
                   </td>
                   <td className="text-xs">{vehicle?.mfg_year}</td>
                 </tr>
                 <tr className="border-b">
                   <td className="font-semibold w-1/3 text-xs print:py-0 py-2">
-                    Vechile KM
+                    Vehicle KM
                   </td>
                   <td className="text-xs">{vehicle?.vehicle_open_km}</td>
                 </tr>
@@ -378,7 +390,7 @@ const TruckView = () => {
                   <th className="border py-2 text-xs">Present Date</th>
                   <th className="border py-2 text-xs">Present KM</th>
                   <th className="border py-2 text-xs">Difference KM</th>
-                  <th className="border py-2 text-xs print:hidden">Action</th>
+                  {/* <th className="border py-2 text-xs print:hidden">Action</th> */}
                 </tr>
               </thead>
               <tbody>
@@ -394,21 +406,22 @@ const TruckView = () => {
                     <td className="border py-2 text-xs">
                       {item?.service_sub_km}
                     </td>
+
                     <td className="border py-2 text-xs">
-                      {item?.service_sub_pre_date
-                        ? moment(item.service_sub_pre_date).format(
+                      {vehicle?.vehicle_present_date
+                        ? moment(item.vehicle_present_date).format(
                             "DD-MMM-YYYY"
                           )
                         : ""}
                     </td>
                     <td className="border py-2 text-xs">
-                      {item?.service_sub_pre_km}
+                      {vehicle?.vehicle_present_km}
                     </td>
                     <td className="border py-2 text-xs">
-                      {item?.service_sub_pre_km - item?.service_sub_km}
+                      {vehicle?.vehicle_present_km - item?.service_sub_km}
                     </td>
 
-                    <td className="border py-0 text-xs print:hidden">
+                    {/* <td className="border py-0 text-xs print:hidden">
                       <button
                         onClick={() => {
                           navigate(`/spkm/${item.id}`);
@@ -419,7 +432,7 @@ const TruckView = () => {
                       >
                         <IconEditCircle size={20} />
                       </button>
-                    </td>
+                    </td> */}
                   </tr>
                 ))}
               </tbody>
@@ -1088,34 +1101,143 @@ const TruckView = () => {
     }
   };
 
+  const onInputChange = (e) => {
+    if (e.target.name === "vehicle_present_km") {
+      const onlyDigits = e.target.value.replace(/\D/g, "");
+      setVehiclesKm({
+        ...vehicleskm,
+        [e.target.name]: onlyDigits,
+      });
+    } else {
+      setVehiclesKm({
+        ...vehicleskm,
+        [e.target.name]: e.target.value,
+      });
+    }
+  };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLodingKm(true);
+    const form = document.getElementById("addIndiv");
+    if (!form.checkValidity() || vehicleskm.reg_no == "") {
+      toast.error("Please fill all required fields");
+      return;
+    }
+
+    const data = {
+      reg_no: vehicle.reg_no,
+      vehicle_present_km: vehicleskm.vehicle_present_km,
+      vehicle_present_date: vehicleskm.vehicle_present_date,
+    };
+    try {
+      const res = await axios.post(
+        `${BASE_URL}/api/web-update-vehicle-presentkm`,
+        data,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+
+      if (res.data.code === 200) {
+        toast.success(res.data.msg);
+        setVehiclesKm({
+          vehicle_present_km: "",
+          vehicle_present_date: "",
+        });
+        fetchTyreDetails();
+      } else if (res.data.code === 400) {
+        toast.error(res.data.msg);
+      }
+    } catch (error) {
+      console.error("Submit Error:", error);
+      toast.error("Something went wrong while submitting");
+      setLodingKm(false);
+    } finally {
+      setLodingKm(false);
+    }
+  };
+
+  const FormLabel = ({ children, required }) => (
+    <label className="block text-xs font-semibold text-black mb-1 ">
+      {children}
+      {required && <span className="text-red-500 ml-1">*</span>}
+    </label>
+  );
+
+  const inputClass =
+    "w-full px-3 py-2 text-xs border rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-500 border-blue-500";
   if (loading) return <SkeletonLoader />;
 
   return (
     <Layout>
       <div className="bg-[#FFFFFF]  p-2 rounded-lg">
-        <div className="sticky top-0 p-2  mb-4 border-b-2 border-red-500 rounded-lg  bg-[#E1F5FA] ">
-          <h2 className="px-5 text-black text-lg flex flex-row justify-between items-center rounded-xl p-2">
+        <div className="sticky top-0 mb-4 p-4 bg-[#E1F5FA] border-b-2 border-red-500 rounded-lg shadow-sm">
+          <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
+            {/* Left Section: Title */}
             <div className="flex items-center gap-2">
-              <IconInfoCircle className="w-4 h-4" />
-              <span>
-                Vehicle Details &nbsp;{" "}
-                <strong className="text-blue-700">{vehicle.reg_no}</strong>{" "}
+              <IconInfoCircle className="w-4 h-4 text-blue-600" />
+              <span className="text-black text-lg">
+                Vehicle Details &nbsp;
+                <strong className="text-blue-700">{vehicle.reg_no}</strong>
               </span>
             </div>
-            <div className="flex items-center space-x-4">
-              <IconPrinter
-                className="cursor-pointer text-gray-600 hover:text-blue-600"
-                onClick={handlePrint}
-                title="Print"
-              />
-              <IconArrowBack
-                className="cursor-pointer text-gray-600 hover:text-red-600"
-                onClick={() => navigate("/vehicles-list")}
-                title="Go Back"
-              />
+
+            {/* Right Section: Form + Icons */}
+            <div className="flex flex-col lg:flex-row items-start lg:items-center gap-4 w-full lg:w-auto">
+              <form
+                id="addIndiv"
+                className="flex flex-col sm:flex-row items-start sm:items-end gap-4"
+                onSubmit={handleSubmit}
+              >
+                <div className="w-32">
+                  <FormLabel required>Present Km</FormLabel>
+                  <input
+                    type="text"
+                    name="vehicle_present_km"
+                    value={vehicleskm.vehicle_present_km}
+                    onChange={onInputChange}
+                    className={inputClass}
+                    required
+                  />
+                </div>
+                <div className="w-32">
+                  <FormLabel required>Present Date</FormLabel>
+                  <input
+                    type="date"
+                    name="vehicle_present_date"
+                    value={vehicleskm.vehicle_present_date}
+                    onChange={onInputChange}
+                    className={inputClass}
+                    required
+                  />
+                </div>
+                <button
+                  type="submit"
+                  className="text-sm font-medium w-24 text-white bg-blue-600 hover:bg-green-700 px-4 py-2 rounded-lg shadow-md"
+                >
+                  {loadingkm ? "Updating" : "Update"}
+                </button>
+              </form>
+
+              {/* Action Icons */}
+              <div className="flex items-center space-x-3">
+                <IconPrinter
+                  className="cursor-pointer text-gray-600 hover:text-blue-600"
+                  onClick={handlePrint}
+                  title="Print"
+                />
+                <IconArrowBack
+                  className="cursor-pointer text-gray-600 hover:text-red-600"
+                  onClick={() => navigate("/vehicles-list")}
+                  title="Go Back"
+                />
+              </div>
             </div>
-          </h2>
+          </div>
         </div>
+
         <div className="flex">
           <div className=" border-r h-[33rem] border-gray-200">
             <Tabs

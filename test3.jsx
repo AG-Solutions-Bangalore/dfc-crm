@@ -75,7 +75,7 @@ const AddTrip = () => {
 
       setvehiclesOtherData(response.data?.vehiclesOtherData);
     } catch (error) {
-      console.error("Error fetching setvechile other  data", error);
+      console.error("Error fetching Vehicle other  data", error);
     } finally {
       setLoading(false);
     }
@@ -176,7 +176,7 @@ const AddTrip = () => {
 
       setvehiclesDriver(response.data?.vehiclesDriver);
     } catch (error) {
-      console.error("Error fetching driver vechile trip data", error);
+      console.error("Error fetching driver Vehicle trip data", error);
     } finally {
       setLoading(false);
     }
@@ -291,7 +291,9 @@ const AddTrip = () => {
       trip_year: "2023-24",
       trip_vehicle: trip.trip_vehicle,
       trip_agency: trip.trip_agency,
-      trip_hsd: Math.round(agenciesRT.agency_rt_km/vehiclesOtherData.vehicle_mileage),
+      trip_hsd: Math.round(
+        agenciesRT.agency_rt_km / vehiclesOtherData.vehicle_mileage
+      ),
       trip_advance: trip.trip_advance,
       trip_hsd_supplied: trip.trip_hsd_supplied,
       trip_supplier: trip.trip_supplier,
@@ -378,7 +380,7 @@ const AddTrip = () => {
                 className={inputClass}
               />
             </div>
-            {/* Vechile No  */}
+            {/* Vehicle No  */}
 
             <div>
               <FormLabel>Vechile No</FormLabel>
@@ -539,7 +541,9 @@ const AddTrip = () => {
               <input
                 type="text"
                 name="trip_hsd"
-                value={Math.round(agenciesRT.agency_rt_km/vehiclesOtherData.vehicle_mileage)}
+                value={Math.round(
+                  agenciesRT.agency_rt_km / vehiclesOtherData.vehicle_mileage
+                )}
                 onChange={(e) => onInputChange(e)}
                 className={inputClass}
               />
@@ -578,8 +582,7 @@ const AddTrip = () => {
               />
             </div>
           </div>
-          
-          
+
           {/* Form Actions */}
           <div className="flex flex-wrap gap-4 justify-start">
             <button

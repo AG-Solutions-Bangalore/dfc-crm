@@ -306,7 +306,7 @@ const EditVechiles = () => {
           <h2 className=" px-5 text-[black] text-lg   flex flex-row  justify-between items-center  rounded-xl p-2 ">
             <div className="flex  items-center gap-2">
               <IconInfoCircle className="w-4 h-4" />
-              <span>Edit Vechiles </span>
+              <span>Edit Vehicle </span>
             </div>
             <IconArrowBack
               onClick={() => navigate("/vehicles-list")}
@@ -357,7 +357,7 @@ const EditVechiles = () => {
             {/* vechile type  */}
 
             <div>
-              <FormLabel required>Vechile Type</FormLabel>
+              <FormLabel required>Vehicle Type</FormLabel>
               <select
                 name="vehicle_type"
                 value={vehicles.vehicle_type}
@@ -365,7 +365,7 @@ const EditVechiles = () => {
                 required
                 className={inputClassSelect}
               >
-                <option value="">Select Vechile Type</option>
+                <option value="">Select Vehicle Type</option>
                 {vehicleType.map((option) => (
                   <option key={option.value} value={option.value}>
                     {option.value}
@@ -417,9 +417,9 @@ const EditVechiles = () => {
                 isSearchable={true}
               />
             </div>
-            {/* modal year  */}
+            {/* Model year  */}
             <div>
-              <FormLabel required>Modal Year</FormLabel>
+              <FormLabel required>Model Year</FormLabel>
               <input
                 type="text"
                 name="mfg_year"

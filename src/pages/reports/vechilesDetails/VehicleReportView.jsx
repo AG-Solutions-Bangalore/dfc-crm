@@ -237,7 +237,7 @@ const VehicleReportView = () => {
                       { label: "Branch", value: vehicle.vehicle_branch },
                       { label: "Company", value: vehicle.vehicle_company },
                       { label: "Mileage", value: vehicle.vehicle_mileage },
-                      { label: "Modal Year", value: vehicle.mfg_year },
+                      { label: "Model Year", value: vehicle.mfg_year },
                       { label: "Vehicle Type", value: vehicle.vehicle_type },
                       { label: "Vehicle KM", value: vehicle.vehicle_open_km },
                     ].map((row, index) => (

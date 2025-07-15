@@ -242,7 +242,7 @@ const AssignTypeTyreView = () => {
           <h2 className=" px-5 text-[black] text-lg   flex flex-row  justify-between items-center  rounded-xl p-2 ">
             <div className="flex  items-center gap-2">
               <IconInfoCircle className="w-4 h-4" />
-              <span>Stock Tyre Vechile View </span>
+              <span>Stock Tyre Vehicle View </span>
             </div>
             <div className="flex items-center space-x-4">
               <IconPrinter
@@ -267,7 +267,7 @@ const AssignTypeTyreView = () => {
                     { label: "Branch", value: vehicle.vehicle_branch },
                     { label: "Company", value: vehicle.vehicle_company },
                     { label: "Vehicle Type", value: vehicle.vehicle_type },
-                    { label: "Modal Year", value: vehicle.mfg_year },
+                    { label: "Model Year", value: vehicle.mfg_year },
                     { label: "Open KM", value: vehicle.vehicle_open_km },
                     { label: "Open HSD", value: vehicle.vehicle_hsd_open },
                   ].map((row, index) => (
