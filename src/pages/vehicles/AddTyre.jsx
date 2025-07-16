@@ -532,7 +532,7 @@ const AddTyre = () => {
       } else if (res.data.code == 400) {
         toast.error(res.data.msg);
       }
-      navigate("/vechiles-list");
+      navigate("/vehicles-list");
       setVehicles({
         reg_no: "",
         mfg_year: "",
@@ -664,7 +664,7 @@ const AddTyre = () => {
           <h2 className=" px-5 text-[black] text-lg   flex flex-row  justify-between items-center  rounded-xl p-2 ">
             <div className="flex  items-center gap-2">
               <IconInfoCircle className="w-4 h-4" />
-              <span>Add Tyre </span>
+              <span>Add Tyre</span>
             </div>
             <IconArrowBack
               onClick={() => navigate("/vehicles-list")}

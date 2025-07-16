@@ -289,20 +289,18 @@ const ViewVechile = () => {
                           Insurance Due
                         </td>
                         <td>
-                          {moment(vehicle?.ins_due).format("DD-MMMM-YYYY")}
+                          {moment(vehicle?.ins_due).format("DD-MMM-YYYY")}
                         </td>
                       </tr>
                       <tr>
                         <td className="font-semibold w-1/3 py-2">Permit Due</td>
                         <td>
-                          {moment(vehicle?.permit_due).format("DD-MMMM-YYYY")}
+                          {moment(vehicle?.permit_due).format("DD-MMM-YYYY")}
                         </td>
                       </tr>
                       <tr>
                         <td className="font-semibold w-1/3 py-2">FC Due</td>
-                        <td>
-                          {moment(vehicle?.fc_due).format("DD-MMMM-YYYY")}
-                        </td>
+                        <td>{moment(vehicle?.fc_due).format("DD-MMM-YYYY")}</td>
                       </tr>
                       <tr>
                         <td className="font-semibold w-1/3 py-2">Mileage</td>
@@ -454,7 +452,11 @@ const ViewVechile = () => {
                         {tyre?.tyre_assign_1_front_left_km}
                       </td>
                       <td className="border p-2">
-                        {tyre?.tyre_assign_1_front_left_pre_date}
+                        {tyre?.tyre_assign_1_front_left_pre_date
+                          ? moment(
+                              tyre?.tyre_assign_1_front_left_pre_date
+                            ).format("DD-MMMM-YYYY")
+                          : ""}
                       </td>
                       <td className="border p-2">
                         {tyre?.tyre_assign_1_front_left_pre_km}
@@ -511,7 +513,12 @@ const ViewVechile = () => {
                         {tyre?.tyre_assign_2_front_right_km}
                       </td>
                       <td className="border p-2">
-                        {tyre?.tyre_assign_2_front_right_pre_date}
+                        {/* {tyre?.tyre_assign_2_front_right_pre_date} */}
+                        {tyre?.tyre_assign_2_front_right_pre_date
+                          ? moment(
+                              tyre?.tyre_assign_2_front_right_pre_date
+                            ).format("DD-MMMM-YYYY")
+                          : ""}
                       </td>
                       <td className="border p-2">
                         {tyre?.tyre_assign_2_front_right_pre_km}
@@ -569,7 +576,12 @@ const ViewVechile = () => {
                         {tyre?.tyre_assign_3_back_left_km}
                       </td>
                       <td className="border p-2">
-                        {tyre?.tyre_assign_3_back_left_pre_date}
+                        {/* {tyre?.tyre_assign_3_back_left_pre_date} */}
+                        {tyre?.tyre_assign_3_back_left_pre_date
+                          ? moment(
+                              tyre?.tyre_assign_3_back_left_pre_date
+                            ).format("DD-MMMM-YYYY")
+                          : ""}
                       </td>
                       <td className="border p-2">
                         {tyre?.tyre_assign_3_back_left_pre_km}
@@ -626,7 +638,12 @@ const ViewVechile = () => {
                         {tyre?.tyre_assign_4_back_left_km}
                       </td>
                       <td className="border p-2">
-                        {tyre?.tyre_assign_4_back_left_pre_date}
+                        {/* {tyre?.tyre_assign_4_back_left_pre_date} */}
+                        {tyre?.tyre_assign_4_back_left_pre_date
+                          ? moment(
+                              tyre?.tyre_assign_4_back_left_pre_date
+                            ).format("DD-MMMM-YYYY")
+                          : ""}
                       </td>
                       <td className="border p-2">
                         {tyre?.tyre_assign_4_back_left_pre_km}
@@ -683,7 +700,12 @@ const ViewVechile = () => {
                         {tyre?.tyre_assign_5_back_right_km}
                       </td>
                       <td className="border p-2">
-                        {tyre?.tyre_assign_5_back_right_pre_date}
+                        {/* {tyre?.tyre_assign_5_back_right_pre_date} */}
+                        {tyre?.tyre_assign_5_back_right_pre_date
+                          ? moment(
+                              tyre?.tyre_assign_5_back_right_pre_date
+                            ).format("DD-MMMM-YYYY")
+                          : ""}
                       </td>
                       <td className="border p-2">
                         {tyre?.tyre_assign_5_back_right_pre_km}
@@ -740,7 +762,12 @@ const ViewVechile = () => {
                         {tyre?.tyre_assign_6_back_right_km}
                       </td>
                       <td className="border p-2">
-                        {tyre?.tyre_assign_6_back_right_pre_date}
+                        {/* {tyre?.tyre_assign_6_back_right_pre_date} */}
+                        {tyre?.tyre_assign_6_back_right_pre_date
+                          ? moment(
+                              tyre?.tyre_assign_6_back_right_pre_date
+                            ).format("DD-MMMM-YYYY")
+                          : ""}
                       </td>
                       <td className="border p-2">
                         {tyre?.tyre_assign_6_back_right_pre_km}
@@ -798,7 +825,12 @@ const ViewVechile = () => {
                         {tyre?.tyre_assign_3_back_housing_left_km}
                       </td>
                       <td className="border p-2">
-                        {tyre?.tyre_assign_3_back_housing_left_pre_date}
+                        {/* {tyre?.tyre_assign_3_back_housing_left_pre_date} */}
+                        {tyre?.tyre_assign_3_back_housing_left_pre_date
+                          ? moment(
+                              tyre?.tyre_assign_3_back_housing_left_pre_date
+                            ).format("DD-MMMM-YYYY")
+                          : ""}
                       </td>
                       <td className="border p-2">
                         {tyre?.tyre_assign_3_back_housing_left_pre_km}
@@ -856,7 +888,12 @@ const ViewVechile = () => {
                         {tyre?.tyre_assign_4_back_housing_left_km}
                       </td>
                       <td className="border p-2">
-                        {tyre?.tyre_assign_4_back_housing_left_pre_date}
+                        {/* {tyre?.tyre_assign_4_back_housing_left_pre_date} */}
+                        {tyre?.tyre_assign_4_back_housing_left_pre_date
+                          ? moment(
+                              tyre?.tyre_assign_4_back_housing_left_pre_date
+                            ).format("DD-MMMM-YYYY")
+                          : ""}
                       </td>
                       <td className="border p-2">
                         {tyre?.tyre_assign_4_back_housing_left_pre_km}
@@ -914,7 +951,12 @@ const ViewVechile = () => {
                         {tyre?.tyre_assign_5_back_dummy_left_km}
                       </td>
                       <td className="border p-2">
-                        {tyre?.tyre_assign_5_back_dummy_left_pre_date}
+                        {/* {tyre?.tyre_assign_5_back_dummy_left_pre_date} */}
+                        {tyre?.tyre_assign_5_back_dummy_left_pre_date
+                          ? moment(
+                              tyre?.tyre_assign_5_back_dummy_left_pre_date
+                            ).format("DD-MMMM-YYYY")
+                          : ""}
                       </td>
                       <td className="border p-2">
                         {tyre?.tyre_assign_5_back_dummy_left_pre_km}
@@ -971,7 +1013,12 @@ const ViewVechile = () => {
                         {tyre?.tyre_assign_6_back_dummy_left_km}
                       </td>
                       <td className="border p-2">
-                        {tyre?.tyre_assign_6_back_dummy_left_pre_date}
+                        {/* {tyre?.tyre_assign_6_back_dummy_left_pre_date} */}
+                        {tyre?.tyre_assign_6_back_dummy_left_pre_date
+                          ? moment(
+                              tyre?.tyre_assign_6_back_dummy_left_pre_date
+                            ).format("DD-MMMM-YYYY")
+                          : ""}
                       </td>
                       <td className="border p-2">
                         {tyre?.tyre_assign_6_back_dummy_left_pre_km}
@@ -1029,7 +1076,12 @@ const ViewVechile = () => {
                         {tyre?.tyre_assign_7_back_housing_right_km}
                       </td>
                       <td className="border p-2">
-                        {tyre?.tyre_assign_7_back_housing_right_pre_date}
+                        {/* {tyre?.tyre_assign_7_back_housing_right_pre_date} */}
+                        {tyre?.tyre_assign_7_back_housing_right_pre_date
+                          ? moment(
+                              tyre?.tyre_assign_7_back_housing_right_pre_date
+                            ).format("DD-MMMM-YYYY")
+                          : ""}
                       </td>
                       <td className="border p-2">
                         {tyre?.tyre_assign_7_back_housing_right_pre_km}
@@ -1089,7 +1141,12 @@ const ViewVechile = () => {
                         {tyre?.tyre_assign_8_back_housing_right_km}
                       </td>
                       <td className="border p-2">
-                        {tyre?.tyre_assign_8_back_housing_right_pre_date}
+                        {/* {tyre?.tyre_assign_8_back_housing_right_pre_date} */}
+                        {tyre?.tyre_assign_8_back_housing_right_pre_date
+                          ? moment(
+                              tyre?.tyre_assign_8_back_housing_right_pre_date
+                            ).format("DD-MMMM-YYYY")
+                          : ""}
                       </td>
                       <td className="border p-2">
                         {tyre?.tyre_assign_8_back_housing_right_pre_km}
@@ -1148,7 +1205,12 @@ const ViewVechile = () => {
                         {tyre?.tyre_assign_9_back_dummy_right_km}
                       </td>
                       <td className="border p-2">
-                        {tyre?.tyre_assign_9_back_dummy_right_pre_date}
+                        {/* {tyre?.tyre_assign_9_back_dummy_right_pre_date} */}
+                        {tyre?.tyre_assign_9_back_dummy_right_pre_date
+                          ? moment(
+                              tyre?.tyre_assign_9_back_dummy_right_pre_date
+                            ).format("DD-MMMM-YYYY")
+                          : ""}
                       </td>
                       <td className="border p-2">
                         {tyre?.tyre_assign_9_back_dummy_right_pre_km}
@@ -1205,7 +1267,12 @@ const ViewVechile = () => {
                         {tyre?.tyre_assign_10_back_dummy_right_km}
                       </td>
                       <td className="border p-2">
-                        {tyre?.tyre_assign_10_back_dummy_right_pre_date}
+                        {/* {tyre?.tyre_assign_10_back_dummy_right_pre_date} */}
+                        {tyre?.tyre_assign_10_back_dummy_right_pre_date
+                          ? moment(
+                              tyre?.tyre_assign_10_back_dummy_right_pre_date
+                            ).format("DD-MMMM-YYYY")
+                          : ""}
                       </td>
                       <td className="border p-2">
                         {tyre?.tyre_assign_10_back_dummy_right_pre_km}
