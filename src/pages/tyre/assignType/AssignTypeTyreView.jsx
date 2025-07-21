@@ -242,7 +242,10 @@ const AssignTypeTyreView = () => {
           <h2 className=" px-5 text-[black] text-lg   flex flex-row  justify-between items-center  rounded-xl p-2 ">
             <div className="flex  items-center gap-2">
               <IconInfoCircle className="w-4 h-4" />
-              <span>Stock Tyre Vehicle View </span>
+              <span>
+                Stock Tyre Vehicle View -{" "}
+                <span className="font-bold">({vehicle?.reg_no})</span>{" "}
+              </span>
             </div>
             <div className="flex items-center space-x-4">
               <IconPrinter
@@ -259,6 +262,9 @@ const AssignTypeTyreView = () => {
           </h2>
         </div>
         <div ref={componentRef}>
+          <h3 className="text-xl font-bold mb-2 text-center hidden print:block">
+            Stock Tyre Vehicle View - ({vehicle?.reg_no})
+          </h3>
           <div className="grid grid-cols-2 gap-4 mb-6">
             <div>
               <table className="w-full">
@@ -324,7 +330,6 @@ const AssignTypeTyreView = () => {
               </table>
             </div>
           </div>
-
           <div className="mb-4">
             <h3 className="text-xl font-bold mb-2 text-center">Tyre Details</h3>
             {tyre && Object.keys(tyre).length > 0 ? (

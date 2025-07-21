@@ -4,7 +4,12 @@ import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 import BASE_URL from "../../base/BaseUrl";
 import axios from "axios";
-import { IconArrowBack, IconInfoCircle } from "@tabler/icons-react";
+import {
+  IconArrowBack,
+  IconInfoCircle,
+  IconPlus,
+  IconTrash,
+} from "@tabler/icons-react";
 import Select from "react-select";
 import { BackButton, CreateButton } from "../../components/common/ButtonColors";
 import { decryptId } from "../../components/common/EncryptionDecryption";
@@ -44,6 +49,8 @@ const EditServices = () => {
     service_status: "",
     service_sub_data: "",
   });
+  const [count, setCount] = useState(1);
+
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
   const useTemplate = {
@@ -229,7 +236,7 @@ const EditServices = () => {
       service_amount: service.service_amount,
       service_remarks: service.service_remarks,
       service_status: service.service_status,
-      service_count: service.service_count,
+      service_count: count,
       service_sub_data: users,
     };
 
@@ -250,7 +257,17 @@ const EditServices = () => {
       navigate("/service-list");
     });
   };
-
+  const addItem = () => {
+    setUsers([...users, useTemplate]);
+    setCount(count + 1);
+  };
+  const removeUser = (index) => {
+    const filteredUsers = [...users];
+    filteredUsers.splice(index, 1);
+    setUsers(filteredUsers);
+    setCount(count - 1);
+  };
+  console.log(count, "count");
   const FormLabel = ({ children, required }) => (
     <label className="block text-sm font-semibold text-black mb-1 ">
       {children}
@@ -425,7 +442,7 @@ const EditServices = () => {
           <hr />
           {users.map((user, index) => (
             <div
-              className="grid grid-cols-1  md:grid-cols-1 lg:grid-cols-3 gap-6"
+              className="grid grid-cols-1  md:grid-cols-1 lg:grid-cols-4 gap-6"
               key={index}
             >
               {/* service type  */}
@@ -471,6 +488,31 @@ const EditServices = () => {
                   value={user.service_sub_details}
                   onChange={(e) => onChange(e, index)}
                   className={inputClass}
+                />
+              </div>
+              <div className="flex items-center gap-4 mt-5">
+                <button
+                  type="button"
+                  onClick={addItem}
+                  className={CreateButton}
+                >
+                  <IconPlus className="w-5 h-5 mr-1" />
+                  Add More
+                </button>
+                <IconTrash
+                  onClick={() => {
+                    if (users.length > 1 && !user.id) {
+                      removeUser(index);
+                    }
+                  }}
+                  className={`
+    cursor-pointer 
+    ${
+      users.length <= 1 || user.id
+        ? "text-gray-300 cursor-not-allowed pointer-events-none"
+        : "text-gray-500 hover:text-red-600"
+    }
+  `}
                 />
               </div>
             </div>
