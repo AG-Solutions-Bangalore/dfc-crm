@@ -577,23 +577,32 @@ const AddServices = () => {
                 />
               </div>
 
-              <div>
+              <div className="flex items-center gap-4 mt-5">
+                <button
+                  type="button"
+                  onClick={addItem}
+                  className={CreateButton}
+                >
+                  <IconPlus className="w-5 h-5 mr-1" />
+                  Add More
+                </button>
                 <IconTrash
-                  onClick={() => removeUser(index)}
-                  className="cursor-pointer  translate-y-0 lg:translate-y-7  hover:text-red-600"
+                  onClick={() => {
+                    if (users.length > 1) removeUser(index);
+                  }}
+                  className={`
+    cursor-pointer 
+    ${
+      users.length <= 1
+        ? "text-gray-300 cursor-not-allowed pointer-events-none"
+        : "text-gray-500 hover:text-red-600"
+    }
+  `}
                 />
               </div>
             </div>
           ))}
-          <div>
-            <button
-              className={CreateButton}
-              type="button"
-              onClick={(e) => addItem(e)}
-            >
-              <IconPlus className="w-5 h-5" /> Add More
-            </button>
-          </div>
+
           {/* Form Actions */}
           <div className="flex flex-wrap gap-4 justify-start">
             <button
