@@ -1,6 +1,3 @@
-import React, { useEffect, useRef, useState } from "react";
-import Layout from "../../layout/Layout";
-import { useNavigate, useParams } from "react-router-dom";
 import {
   IconArrowBack,
   IconChevronRight,
@@ -9,10 +6,14 @@ import {
   IconInfoCircle,
   IconPrinter,
 } from "@tabler/icons-react";
-import BASE_URL from "../../base/BaseUrl";
-import { useReactToPrint } from "react-to-print";
-import moment from "moment";
 import axios from "axios";
+import moment from "moment";
+import { useEffect, useRef, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { useReactToPrint } from "react-to-print";
+import BASE_URL from "../../base/BaseUrl";
+import Layout from "../../layout/Layout";
+import ChnagePkmNew from "./ChnagePkmNew";
 
 // Skeleton Loader Component
 const SkeletonLoader = () => {
@@ -77,7 +78,7 @@ const ViewVechile = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const printRef = useRef(null);
-
+  const [open, setOpen] = useState();
   const [vehicle, setVehicle] = useState({});
   const [tyre, setTyre] = useState({});
   const [loading, setLoading] = useState(true);
@@ -120,48 +121,46 @@ const ViewVechile = () => {
     `,
   });
 
+  const fetchTyreDetails = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.get(
+        `${BASE_URL}/api/web-fetch-vehicles-by-id/${id}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      setVehicle(response?.data.vehicles);
+
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching Vehicle View details:", error);
+      setLoading(false);
+    }
+  };
   useEffect(() => {
-    const fetchTyreDetails = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        const response = await axios.get(
-          `${BASE_URL}/api/web-fetch-vehicles-by-id/${id}`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
-
-        setVehicle(response.data.vehicles);
-
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching Vehicle View details:", error);
-        setLoading(false);
-      }
-    };
-
     fetchTyreDetails();
   }, [id]);
+  const fetchTyreVechile = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.get(
+        `${BASE_URL}/api/web-fetch-vehicles-tyre-sub/${vehicle?.reg_no}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      setTyre(response.data.vehiceltyresub);
+
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching Vehicle tyre View details:", error);
+      setLoading(false);
+    }
+  };
   useEffect(() => {
-    const fetchTyreVechile = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        const response = await axios.get(
-          `${BASE_URL}/api/web-fetch-vehicles-tyre-sub/${vehicle?.reg_no}`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
-
-        setTyre(response.data.vehiceltyresub);
-
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching Vehicle tyre View details:", error);
-        setLoading(false);
-      }
-    };
-
     fetchTyreVechile();
   }, [vehicle.reg_no]);
 
@@ -191,7 +190,8 @@ const ViewVechile = () => {
     localStorage.setItem("vehicle_no", vehicle.reg_no);
     localStorage.setItem("vehicle_branch", vehicle.vehicle_branch);
     localStorage.setItem("vechile_view", id);
-    navigate("/changePkm");
+    // navigate("/changePkm");
+    setOpen(true);
   };
 
   if (loading) return <SkeletonLoader />;
@@ -446,7 +446,13 @@ const ViewVechile = () => {
                         {tyre?.tyre_assign_1_front_left_no}
                       </td>
                       <td className="border p-2">
-                        {tyre?.tyre_assign_1_front_left_date}
+                        {/* {tyre?.tyre_assign_1_front_left_date} */}
+
+                        {tyre?.tyre_assign_1_front_left_date
+                          ? moment(tyre?.tyre_assign_1_front_left_date).format(
+                              "DD-MMMM-YYYY"
+                            )
+                          : ""}
                       </td>
                       <td className="border p-2">
                         {tyre?.tyre_assign_1_front_left_km}
@@ -477,7 +483,7 @@ const ViewVechile = () => {
                                 tyre?.id + "#tyre_assign_1_front_left_no"
                               )
                             }
-                            title="change tyre"
+                            title="Change Tyre"
                             className="text-blue-500 hover:text-blue-700"
                           >
                             <IconEdit size={20} />
@@ -490,7 +496,7 @@ const ViewVechile = () => {
                                 tyre?.id + "#tyre_assign_1_front_left_no"
                               )
                             }
-                            title="change present km"
+                            title="Change Date & Km"
                             className="text-blue-500 hover:text-blue-700"
                           >
                             <IconEditCircle size={20} />
@@ -507,7 +513,13 @@ const ViewVechile = () => {
                         {tyre?.tyre_assign_2_front_right_no}
                       </td>
                       <td className="border p-2">
-                        {tyre?.tyre_assign_2_front_right_date}
+                        {/* {tyre?.tyre_assign_2_front_right_date} */}
+
+                        {tyre?.tyre_assign_2_front_right_date
+                          ? moment(tyre?.tyre_assign_2_front_right_date).format(
+                              "DD-MMMM-YYYY"
+                            )
+                          : ""}
                       </td>
                       <td className="border p-2">
                         {tyre?.tyre_assign_2_front_right_km}
@@ -539,7 +551,7 @@ const ViewVechile = () => {
                                 tyre?.id + "#tyre_assign_2_front_right_no"
                               )
                             }
-                            title="change tyre"
+                            title="Change Tyre"
                             className="text-blue-500 hover:text-blue-700"
                           >
                             <IconEdit size={20} />
@@ -552,7 +564,7 @@ const ViewVechile = () => {
                                 tyre?.id + "#tyre_assign_2_front_right_no"
                               )
                             }
-                            title="change present km"
+                            title="Change Date & Km"
                             className="text-blue-500 hover:text-blue-700"
                           >
                             <IconEditCircle size={20} />
@@ -570,7 +582,12 @@ const ViewVechile = () => {
                         {tyre?.tyre_assign_3_back_left_no}
                       </td>
                       <td className="border p-2">
-                        {tyre?.tyre_assign_3_back_left_date}
+                        {/* {tyre?.tyre_assign_3_back_left_date} */}
+                        {tyre?.tyre_assign_3_back_left_date
+                          ? moment(tyre?.tyre_assign_3_back_left_date).format(
+                              "DD-MMMM-YYYY"
+                            )
+                          : ""}
                       </td>
                       <td className="border p-2">
                         {tyre?.tyre_assign_3_back_left_km}
@@ -602,7 +619,7 @@ const ViewVechile = () => {
                                 tyre?.id + "#tyre_assign_3_back_left_no"
                               )
                             }
-                            title="change tyre"
+                            title="Change Tyre"
                             className="text-blue-500 hover:text-blue-700"
                           >
                             <IconEdit size={20} />
@@ -615,7 +632,7 @@ const ViewVechile = () => {
                                 tyre?.id + "#tyre_assign_3_back_left_no"
                               )
                             }
-                            title="change present km"
+                            title="Change Date & Km"
                             className="text-blue-500 hover:text-blue-700"
                           >
                             <IconEditCircle size={20} />
@@ -632,7 +649,12 @@ const ViewVechile = () => {
                         {tyre?.tyre_assign_4_back_left_no}
                       </td>
                       <td className="border p-2">
-                        {tyre?.tyre_assign_4_back_left_date}
+                        {/* {tyre?.tyre_assign_4_back_left_date} */}
+                        {tyre?.tyre_assign_4_back_left_date
+                          ? moment(tyre?.tyre_assign_4_back_left_date).format(
+                              "DD-MMMM-YYYY"
+                            )
+                          : ""}
                       </td>
                       <td className="border p-2">
                         {tyre?.tyre_assign_4_back_left_km}
@@ -664,7 +686,7 @@ const ViewVechile = () => {
                                 tyre?.id + "#tyre_assign_4_back_left_no"
                               )
                             }
-                            title="change tyre"
+                            title="Change Tyre"
                             className="text-blue-500 hover:text-blue-700"
                           >
                             <IconEdit size={20} />
@@ -677,7 +699,7 @@ const ViewVechile = () => {
                                 tyre?.id + "#tyre_assign_4_back_left_no"
                               )
                             }
-                            title="change present km"
+                            title="Change Date & Km"
                             className="text-blue-500 hover:text-blue-700"
                           >
                             <IconEditCircle size={20} />
@@ -694,7 +716,12 @@ const ViewVechile = () => {
                         {tyre?.tyre_assign_5_back_right_no}
                       </td>
                       <td className="border p-2">
-                        {tyre?.tyre_assign_5_back_right_date}
+                        {/* {tyre?.tyre_assign_5_back_right_date} */}
+                        {tyre?.tyre_assign_5_back_right_date
+                          ? moment(tyre?.tyre_assign_5_back_right_date).format(
+                              "DD-MMMM-YYYY"
+                            )
+                          : ""}
                       </td>
                       <td className="border p-2">
                         {tyre?.tyre_assign_5_back_right_km}
@@ -726,7 +753,7 @@ const ViewVechile = () => {
                                 tyre?.id + "#tyre_assign_5_back_right_no"
                               )
                             }
-                            title="change tyre"
+                            title="Change Tyre"
                             className="text-blue-500 hover:text-blue-700"
                           >
                             <IconEdit size={20} />
@@ -739,7 +766,7 @@ const ViewVechile = () => {
                                 tyre?.id + "#tyre_assign_5_back_right_no"
                               )
                             }
-                            title="change present km"
+                            title="Change Date & Km"
                             className="text-blue-500 hover:text-blue-700"
                           >
                             <IconEditCircle size={20} />
@@ -756,7 +783,12 @@ const ViewVechile = () => {
                         {tyre?.tyre_assign_6_back_right_no}
                       </td>
                       <td className="border p-2">
-                        {tyre?.tyre_assign_6_back_right_date}
+                        {/* {tyre?.tyre_assign_6_back_right_date} */}
+                        {tyre?.tyre_assign_6_back_right_date
+                          ? moment(tyre?.tyre_assign_6_back_right_date).format(
+                              "DD-MMMM-YYYY"
+                            )
+                          : ""}
                       </td>
                       <td className="border p-2">
                         {tyre?.tyre_assign_6_back_right_km}
@@ -788,7 +820,7 @@ const ViewVechile = () => {
                                 tyre?.id + "#tyre_assign_6_back_right_no"
                               )
                             }
-                            title="change tyre"
+                            title="Change Tyre"
                             className="text-blue-500 hover:text-blue-700"
                           >
                             <IconEdit size={20} />
@@ -801,7 +833,7 @@ const ViewVechile = () => {
                                 tyre?.id + "#tyre_assign_6_back_right_no"
                               )
                             }
-                            title="change present km"
+                            title="Change Date & Km"
                             className="text-blue-500 hover:text-blue-700"
                           >
                             <IconEditCircle size={20} />
@@ -819,7 +851,12 @@ const ViewVechile = () => {
                         {tyre?.tyre_assign_3_back_housing_left_no}
                       </td>
                       <td className="border p-2">
-                        {tyre?.tyre_assign_3_back_housing_left_date}
+                        {/* {tyre?.tyre_assign_3_back_housing_left_date} */}
+                        {tyre?.tyre_assign_3_back_housing_left_date
+                          ? moment(
+                              tyre?.tyre_assign_3_back_housing_left_date
+                            ).format("DD-MMMM-YYYY")
+                          : ""}
                       </td>
                       <td className="border p-2">
                         {tyre?.tyre_assign_3_back_housing_left_km}
@@ -851,7 +888,7 @@ const ViewVechile = () => {
                                 tyre?.id + "#tyre_assign_3_back_housing_left_no"
                               )
                             }
-                            title="change tyre"
+                            title="Change Tyre"
                             className="text-blue-500 hover:text-blue-700"
                           >
                             <IconEdit size={20} />
@@ -864,7 +901,7 @@ const ViewVechile = () => {
                                 tyre?.id + "#tyre_assign_3_back_housing_left_no"
                               )
                             }
-                            title="change present km"
+                            title="Change Date & Km"
                             className="text-blue-500 hover:text-blue-700"
                           >
                             <IconEditCircle size={20} />
@@ -882,7 +919,12 @@ const ViewVechile = () => {
                         {tyre?.tyre_assign_4_back_housing_left_no}
                       </td>
                       <td className="border p-2">
-                        {tyre?.tyre_assign_4_back_housing_left_date}
+                        {/* {tyre?.tyre_assign_4_back_housing_left_date} */}
+                        {tyre?.tyre_assign_4_back_housing_left_date
+                          ? moment(
+                              tyre?.tyre_assign_4_back_housing_left_date
+                            ).format("DD-MMMM-YYYY")
+                          : ""}
                       </td>
                       <td className="border p-2">
                         {tyre?.tyre_assign_4_back_housing_left_km}
@@ -914,7 +956,7 @@ const ViewVechile = () => {
                                 tyre?.id + "#tyre_assign_4_back_housing_left_no"
                               )
                             }
-                            title="change tyre"
+                            title="Change Tyre"
                             className="text-blue-500 hover:text-blue-700"
                           >
                             <IconEdit size={20} />
@@ -927,7 +969,7 @@ const ViewVechile = () => {
                                 tyre?.id + "#tyre_assign_4_back_housing_left_no"
                               )
                             }
-                            title="change present km"
+                            title="Change Date & Km"
                             className="text-blue-500 hover:text-blue-700"
                           >
                             <IconEditCircle size={20} />
@@ -945,7 +987,12 @@ const ViewVechile = () => {
                         {tyre?.tyre_assign_5_back_dummy_left_no}
                       </td>
                       <td className="border p-2">
-                        {tyre?.tyre_assign_5_back_dummy_left_date}
+                        {/* {tyre?.tyre_assign_5_back_dummy_left_date} */}
+                        {tyre?.tyre_assign_5_back_dummy_left_date
+                          ? moment(
+                              tyre?.tyre_assign_5_back_dummy_left_date
+                            ).format("DD-MMMM-YYYY")
+                          : ""}
                       </td>
                       <td className="border p-2">
                         {tyre?.tyre_assign_5_back_dummy_left_km}
@@ -977,7 +1024,7 @@ const ViewVechile = () => {
                                 tyre?.id + "#tyre_assign_5_back_dummy_left_no"
                               )
                             }
-                            title="change tyre"
+                            title="Change Tyre"
                             className="text-blue-500 hover:text-blue-700"
                           >
                             <IconEdit size={20} />
@@ -990,7 +1037,7 @@ const ViewVechile = () => {
                                 tyre?.id + "#tyre_assign_5_back_dummy_left_no"
                               )
                             }
-                            title="change present km"
+                            title="Change Date & Km"
                             className="text-blue-500 hover:text-blue-700"
                           >
                             <IconEditCircle size={20} />
@@ -1007,7 +1054,12 @@ const ViewVechile = () => {
                         {tyre?.tyre_assign_6_back_dummy_left_no}
                       </td>
                       <td className="border p-2">
-                        {tyre?.tyre_assign_6_back_dummy_left_date}
+                        {/* {tyre?.tyre_assign_6_back_dummy_left_date} */}
+                        {tyre?.tyre_assign_6_back_dummy_left_date
+                          ? moment(
+                              tyre?.tyre_assign_6_back_dummy_left_date
+                            ).format("DD-MMMM-YYYY")
+                          : ""}
                       </td>
                       <td className="border p-2">
                         {tyre?.tyre_assign_6_back_dummy_left_km}
@@ -1039,7 +1091,7 @@ const ViewVechile = () => {
                                 tyre?.id + "#tyre_assign_6_back_dummy_left_no"
                               )
                             }
-                            title="change tyre"
+                            title="Change Tyre"
                             className="text-blue-500 hover:text-blue-700"
                           >
                             <IconEdit size={20} />
@@ -1052,7 +1104,7 @@ const ViewVechile = () => {
                                 tyre?.id + "#tyre_assign_6_back_dummy_left_no"
                               )
                             }
-                            title="change present km"
+                            title="Change Date & Km"
                             className="text-blue-500 hover:text-blue-700"
                           >
                             <IconEditCircle size={20} />
@@ -1070,7 +1122,12 @@ const ViewVechile = () => {
                         {tyre?.tyre_assign_7_back_housing_right_no}
                       </td>
                       <td className="border p-2">
-                        {tyre?.tyre_assign_7_back_housing_right_date}
+                        {/* {tyre?.tyre_assign_7_back_housing_right_date} */}
+                        {tyre?.tyre_assign_7_back_housing_right_date
+                          ? moment(
+                              tyre?.tyre_assign_7_back_housing_right_date
+                            ).format("DD-MMMM-YYYY")
+                          : ""}
                       </td>
                       <td className="border p-2">
                         {tyre?.tyre_assign_7_back_housing_right_km}
@@ -1103,7 +1160,7 @@ const ViewVechile = () => {
                                   "#tyre_assign_7_back_housing_right_no"
                               )
                             }
-                            title="change tyre"
+                            title="Change Tyre"
                             className="text-blue-500 hover:text-blue-700"
                           >
                             <IconEdit size={20} />
@@ -1117,7 +1174,7 @@ const ViewVechile = () => {
                                   "#tyre_assign_7_back_housing_right_no"
                               )
                             }
-                            title="change present km"
+                            title="Change Date & Km"
                             className="text-blue-500 hover:text-blue-700"
                           >
                             <IconEditCircle size={20} />
@@ -1135,7 +1192,12 @@ const ViewVechile = () => {
                         {tyre?.tyre_assign_8_back_housing_right_no}
                       </td>
                       <td className="border p-2">
-                        {tyre?.tyre_assign_8_back_housing_right_date}
+                        {/* {tyre?.tyre_assign_8_back_housing_right_date} */}
+                        {tyre?.tyre_assign_8_back_housing_right_date
+                          ? moment(
+                              tyre?.tyre_assign_8_back_housing_right_date
+                            ).format("DD-MMMM-YYYY")
+                          : ""}
                       </td>
                       <td className="border p-2">
                         {tyre?.tyre_assign_8_back_housing_right_km}
@@ -1168,7 +1230,7 @@ const ViewVechile = () => {
                                   "#tyre_assign_8_back_housing_right_no"
                               )
                             }
-                            title="change tyre"
+                            title="Change Tyre"
                             className="text-blue-500 hover:text-blue-700"
                           >
                             <IconEdit size={20} />
@@ -1182,7 +1244,7 @@ const ViewVechile = () => {
                                   "#tyre_assign_8_back_housing_right_no"
                               )
                             }
-                            title="change present km"
+                            title="Change Date & Km"
                             className="text-blue-500 hover:text-blue-700"
                           >
                             <IconEditCircle size={20} />
@@ -1199,7 +1261,12 @@ const ViewVechile = () => {
                         {tyre?.tyre_assign_9_back_dummy_right_no}
                       </td>
                       <td className="border p-2">
-                        {tyre?.tyre_assign_9_back_dummy_right_date}
+                        {/* {tyre?.tyre_assign_9_back_dummy_right_date} */}
+                        {tyre?.tyre_assign_9_back_dummy_right_date
+                          ? moment(
+                              tyre?.tyre_assign_9_back_dummy_right_date
+                            ).format("DD-MMMM-YYYY")
+                          : ""}
                       </td>
                       <td className="border p-2">
                         {tyre?.tyre_assign_9_back_dummy_right_km}
@@ -1231,7 +1298,7 @@ const ViewVechile = () => {
                                 tyre?.id + "#tyre_assign_9_back_dummy_right_no"
                               )
                             }
-                            title="change tyre"
+                            title="Change Tyre"
                             className="text-blue-500 hover:text-blue-700"
                           >
                             <IconEdit size={20} />
@@ -1244,7 +1311,7 @@ const ViewVechile = () => {
                                 tyre?.id + "#tyre_assign_9_back_dummy_right_no"
                               )
                             }
-                            title="change present km"
+                            title="Change Date & Km"
                             className="text-blue-500 hover:text-blue-700"
                           >
                             <IconEditCircle size={20} />
@@ -1261,7 +1328,12 @@ const ViewVechile = () => {
                         {tyre?.tyre_assign_10_back_dummy_right_no}
                       </td>
                       <td className="border p-2">
-                        {tyre?.tyre_assign_10_back_dummy_right_date}
+                        {/* {tyre?.tyre_assign_10_back_dummy_right_date} */}
+                        {tyre?.tyre_assign_10_back_dummy_right_date
+                          ? moment(
+                              tyre?.tyre_assign_10_back_dummy_right_date
+                            ).format("DD-MMMM-YYYY")
+                          : ""}
                       </td>
                       <td className="border p-2">
                         {tyre?.tyre_assign_10_back_dummy_right_km}
@@ -1293,7 +1365,7 @@ const ViewVechile = () => {
                                 tyre?.id + "#tyre_assign_10_back_dummy_right_no"
                               )
                             }
-                            title="change tyre"
+                            title="Change Tyre"
                             className="text-blue-500 hover:text-blue-700"
                           >
                             <IconEdit size={20} />
@@ -1306,7 +1378,7 @@ const ViewVechile = () => {
                                 tyre?.id + "#tyre_assign_10_back_dummy_right_no"
                               )
                             }
-                            title="change present km"
+                            title="Change Date & Km"
                             className="text-blue-500 hover:text-blue-700"
                           >
                             <IconEditCircle size={20} />
@@ -1326,6 +1398,11 @@ const ViewVechile = () => {
           )}
         </div>
       </div>
+      <ChnagePkmNew
+        open={open}
+        onClose={() => setOpen(false)}
+        refetch={fetchTyreVechile}
+      />
     </Layout>
   );
 };
