@@ -106,7 +106,7 @@ function VechilesDetailsReportForm() {
           <h2 className=" px-5 text-[black] text-lg   flex flex-row  justify-between items-center  rounded-xl p-2 ">
             <div className="flex  items-center gap-2">
               <IconInfoCircle className="w-4 h-4" />
-              <span>Vehicle Details</span>
+              <span>Vehicle Details </span>
             </div>
           </h2>
         </div>

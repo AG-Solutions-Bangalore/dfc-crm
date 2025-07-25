@@ -519,6 +519,8 @@ const TruckView = () => {
                 <tr className="bg-gray-100">
                   <th className="border py-2 text-xs">Tyre Position</th>
                   <th className="border py-2 text-xs">Tyre No</th>
+                  <th className="border py-2 text-xs">Type</th>
+                  <th className="border py-2 text-xs">Make</th>
                   <th className="border py-2 text-xs">Date</th>
                   <th className="border py-2 text-xs">KM</th>
                   <th className="border py-2 text-xs">Present Date</th>
@@ -536,6 +538,12 @@ const TruckView = () => {
                     </td>
                     <td className="border py-2 text-xs text-start px-2">
                       {tyre?.tyre_assign_1_front_left_no}
+                    </td>
+                    <td className="border py-2 text-xs text-start px-2">
+                      {tyre?.tyre_assign_1_front_left_type}
+                    </td>
+                    <td className="border py-2 text-xs text-start px-2">
+                      {tyre?.tyre_assign_1_front_left_make}
                     </td>
                     <td className="border py-2 text-xs">
                       {tyre?.tyre_assign_1_front_left_date
@@ -574,6 +582,12 @@ const TruckView = () => {
                     </td>
                     <td className="border py-2 text-xs text-start px-2">
                       {tyre?.tyre_assign_2_front_right_no}
+                    </td>
+                    <td className="border py-2 text-xs text-start px-2">
+                      {tyre?.tyre_assign_2_front_right_type}
+                    </td>
+                    <td className="border py-2 text-xs text-start px-2">
+                      {tyre?.tyre_assign_2_front_right_make}
                     </td>
                     <td className="border py-2 text-xs">
                       {tyre?.tyre_assign_2_front_right_date
@@ -614,6 +628,12 @@ const TruckView = () => {
                     <td className="border py-2 text-xs text-start px-2">
                       {tyre?.tyre_assign_3_back_left_no}
                     </td>
+                    <td className="border py-2 text-xs text-start px-2">
+                      {tyre?.tyre_assign_3_back_left_type}
+                    </td>
+                    <td className="border py-2 text-xs text-start px-2">
+                      {tyre?.tyre_assign_3_back_left_make}
+                    </td>
                     <td className="border py-2 text-xs">
                       {tyre?.tyre_assign_3_back_left_date
                         ? moment(tyre?.tyre_assign_3_back_left_date).format(
@@ -651,6 +671,12 @@ const TruckView = () => {
                     </td>
                     <td className="border py-2 text-xs text-start px-2">
                       {tyre?.tyre_assign_4_back_left_no}
+                    </td>
+                    <td className="border py-2 text-xs text-start px-2">
+                      {tyre?.tyre_assign_4_back_left_type}
+                    </td>
+                    <td className="border py-2 text-xs text-start px-2">
+                      {tyre?.tyre_assign_4_back_left_make}
                     </td>
                     <td className="border py-2 text-xs">
                       {tyre?.tyre_assign_4_back_left_date
@@ -690,6 +716,12 @@ const TruckView = () => {
                     <td className="border py-2 text-xs text-start px-2">
                       {tyre?.tyre_assign_5_back_right_no}
                     </td>
+                    <td className="border py-2 text-xs text-start px-2">
+                      {tyre?.tyre_assign_5_back_right_type}
+                    </td>
+                    <td className="border py-2 text-xs text-start px-2">
+                      {tyre?.tyre_assign_5_back_right_make}
+                    </td>
                     <td className="border py-2 text-xs">
                       {tyre?.tyre_assign_5_back_right_date
                         ? moment(tyre?.tyre_assign_5_back_right_date).format(
@@ -727,6 +759,12 @@ const TruckView = () => {
                     </td>
                     <td className="border py-2 text-xs text-start px-2">
                       {tyre?.tyre_assign_6_back_right_no}
+                    </td>
+                    <td className="border py-2 text-xs text-start px-2">
+                      {tyre?.tyre_assign_6_back_right_type}
+                    </td>
+                    <td className="border py-2 text-xs text-start px-2">
+                      {tyre?.tyre_assign_6_back_right_make}
                     </td>
                     <td className="border py-2 text-xs">
                       {tyre?.tyre_assign_6_back_right_date
@@ -767,6 +805,12 @@ const TruckView = () => {
                     <td className="border py-2 text-xs text-start px-2">
                       {tyre?.tyre_assign_3_back_housing_left_no}
                     </td>
+                    <td className="border py-2 text-xs text-start px-2">
+                      {tyre?.tyre_assign_3_back_housing_left_type}
+                    </td>
+                    <td className="border py-2 text-xs text-start px-2">
+                      {tyre?.tyre_assign_3_back_housing_left_make}
+                    </td>
                     <td className="border py-2 text-xs">
                       {tyre?.tyre_assign_3_back_housing_left_date
                         ? moment(
@@ -805,6 +849,12 @@ const TruckView = () => {
                     </td>
                     <td className="border py-2 text-xs text-start px-2">
                       {tyre?.tyre_assign_4_back_housing_left_no}
+                    </td>
+                    <td className="border py-2 text-xs text-start px-2">
+                      {tyre?.tyre_assign_4_back_housing_left_type}
+                    </td>
+                    <td className="border py-2 text-xs text-start px-2">
+                      {tyre?.tyre_assign_4_back_housing_left_make}
                     </td>
                     <td className="border py-2 text-xs">
                       {tyre?.tyre_assign_4_back_housing_left_date
@@ -845,6 +895,12 @@ const TruckView = () => {
                     <td className="border py-2 text-xs text-start px-2">
                       {tyre?.tyre_assign_5_back_dummy_left_no}
                     </td>
+                    <td className="border py-2 text-xs text-start px-2">
+                      {tyre?.tyre_assign_5_back_dummy_left_type}
+                    </td>
+                    <td className="border py-2 text-xs text-start px-2">
+                      {tyre?.tyre_assign_5_back_dummy_left_make}
+                    </td>
                     <td className="border py-2 text-xs">
                       {tyre?.tyre_assign_5_back_dummy_left_date
                         ? moment(
@@ -882,6 +938,12 @@ const TruckView = () => {
                     </td>
                     <td className="border py-2 text-xs text-start px-2">
                       {tyre?.tyre_assign_6_back_dummy_left_no}
+                    </td>
+                    <td className="border py-2 text-xs text-start px-2">
+                      {tyre?.tyre_assign_6_back_dummy_left_type}
+                    </td>
+                    <td className="border py-2 text-xs text-start px-2">
+                      {tyre?.tyre_assign_6_back_dummy_left_make}
                     </td>
                     <td className="border py-2 text-xs">
                       {tyre?.tyre_assign_6_back_dummy_left_date
@@ -922,6 +984,12 @@ const TruckView = () => {
                     <td className="border py-2 text-xs text-start px-2">
                       {tyre?.tyre_assign_7_back_housing_right_no}
                     </td>
+                    <td className="border py-2 text-xs text-start px-2">
+                      {tyre?.tyre_assign_7_back_housing_right_type}
+                    </td>
+                    <td className="border py-2 text-xs text-start px-2">
+                      {tyre?.tyre_assign_7_back_housing_right_make}
+                    </td>
                     <td className="border py-2 text-xs">
                       {tyre?.tyre_assign_7_back_housing_right_date
                         ? moment(
@@ -961,6 +1029,12 @@ const TruckView = () => {
                     <td className="border py-2 text-xs text-start px-2">
                       {tyre?.tyre_assign_8_back_housing_right_no}
                     </td>
+                    <td className="border py-2 text-xs text-start px-2">
+                      {tyre?.tyre_assign_8_back_housing_right_type}
+                    </td>
+                    <td className="border py-2 text-xs text-start px-2">
+                      {tyre?.tyre_assign_8_back_housing_right_make}
+                    </td>
                     <td className="border py-2 text-xs">
                       {tyre?.tyre_assign_8_back_housing_right_date
                         ? moment(
@@ -999,6 +1073,12 @@ const TruckView = () => {
                     <td className="border py-2 text-xs text-start px-2">
                       {tyre?.tyre_assign_9_back_dummy_right_no}
                     </td>
+                    <td className="border py-2 text-xs text-start px-2">
+                      {tyre?.tyre_assign_9_back_dummy_right_type}
+                    </td>
+                    <td className="border py-2 text-xs text-start px-2">
+                      {tyre?.tyre_assign_9_back_dummy_right_make}
+                    </td>
                     <td className="border py-2 text-xs">
                       {tyre?.tyre_assign_9_back_dummy_right_date
                         ? moment(
@@ -1036,6 +1116,12 @@ const TruckView = () => {
                     </td>
                     <td className="border py-2 text-xs text-start px-2">
                       {tyre?.tyre_assign_10_back_dummy_right_no}
+                    </td>
+                    <td className="border py-2 text-xs text-start px-2">
+                      {tyre?.tyre_assign_10_back_dummy_right_type}
+                    </td>
+                    <td className="border py-2 text-xs text-start px-2">
+                      {tyre?.tyre_assign_10_back_dummy_right_make}
                     </td>
                     <td className="border py-2 text-xs">
                       {tyre?.tyre_assign_10_back_dummy_right_date
