@@ -150,6 +150,87 @@ const AssignTypeTyreView = () => {
     fetchVehicleData();
   }, [id, navigate]);
 
+  // const renderTyreRows = () => {
+  //   const vehicleType = vehicle.vehicle_type;
+  //   const tyreData = tyre;
+
+  //   const tyrePositions = {
+  //     Other: [
+  //       { position: "1. Front Left", prefix: "tyre_assign_1_front_left" },
+  //       { position: "2. Front Right", prefix: "tyre_assign_2_front_right" },
+  //     ],
+  //     "6W Truck": [
+  //       { position: "1. Front Left", prefix: "tyre_assign_1_front_left" },
+  //       { position: "2. Front Right", prefix: "tyre_assign_2_front_right" },
+  //       { position: "3. Back Left", prefix: "tyre_assign_3_back_left" },
+  //       { position: "4. Back Left", prefix: "tyre_assign_4_back_left" },
+  //       { position: "5. Back Right", prefix: "tyre_assign_5_back_right" },
+  //       { position: "6. Back Right", prefix: "tyre_assign_6_back_right" },
+  //     ],
+  //     "10W Truck": [
+  //       { position: "1. Front Left", prefix: "tyre_assign_1_front_left" },
+  //       { position: "2. Front Right", prefix: "tyre_assign_2_front_right" },
+  //       {
+  //         position: "3. Back Housing Left",
+  //         prefix: "tyre_assign_3_back_housing_left",
+  //       },
+  //       {
+  //         position: "4. Back Housing Left",
+  //         prefix: "tyre_assign_4_back_housing_left",
+  //       },
+  //       {
+  //         position: "5. Back Dummy Left",
+  //         prefix: "tyre_assign_5_back_dummy_left",
+  //       },
+  //       {
+  //         position: "6. Back Dummy Left",
+  //         prefix: "tyre_assign_6_back_dummy_left",
+  //       },
+  //       {
+  //         position: "7. Back Housing Right",
+  //         prefix: "tyre_assign_7_back_housing_right",
+  //       },
+  //       {
+  //         position: "8. Back Housing Right",
+  //         prefix: "tyre_assign_8_back_housing_right",
+  //       },
+  //       {
+  //         position: "9. Back Dummy Right",
+  //         prefix: "tyre_assign_9_back_dummy_right",
+  //       },
+  //       {
+  //         position: "10. Back Dummy Right",
+  //         prefix: "tyre_assign_10_back_dummy_right",
+  //       },
+  //     ],
+  //   };
+
+  //   const positionsToRender = tyrePositions[vehicleType] || [];
+
+  //   return positionsToRender.map((tyre, index) => (
+  //     <tr key={index} className="border border-gray-300">
+  //       <td className="p-2 border border-gray-300">{tyre.position}</td>
+  //       <td className="p-2 border border-gray-300">
+  //         {tyreData[`${tyre.prefix}_no`] || "N/A"}
+  //       </td>
+
+  //       <td className="p-2 border border-gray-300">
+  //         {tyreData[`${tyre.prefix}_date`]
+  //           ? moment(tyreData[`${tyre.prefix}_date`]).format("DD-MM-YYYY")
+  //           : "N/A"}
+  //       </td>
+  //       <td className="p-2 border border-gray-300">
+  //         {tyreData[`${tyre.prefix}_km`] || "N/A"}
+  //       </td>
+  //       <td className="p-2 border border-gray-300">
+  //         {tyreData[`${tyre.prefix}_pre_km`] || "N/A"}
+  //       </td>
+  //       <td className="p-2 border border-gray-300">
+  //         {tyreData[`${tyre.prefix}_status`] || "N/A"}
+  //       </td>
+  //     </tr>
+  //   ));
+  // };
   const renderTyreRows = () => {
     const vehicleType = vehicle.vehicle_type;
     const tyreData = tyre;
@@ -207,28 +288,34 @@ const AssignTypeTyreView = () => {
 
     const positionsToRender = tyrePositions[vehicleType] || [];
 
-    return positionsToRender.map((tyre, index) => (
-      <tr key={index} className="border border-gray-300">
-        <td className="p-2 border border-gray-300">{tyre.position}</td>
-        <td className="p-2 border border-gray-300">
-          {tyreData[`${tyre.prefix}_no`] || "N/A"}
-        </td>
-        <td className="p-2 border border-gray-300">
-          {tyreData[`${tyre.prefix}_date`]
-            ? moment(tyreData[`${tyre.prefix}_date`]).format("DD-MM-YYYY")
-            : "N/A"}
-        </td>
-        <td className="p-2 border border-gray-300">
-          {tyreData[`${tyre.prefix}_km`] || "N/A"}
-        </td>
-        <td className="p-2 border border-gray-300">
-          {tyreData[`${tyre.prefix}_pre_km`] || "N/A"}
-        </td>
-        <td className="p-2 border border-gray-300">
-          {tyreData[`${tyre.prefix}_status`] || "N/A"}
-        </td>
-      </tr>
-    ));
+    return positionsToRender.map((tyre, index) => {
+      const no = tyreData[`${tyre.prefix}_no`] || "N/A";
+      const date = tyreData[`${tyre.prefix}_date`]
+        ? moment(tyreData[`${tyre.prefix}_date`]).format("DD-MM-YYYY")
+        : "N/A";
+      const km = parseInt(tyreData[`${tyre.prefix}_km`] || 0);
+      const preKm = parseInt(tyreData[`${tyre.prefix}_pre_km`] || 0);
+      const differenceKm = preKm - km;
+      const type = tyreData[`${tyre.prefix}_type`] || "N/A";
+      const make = tyreData[`${tyre.prefix}_make`] || "N/A";
+      const status = tyreData[`${tyre.prefix}_status`] || "N/A";
+
+      return (
+        <tr key={index} className="border border-gray-300">
+          <td className="p-2 border border-gray-300">{tyre.position}</td>
+          <td className="p-2 border border-gray-300">{no}</td>
+          <td className="p-2 border border-gray-300">{type}</td>
+          <td className="p-2 border border-gray-300">{make}</td>
+          <td className="p-2 border border-gray-300">{date}</td>
+          <td className="p-2 border border-gray-300">{km || "N/A"}</td>
+          <td className="p-2 border border-gray-300">{preKm || "N/A"}</td>
+          <td className="p-2 border border-gray-300">
+            {differenceKm || "N/A"}
+          </td>
+          <td className="p-2 border border-gray-300">{status}</td>
+        </tr>
+      );
+    });
   };
 
   if (loading) {
@@ -339,9 +426,12 @@ const AssignTypeTyreView = () => {
                     {[
                       "Tyre Position",
                       "Tyre No",
+                      "Tyre",
+                      "Make",
                       "Date",
                       "KM",
                       "Present KM",
+                      "Differnce KM",
                       "Status",
                     ].map((header) => (
                       <th key={header} className="p-2 border border-gray-300">
