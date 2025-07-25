@@ -202,7 +202,7 @@ const ViewVechile = () => {
           <h2 className="px-5 text-black text-lg flex flex-row justify-between items-center rounded-xl p-2">
             <div className="flex items-center gap-2">
               <IconInfoCircle className="w-4 h-4" />
-              <span>Vehicle View </span>
+              <span>Vehicle View</span>
             </div>
             <div className="flex items-center space-x-4">
               <IconPrinter
@@ -428,7 +428,10 @@ const ViewVechile = () => {
                   <tr className="bg-gray-100">
                     <th className="border p-2">Tyre Position</th>
                     <th className="border p-2">Tyre No</th>
+                    <th className="border p-2">Type</th>
+                    <th className="border p-2">Make</th>
                     <th className="border p-2">Date</th>
+
                     <th className="border p-2">KM</th>
                     <th className="border p-2">Present Date</th>
                     <th className="border p-2">Present KM</th>
@@ -446,8 +449,12 @@ const ViewVechile = () => {
                         {tyre?.tyre_assign_1_front_left_no}
                       </td>
                       <td className="border p-2">
-                        {/* {tyre?.tyre_assign_1_front_left_date} */}
-
+                        {tyre?.tyre_assign_1_front_left_type}
+                      </td>
+                      <td className="border p-2">
+                        {tyre?.tyre_assign_1_front_left_make}
+                      </td>
+                      <td className="border p-2">
                         {tyre?.tyre_assign_1_front_left_date
                           ? moment(tyre?.tyre_assign_1_front_left_date).format(
                               "DD-MMMM-YYYY"
@@ -511,6 +518,12 @@ const ViewVechile = () => {
                       <td className="border p-2">2.Front Right</td>
                       <td className="border p-2">
                         {tyre?.tyre_assign_2_front_right_no}
+                      </td>
+                      <td className="border p-2">
+                        {tyre?.tyre_assign_2_front_right_type}
+                      </td>
+                      <td className="border p-2">
+                        {tyre?.tyre_assign_2_front_right_make}
                       </td>
                       <td className="border p-2">
                         {/* {tyre?.tyre_assign_2_front_right_date} */}
@@ -582,6 +595,12 @@ const ViewVechile = () => {
                         {tyre?.tyre_assign_3_back_left_no}
                       </td>
                       <td className="border p-2">
+                        {tyre?.tyre_assign_3_back_left_type}
+                      </td>
+                      <td className="border p-2">
+                        {tyre?.tyre_assign_3_back_left_make}
+                      </td>
+                      <td className="border p-2">
                         {/* {tyre?.tyre_assign_3_back_left_date} */}
                         {tyre?.tyre_assign_3_back_left_date
                           ? moment(tyre?.tyre_assign_3_back_left_date).format(
@@ -647,6 +666,12 @@ const ViewVechile = () => {
                       <td className="border p-2">4. Back Left</td>
                       <td className="border p-2">
                         {tyre?.tyre_assign_4_back_left_no}
+                      </td>
+                      <td className="border p-2">
+                        {tyre?.tyre_assign_4_back_left_type}
+                      </td>
+                      <td className="border p-2">
+                        {tyre?.tyre_assign_4_back_left_make}
                       </td>
                       <td className="border p-2">
                         {/* {tyre?.tyre_assign_4_back_left_date} */}
@@ -716,6 +741,12 @@ const ViewVechile = () => {
                         {tyre?.tyre_assign_5_back_right_no}
                       </td>
                       <td className="border p-2">
+                        {tyre?.tyre_assign_5_back_right_type}
+                      </td>
+                      <td className="border p-2">
+                        {tyre?.tyre_assign_5_back_right_make}
+                      </td>
+                      <td className="border p-2">
                         {/* {tyre?.tyre_assign_5_back_right_date} */}
                         {tyre?.tyre_assign_5_back_right_date
                           ? moment(tyre?.tyre_assign_5_back_right_date).format(
@@ -781,6 +812,12 @@ const ViewVechile = () => {
                       <td className="border p-2">6. Back Right</td>
                       <td className="border p-2">
                         {tyre?.tyre_assign_6_back_right_no}
+                      </td>
+                      <td className="border p-2">
+                        {tyre?.tyre_assign_6_back_right_type}
+                      </td>
+                      <td className="border p-2">
+                        {tyre?.tyre_assign_6_back_right_make}
                       </td>
                       <td className="border p-2">
                         {/* {tyre?.tyre_assign_6_back_right_date} */}
@@ -851,6 +888,12 @@ const ViewVechile = () => {
                         {tyre?.tyre_assign_3_back_housing_left_no}
                       </td>
                       <td className="border p-2">
+                        {tyre?.tyre_assign_3_back_housing_left_type}
+                      </td>
+                      <td className="border p-2">
+                        {tyre?.tyre_assign_3_back_housing_left_make}
+                      </td>
+                      <td className="border p-2">
                         {/* {tyre?.tyre_assign_3_back_housing_left_date} */}
                         {tyre?.tyre_assign_3_back_housing_left_date
                           ? moment(
@@ -917,6 +960,12 @@ const ViewVechile = () => {
                       <td className="border p-2">4. Back Housing Left</td>
                       <td className="border p-2">
                         {tyre?.tyre_assign_4_back_housing_left_no}
+                      </td>
+                      <td className="border p-2">
+                        {tyre?.tyre_assign_4_back_housing_left_type}
+                      </td>
+                      <td className="border p-2">
+                        {tyre?.tyre_assign_4_back_housing_left_make}
                       </td>
                       <td className="border p-2">
                         {/* {tyre?.tyre_assign_4_back_housing_left_date} */}
@@ -987,6 +1036,12 @@ const ViewVechile = () => {
                         {tyre?.tyre_assign_5_back_dummy_left_no}
                       </td>
                       <td className="border p-2">
+                        {tyre?.tyre_assign_5_back_dummy_left_type}
+                      </td>
+                      <td className="border p-2">
+                        {tyre?.tyre_assign_5_back_dummy_left_make}
+                      </td>
+                      <td className="border p-2">
                         {/* {tyre?.tyre_assign_5_back_dummy_left_date} */}
                         {tyre?.tyre_assign_5_back_dummy_left_date
                           ? moment(
@@ -1052,6 +1107,12 @@ const ViewVechile = () => {
                       <td className="border p-2">6. Back Dummy Left</td>
                       <td className="border p-2">
                         {tyre?.tyre_assign_6_back_dummy_left_no}
+                      </td>
+                      <td className="border p-2">
+                        {tyre?.tyre_assign_6_back_dummy_left_type}
+                      </td>
+                      <td className="border p-2">
+                        {tyre?.tyre_assign_6_back_dummy_left_make}
                       </td>
                       <td className="border p-2">
                         {/* {tyre?.tyre_assign_6_back_dummy_left_date} */}
@@ -1120,6 +1181,12 @@ const ViewVechile = () => {
                       <td className="border p-2">7. Back Housing Right</td>
                       <td className="border p-2">
                         {tyre?.tyre_assign_7_back_housing_right_no}
+                      </td>
+                      <td className="border p-2">
+                        {tyre?.tyre_assign_7_back_housing_right_type}
+                      </td>
+                      <td className="border p-2">
+                        {tyre?.tyre_assign_7_back_housing_right_make}
                       </td>
                       <td className="border p-2">
                         {/* {tyre?.tyre_assign_7_back_housing_right_date} */}
@@ -1192,6 +1259,12 @@ const ViewVechile = () => {
                         {tyre?.tyre_assign_8_back_housing_right_no}
                       </td>
                       <td className="border p-2">
+                        {tyre?.tyre_assign_8_back_housing_right_type}
+                      </td>
+                      <td className="border p-2">
+                        {tyre?.tyre_assign_8_back_housing_right_make}
+                      </td>
+                      <td className="border p-2">
                         {/* {tyre?.tyre_assign_8_back_housing_right_date} */}
                         {tyre?.tyre_assign_8_back_housing_right_date
                           ? moment(
@@ -1261,6 +1334,12 @@ const ViewVechile = () => {
                         {tyre?.tyre_assign_9_back_dummy_right_no}
                       </td>
                       <td className="border p-2">
+                        {tyre?.tyre_assign_9_back_dummy_right_type}
+                      </td>
+                      <td className="border p-2">
+                        {tyre?.tyre_assign_9_back_dummy_right_make}
+                      </td>
+                      <td className="border p-2">
                         {/* {tyre?.tyre_assign_9_back_dummy_right_date} */}
                         {tyre?.tyre_assign_9_back_dummy_right_date
                           ? moment(
@@ -1326,6 +1405,12 @@ const ViewVechile = () => {
                       <td className="border p-2">10. Back Dummy Right</td>
                       <td className="border p-2">
                         {tyre?.tyre_assign_10_back_dummy_right_no}
+                      </td>
+                      <td className="border p-2">
+                        {tyre?.tyre_assign_10_back_dummy_right_type}
+                      </td>
+                      <td className="border p-2">
+                        {tyre?.tyre_assign_10_back_dummy_right_make}
                       </td>
                       <td className="border p-2">
                         {/* {tyre?.tyre_assign_10_back_dummy_right_date} */}
