@@ -1,7 +1,6 @@
 import { Tabs } from "@mantine/core";
 import {
   IconArrowBack,
-  IconEditCircle,
   IconInfoCircle,
   IconMessageCircle,
   IconPrinter,
@@ -14,11 +13,10 @@ import moment from "moment";
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useReactToPrint } from "react-to-print";
+import { toast } from "sonner";
 import BASE_URL from "../../base/BaseUrl";
 import { decryptId } from "../../components/common/EncryptionDecryption";
 import Layout from "../../layout/Layout";
-import { FormLabel } from "@mui/material";
-import { toast } from "sonner";
 
 // Skeleton Loader Component
 const SkeletonLoader = () => {
@@ -378,9 +376,11 @@ const TruckView = () => {
   const serviceInfo = () => {
     return (
       <>
-        {service.length > 0 && (
+        {oldService.length > 0 && (
           <div className="mt-2">
-            <h3 className="text-lg font-semibold mb-2 text-center">Service</h3>
+            <h3 className="text-lg font-semibold mb-2 text-center">
+              Service Histroy
+            </h3>
             <table className="w-full border-collapse">
               <thead>
                 <tr className="bg-gray-100">
@@ -395,7 +395,7 @@ const TruckView = () => {
               </thead>
               <tbody>
                 {/* left  */}
-                {service?.map((item, key) => (
+                {oldService?.map((item, key) => (
                   <tr key={key} className="text-center">
                     <td className="border py-2 text-xs text-start px-2">
                       {item?.service_sub_type}
@@ -440,7 +440,7 @@ const TruckView = () => {
           </div>
         )}
 
-        {service.length <= 0 && (
+        {oldService.length <= 0 && (
           <div className="text-center">
             <h1>No Data Available</h1>
           </div>
@@ -1172,14 +1172,14 @@ const TruckView = () => {
       case "info":
         return vechileInfo();
 
-      case "services":
+      case "Service History":
         return serviceInfo();
 
       case "trip":
         return tripInfo();
       case "tyre":
         return tyreInfo();
-      case "Service History":
+      case "services":
         return oldServiceInfo();
 
       default:
@@ -1340,16 +1340,16 @@ const TruckView = () => {
                   Vehicle Info
                 </Tabs.Tab>
                 <Tabs.Tab
-                  value="Service History"
-                  icon={<IconMessageCircle size={16} />}
-                >
-                  Service History
-                </Tabs.Tab>
-                <Tabs.Tab
                   value="services"
                   icon={<IconMessageCircle size={16} />}
                 >
-                  Services
+                  Service
+                </Tabs.Tab>
+                <Tabs.Tab
+                  value="Service History"
+                  icon={<IconMessageCircle size={16} />}
+                >
+                  Services History
                 </Tabs.Tab>
                 <Tabs.Tab value="trip" icon={<IconTruckDelivery size={16} />}>
                   Trip
