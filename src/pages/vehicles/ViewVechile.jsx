@@ -435,7 +435,7 @@ const ViewVechile = () => {
                     <th className="border p-2">KM</th>
                     <th className="border p-2">Present Date</th>
                     <th className="border p-2">Present KM</th>
-                    <th className="border p-2">Difference KM</th>
+                    <th className="border p-2">KM Run</th>
                     <th className="border p-2">Status</th>
                     <th className="border p-2 print:hidden">Action</th>
                   </tr>
