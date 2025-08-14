@@ -1,159 +1,162 @@
-
 [
-    {
-      "title": "Dashboard",
-      "href": "/home"
-    },
-    {
-      "title": "Master",
-      "subItems": [
-        {
-          "title": "Company",
-          "href": "/master/company-list"
-        },
-        {
-          "title": "Branch",
-          "href": "/master/branch-list"
-        },
-        {
-          "title": "Tyre Position",
-          "href": "/master/tyreposition-list"
-        },
-        {
-          "title": "Tyre Make",
-          "href": "/master/tyremake-list"
-        },
-        {
-          "title": "Service Type",
-          "href": "/master/servicetype-list"
-        },
-        {
-          "title": "Team",
-          "href": "/master/team-list"
-        },
-        {
-          "title": "Driver",
-          "href": "/master/driver-list"
-        },
-        {
-          "title": "Agencies",
-          "href": "/master/agencies-list"
-        },
-        {
-          "title": "Vendor",
-          "href": "/master/vendor-list"
-        }
-      ]
-    },
-    {
-      "title": "Vehicles",
-      "href": "/vehicles-list"
-    },
-    {
-      "title": "Tyre",
-      "subItems": [
-        {
-          "title": "Purchase",
-          "href": "/tyre/purchase-list"
-        },
-        {
-          "title": "Fitted Tyre",
-          "href": "/tyre/assign-list"
-        },
-        {
-          "title": "Stock Tyre",
-          "href": "/tyre/unassign-list"
-        },
-        {
-          "title": "Under Inspec.",
-          "href": "/tyre/inspection-list"
-        }
-      ]
-    },
-    {
-      "title": "Service",
-      "href": "/service-list"
-    },
-    {
-      "title": "Trip",
-      "href": "/form-trip"
-    },
-    {
-      "title": "Payments",
-      "subItems": [
-        {
-          "title": "ToBranch",
-          "href": "/payment/branch-list"
-        },
-        {
-          "title": "Advance",
-          "href": "/payment/advance-list"
-        },
-        {
-          "title": "Details",
-          "href": "/payment/details-list"
-        }
-      ]
-    },
-    {
-      "title": "Todo",
-      "href": "/todo-list"
-    },
-    {
-      "title": "Report",
-      "subItems": [
-        {
-          "title": "AgenciesR",
-          "href": "/report-agencies-form"
-        },
-        {
-          "title": "TeamR",
-          "href": "/report-team-form"
-        },
-        {
-          "title": "DriverR",
-          "href": "/report-driver-form"
-        },
-        {
-          "title": "VendorR",
-          "href": "/report-vendor-form"
-        },
-        {
-          "title": "VehiclesR",
-          "href": "/report-vechiles-form"
-        },
-        {
-          "title": "V-Details",
-          "href": "/report-vdetails-form"
-        },
-        {
-          "title": "Tyre",
-          "href": "/report-tyre-form"
-        },
-        {
-          "title": "Services",
-          "href": "/report-services-form"
-        },
-        {
-          "title": "TripR",
-          "href": "/report-trip-form"
-        },
-        {
-          "title": "Salary",
-          "href": "/report-salary-form"
-        },
-        {
-          "title": "Payment",
-          "href": "/report-payment-form"
-        }
-      ]
-    },
-    {
-      "title": "User Management",
-      "href": "/userManagement"
-    },
-    {
-      "title": "User Type",
-      "href": "/user-type"
-    }
-  ]
+  {
+    "title": "Dashboard",
+    "href": "/home"
+  },
+  {
+    "title": "Master",
+    "subItems": [
+      {
+        "title": "Company",
+        "href": "/master/company-list"
+      },
+      {
+        "title": "Branch",
+        "href": "/master/branch-list"
+      },
+      {
+        "title": "Tyre Position",
+        "href": "/master/tyreposition-list"
+      },
+      {
+        "title": "Tyre Make",
+        "href": "/master/tyremake-list"
+      },
+      {
+        "title": "Service Type",
+        "href": "/master/servicetype-list"
+      },
+      {
+        "title": "Team",
+        "href": "/master/team-list"
+      },
+      {
+        "title": "Driver",
+        "href": "/master/driver-list"
+      },
+      {
+        "title": "Agencies",
+        "href": "/master/agencies-list"
+      },
+      {
+        "title": "Vendor",
+        "href": "/master/vendor-list"
+      }
+    ]
+  },
+  {
+    "title": "Vehicles",
+    "href": "/vehicles-list"
+  },
+  {
+    "title": "Tyre",
+    "subItems": [
+      {
+        "title": "Purchase",
+        "href": "/tyre/purchase-list"
+      },
+      {
+        "title": "Fitted Tyre",
+        "href": "/tyre/assign-list"
+      },
+      {
+        "title": "Stock Tyre",
+        "href": "/tyre/unassign-list"
+      },
+      {
+        "title": "Under Inspec.",
+        "href": "/tyre/inspection-list"
+      },
+      {
+        "title": "Tyre Histroy",
+        "href": "/tyre/histroy"
+      }
+    ]
+  },
+  {
+    "title": "Service",
+    "href": "/service-list"
+  },
+  {
+    "title": "Trip",
+    "href": "/form-trip"
+  },
+  {
+    "title": "Payments",
+    "subItems": [
+      {
+        "title": "ToBranch",
+        "href": "/payment/branch-list"
+      },
+      {
+        "title": "Advance",
+        "href": "/payment/advance-list"
+      },
+      {
+        "title": "Details",
+        "href": "/payment/details-list"
+      }
+    ]
+  },
+  {
+    "title": "Todo",
+    "href": "/todo-list"
+  },
+  {
+    "title": "Report",
+    "subItems": [
+      {
+        "title": "AgenciesR",
+        "href": "/report-agencies-form"
+      },
+      {
+        "title": "TeamR",
+        "href": "/report-team-form"
+      },
+      {
+        "title": "DriverR",
+        "href": "/report-driver-form"
+      },
+      {
+        "title": "VendorR",
+        "href": "/report-vendor-form"
+      },
+      {
+        "title": "VehiclesR",
+        "href": "/report-vechiles-form"
+      },
+      {
+        "title": "V-Details",
+        "href": "/report-vdetails-form"
+      },
+      {
+        "title": "Tyre",
+        "href": "/report-tyre-form"
+      },
+      {
+        "title": "Services",
+        "href": "/report-services-form"
+      },
+      {
+        "title": "TripR",
+        "href": "/report-trip-form"
+      },
+      {
+        "title": "Salary",
+        "href": "/report-salary-form"
+      },
+      {
+        "title": "Payment",
+        "href": "/report-payment-form"
+      }
+    ]
+  },
+  {
+    "title": "User Management",
+    "href": "/userManagement"
+  },
+  {
+    "title": "User Type",
+    "href": "/user-type"
+  }
+]

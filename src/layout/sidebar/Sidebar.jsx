@@ -48,6 +48,7 @@ const Sidebar = ({
               height: "calc(100% - 25px)",
               // backgroundColor: "red",
               transition: "width 0.3s ease-in-out",
+              zIndex: "auto",
             },
           }}
           className="custom-scroll"

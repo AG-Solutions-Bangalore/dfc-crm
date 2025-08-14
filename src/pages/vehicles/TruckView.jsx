@@ -1,7 +1,7 @@
-import { Tabs } from "@mantine/core";
+import { Modal, Tabs } from "@mantine/core";
 import {
   IconArrowBack,
-  IconEditCircle,
+  IconEye,
   IconInfoCircle,
   IconMessageCircle,
   IconPrinter,
@@ -14,11 +14,11 @@ import moment from "moment";
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useReactToPrint } from "react-to-print";
+import { toast } from "sonner";
 import BASE_URL from "../../base/BaseUrl";
 import { decryptId } from "../../components/common/EncryptionDecryption";
 import Layout from "../../layout/Layout";
-import { FormLabel } from "@mui/material";
-import { toast } from "sonner";
+import { IconScanEye } from "@tabler/icons-react";
 
 // Skeleton Loader Component
 const SkeletonLoader = () => {
@@ -85,22 +85,35 @@ const TruckView = () => {
   const navigate = useNavigate();
   const printRef = useRef(null);
   const decryptedId = decryptId(id);
-
+  const [filteredHistory, setFilteredHistory] = useState([]);
+  const [open, setOpen] = useState(false);
   const [vehicle, setVehicle] = useState({}); //first one
   const [service, setService] = useState([]); //secodn one
   const [trip, setTrip] = useState({}); // third one
   const [tyre, setTyre] = useState({}); //fourth one
+  const [tyrehistroy, setTyreHistroy] = useState({}); //fourth one
   const [serviceTypeFixed, setServiceTypeFixed] = useState([]); //fifth one
   const [oldService, setOldService] = useState([]); //last one
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("info");
   const [loadingkm, setLodingKm] = useState(false); //last one
-
   const [vehicleskm, setVehiclesKm] = useState({
     reg_no: vehicle.reg_no,
     vehicle_present_km: vehicle.vehicle_present_km,
     vehicle_present_date: vehicle.vehicle_present_date,
   });
+  const handleOpen = (service_sub_type) => {
+    const filtered = oldService.filter(
+      (item) => item.service_sub_type == service_sub_type
+    );
+    setFilteredHistory(filtered);
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    setFilteredHistory([]);
+  };
   const handlePrint = useReactToPrint({
     content: () => printRef.current,
     pageStyle: `
@@ -194,6 +207,7 @@ const TruckView = () => {
       setServiceTypeFixed(response.data.servicesTypesFixed);
       setTrip(response.data.trip);
       setTyre(response.data.vehiceltyresub);
+      setTyreHistroy(response.data.tyreHistory);
       setOldService(response.data.historyservices);
       setLoading(false);
     } catch (error) {
@@ -326,13 +340,24 @@ const TruckView = () => {
                     <div key={index}>
                       <div className="border  border-gray-300 hover:bg-gray-50 transition-colors duration-300">
                         <p
-                          className={`p-1 text-xs border font-bold ${
+                          className={`p-1 text-xs border font-bold flex items-center justify-center gap-1 ${
                             hasData ? "bg-blue-200" : "bg-gray-200"
                           } border-black text-center`}
                         >
                           {serviceType.service_types_fixed}
+                          {hasData ? (
+                            <IconScanEye
+                              size={20}
+                           
+                              onClick={() =>
+                                handleOpen(serviceType?.service_types_fixed)
+                              }
+                              className="cursor-pointer"
+                            />
+                          ) : (
+                            ""
+                          )}
                         </p>
-
                         <p className="p-2 text-xs border border-black text-center">
                           {service.map((serviceItem) => {
                             if (
@@ -378,9 +403,11 @@ const TruckView = () => {
   const serviceInfo = () => {
     return (
       <>
-        {service.length > 0 && (
+        {oldService.length > 0 && (
           <div className="mt-2">
-            <h3 className="text-lg font-semibold mb-2 text-center">Service</h3>
+            <h3 className="text-lg font-semibold mb-2 text-center">
+              Service Histroy
+            </h3>
             <table className="w-full border-collapse">
               <thead>
                 <tr className="bg-gray-100">
@@ -390,12 +417,10 @@ const TruckView = () => {
                   <th className="border py-2 text-xs">Present Date</th>
                   <th className="border py-2 text-xs">Present KM</th>
                   <th className="border py-2 text-xs">Difference KM</th>
-                  {/* <th className="border py-2 text-xs print:hidden">Action</th> */}
                 </tr>
               </thead>
               <tbody>
-                {/* left  */}
-                {service?.map((item, key) => (
+                {oldService?.map((item, key) => (
                   <tr key={key} className="text-center">
                     <td className="border py-2 text-xs text-start px-2">
                       {item?.service_sub_type}
@@ -420,19 +445,6 @@ const TruckView = () => {
                     <td className="border py-2 text-xs">
                       {vehicle?.vehicle_present_km - item?.service_sub_km}
                     </td>
-
-                    {/* <td className="border py-0 text-xs print:hidden">
-                      <button
-                        onClick={() => {
-                          navigate(`/spkm/${item.id}`);
-                          localStorage.setItem("spkmId", id);
-                        }}
-                        title="change present km"
-                        className="text-blue-500 hover:text-blue-700"
-                      >
-                        <IconEditCircle size={20} />
-                      </button>
-                    </td> */}
                   </tr>
                 ))}
               </tbody>
@@ -440,7 +452,7 @@ const TruckView = () => {
           </div>
         )}
 
-        {service.length <= 0 && (
+        {oldService.length <= 0 && (
           <div className="text-center">
             <h1>No Data Available</h1>
           </div>
@@ -513,7 +525,9 @@ const TruckView = () => {
       <>
         {tyre != 0 && (
           <div className="mt-2">
-            <h3 className="text-lg font-semibold mb-2 text-center">Tyre</h3>
+            <h3 className="text-lg font-semibold mb-2 text-center">
+              Present Tyre
+            </h3>
             <table className="w-full border-collapse">
               <thead>
                 <tr className="bg-gray-100">
@@ -1164,6 +1178,85 @@ const TruckView = () => {
       </>
     );
   };
+  const tyreHistroyInfo = () => {
+    return (
+      <>
+        {tyrehistroy != 0 && (
+          <div className="mt-2">
+            <h3 className="text-lg font-semibold mb-2 text-center">
+              Tyre Histroy
+            </h3>
+            <table className="w-full border-collapse">
+              <thead>
+                <tr className="bg-gray-100">
+                  <th className="border py-2 text-xs">Tyre Position</th>
+                  <th className="border py-2 text-xs">Tyre No</th>
+                  <th className="border py-2 text-xs">Type</th>
+                  <th className="border py-2 text-xs">Make</th>
+                  <th className="border py-2 text-xs">Fitting Date</th>
+                  <th className="border py-2 text-xs">Fitting KM</th>
+                  <th className="border py-2 text-xs">Remove Date</th>
+                  <th className="border py-2 text-xs">Remove KM</th>
+                  <th className="border py-2 text-xs">Difference KM</th>
+                  <th className="border py-2 text-xs">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {tyrehistroy.map((data, index) => (
+                  <tr className="text-center" key={index}>
+                    <td className="border py-2 text-xs text-start px-2">
+                      {data?.history_assign_positionL || ""}
+                    </td>
+                    <td className="border py-2 text-xs text-start px-2">
+                      {data?.history_assign_no || ""}
+                    </td>
+                    <td className="border py-2 text-xs text-start px-2">
+                      {data?.history_assign_type || ""}
+                    </td>
+                    <td className="border py-2 text-xs text-start px-2">
+                      {data?.history_assign_make || ""}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {data?.history_assign_date
+                        ? moment(data?.history_assign_date).format(
+                            "DD-MMM-YYYY"
+                          )
+                        : ""}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {data?.history_assign_km}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {data?.history_assign_pre_date
+                        ? moment(data?.history_assign_pre_date).format(
+                            "DD-MMM-YYYY"
+                          )
+                        : ""}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {data?.history_assign_pre_km || ""}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {data?.history_assign_pre_km - data?.history_assign_km ||
+                        ""}
+                    </td>
+                    <td className="border py-2 text-xs ">
+                      {data?.history_assign_status}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+        {tyre == 0 && (
+          <div className="text-center">
+            <h1>No Data Available</h1>
+          </div>
+        )}
+      </>
+    );
+  };
   const handleTabChange = (value) => {
     setActiveTab(value);
   };
@@ -1172,14 +1265,16 @@ const TruckView = () => {
       case "info":
         return vechileInfo();
 
-      case "services":
+      case "Service History":
         return serviceInfo();
 
       case "trip":
         return tripInfo();
       case "tyre":
         return tyreInfo();
-      case "Service History":
+      case "tyre histroy":
+        return tyreHistroyInfo();
+      case "services":
         return oldServiceInfo();
 
       default:
@@ -1257,128 +1352,194 @@ const TruckView = () => {
   if (loading) return <SkeletonLoader />;
 
   return (
-    <Layout>
-      <div className="bg-[#FFFFFF]  p-2 rounded-lg">
-        <div className="sticky top-0 mb-4 p-4 bg-[#E1F5FA] border-b-2 border-red-500 rounded-lg shadow-sm">
-          <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
-            {/* Left Section: Title */}
-            <div className="flex items-center gap-2">
-              <IconInfoCircle className="w-4 h-4 text-blue-600" />
-              <span className="text-black text-lg">
-                Vehicle Details &nbsp;
-                <strong className="text-blue-700">{vehicle.reg_no}</strong>
-              </span>
-            </div>
+    <>
+      <Layout>
+        <div className="bg-[#FFFFFF]  p-2 rounded-lg">
+          <div className="sticky top-0 mb-4 p-4 bg-[#E1F5FA] border-b-2 border-red-500 rounded-lg shadow-sm">
+            <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
+              {/* Left Section: Title */}
+              <div className="flex items-center gap-2">
+                <IconInfoCircle className="w-4 h-4 text-blue-600" />
+                <span className="text-black text-lg">
+                  Vehicle Details &nbsp;
+                  <strong className="text-blue-700">{vehicle.reg_no}</strong>
+                </span>
+              </div>
 
-            {/* Right Section: Form + Icons */}
-            <div className="flex flex-col lg:flex-row items-start lg:items-center gap-4 w-full lg:w-auto">
-              <form
-                id="addIndiv"
-                className="flex flex-col sm:flex-row items-start sm:items-end gap-4"
-                onSubmit={handleSubmit}
-              >
-                <div className="w-32">
-                  <FormLabel required>Present Km</FormLabel>
-                  <input
-                    type="text"
-                    name="vehicle_present_km"
-                    value={vehicleskm.vehicle_present_km}
-                    onChange={onInputChange}
-                    className={inputClass}
-                    required
-                  />
-                </div>
-                <div className="w-32">
-                  <FormLabel required>Present Date</FormLabel>
-                  <input
-                    type="date"
-                    name="vehicle_present_date"
-                    value={vehicleskm.vehicle_present_date}
-                    onChange={onInputChange}
-                    className={inputClass}
-                    required
-                  />
-                </div>
-                <button
-                  type="submit"
-                  className="text-sm font-medium w-24 text-white bg-blue-600 hover:bg-green-700 px-4 py-2 rounded-lg shadow-md"
+              {/* Right Section: Form + Icons */}
+              <div className="flex flex-col lg:flex-row items-start lg:items-center gap-4 w-full lg:w-auto">
+                <form
+                  id="addIndiv"
+                  className="flex flex-col sm:flex-row items-start sm:items-end gap-4"
+                  onSubmit={handleSubmit}
                 >
-                  {loadingkm ? "Updating" : "Update"}
-                </button>
-              </form>
+                  <div className="w-32">
+                    <FormLabel required>Present Km</FormLabel>
+                    <input
+                      type="text"
+                      name="vehicle_present_km"
+                      value={vehicleskm.vehicle_present_km}
+                      onChange={onInputChange}
+                      className={inputClass}
+                      required
+                    />
+                  </div>
+                  <div className="w-32">
+                    <FormLabel required>Present Date</FormLabel>
+                    <input
+                      type="date"
+                      name="vehicle_present_date"
+                      value={vehicleskm.vehicle_present_date}
+                      onChange={onInputChange}
+                      className={inputClass}
+                      required
+                    />
+                  </div>
+                  <button
+                    type="submit"
+                    className="text-sm font-medium w-24 text-white bg-blue-600 hover:bg-green-700 px-4 py-2 rounded-lg shadow-md"
+                  >
+                    {loadingkm ? "Updating" : "Update"}
+                  </button>
+                </form>
 
-              {/* Action Icons */}
-              <div className="flex items-center space-x-3">
-                <IconPrinter
-                  className="cursor-pointer text-gray-600 hover:text-blue-600"
-                  onClick={handlePrint}
-                  title="Print"
-                />
-                <IconArrowBack
-                  className="cursor-pointer text-gray-600 hover:text-red-600"
-                  onClick={() => navigate("/vehicles-list")}
-                  title="Go Back"
-                />
+                {/* Action Icons */}
+                <div className="flex items-center space-x-3">
+                  <IconPrinter
+                    className="cursor-pointer text-gray-600 hover:text-blue-600"
+                    onClick={handlePrint}
+                    title="Print"
+                  />
+                  <IconArrowBack
+                    className="cursor-pointer text-gray-600 hover:text-red-600"
+                    onClick={() => navigate("/vehicles-list")}
+                    title="Go Back"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex">
+            <div className=" border-r h-[33rem] border-gray-200">
+              <Tabs
+                value={activeTab}
+                onTabChange={handleTabChange}
+                orientation="vertical"
+                color="orange"
+                variant="default"
+                radius="lg"
+                className=""
+              >
+                <Tabs.List>
+                  <Tabs.Tab value="info" icon={<IconTruck size={16} />}>
+                    Vehicle Info
+                  </Tabs.Tab>
+                  <Tabs.Tab
+                    value="services"
+                    icon={<IconMessageCircle size={16} />}
+                  >
+                    Service
+                  </Tabs.Tab>
+                  <Tabs.Tab
+                    value="Service History"
+                    icon={<IconMessageCircle size={16} />}
+                  >
+                    Services History
+                  </Tabs.Tab>
+                  <Tabs.Tab value="trip" icon={<IconTruckDelivery size={16} />}>
+                    Trip
+                  </Tabs.Tab>
+                  <Tabs.Tab value="tyre" icon={<IconSettings size={16} />}>
+                    Present Tyre
+                  </Tabs.Tab>
+                  <Tabs.Tab
+                    value="tyre histroy"
+                    icon={<IconSettings size={16} />}
+                  >
+                    Tyre History
+                  </Tabs.Tab>
+                </Tabs.List>
+              </Tabs>
+            </div>
+            <div className="flex-1  pl-6">
+              <div className="visible print:hidden">{renderContent()}</div>
+
+              <div ref={printRef} className=" p-4 hidden print:block">
+                {vechileInfo()}
+
+                {/* service  */}
+                {serviceInfo()}
+
+                {/* trip  */}
+                {tripInfo()}
+
+                {/* tyre  */}
+                {tyreInfo()}
               </div>
             </div>
           </div>
         </div>
-
-        <div className="flex">
-          <div className=" border-r h-[33rem] border-gray-200">
-            <Tabs
-              value={activeTab}
-              onTabChange={handleTabChange}
-              orientation="vertical"
-              color="orange"
-              variant="default"
-              radius="lg"
-              className=""
-            >
-              <Tabs.List>
-                <Tabs.Tab value="info" icon={<IconTruck size={16} />}>
-                  Vehicle Info
-                </Tabs.Tab>
-                <Tabs.Tab
-                  value="Service History"
-                  icon={<IconMessageCircle size={16} />}
-                >
-                  Service History
-                </Tabs.Tab>
-                <Tabs.Tab
-                  value="services"
-                  icon={<IconMessageCircle size={16} />}
-                >
-                  Services
-                </Tabs.Tab>
-                <Tabs.Tab value="trip" icon={<IconTruckDelivery size={16} />}>
-                  Trip
-                </Tabs.Tab>
-                <Tabs.Tab value="tyre" icon={<IconSettings size={16} />}>
-                  Tyre
-                </Tabs.Tab>
-              </Tabs.List>
-            </Tabs>
-          </div>
-          <div className="flex-1  pl-6">
-            <div className="visible print:hidden">{renderContent()}</div>
-
-            <div ref={printRef} className=" p-4 hidden print:block">
-              {vechileInfo()}
-
-              {/* service  */}
-              {serviceInfo()}
-
-              {/* trip  */}
-              {tripInfo()}
-
-              {/* tyre  */}
-              {tyreInfo()}
-            </div>
-          </div>
+      </Layout>
+      <Modal
+        opened={open}
+        onClose={handleClose}
+        title="Tyre History"
+        size="xl"
+        centered
+        overlayProps={{
+          backgroundOpacity: 0.55,
+          blur: 3,
+        }}
+      >
+        <div style={{ maxHeight: "70vh", overflow: "auto" }}>
+          {filteredHistory.length > 0 ? (
+            <table className="w-full border-collapse">
+              <thead>
+                <tr className="bg-blue-100">
+                  <th className="border py-2 text-xs">Services</th>
+                  <th className="border py-2 text-xs">Date</th>
+                  <th className="border py-2 text-xs">KM</th>
+                  <th className="border py-2 text-xs">Present Date</th>
+                  <th className="border py-2 text-xs">Present KM</th>
+                  <th className="border py-2 text-xs">Difference KM</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredHistory.map((item, key) => (
+                  <tr key={key} className="text-center">
+                    <td className="border py-2 text-xs text-start px-2">
+                      {item?.service_sub_type}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {moment(item?.service_sub_date).format("DD-MMM-YYYY")}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {item?.service_sub_km}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {vehicle?.vehicle_present_date
+                        ? moment(vehicle?.vehicle_present_date).format(
+                            "DD-MMM-YYYY"
+                          )
+                        : ""}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {vehicle?.vehicle_present_km}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {vehicle?.vehicle_present_km - item?.service_sub_km}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <p className="text-center">No Data Available</p>
+          )}
         </div>
-      </div>
-    </Layout>
+      </Modal>
+    </>
   );
 };
 

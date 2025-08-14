@@ -13,6 +13,7 @@ const Header = ({ toggleMobileSidebar, toggleSidebar }) => {
     justifyContent: "center",
     backdropFilter: "blur(4px)",
     borderRadius: 13,
+    zIndex: "auto",
     [theme.breakpoints.up("lg")]: {
       minHeight: "70px",
     },

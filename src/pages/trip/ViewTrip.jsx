@@ -90,7 +90,6 @@ const ViewTrip = ({ tripId }) => {
 
       <CardBody className="max-h-[24rem] overflow-y-auto">
         <div className="space-y-4">
-          {/* Vehicle Details Sections */}
           <div>
             <Typography
               variant="h6"
