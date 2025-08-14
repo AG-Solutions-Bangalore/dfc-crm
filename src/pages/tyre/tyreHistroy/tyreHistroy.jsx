@@ -56,7 +56,6 @@ const TyreHistroy = () => {
         header: "Make",
         size: 150,
       },
-
       {
         accessorKey: "history_assign_date",
 
@@ -72,6 +71,7 @@ const TyreHistroy = () => {
         header: "Fitting KM",
         size: 150,
       },
+
       {
         accessorKey: "history_assign_pre_date",
         header: "Remove Date",
@@ -86,6 +86,17 @@ const TyreHistroy = () => {
         accessorKey: "history_assign_pre_km",
         header: "Remove KM",
         size: 150,
+      },
+      {
+        accessorKey: "runkm",
+        header: "Run Km",
+        size: 150,
+        Cell: ({ row }) => {
+          const removekm = Number(row.original.history_assign_pre_km) || 0;
+          const fittingkm = Number(row.original.history_assign_km) || 0;
+          const diff = removekm - fittingkm;
+          return diff;
+        },
       },
 
       {
