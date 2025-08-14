@@ -348,7 +348,6 @@ const TruckView = () => {
                           {hasData ? (
                             <IconScanEye
                               size={20}
-                           
                               onClick={() =>
                                 handleOpen(serviceType?.service_types_fixed)
                               }
@@ -416,7 +415,7 @@ const TruckView = () => {
                   <th className="border py-2 text-xs">KM</th>
                   <th className="border py-2 text-xs">Present Date</th>
                   <th className="border py-2 text-xs">Present KM</th>
-                  <th className="border py-2 text-xs">Difference KM</th>
+                  <th className="border py-2 text-xs">KM Run</th>
                 </tr>
               </thead>
               <tbody>
@@ -539,7 +538,7 @@ const TruckView = () => {
                   <th className="border py-2 text-xs">KM</th>
                   <th className="border py-2 text-xs">Present Date</th>
                   <th className="border py-2 text-xs">Present KM</th>
-                  <th className="border py-2 text-xs">Difference KM</th>
+                  <th className="border py-2 text-xs">KM Run</th>
                   <th className="border py-2 text-xs">Status</th>
                 </tr>
               </thead>
@@ -1197,7 +1196,7 @@ const TruckView = () => {
                   <th className="border py-2 text-xs">Fitting KM</th>
                   <th className="border py-2 text-xs">Remove Date</th>
                   <th className="border py-2 text-xs">Remove KM</th>
-                  <th className="border py-2 text-xs">Difference KM</th>
+                  <th className="border py-2 text-xs">KM Run</th>
                   <th className="border py-2 text-xs">Status</th>
                 </tr>
               </thead>
@@ -1249,7 +1248,7 @@ const TruckView = () => {
             </table>
           </div>
         )}
-        {tyre == 0 && (
+        {tyrehistroy == 0 && (
           <div className="text-center">
             <h1>No Data Available</h1>
           </div>
@@ -1502,7 +1501,7 @@ const TruckView = () => {
                   <th className="border py-2 text-xs">KM</th>
                   <th className="border py-2 text-xs">Present Date</th>
                   <th className="border py-2 text-xs">Present KM</th>
-                  <th className="border py-2 text-xs">Difference KM</th>
+                  <th className="border py-2 text-xs">KM Run</th>
                 </tr>
               </thead>
               <tbody>
