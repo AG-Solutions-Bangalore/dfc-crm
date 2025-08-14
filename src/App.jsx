@@ -124,6 +124,7 @@ const UnassignTypeTyreList = lazy(() =>
 const InspectionTyreList = lazy(() =>
   import("./pages/tyre/inspection/InspectionTyreList")
 );
+const TyreHistroy = lazy(() => import("./pages/tyre/tyreHistroy/tyreHistroy"));
 
 // Services Pages
 const ServicesList = lazy(() => import("./pages/services/ServicesList"));
@@ -189,7 +190,7 @@ const App = () => {
       <Toaster richColors position="top-right" />
 
       <Suspense fallback={<LoadingSpinner />}>
-        <DisableRightClick />
+        {/* <DisableRightClick /> */}
         <Routes>
           {/* Auth Routes */}
           <Route path="/" element={<SignIn />} />
@@ -279,6 +280,7 @@ const App = () => {
             path="/tyre/inspection-list"
             element={<InspectionTyreList />}
           />
+          <Route path="/tyre/histroy" element={<TyreHistroy />} />
 
           {/* Services Routes */}
           <Route path="/service-list" element={<ServicesList />} />

@@ -1,612 +1,1391 @@
-import React, { useEffect, useState } from "react";
-import Layout from "../../layout/Layout";
-import { toast } from "sonner";
-import { useNavigate } from "react-router-dom";
+import { Tabs } from "@mantine/core";
+import {
+  IconArrowBack,
+  IconInfoCircle,
+  IconMessageCircle,
+  IconPrinter,
+  IconSettings,
+  IconTruck,
+  IconTruckDelivery,
+} from "@tabler/icons-react";
 import axios from "axios";
+import moment from "moment";
+import React, { useEffect, useRef, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { useReactToPrint } from "react-to-print";
+import { toast } from "sonner";
 import BASE_URL from "../../base/BaseUrl";
-import { IconArrowBack, IconInfoCircle } from "@tabler/icons-react";
-import Select from "react-select";
-const AddTrip = () => {
-  const today = new Date();
-  const dd = String(today.getDate()).padStart(2, "0");
-  const mm = String(today.getMonth() + 1).padStart(2, "0");
-  const yyyy = today.getFullYear();
-  const todayback = yyyy + "-" + mm + "-" + dd;
-  const navigate = useNavigate();
-  const [trip, setTrip] = useState({
-    trip_date: todayback,
-    trip_year: "2023-24",
-    trip_branch: "",
-    trip_company: "",
-    trip_driver: "",
-    vehicle_driver: "",
-    trip_vehicle: "",
-    trip_agency: "",
-    trip_hsd: "",
-    trip_advance: "",
-    trip_mileage: "",
-    trip_hsd_supplied: "",
-    trip_supplier: "",
-    trip_remarks: "",
-    trip_km: "",
-  });
-  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
-  const [loading, setLoading] = useState(false);
-  //vechile no
-  const [vehicles, setVehicles] = useState([]);
-  const [vehiclesOtherData, setvehiclesOtherData] = useState([]);
-  const [vendor, setVendor] = useState([]);
-  const [agency, setAgency] = useState([]);
-  const [agenciesRT, setAgenciesRT] = useState([]);
-  const [driver, setDriver] = useState([]);
-  const [vehiclesDriver, setvehiclesDriver] = useState([]);
-  const fetchVechile = async () => {
-    try {
-      setLoading(true);
-      const token = localStorage.getItem("token");
-      const response = await axios.get(
-        `${BASE_URL}/api/web-fetch-remaing-trip-vehicle`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+import { decryptId } from "../../components/common/EncryptionDecryption";
+import Layout from "../../layout/Layout";
 
-      setVehicles(response.data?.vehicles);
-    } catch (error) {
-      console.error("Error fetching  trip data", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-  const fetchVechileOtherData = async () => {
-    try {
-      setLoading(true);
-      const token = localStorage.getItem("token");
-      const response = await axios.get(
-        `${BASE_URL}/api/web-fetch-vehicles-other-data/${trip.trip_vehicle}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      setvehiclesOtherData(response.data?.vehiclesOtherData);
-    } catch (error) {
-      console.error("Error fetching Vehicle other  data", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const fetchVendor = async () => {
-    try {
-      setLoading(true);
-      const token = localStorage.getItem("token");
-      const response = await axios.get(
-        `${BASE_URL}/api/web-fetch-vendors/Diesel/${vehiclesOtherData.vehicle_branch}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      setVendor(response.data?.vendor);
-    } catch (error) {
-      console.error("Error fetching trip data", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-  const fetchAgency = async () => {
-    try {
-      setLoading(true);
-      const token = localStorage.getItem("token");
-      const response = await axios.get(
-        `${BASE_URL}/api/web-fetch-agencies/${vehiclesOtherData.vehicle_branch}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      setAgency(response.data?.agencies);
-    } catch (error) {
-      console.error("Error fetching trip agency data", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-  const fetchAgencyRt = async () => {
-    try {
-      setLoading(true);
-      const token = localStorage.getItem("token");
-      const response = await axios.get(
-        `${BASE_URL}/api/web-fetch-agencies-sh-rt/${trip.trip_agency}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      setAgenciesRT(response.data?.agenciesRT);
-    } catch (error) {
-      console.error("Error fetching agency rt data", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-  const fetchDriver = async () => {
-    try {
-      setLoading(true);
-      const token = localStorage.getItem("token");
-      const response = await axios.get(
-        `${BASE_URL}/api/web-fetch-assigning-tripdriver/${vehiclesOtherData.vehicle_branch}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      setDriver(response.data?.drivers);
-    } catch (error) {
-      console.error("Error fetching driver trip data", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-  const fetchVechileDriver = async () => {
-    try {
-      setLoading(true);
-      const token = localStorage.getItem("token");
-      const response = await axios.get(
-        `${BASE_URL}/api/web-fetch-vehicles-driver/${trip.trip_vehicle}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      setvehiclesDriver(response.data?.vehiclesDriver);
-    } catch (error) {
-      console.error("Error fetching driver Vehicle trip data", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-  useEffect(() => {
-    fetchVechile();
-  }, []);
-
-  useEffect(() => {
-    fetchVechileOtherData();
-  }, [trip.trip_vehicle]);
-
-  useEffect(() => {
-    fetchVendor();
-  }, [vehiclesOtherData.vehicle_branch]);
-
-  useEffect(() => {
-    fetchAgency();
-  }, [vehiclesOtherData.vehicle_branch]);
-
-  useEffect(() => {
-    fetchVechile();
-  }, []);
-  useEffect(() => {
-    fetchAgencyRt();
-  }, [trip.trip_agency]);
-
-  useEffect(() => {
-    fetchDriver();
-  }, [vehiclesOtherData.vehicle_branch]);
-  useEffect(() => {
-    fetchVechileDriver();
-  }, [trip.trip_vehicle]);
-
-  const validateOnlyDigits = (inputtxt) => {
-    var phoneno = /^\d+$/;
-    if (inputtxt.match(phoneno) || inputtxt.length == 0) {
-      return true;
-    } else {
-      return false;
-    }
-  };
-
-  const onInputChange = (e) => {
-    if (e.name == "trip_vehicle") {
-      setTrip({
-        ...trip,
-        trip_vehicle: e.value,
-      });
-    } else if (e.name == "trip_agency") {
-      setTrip({
-        ...trip,
-        trip_agency: e.value,
-      });
-    } else if (e.name == "trip_driver") {
-      setTrip({
-        ...trip,
-        trip_driver: e.value,
-      });
-    } else if (e.name == "trip_supplier") {
-      setTrip({
-        ...trip,
-        trip_supplier: e.value,
-      });
-    } else if (e.target.name == "trip_hsd") {
-      if (validateOnlyDigits(e.target.value)) {
-        setTrip({
-          ...trip,
-          [e.target.name]: e.target.value,
-        });
-      }
-    } else if (e.target.name == "trip_advance") {
-      if (validateOnlyDigits(e.target.value)) {
-        setTrip({
-          ...trip,
-          [e.target.name]: e.target.value,
-        });
-      }
-    } else {
-      setTrip({
-        ...trip,
-        [e.target.name]: e.target.value,
-      });
-    }
-  };
-  const customStyles = {
-    control: (provided) => ({
-      ...provided,
-      height: "34px",
-      minHeight: "34px",
-      fontSize: "0.75rem",
-      borderRadius: "0.5rem",
-      borderColor: "#2196F3",
-    }),
-    menu: (provided) => ({
-      ...provided,
-      fontSize: "0.75rem",
-    }),
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const form = document.getElementById("addIndiv");
-    if (!form.checkValidity()) {
-      toast.error("Fill all required");
-      setIsButtonDisabled(false);
-
-      return;
-    }
-    const data = {
-      trip_date: trip.trip_date,
-      trip_year: "2023-24",
-      trip_vehicle: trip.trip_vehicle,
-      trip_agency: trip.trip_agency,
-      trip_hsd: Math.round(
-        agenciesRT.agency_rt_km / vehiclesOtherData.vehicle_mileage
-      ),
-      trip_advance: trip.trip_advance,
-      trip_hsd_supplied: trip.trip_hsd_supplied,
-      trip_supplier: trip.trip_supplier,
-      trip_remarks: trip.trip_remarks,
-      trip_branch: vehiclesOtherData.vehicle_branch,
-      trip_company: vehiclesOtherData.vehicle_company,
-      trip_driver: trip.trip_driver,
-    };
-
-    setIsButtonDisabled(true);
-    axios({
-      url: BASE_URL + "/api/web-create-trip",
-      method: "POST",
-      data,
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    }).then((res) => {
-      toast.success("Trip Created Sucessfully");
-
-      navigate("/trip-list");
-      setTrip({
-        trip_date: todayback,
-        trip_year: "2023-24",
-        trip_branch: "",
-        trip_company: "",
-        trip_driver: "",
-        vehicle_driver: "",
-        trip_vehicle: "",
-        trip_agency: "",
-        trip_hsd: "",
-        trip_advance: "",
-        trip_mileage: "",
-        trip_hsd_supplied: "",
-        trip_supplier: "",
-        trip_remarks: "",
-        trip_km: "",
-      });
-    });
-  };
-
-  const FormLabel = ({ children, required }) => (
-    <label className="block text-sm font-semibold text-black mb-1 ">
-      {children}
-      {required && <span className="text-red-500 ml-1">*</span>}
-    </label>
-  );
-
-  const inputClassSelect =
-    "w-full px-3 py-2 text-xs border rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 border-blue-500";
-  const inputClass =
-    "w-full px-3 py-2 text-xs border rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-500 border-blue-500";
+// Skeleton Loader Component
+const SkeletonLoader = () => {
   return (
     <Layout>
-      <div className=" bg-[#FFFFFF] p-2  rounded-lg  ">
-        <div className="sticky top-0 p-2  mb-4 border-b-2 border-red-500 rounded-lg  bg-[#E1F5FA] ">
-          <h2 className=" px-5 text-[black] text-lg   flex flex-row  justify-between items-center  rounded-xl p-2 ">
-            <div className="flex  items-center gap-2">
-              <IconInfoCircle className="w-4 h-4" />
-              <span>Add Trip </span>
+      <div className="bg-white p-4 rounded-lg">
+        {/* Header Skeleton */}
+        <div className="sticky top-0 mb-4 border-b-2 border-gray-200 rounded-lg bg-gray-50 animate-pulse">
+          <div className="flex justify-between items-center p-4">
+            <div className="h-8 bg-gray-300 w-1/3 rounded"></div>
+            <div className="flex space-x-4">
+              <div className="h-8 w-8 bg-gray-300 rounded-full"></div>
+              <div className="h-8 w-8 bg-gray-300 rounded-full"></div>
             </div>
-            <IconArrowBack
-              onClick={() => navigate("/trip-list")}
-              className="cursor-pointer hover:text-red-600"
-            />
-          </h2>
+          </div>
         </div>
-        <hr />
-        <form
-          onSubmit={handleSubmit}
-          id="addIndiv"
-          className="w-full max-w-7xl  rounded-lg mx-auto p-4 space-y-6 "
-        >
-          <div className="grid grid-cols-1  md:grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* date  */}
-            <div>
-              <FormLabel required>Date</FormLabel>
-              <input
-                type="date"
-                required
-                name="trip_date"
-                value={trip.trip_date}
-                onChange={(e) => onInputChange(e)}
-                className={inputClass}
-              />
-            </div>
-            {/* Vehicle No  */}
 
-            <div>
-              <FormLabel>Vechile No</FormLabel>
-              <Select
-                name="trip_vehicle"
-                options={vehicles.map((option) => ({
-                  value: option.reg_no,
-                  label: option.reg_no,
-                  name: "trip_vehicle",
-                }))}
-                onChange={(e) => onInputChange(e)}
-                value={
-                  trip.trip_vehicle
-                    ? {
-                        value: trip.trip_vehicle,
-                        label: trip.trip_vehicle,
-                      }
-                    : null
-                }
-                placeholder="Select Vechile No"
-                styles={customStyles}
-                isSearchable={true}
-              />
+        {/* Details Skeleton */}
+        <div className="grid md:grid-cols-2 gap-4 mb-6">
+          {[...Array(2)].map((_, colIndex) => (
+            <div key={colIndex} className="space-y-4">
+              {[...Array(4)].map((_, rowIndex) => (
+                <div key={rowIndex} className="flex items-center">
+                  <div className="h-4 bg-gray-300 w-1/3 mr-4 rounded"></div>
+                  <div className="h-4 bg-gray-300 w-2/3 rounded"></div>
+                </div>
+              ))}
             </div>
-            {/* company  */}
-            <div>
-              <FormLabel>Company</FormLabel>
-              <input
-                type="text"
-                name="trip_company"
-                value={vehiclesOtherData.vehicle_company}
-                onChange={(e) => onInputChange(e)}
-                className={inputClass}
-              />
-            </div>
-            {/* Branch  */}
-            <div>
-              <FormLabel required>Branch</FormLabel>
-              <input
-                type="text"
-                name="trip_branch"
-                value={vehiclesOtherData.vehicle_branch}
-                onChange={(e) => onInputChange(e)}
-                className={inputClass}
-              />
-            </div>
-            {/* Vechile Driver  */}
-            <div>
-              <FormLabel required>Driver</FormLabel>
-              <input
-                type="text"
-                name="vehicle_driver"
-                value={vehiclesDriver.vehicle_driver}
-                onChange={(e) => onInputChange(e)}
-                className={inputClass}
-              />
-            </div>
+          ))}
+        </div>
 
-            {/* Change Driver  */}
-            <div>
-              <FormLabel>Change Driver</FormLabel>
-              <Select
-                name="trip_driver"
-                options={driver.map((option) => ({
-                  value: option.full_name,
-                  label: option.full_name,
-                  name: "trip_driver",
-                }))}
-                onChange={(e) => onInputChange(e)}
-                value={
-                  trip.trip_driver
-                    ? {
-                        value: trip.trip_driver,
-                        label: trip.trip_driver,
-                      }
-                    : null
-                }
-                placeholder="Select Change Driver"
-                styles={customStyles}
-                isSearchable={true}
-              />
-            </div>
-            {/* Agencies  */}
-            <div>
-              <FormLabel>Agencies</FormLabel>
-              <Select
-                name="trip_agency"
-                options={agency.map((option) => ({
-                  value: option.agency_name,
-                  label: option.agency_name,
-                  name: "trip_agency",
-                }))}
-                onChange={(e) => onInputChange(e)}
-                value={
-                  trip.trip_agency
-                    ? {
-                        value: trip.trip_agency,
-                        label: trip.trip_agency,
-                      }
-                    : null
-                }
-                placeholder="Select Agencies"
-                styles={customStyles}
-                isSearchable={true}
-              />
-            </div>
-            {/* RT Km  */}
-            <div>
-              <FormLabel>RT KM</FormLabel>
-              <input
-                type="text"
-                name="trip_km"
-                value={agenciesRT.agency_rt_km}
-                onChange={(e) => onInputChange(e)}
-                className={inputClass}
-              />
-            </div>
-            {/* Mileage  */}
-            <div>
-              <FormLabel>Mileage</FormLabel>
-              <input
-                type="text"
-                name="trip_mileage"
-                value={vehiclesOtherData.vehicle_mileage}
-                onChange={(e) => onInputChange(e)}
-                className={inputClass}
-              />
-            </div>
-
-            {/* Supplier  */}
-            <div>
-              <FormLabel>Supplier</FormLabel>
-              <Select
-                name="trip_supplier"
-                options={vendor.map((option) => ({
-                  value: option.vendor_name,
-                  label: option.vendor_name,
-                  name: "trip_supplier",
-                }))}
-                onChange={(e) => onInputChange(e)}
-                value={
-                  trip.trip_supplier
-                    ? {
-                        value: trip.trip_supplier,
-                        label: trip.trip_supplier,
-                      }
-                    : null
-                }
-                placeholder="Select Supplier"
-                styles={customStyles}
-                isSearchable={true}
-              />
-            </div>
-
-            {/* Fixed HSD  */}
-            <div className=" col-span-0 lg:col-span-3">
-              <FormLabel>Fixed HSD</FormLabel>
-              <input
-                type="text"
-                name="trip_hsd"
-                value={Math.round(
-                  agenciesRT.agency_rt_km / vehiclesOtherData.vehicle_mileage
-                )}
-                onChange={(e) => onInputChange(e)}
-                className={inputClass}
-              />
-            </div>
-            {/* HSD Supplied  */}
-            <div className=" col-span-0 lg:col-span-3">
-              <FormLabel>HSD Supplied</FormLabel>
-              <input
-                type="text"
-                name="trip_hsd_supplied"
-                value={trip.trip_hsd_supplied}
-                onChange={(e) => onInputChange(e)}
-                className={inputClass}
-              />
-            </div>
-            {/* Advance  */}
-            <div className=" col-span-0 lg:col-span-3">
-              <FormLabel>Advance</FormLabel>
-              <input
-                type="text"
-                name="trip_advance"
-                value={trip.trip_advance}
-                onChange={(e) => onInputChange(e)}
-                className={inputClass}
-              />
-            </div>
-            {/* Remark  */}
-            <div className=" col-span-0 lg:col-span-3">
-              <FormLabel>Remarks</FormLabel>
-              <input
-                type="text"
-                name="trip_remarks"
-                value={trip.trip_remarks}
-                onChange={(e) => onInputChange(e)}
-                className={inputClass}
-              />
-            </div>
-          </div>
-
-          {/* Form Actions */}
-          <div className="flex flex-wrap gap-4 justify-start">
-            <button
-              type="submit"
-              className="text-center text-sm font-[400] cursor-pointer  w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md"
-              disabled={isButtonDisabled}
-            >
-              {isButtonDisabled ? "Sumbitting..." : "Sumbit"}
-            </button>
-
-            <button
-              type="button"
-              className="text-center text-sm font-[400] cursor-pointer  w-36 text-white bg-red-600 hover:bg-red-400 p-2 rounded-lg shadow-md"
-              onClick={() => {
-                navigate("/trip-list");
-              }}
-            >
-              Back
-            </button>
-          </div>
-        </form>
+        {/* Table Skeleton */}
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead>
+              <tr>
+                {[...Array(8)].map((_, index) => (
+                  <th key={index} className="p-3 bg-gray-200 text-left">
+                    <div className="h-4 bg-gray-300 w-3/4 rounded"></div>
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {[...Array(9)].map((_, rowIndex) => (
+                <tr key={rowIndex} className="border-b">
+                  {[...Array(8)].map((_, colIndex) => (
+                    <td key={colIndex} className="p-3">
+                      <div className="h-4 bg-gray-300 w-3/4 rounded"></div>
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </Layout>
   );
 };
 
-export default AddTrip;
+const TruckView = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const printRef = useRef(null);
+  const decryptedId = decryptId(id);
+
+  const [vehicle, setVehicle] = useState({}); //first one
+  const [service, setService] = useState([]); //secodn one
+  const [trip, setTrip] = useState({}); // third one
+  const [tyre, setTyre] = useState({}); //fourth one
+  const [serviceTypeFixed, setServiceTypeFixed] = useState([]); //fifth one
+  const [oldService, setOldService] = useState([]); //last one
+  const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState("info");
+  const [loadingkm, setLodingKm] = useState(false); //last one
+
+  const [vehicleskm, setVehiclesKm] = useState({
+    reg_no: vehicle.reg_no,
+    vehicle_present_km: vehicle.vehicle_present_km,
+    vehicle_present_date: vehicle.vehicle_present_date,
+  });
+  const handlePrint = useReactToPrint({
+    content: () => printRef.current,
+    pageStyle: `
+      @page {
+        size: A4;
+        margin: 2mm;
+      }
+      @media print {
+        body {
+          margin: 0;
+          padding: 0;
+             border: 1px solid #000;
+                   min-height:100vh
+        }
+        
+        * {
+          font-size: 11px !important;
+          line-height: 2 !important;
+        }
+  
+        table {
+          width: 100%;
+          border-collapse: collapse;
+          page-break-inside: avoid;
+        }
+  
+        th, td {
+          border: 0.5px solid #ddd;
+          padding: 2px !important;
+        }
+  
+        .py-2 {
+          padding-top: 2px !important;
+          padding-bottom: 2px !important;
+        }
+  
+        h1, h2, h3 {
+          font-size: 10px !important;
+          margin: 4px 0 !important;
+        }
+  
+        .p-4 {
+          padding: 8px !important;
+        }
+  
+        .mb-2, .mb-4 {
+          margin-bottom: 4px !important;
+        }
+  
+        .gap-4 {
+          gap: 8px !important;
+        }
+  
+        .print\\:py-0 {
+          padding-top: 0 !important;
+          padding-bottom: 0 !important;
+        }
+  
+        .print\\:hidden {
+          display: none !important;
+        }
+  
+        .bg-gray-100 {
+          background-color: #f3f4f6 !important;
+          -webkit-print-color-adjust: exact;
+          print-color-adjust: exact;
+        }
+      }
+    `,
+  });
+
+  const fetchTyreDetails = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.get(
+        `${BASE_URL}/api/fetch-vehicle-detail-id/${decryptedId}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      const vehicledata = response.data.vehicle;
+      setVehicle(vehicledata);
+      if (vehicledata?.reg_no) {
+        setVehiclesKm({
+          reg_no: vehicledata.reg_no,
+          vehicle_present_km: vehicledata.vehicle_present_km || "",
+          vehicle_present_date: vehicledata.vehicle_present_date || "",
+        });
+      }
+      setService(response.data.fullservices);
+      setServiceTypeFixed(response.data.servicesTypesFixed);
+      setTrip(response.data.trip);
+      setTyre(response.data.vehiceltyresub);
+      setOldService(response.data.historyservices);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching Vehicle View details:", error);
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
+    if (decryptedId) {
+      fetchTyreDetails();
+    }
+  }, [decryptedId]);
+
+  const vechileInfo = () => {
+    return (
+      <>
+        <div className="mb-2 ">
+          <h1 className="print:text-lg print:text-black text-blue-500 font-bold">
+            {vehicle.reg_no}
+          </h1>
+        </div>
+        <div className="grid grid-cols-2 gap-4 mb-2 ">
+          <div>
+            <table className="w-full ">
+              <tbody>
+                <tr className="border-b">
+                  <td className="font-semibold w-1/3 text-xs print:py-0 py-3 ">
+                    Branch
+                  </td>
+                  <td className="text-xs">{vehicle?.vehicle_branch}</td>
+                </tr>
+                <tr className="border-b">
+                  <td className="font-semibold w-1/3 text-xs print:py-0 py-3">
+                    Company
+                  </td>
+                  <td className="text-xs">{vehicle?.vehicle_company}</td>
+                </tr>
+                <tr className="border-b">
+                  <td className="font-semibold w-1/3 text-xs print:py-0 py-3">
+                    Vehicle Type
+                  </td>
+                  <td className="text-xs">{vehicle?.vehicle_type}</td>
+                </tr>
+                <tr className="border-b">
+                  <td className="font-semibold w-1/3 text-xs print:py-0 py-3">
+                    Model Year
+                  </td>
+                  <td className="text-xs">{vehicle?.mfg_year}</td>
+                </tr>
+                <tr className="border-b">
+                  <td className="font-semibold w-1/3 text-xs print:py-0 py-2">
+                    Vehicle KM
+                  </td>
+                  <td className="text-xs">{vehicle?.vehicle_open_km}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div>
+            <table className="w-full">
+              <tbody>
+                <tr className="border-b">
+                  <td className="font-semibold w-1/3 text-xs print:py-0  py-2">
+                    Insurance Due
+                  </td>
+                  <td className="text-xs">
+                    {moment(vehicle?.ins_due).format("DD-MMMM-YYYY")}
+                  </td>
+                </tr>
+                <tr className="border-b">
+                  <td className="font-semibold w-1/3 text-xs print:py-0 py-2">
+                    Permit Due
+                  </td>
+                  <td className="text-xs">
+                    {moment(vehicle?.permit_due).format("DD-MMMM-YYYY")}
+                  </td>
+                </tr>
+                <tr className="border-b">
+                  <td className="font-semibold w-1/3 text-xs print:py-0 py-2">
+                    FC Due
+                  </td>
+                  <td className="text-xs">
+                    {moment(vehicle?.fc_due).format("DD-MMMM-YYYY")}
+                  </td>
+                </tr>
+                <tr className="border-b">
+                  <td className="font-semibold w-1/3 text-xs print:py-0 py-2">
+                    Mileage
+                  </td>
+                  <td className="text-xs">{vehicle?.vehicle_mileage}</td>
+                </tr>
+                <tr className="border-b">
+                  <td className="font-semibold w-1/3 text-xs print:py-0 py-2">
+                    Driver
+                  </td>
+                  <td className="text-xs">
+                    {vehicle?.vehicle_driver} {" - "}
+                    {vehicle.vehicle_driver_no}
+                  </td>
+                </tr>
+                <tr className="border-b">
+                  <td className="font-semibold w-1/3 text-xs print:py-0 py-2">
+                    Status
+                  </td>
+                  <td className="text-xs">{vehicle?.vehicle_status}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </>
+    );
+  };
+
+  const oldServiceInfo = () => {
+    return (
+      <>
+        {serviceTypeFixed.length > 0 && (
+          <div className="mt-2">
+            <div className="overflow-x-auto ">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2">
+                {serviceTypeFixed.map((serviceType, index) => {
+                  const hasData = service.some(
+                    (serviceItem) =>
+                      serviceItem.service_sub_type ===
+                      serviceType.service_types_fixed
+                  );
+
+                  return (
+                    <div key={index}>
+                      <div className="border  border-gray-300 hover:bg-gray-50 transition-colors duration-300">
+                        <p
+                          className={`p-1 text-xs border font-bold ${
+                            hasData ? "bg-blue-200" : "bg-gray-200"
+                          } border-black text-center`}
+                        >
+                          {serviceType.service_types_fixed}
+                        </p>
+
+                        <p className="p-2 text-xs border border-black text-center">
+                          {service.map((serviceItem) => {
+                            if (
+                              serviceItem.service_sub_type ===
+                              serviceType.service_types_fixed
+                            ) {
+                              return (
+                                <React.Fragment key={serviceItem.id}>
+                                  <div>
+                                    {moment(
+                                      serviceItem.service_sub_date
+                                    ).format("DD-MMM-YYYY")}
+                                  </div>
+                                  <div>
+                                    <span className=" font-semibold">
+                                      KM&nbsp;:&nbsp;
+                                    </span>
+                                    {serviceItem.service_sub_km}
+                                  </div>
+                                </React.Fragment>
+                              );
+                            }
+                            return null;
+                          })}
+                        </p>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {serviceTypeFixed.length <= 0 && (
+          <div className="text-center">
+            <h1>No Data Available</h1>
+          </div>
+        )}
+      </>
+    );
+  };
+  const serviceInfo = () => {
+    return (
+      <>
+        {oldService.length > 0 && (
+          <div className="mt-2">
+            <h3 className="text-lg font-semibold mb-2 text-center">
+              Service Histroy
+            </h3>
+            <table className="w-full border-collapse">
+              <thead>
+                <tr className="bg-gray-100">
+                  <th className="border py-2 text-xs">Services</th>
+                  <th className="border py-2 text-xs">Date</th>
+                  <th className="border py-2 text-xs">KM</th>
+                  <th className="border py-2 text-xs">Present Date</th>
+                  <th className="border py-2 text-xs">Present KM</th>
+                  <th className="border py-2 text-xs">Difference KM</th>
+                  {/* <th className="border py-2 text-xs print:hidden">Action</th> */}
+                </tr>
+              </thead>
+              <tbody>
+                {/* left  */}
+                {oldService?.map((item, key) => (
+                  <tr key={key} className="text-center">
+                    <td className="border py-2 text-xs text-start px-2">
+                      {item?.service_sub_type}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {moment(item?.service_sub_date).format("DD-MMM-YYYY")}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {item?.service_sub_km}
+                    </td>
+
+                    <td className="border py-2 text-xs">
+                      {vehicle?.vehicle_present_date
+                        ? moment(item.vehicle_present_date).format(
+                            "DD-MMM-YYYY"
+                          )
+                        : ""}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {vehicle?.vehicle_present_km}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {vehicle?.vehicle_present_km - item?.service_sub_km}
+                    </td>
+
+                    {/* <td className="border py-0 text-xs print:hidden">
+                      <button
+                        onClick={() => {
+                          navigate(`/spkm/${item.id}`);
+                          localStorage.setItem("spkmId", id);
+                        }}
+                        title="change present km"
+                        className="text-blue-500 hover:text-blue-700"
+                      >
+                        <IconEditCircle size={20} />
+                      </button>
+                    </td> */}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+
+        {oldService.length <= 0 && (
+          <div className="text-center">
+            <h1>No Data Available</h1>
+          </div>
+        )}
+      </>
+    );
+  };
+
+  const tripInfo = () => {
+    return (
+      <>
+        {trip.length > 0 && (
+          <div className="mt-2">
+            <h3 className="text-lg font-semibold mb-2 text-center">Trip</h3>
+            <table className="w-full border-collapse">
+              <thead>
+                <tr className="bg-gray-100">
+                  <th className="border py-2 text-xs ">Date</th>
+                  <th className="border py-2 text-xs ">Agency</th>
+                  <th className="border py-2 text-xs ">KM</th>
+                  <th className="border py-2 text-xs ">Supplier</th>
+                  <th className="border py-2 text-xs ">HSD</th>
+                  <th className="border py-2 text-xs ">HSD Supplied</th>
+                  <th className="border py-2 text-xs  ">Driver</th>
+                  <th className="border py-2 text-xs  ">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {/* left  */}
+                {trip?.map((item, key) => (
+                  <tr key={key} className="text-center">
+                    <td className="border py-2 text-xs ">
+                      {moment(item?.trip_date).format("DD-MMM-YYYY")}
+                    </td>
+                    <td className="border py-2 text-xs text-start px-2">
+                      {item?.trip_agency}
+                    </td>
+                    <td className="border py-2 text-xs">{item?.trip_km}</td>
+                    <td className="border py-2 text-xs text-start px-2">
+                      {item?.trip_supplier}
+                    </td>
+                    <td className="border py-2 text-xs ">{item?.trip_hsd}</td>
+                    <td className="border py-2 text-xs ">
+                      {item?.trip_hsd_supplied}
+                    </td>
+                    <td className="border py-2 text-xs text-start px-2">
+                      {item?.trip_driver}-{item?.trip_driver_no}
+                    </td>
+                    <td className="border py-2  text-xs text-start px-2">
+                      {item?.trip_status}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+
+        {trip.length <= 0 && (
+          <div className="text-center">
+            <h1>No Data Available</h1>
+          </div>
+        )}
+      </>
+    );
+  };
+
+  const tyreInfo = () => {
+    return (
+      <>
+        {tyre != 0 && (
+          <div className="mt-2">
+            <h3 className="text-lg font-semibold mb-2 text-center">Tyre</h3>
+            <table className="w-full border-collapse">
+              <thead>
+                <tr className="bg-gray-100">
+                  <th className="border py-2 text-xs">Tyre Position</th>
+                  <th className="border py-2 text-xs">Tyre No</th>
+                  <th className="border py-2 text-xs">Type</th>
+                  <th className="border py-2 text-xs">Make</th>
+                  <th className="border py-2 text-xs">Date</th>
+                  <th className="border py-2 text-xs">KM</th>
+                  <th className="border py-2 text-xs">Present Date</th>
+                  <th className="border py-2 text-xs">Present KM</th>
+                  <th className="border py-2 text-xs">Difference KM</th>
+                  <th className="border py-2 text-xs">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {/* left  */}
+                {vehicle?.vehicle_type != "Other" && (
+                  <tr className="text-center">
+                    <td className="border py-2 text-xs text-start px-2">
+                      1.Front Left
+                    </td>
+                    <td className="border py-2 text-xs text-start px-2">
+                      {tyre?.tyre_assign_1_front_left_no}
+                    </td>
+                    <td className="border py-2 text-xs text-start px-2">
+                      {tyre?.tyre_assign_1_front_left_type}
+                    </td>
+                    <td className="border py-2 text-xs text-start px-2">
+                      {tyre?.tyre_assign_1_front_left_make}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {tyre?.tyre_assign_1_front_left_date
+                        ? moment(tyre?.tyre_assign_1_front_left_date).format(
+                            "DD-MMM-YYYY"
+                          )
+                        : ""}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {tyre?.tyre_assign_1_front_left_km}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {tyre?.tyre_assign_1_front_left_pre_date
+                        ? moment(
+                            tyre?.tyre_assign_1_front_left_pre_date
+                          ).format("DD-MMM-YYYY")
+                        : ""}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {tyre?.tyre_assign_1_front_left_pre_km}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {tyre?.tyre_assign_1_front_left_pre_km -
+                        tyre?.tyre_assign_1_front_left_km}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {tyre?.tyre_assign_1_front_left_status}
+                    </td>
+                  </tr>
+                )}
+                {/* right  */}
+                {vehicle.vehicle_type != "Other" && (
+                  <tr className="text-center">
+                    <td className="border py-2 text-xs text-start px-2">
+                      2.Front Right
+                    </td>
+                    <td className="border py-2 text-xs text-start px-2">
+                      {tyre?.tyre_assign_2_front_right_no}
+                    </td>
+                    <td className="border py-2 text-xs text-start px-2">
+                      {tyre?.tyre_assign_2_front_right_type}
+                    </td>
+                    <td className="border py-2 text-xs text-start px-2">
+                      {tyre?.tyre_assign_2_front_right_make}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {tyre?.tyre_assign_2_front_right_date
+                        ? moment(tyre?.tyre_assign_2_front_right_date).format(
+                            "DD-MMM-YYYY"
+                          )
+                        : ""}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {tyre?.tyre_assign_2_front_right_km}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {tyre?.tyre_assign_2_front_right_pre_date
+                        ? moment(
+                            tyre?.tyre_assign_2_front_right_pre_date
+                          ).format("DD-MMM-YYYY")
+                        : ""}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {tyre?.tyre_assign_2_front_right_pre_km}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {tyre?.tyre_assign_2_front_right_pre_km -
+                        tyre?.tyre_assign_2_front_right_km}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {tyre?.tyre_assign_2_front_right_status}
+                    </td>
+                  </tr>
+                )}
+
+                {/* 6w truck 1 back left */}
+                {vehicle.vehicle_type == "6W Truck" && (
+                  <tr className="text-center">
+                    <td className="border py-2 text-xs text-start px-2">
+                      3. Back Left
+                    </td>
+                    <td className="border py-2 text-xs text-start px-2">
+                      {tyre?.tyre_assign_3_back_left_no}
+                    </td>
+                    <td className="border py-2 text-xs text-start px-2">
+                      {tyre?.tyre_assign_3_back_left_type}
+                    </td>
+                    <td className="border py-2 text-xs text-start px-2">
+                      {tyre?.tyre_assign_3_back_left_make}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {tyre?.tyre_assign_3_back_left_date
+                        ? moment(tyre?.tyre_assign_3_back_left_date).format(
+                            "DD-MMM-YYYY"
+                          )
+                        : ""}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {tyre?.tyre_assign_3_back_left_km}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {tyre?.tyre_assign_3_back_left_pre_date
+                        ? moment(tyre?.tyre_assign_3_back_left_pre_date).format(
+                            "DD-MMM-YYYY"
+                          )
+                        : ""}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {tyre?.tyre_assign_3_back_left_pre_km}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {tyre?.tyre_assign_3_back_left_pre_km -
+                        tyre?.tyre_assign_3_back_left_km}
+                    </td>
+                    <td className="border py-2 text-xs ">
+                      {tyre?.tyre_assign_3_back_left_status}
+                    </td>
+                  </tr>
+                )}
+                {/* 6w truck 2 back left */}
+                {vehicle.vehicle_type == "6W Truck" && (
+                  <tr className="text-center">
+                    <td className="border py-2 text-xs text-start px-2">
+                      4. Back Left
+                    </td>
+                    <td className="border py-2 text-xs text-start px-2">
+                      {tyre?.tyre_assign_4_back_left_no}
+                    </td>
+                    <td className="border py-2 text-xs text-start px-2">
+                      {tyre?.tyre_assign_4_back_left_type}
+                    </td>
+                    <td className="border py-2 text-xs text-start px-2">
+                      {tyre?.tyre_assign_4_back_left_make}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {tyre?.tyre_assign_4_back_left_date
+                        ? moment(tyre?.tyre_assign_4_back_left_date).format(
+                            "DD-MMM-YYYY"
+                          )
+                        : ""}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {tyre?.tyre_assign_4_back_left_km}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {tyre?.tyre_assign_4_back_left_pre_date
+                        ? moment(tyre?.tyre_assign_4_back_left_pre_date).format(
+                            "DD-MMM-YYYY"
+                          )
+                        : ""}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {tyre?.tyre_assign_4_back_left_pre_km}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {tyre?.tyre_assign_4_back_left_pre_km -
+                        tyre?.tyre_assign_4_back_left_km}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {tyre?.tyre_assign_4_back_left_status}
+                    </td>
+                  </tr>
+                )}
+                {/* 6w truck 3 back right  */}
+                {vehicle.vehicle_type == "6W Truck" && (
+                  <tr className="text-center">
+                    <td className="border py-2 text-xs text-start px-2">
+                      5. Back Right
+                    </td>
+                    <td className="border py-2 text-xs text-start px-2">
+                      {tyre?.tyre_assign_5_back_right_no}
+                    </td>
+                    <td className="border py-2 text-xs text-start px-2">
+                      {tyre?.tyre_assign_5_back_right_type}
+                    </td>
+                    <td className="border py-2 text-xs text-start px-2">
+                      {tyre?.tyre_assign_5_back_right_make}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {tyre?.tyre_assign_5_back_right_date
+                        ? moment(tyre?.tyre_assign_5_back_right_date).format(
+                            "DD-MMM-YYYY"
+                          )
+                        : ""}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {tyre?.tyre_assign_5_back_right_km}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {tyre?.tyre_assign_5_back_right_pre_date
+                        ? moment(
+                            tyre?.tyre_assign_5_back_right_pre_date
+                          ).format("DD-MMM-YYYY")
+                        : ""}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {tyre?.tyre_assign_5_back_right_pre_km}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {tyre?.tyre_assign_5_back_right_pre_km -
+                        tyre?.tyre_assign_5_back_right_km}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {tyre?.tyre_assign_5_back_right_status}
+                    </td>
+                  </tr>
+                )}
+                {/* 6w truck 4 back right  */}
+                {vehicle.vehicle_type == "6W Truck" && (
+                  <tr className="text-center">
+                    <td className="border py-2 text-xs text-start px-2">
+                      6. Back Right
+                    </td>
+                    <td className="border py-2 text-xs text-start px-2">
+                      {tyre?.tyre_assign_6_back_right_no}
+                    </td>
+                    <td className="border py-2 text-xs text-start px-2">
+                      {tyre?.tyre_assign_6_back_right_type}
+                    </td>
+                    <td className="border py-2 text-xs text-start px-2">
+                      {tyre?.tyre_assign_6_back_right_make}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {tyre?.tyre_assign_6_back_right_date
+                        ? moment(tyre?.tyre_assign_6_back_right_date).format(
+                            "DD-MMM-YYYY"
+                          )
+                        : ""}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {tyre?.tyre_assign_6_back_right_km}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {tyre?.tyre_assign_6_back_right_pre_date
+                        ? moment(
+                            tyre?.tyre_assign_6_back_right_pre_date
+                          ).format("DD-MMM-YYYY")
+                        : ""}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {tyre?.tyre_assign_6_back_right_pre_km}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {tyre?.tyre_assign_6_back_right_pre_km -
+                        tyre?.tyre_assign_6_back_right_km}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {tyre?.tyre_assign_6_back_right_status}
+                    </td>
+                  </tr>
+                )}
+
+                {/* 10w truck 1 back housing  left  */}
+                {vehicle.vehicle_type == "10W Truck" && (
+                  <tr className="text-center">
+                    <td className="border py-2 text-xs text-start px-2">
+                      3. Back Housing Left
+                    </td>
+                    <td className="border py-2 text-xs text-start px-2">
+                      {tyre?.tyre_assign_3_back_housing_left_no}
+                    </td>
+                    <td className="border py-2 text-xs text-start px-2">
+                      {tyre?.tyre_assign_3_back_housing_left_type}
+                    </td>
+                    <td className="border py-2 text-xs text-start px-2">
+                      {tyre?.tyre_assign_3_back_housing_left_make}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {tyre?.tyre_assign_3_back_housing_left_date
+                        ? moment(
+                            tyre?.tyre_assign_3_back_housing_left_date
+                          ).format("DD-MMM-YYYY")
+                        : ""}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {tyre?.tyre_assign_3_back_housing_left_km}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {tyre?.tyre_assign_3_back_housing_left_pre_date
+                        ? moment(
+                            tyre?.tyre_assign_3_back_housing_left_pre_date
+                          ).format("DD-MMM-YYYY")
+                        : ""}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {tyre?.tyre_assign_3_back_housing_left_pre_km}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {tyre?.tyre_assign_3_back_housing_left_pre_km -
+                        tyre?.tyre_assign_3_back_housing_left_km}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {tyre?.tyre_assign_3_back_housing_left_status}
+                    </td>
+                  </tr>
+                )}
+
+                {/* 10w truck 2 back housing  left  */}
+                {vehicle.vehicle_type == "10W Truck" && (
+                  <tr className="text-center">
+                    <td className="border py-2 text-xs text-start px-2">
+                      4. Back Housing Left
+                    </td>
+                    <td className="border py-2 text-xs text-start px-2">
+                      {tyre?.tyre_assign_4_back_housing_left_no}
+                    </td>
+                    <td className="border py-2 text-xs text-start px-2">
+                      {tyre?.tyre_assign_4_back_housing_left_type}
+                    </td>
+                    <td className="border py-2 text-xs text-start px-2">
+                      {tyre?.tyre_assign_4_back_housing_left_make}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {tyre?.tyre_assign_4_back_housing_left_date
+                        ? moment(
+                            tyre?.tyre_assign_4_back_housing_left_date
+                          ).format("DD-MMM-YYYY")
+                        : ""}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {tyre?.tyre_assign_4_back_housing_left_km}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {tyre?.tyre_assign_4_back_housing_left_pre_date
+                        ? moment(
+                            tyre?.tyre_assign_4_back_housing_left_pre_date
+                          ).format("DD-MMM-YYYY")
+                        : ""}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {tyre?.tyre_assign_4_back_housing_left_pre_km}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {tyre?.tyre_assign_4_back_housing_left_pre_km -
+                        tyre?.tyre_assign_4_back_housing_left_km}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {tyre?.tyre_assign_4_back_housing_left_status}
+                    </td>
+                  </tr>
+                )}
+
+                {/* 10w truck 3 back dummy  left  */}
+                {vehicle.vehicle_type == "10W Truck" && (
+                  <tr className="text-center">
+                    <td className="border py-2 text-xs text-start px-2">
+                      5. Back Dummy Left
+                    </td>
+                    <td className="border py-2 text-xs text-start px-2">
+                      {tyre?.tyre_assign_5_back_dummy_left_no}
+                    </td>
+                    <td className="border py-2 text-xs text-start px-2">
+                      {tyre?.tyre_assign_5_back_dummy_left_type}
+                    </td>
+                    <td className="border py-2 text-xs text-start px-2">
+                      {tyre?.tyre_assign_5_back_dummy_left_make}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {tyre?.tyre_assign_5_back_dummy_left_date
+                        ? moment(
+                            tyre?.tyre_assign_5_back_dummy_left_date
+                          ).format("DD-MMM-YYYY")
+                        : ""}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {tyre?.tyre_assign_5_back_dummy_left_km}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {tyre?.tyre_assign_5_back_dummy_left_pre_date
+                        ? moment(
+                            tyre?.tyre_assign_5_back_dummy_left_pre_date
+                          ).format("DD-MMM-YYYY")
+                        : ""}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {tyre?.tyre_assign_5_back_dummy_left_pre_km}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {tyre?.tyre_assign_5_back_dummy_left_pre_km -
+                        tyre?.tyre_assign_5_back_dummy_left_km}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {tyre?.tyre_assign_5_back_dummy_left_status}
+                    </td>
+                  </tr>
+                )}
+                {/* 10w truck 4 back dummy  left  */}
+                {vehicle.vehicle_type == "10W Truck" && (
+                  <tr className="text-center">
+                    <td className="border py-2 text-xs text-start px-2">
+                      6. Back Dummy Left
+                    </td>
+                    <td className="border py-2 text-xs text-start px-2">
+                      {tyre?.tyre_assign_6_back_dummy_left_no}
+                    </td>
+                    <td className="border py-2 text-xs text-start px-2">
+                      {tyre?.tyre_assign_6_back_dummy_left_type}
+                    </td>
+                    <td className="border py-2 text-xs text-start px-2">
+                      {tyre?.tyre_assign_6_back_dummy_left_make}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {tyre?.tyre_assign_6_back_dummy_left_date
+                        ? moment(
+                            tyre?.tyre_assign_6_back_dummy_left_date
+                          ).format("DD-MMM-YYYY")
+                        : ""}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {tyre?.tyre_assign_6_back_dummy_left_km}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {tyre?.tyre_assign_6_back_dummy_left_pre_date
+                        ? moment(
+                            tyre?.tyre_assign_6_back_dummy_left_pre_date
+                          ).format("DD-MMM-YYYY")
+                        : ""}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {tyre?.tyre_assign_6_back_dummy_left_pre_km}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {tyre?.tyre_assign_6_back_dummy_left_pre_km -
+                        tyre?.tyre_assign_6_back_dummy_left_km}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {tyre?.tyre_assign_6_back_dummy_left_status}
+                    </td>
+                  </tr>
+                )}
+
+                {/* 10w truck 5 back Housing  Right  */}
+                {vehicle.vehicle_type == "10W Truck" && (
+                  <tr className="text-center">
+                    <td className="border py-2 text-xs text-start px-2">
+                      7. Back Housing Right
+                    </td>
+                    <td className="border py-2 text-xs text-start px-2">
+                      {tyre?.tyre_assign_7_back_housing_right_no}
+                    </td>
+                    <td className="border py-2 text-xs text-start px-2">
+                      {tyre?.tyre_assign_7_back_housing_right_type}
+                    </td>
+                    <td className="border py-2 text-xs text-start px-2">
+                      {tyre?.tyre_assign_7_back_housing_right_make}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {tyre?.tyre_assign_7_back_housing_right_date
+                        ? moment(
+                            tyre?.tyre_assign_7_back_housing_right_date
+                          ).format("DD-MMM-YYYY")
+                        : ""}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {tyre?.tyre_assign_7_back_housing_right_km}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {tyre?.tyre_assign_7_back_housing_right_pre_date
+                        ? moment(
+                            tyre?.tyre_assign_7_back_housing_right_pre_date
+                          ).format("DD-MMM-YYYY")
+                        : ""}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {tyre?.tyre_assign_7_back_housing_right_pre_km}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {tyre?.tyre_assign_7_back_housing_right_pre_km -
+                        tyre?.tyre_assign_7_back_housing_right_km}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {tyre?.tyre_assign_7_back_housing_right_status}
+                    </td>
+                  </tr>
+                )}
+
+                {/* 10w truck 6 back Housing  Right  */}
+                {vehicle.vehicle_type == "10W Truck" && (
+                  <tr className="text-center">
+                    <td className="border py-2 text-xs text-start px-2">
+                      8. Back Housing Right
+                    </td>
+                    <td className="border py-2 text-xs text-start px-2">
+                      {tyre?.tyre_assign_8_back_housing_right_no}
+                    </td>
+                    <td className="border py-2 text-xs text-start px-2">
+                      {tyre?.tyre_assign_8_back_housing_right_type}
+                    </td>
+                    <td className="border py-2 text-xs text-start px-2">
+                      {tyre?.tyre_assign_8_back_housing_right_make}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {tyre?.tyre_assign_8_back_housing_right_date
+                        ? moment(
+                            tyre?.tyre_assign_8_back_housing_right_date
+                          ).format("DD-MMM-YYYY")
+                        : ""}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {tyre?.tyre_assign_8_back_housing_right_km}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {tyre?.tyre_assign_8_back_housing_right_pre_date
+                        ? moment(
+                            tyre?.tyre_assign_8_back_housing_right_pre_date
+                          ).format("DD-MMM-YYYY")
+                        : ""}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {tyre?.tyre_assign_8_back_housing_right_pre_km}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {tyre?.tyre_assign_8_back_housing_right_pre_km -
+                        tyre?.tyre_assign_8_back_housing_right_km}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {tyre?.tyre_assign_8_back_housing_right_status}
+                    </td>
+                  </tr>
+                )}
+                {/* 10w truck 7 back Dummy Right  */}
+                {vehicle.vehicle_type == "10W Truck" && (
+                  <tr className="text-center">
+                    <td className="border py-2 text-xs text-start px-2">
+                      9. Back Dummy Right
+                    </td>
+                    <td className="border py-2 text-xs text-start px-2">
+                      {tyre?.tyre_assign_9_back_dummy_right_no}
+                    </td>
+                    <td className="border py-2 text-xs text-start px-2">
+                      {tyre?.tyre_assign_9_back_dummy_right_type}
+                    </td>
+                    <td className="border py-2 text-xs text-start px-2">
+                      {tyre?.tyre_assign_9_back_dummy_right_make}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {tyre?.tyre_assign_9_back_dummy_right_date
+                        ? moment(
+                            tyre?.tyre_assign_9_back_dummy_right_date
+                          ).format("DD-MMM-YYYY")
+                        : ""}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {tyre?.tyre_assign_9_back_dummy_right_km}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {tyre?.tyre_assign_9_back_dummy_right_pre_date
+                        ? moment(
+                            tyre?.tyre_assign_9_back_dummy_right_pre_date
+                          ).format("DD-MMM-YYYY")
+                        : ""}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {tyre?.tyre_assign_9_back_dummy_right_pre_km}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {tyre?.tyre_assign_9_back_dummy_right_pre_km -
+                        tyre?.tyre_assign_9_back_dummy_right_km}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {tyre?.tyre_assign_9_back_dummy_right_status}
+                    </td>
+                  </tr>
+                )}
+                {/* 10w truck 8 back Dummy Right  */}
+                {vehicle.vehicle_type == "10W Truck" && (
+                  <tr className="text-center">
+                    <td className="border py-2 text-xs text-start px-2">
+                      10. Back Dummy Right
+                    </td>
+                    <td className="border py-2 text-xs text-start px-2">
+                      {tyre?.tyre_assign_10_back_dummy_right_no}
+                    </td>
+                    <td className="border py-2 text-xs text-start px-2">
+                      {tyre?.tyre_assign_10_back_dummy_right_type}
+                    </td>
+                    <td className="border py-2 text-xs text-start px-2">
+                      {tyre?.tyre_assign_10_back_dummy_right_make}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {tyre?.tyre_assign_10_back_dummy_right_date
+                        ? moment(
+                            tyre?.tyre_assign_10_back_dummy_right_date
+                          ).format("DD-MMM-YYYY")
+                        : ""}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {tyre?.tyre_assign_10_back_dummy_right_km}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {tyre?.tyre_assign_10_back_dummy_right_pre_date
+                        ? moment(
+                            tyre?.tyre_assign_10_back_dummy_right_pre_date
+                          ).format("DD-MMM-YYYY")
+                        : ""}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {tyre?.tyre_assign_10_back_dummy_right_pre_km}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {tyre?.tyre_assign_10_back_dummy_right_pre_km -
+                        tyre?.tyre_assign_10_back_dummy_right_km}
+                    </td>
+                    <td className="border py-2 text-xs">
+                      {tyre?.tyre_assign_10_back_dummy_right_status}
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        )}
+        {tyre == 0 && (
+          <div className="text-center">
+            <h1>No Data Available</h1>
+          </div>
+        )}
+      </>
+    );
+  };
+  const handleTabChange = (value) => {
+    setActiveTab(value);
+  };
+  const renderContent = () => {
+    switch (activeTab) {
+      case "info":
+        return vechileInfo();
+
+      case "Service History":
+        return serviceInfo();
+
+      case "trip":
+        return tripInfo();
+      case "tyre":
+        return tyreInfo();
+      case "services":
+        return oldServiceInfo();
+
+      default:
+        return null;
+    }
+  };
+
+  const onInputChange = (e) => {
+    if (e.target.name === "vehicle_present_km") {
+      const onlyDigits = e.target.value.replace(/\D/g, "");
+      setVehiclesKm({
+        ...vehicleskm,
+        [e.target.name]: onlyDigits,
+      });
+    } else {
+      setVehiclesKm({
+        ...vehicleskm,
+        [e.target.name]: e.target.value,
+      });
+    }
+  };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLodingKm(true);
+    const form = document.getElementById("addIndiv");
+    if (!form.checkValidity() || vehicleskm.reg_no == "") {
+      toast.error("Please fill all required fields");
+      return;
+    }
+
+    const data = {
+      reg_no: vehicle.reg_no,
+      vehicle_present_km: vehicleskm.vehicle_present_km,
+      vehicle_present_date: vehicleskm.vehicle_present_date,
+    };
+    try {
+      const res = await axios.post(
+        `${BASE_URL}/api/web-update-vehicle-presentkm`,
+        data,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+
+      if (res.data.code === 200) {
+        toast.success(res.data.msg);
+        setVehiclesKm({
+          vehicle_present_km: "",
+          vehicle_present_date: "",
+        });
+        fetchTyreDetails();
+      } else if (res.data.code === 400) {
+        toast.error(res.data.msg);
+      }
+    } catch (error) {
+      console.error("Submit Error:", error);
+      toast.error("Something went wrong while submitting");
+      setLodingKm(false);
+    } finally {
+      setLodingKm(false);
+    }
+  };
+
+  const FormLabel = ({ children, required }) => (
+    <label className="block text-xs font-semibold text-black mb-1 ">
+      {children}
+      {required && <span className="text-red-500 ml-1">*</span>}
+    </label>
+  );
+
+  const inputClass =
+    "w-full px-3 py-2 text-xs border rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-500 border-blue-500";
+  if (loading) return <SkeletonLoader />;
+
+  return (
+    <Layout>
+      <div className="bg-[#FFFFFF]  p-2 rounded-lg">
+        <div className="sticky top-0 mb-4 p-4 bg-[#E1F5FA] border-b-2 border-red-500 rounded-lg shadow-sm">
+          <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
+            {/* Left Section: Title */}
+            <div className="flex items-center gap-2">
+              <IconInfoCircle className="w-4 h-4 text-blue-600" />
+              <span className="text-black text-lg">
+                Vehicle Details &nbsp;
+                <strong className="text-blue-700">{vehicle.reg_no}</strong>
+              </span>
+            </div>
+
+            {/* Right Section: Form + Icons */}
+            <div className="flex flex-col lg:flex-row items-start lg:items-center gap-4 w-full lg:w-auto">
+              <form
+                id="addIndiv"
+                className="flex flex-col sm:flex-row items-start sm:items-end gap-4"
+                onSubmit={handleSubmit}
+              >
+                <div className="w-32">
+                  <FormLabel required>Present Km</FormLabel>
+                  <input
+                    type="text"
+                    name="vehicle_present_km"
+                    value={vehicleskm.vehicle_present_km}
+                    onChange={onInputChange}
+                    className={inputClass}
+                    required
+                  />
+                </div>
+                <div className="w-32">
+                  <FormLabel required>Present Date</FormLabel>
+                  <input
+                    type="date"
+                    name="vehicle_present_date"
+                    value={vehicleskm.vehicle_present_date}
+                    onChange={onInputChange}
+                    className={inputClass}
+                    required
+                  />
+                </div>
+                <button
+                  type="submit"
+                  className="text-sm font-medium w-24 text-white bg-blue-600 hover:bg-green-700 px-4 py-2 rounded-lg shadow-md"
+                >
+                  {loadingkm ? "Updating" : "Update"}
+                </button>
+              </form>
+
+              {/* Action Icons */}
+              <div className="flex items-center space-x-3">
+                <IconPrinter
+                  className="cursor-pointer text-gray-600 hover:text-blue-600"
+                  onClick={handlePrint}
+                  title="Print"
+                />
+                <IconArrowBack
+                  className="cursor-pointer text-gray-600 hover:text-red-600"
+                  onClick={() => navigate("/vehicles-list")}
+                  title="Go Back"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="flex">
+          <div className=" border-r h-[33rem] border-gray-200">
+            <Tabs
+              value={activeTab}
+              onTabChange={handleTabChange}
+              orientation="vertical"
+              color="orange"
+              variant="default"
+              radius="lg"
+              className=""
+            >
+              <Tabs.List>
+                <Tabs.Tab value="info" icon={<IconTruck size={16} />}>
+                  Vehicle Info
+                </Tabs.Tab>
+                <Tabs.Tab
+                  value="services"
+                  icon={<IconMessageCircle size={16} />}
+                >
+                  Service
+                </Tabs.Tab>
+                <Tabs.Tab
+                  value="Service History"
+                  icon={<IconMessageCircle size={16} />}
+                >
+                  Services History
+                </Tabs.Tab>
+                <Tabs.Tab value="trip" icon={<IconTruckDelivery size={16} />}>
+                  Trip
+                </Tabs.Tab>
+                <Tabs.Tab value="tyre" icon={<IconSettings size={16} />}>
+                  Tyre
+                </Tabs.Tab>
+                <Tabs.Tab
+                  value="tyre histroy"
+                  icon={<IconSettings size={16} />}
+                >
+                  Tyre History
+                </Tabs.Tab>
+              </Tabs.List>
+            </Tabs>
+          </div>
+          <div className="flex-1  pl-6">
+            <div className="visible print:hidden">{renderContent()}</div>
+
+            <div ref={printRef} className=" p-4 hidden print:block">
+              {vechileInfo()}
+
+              {/* service  */}
+              {serviceInfo()}
+
+              {/* trip  */}
+              {tripInfo()}
+
+              {/* tyre  */}
+              {tyreInfo()}
+            </div>
+          </div>
+        </div>
+      </div>
+    </Layout>
+  );
+};
+
+export default TruckView;

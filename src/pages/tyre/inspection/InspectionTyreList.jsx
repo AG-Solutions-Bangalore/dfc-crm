@@ -1,25 +1,18 @@
-import React, { useEffect, useMemo, useState } from "react";
-import Layout from "../../../layout/Layout";
-import { MantineReactTable, useMantineReactTable } from "mantine-react-table";
-import {
-  IconEdit,
-  IconEditCircle,
-  IconEye,
-  IconPlus,
-} from "@tabler/icons-react";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import BASE_URL from "../../../base/BaseUrl";
-import { toast } from "react-toastify";
 import {
   Button,
   Dialog,
-  DialogHeader,
   DialogBody,
   DialogFooter,
+  DialogHeader,
 } from "@material-tailwind/react";
-import { IconTrash } from "@tabler/icons-react";
+import axios from "axios";
+import { MantineReactTable, useMantineReactTable } from "mantine-react-table";
+import { useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import BASE_URL from "../../../base/BaseUrl";
 import { MasterUnderInspectDelete, MasterUnderInspectEdit } from "../../../components/buttonIndex/ButtonComponents";
+import Layout from "../../../layout/Layout";
 const InspectionTyreList = () => {
   const [inspectionTyreData, setInspectionTyreData] = useState(null);
   const [loading, setLoading] = useState(false);
