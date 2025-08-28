@@ -8,7 +8,7 @@ import LoadingSpinner from "./components/LoadingSpinner";
 
 // Pages (Auth)
 import SignIn from "./pages/auth/SignIn";
-import SignUp from "./pages/auth/SignUp";
+
 import ForgetPassword from "./pages/auth/ForgetPassword";
 
 // Pages (Dashboard)
@@ -194,7 +194,7 @@ const App = () => {
         <Routes>
           {/* Auth Routes */}
           <Route path="/" element={<SignIn />} />
-          <Route path="/register" element={<SignUp />} />
+      
           <Route path="/forget-password" element={<ForgetPassword />} />
 
           {/* Dashboard Routes */}
