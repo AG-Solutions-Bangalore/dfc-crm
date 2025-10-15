@@ -132,6 +132,7 @@ const ServiceReportDetailsView = () => {
           service_company: localStorage.getItem("service_company"),
           service_branch: localStorage.getItem("service_branch"),
           service_truck_no: localStorage.getItem("service_truck_no"),
+          service_type: localStorage.getItem("service_type"),
         };
         const Response = await axios.post(
           `${BASE_URL}/api/fetch-services-details-report`,
@@ -239,6 +240,7 @@ const ServiceReportDetailsView = () => {
       service_company: localStorage.getItem("service_company"),
       service_branch: localStorage.getItem("service_branch"),
       service_truck_no: localStorage.getItem("service_truck_no"),
+      service_type: localStorage.getItem("service_type"),
     };
 
     axios({

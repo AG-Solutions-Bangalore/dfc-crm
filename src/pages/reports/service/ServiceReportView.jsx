@@ -1,26 +1,25 @@
-import React, { useState, useEffect, useRef } from "react";
-import { useNavigate, useParams } from "react-router-dom";
 import {
-  IconInfoCircle,
   IconArrowBack,
-  IconPrinter,
+  IconFileTypePdf,
   IconFileTypeXls,
+  IconInfoCircle,
+  IconPrinter,
 } from "@tabler/icons-react";
 import axios from "axios";
-import BASE_URL from "../../../base/BaseUrl";
-import Layout from "../../../layout/Layout";
-import { useReactToPrint } from "react-to-print";
-import SkeletonLoading from "../agencies/SkeletonLoading";
-import { IconFileTypePdf } from "@tabler/icons-react";
-import { toast } from "sonner";
 import moment from "moment";
-import { NumericFormat } from "react-number-format";
 import pdfMake from "pdfmake/build/pdfmake";
-import pdfFonts from "pdfmake/build/vfs_fonts";
+import React, { useEffect, useRef, useState } from "react";
+import { NumericFormat } from "react-number-format";
+import { useNavigate } from "react-router-dom";
+import { useReactToPrint } from "react-to-print";
+import { toast } from "sonner";
+import BASE_URL from "../../../base/BaseUrl";
 import {
   ReportDate,
   ReportTitle,
 } from "../../../components/common/ReportTitle";
+import Layout from "../../../layout/Layout";
+import SkeletonLoading from "../agencies/SkeletonLoading";
 const printStyles = `
   @media print {
 
@@ -44,7 +43,6 @@ const printStyles = `
   }
 `;
 const ServiceReportView = () => {
-  const { id } = useParams();
   const navigate = useNavigate();
   const [service, setService] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -194,11 +192,11 @@ const ServiceReportView = () => {
         {
           table: {
             headerRows: 1,
-            widths: ["15%", "15%", "10%", "auto", "auto", "10%", "9%"], // Adjust column widths
+            widths: ["15%", "15%", "10%", "auto", "auto", "10%", "9%"], 
             body: tableBody,
           },
           layout: {
-            fillColor: (rowIndex) => (rowIndex === 0 ? "#CCCCCC" : null), // Header background color
+            fillColor: (rowIndex) => (rowIndex === 0 ? "#CCCCCC" : null), 
             hLineWidth: () => 0.3,
             vLineWidth: () => 0.3,
           },

@@ -23,6 +23,7 @@ function ServiceReportForm() {
   const [vendor, setVendor] = useState([]);
   const [company, setCompany] = useState([]);
   const [vehicles, setVehicles] = useState([]);
+  const [serviceType, setServicesType] = useState([]);
 
   const [downloadServices, setServicesDownload] = useState({
     service_date_from: firstdate,
@@ -31,6 +32,7 @@ function ServiceReportForm() {
     service_company: "",
     service_branch: "",
     service_truck_no: "",
+    service_type: "",
   });
 
   const onInputChange = (selectedOption, action) => {
@@ -109,10 +111,28 @@ function ServiceReportForm() {
       console.error("Error fetching vehicles:", error);
     }
   };
+  const fetchServiceType = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.get(
+        `${BASE_URL}/api/web-fetch-service-types`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      setServicesType(response.data?.serviceTypes);
+    } catch (error) {
+      console.error("Error fetching service Type data", error);
+    }
+  };
   useEffect(() => {
     fetchBranches();
     fetchVehicle();
     fetchCompany();
+    fetchServiceType();
   }, []);
   useEffect(() => {
     fetchVendors();
@@ -165,6 +185,7 @@ function ServiceReportForm() {
       service_truck_no: downloadServices.service_truck_no,
       service_company: downloadServices.service_company,
       service_branch: downloadServices.service_branch,
+      service_type: downloadServices.service_type,
     };
     var v = document.getElementById("dowRecp").checkValidity();
     var v = document.getElementById("dowRecp").reportValidity();
@@ -179,20 +200,6 @@ function ServiceReportForm() {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       })
-        // .then((res) => {
-        //   console.log("data : ", res.data);
-        //   const url = window.URL.createObjectURL(new Blob([res.data]));
-        //   const link = document.createElement("a");
-        //   link.href = url;
-        //   link.setAttribute("download", "servicesDetails.csv");
-        //   document.body.appendChild(link);
-        //   link.click();
-        //   toast.success("servicesDetails is Downloaded Successfully");
-        //   setIsButtonDisabled(false);
-        // })
-        // .catch((err) => {
-        //   toast.error("servicesDetails is Not Downloaded");
-        // });
         .then((res) => {
           console.log("data : ", res.data);
           const url = window.URL.createObjectURL(new Blob([res.data]));
@@ -208,6 +215,7 @@ function ServiceReportForm() {
         });
     }
   };
+
   const customStyles = {
     control: (provided) => ({
       ...provided,
@@ -245,6 +253,7 @@ function ServiceReportForm() {
     localStorage.setItem("service_truck_no", downloadServices.service_truck_no);
     localStorage.setItem("service_company", downloadServices.service_company);
     localStorage.setItem("service_branch", downloadServices.service_branch);
+    localStorage.setItem("service_type", downloadServices.service_type);
   };
   return (
     <Layout>
@@ -260,7 +269,7 @@ function ServiceReportForm() {
         <hr />
         <div className="p-4">
           <form id="dowRecp" autoComplete="off">
-            <div className="grid grid-cols-1 md:grid-cols-2   gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3  gap-4">
               <SelectInput
                 label="Vehicle No"
                 name="service_truck_no"
@@ -341,34 +350,29 @@ function ServiceReportForm() {
                 styles={customStyles}
                 isSearchable={true}
               />
+              <SelectInput
+                label="Service Type"
+                name="service_type"
+                value={
+                  downloadServices.service_type
+                    ? {
+                        value: downloadServices.service_type,
+                        label: downloadServices.service_type,
+                      }
+                    : null
+                }
+                options={serviceType.map((item) => ({
+                  value: item.service_types,
+                  label: item.service_types,
+                }))}
+                onChange={onInputChange}
+                placeholder="Service Type"
+                styles={customStyles}
+                isSearchable={true}
+              />
+    
             </div>
 
-            {/* <div className="flex flex-wrap justify-center gap-4 py-4">
-              <button
-                className="text-center text-sm font-medium cursor-pointer hover:animate-pulse w-full sm:w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md"
-                onClick={onSubmit}
-              >
-                Download
-              </button>
-              <button
-                className="text-center text-sm font-medium cursor-pointer hover:animate-pulse w-full sm:w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md"
-                onClick={handleview}
-              >
-                View
-              </button>
-              <button
-                className="text-center text-sm font-medium cursor-pointer hover:animate-pulse w-full sm:w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md"
-                onClick={onDetailSubmit}
-              >
-                Details Download
-              </button>
-              <button
-                className="text-center text-sm font-medium cursor-pointer hover:animate-pulse w-full sm:w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md"
-                onClick={handleview1}
-              >
-                Details View
-              </button>
-            </div> */}
             <div className="flex flex-wrap justify-center gap-4 mt-4">
               <ReportServicesDownload
                 className={`${CreateButton} mx-4`}
