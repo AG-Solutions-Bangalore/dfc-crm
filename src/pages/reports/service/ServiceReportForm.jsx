@@ -135,7 +135,9 @@ function ServiceReportForm() {
     fetchServiceType();
   }, []);
   useEffect(() => {
-    fetchVendors();
+    if (downloadServices.service_branch) {
+      fetchVendors();
+    }
   }, [downloadServices.service_branch]);
   //DOWNLOAD
   const onSubmit = (e) => {
@@ -370,7 +372,6 @@ function ServiceReportForm() {
                 styles={customStyles}
                 isSearchable={true}
               />
-    
             </div>
 
             <div className="flex flex-wrap justify-center gap-4 mt-4">

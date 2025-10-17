@@ -23,24 +23,15 @@ import {
 } from "../../../components/common/ReportTitle";
 const printStyles = `
   @media print {
-
-
-
-
     /* Print content with 20px margin */
     .print-content {
       margin: 10px !important; /* Apply 20px margin to the printed content */
   padding: 3px;
       }
-
 .page-break {
       page-break-before: always;
       margin-top: 10mm;
     }
-
-
-
-
   }
 `;
 const ServiceReportDetailsView = () => {
@@ -56,7 +47,7 @@ const ServiceReportDetailsView = () => {
     pageStyle: `
           @page {
               size: A4;
-              margin: 4mm;
+              margin: 2mm;
           }
           @media print {
               body {
@@ -72,8 +63,6 @@ const ServiceReportDetailsView = () => {
                   border: 1px solid #ddd;
                   padding: 4px;
               }
-
-
 .trademark {
   position: fixed;
   bottom: 0;
@@ -84,7 +73,6 @@ const ServiceReportDetailsView = () => {
   font-size: 8px;
   color: gray;
 }
-
               th {
                   background-color: #f4f4f4;
               }
@@ -143,7 +131,6 @@ const ServiceReportDetailsView = () => {
         );
 
         setService(Response.data.services);
-        console.log(Response.data, "resposne");
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -159,11 +146,27 @@ const ServiceReportDetailsView = () => {
   }
   const handleSavePDF = () => {
     const tableBody = [
-      ["Date", "Vehicle No", "Service Type", "Amount", "Details"], // Header row
+      [
+        "Date",
+        "Vehicle No",
+        "Model/Make",
+        "Company",
+        "Branch",
+        "Service Type",
+        "Garage",
+        "KM",
+        "Amount",
+        "Details",
+      ], // Header row
       ...service.map((item) => [
         moment(item.service_date).format("DD-MM-YYYY") || "-",
         item.service_truck_no || "-",
+        item.mfg_year || "-",
+        item.service_company || "-",
+        item.service_branch || "-",
         item.service_sub_type || "-",
+        item.service_garage || "-",
+        item.service_km || "-",
 
         item.service_sub_amount
           ? `₹${Number(item.service_sub_amount).toLocaleString("en-IN", {
@@ -186,7 +189,20 @@ const ServiceReportDetailsView = () => {
         {
           table: {
             headerRows: 1,
-            widths: ["15%", "15%", "15%", "10%", "40%"],
+            // widths: ["10%", "10%","8%","15%", "15%","12%","8%", "8%", "15%"],
+            widths: [
+              // "auto",
+              "auto",
+              "auto",
+              "auto",
+              "auto",
+              "auto",
+              "auto",
+              "auto",
+              "auto",
+              "auto",
+              "auto",
+            ],
             body: tableBody,
           },
           layout: {
@@ -314,7 +330,12 @@ const ServiceReportDetailsView = () => {
                       {[
                         "Date",
                         "Vehicle No",
+                        "Model/Make",
+                        "Company",
+                        "Branch",
                         "Service Type",
+                        "Garage",
+                        "KM",
                         "Amount",
                         "Details",
                       ].map((header) => (
@@ -330,7 +351,7 @@ const ServiceReportDetailsView = () => {
                   <tbody>
                     {service.map((item, index) => (
                       <tr key={index}>
-                        <td className="p-1 text-xs border border-black text-center">
+                        <td className="p-1 text-xs border border-black text-center w-28">
                           {moment(item.service_date).format("DD-MM-YYYY")}
                         </td>
 
@@ -338,7 +359,22 @@ const ServiceReportDetailsView = () => {
                           {item.service_truck_no || "-"}
                         </td>
                         <td className="p-1 text-xs border border-black px-2">
+                          {item.mfg_year || "-"}
+                        </td>
+                        <td className="p-1 text-xs border border-black px-2">
+                          {item.service_company || "-"}
+                        </td>
+                        <td className="p-1 text-xs border border-black px-2">
+                          {item.service_branch || "-"}
+                        </td>
+                        <td className="p-1 text-xs border border-black px-2">
                           {item.service_sub_type || "-"}
+                        </td>
+                        <td className="p-1 text-xs border border-black px-2">
+                          {item.service_garage || "-"}
+                        </td>
+                        <td className="p-1 text-xs border border-black px-2">
+                          {item.service_km || "-"}
                         </td>
 
                         <td className="p-1 text-xs border border-black text-end px-2">
