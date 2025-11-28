@@ -329,8 +329,9 @@ const EditVechiles = () => {
                 name="reg_no"
                 value={vehicles.reg_no}
                 onChange={(e) => onInputChange(e)}
-                className={inputClass}
+className={`${inputClass} cursor-not-allowed`}
                 required
+                disabled
               />
             </div>
 
