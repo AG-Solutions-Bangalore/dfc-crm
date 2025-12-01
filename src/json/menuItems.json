@@ -148,6 +148,10 @@
       {
         "title": "Payment",
         "href": "/report-payment-form"
+      },
+      {
+        "title": "Fitted Tyre R",
+        "href": "/report-fitted-tyre"
       }
     ]
   },

@@ -19,6 +19,28 @@ const TMake = [
     label: "Radial",
   },
 ];
+const TYRE_SUB_STATUS = [
+  {
+    value: "New",
+    label: "New",
+  },
+  {
+    value: "1st Retread",
+    label: "1st Retread",
+  },
+  {
+    value: "2nd Retread",
+    label: "2nd Retread",
+  },
+  {
+    value: "3rd Retread",
+    label: "3rd Retread",
+  },
+  {
+    value: "Dead",
+    label: "Dead",
+  },
+];
 
 const AddPurchaseTyre = () => {
   const today = new Date();
@@ -38,10 +60,11 @@ const AddPurchaseTyre = () => {
     tyre_remarks: "",
     tyre_count: "",
     tyre_sub_data: "",
+   
   });
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const [fabric_inward_count, setCount] = useState(1);
-  const useTemplate = { tyre_sub_no: "", tyre_sub_type: "", tyre_sub_make: "" };
+  const useTemplate = { tyre_sub_no: "", tyre_sub_type: "", tyre_sub_make: "" ,tyre_sub_status:""};
 
   const [users, setUsers] = useState([useTemplate]);
   const [loading, setLoading] = useState(false);
@@ -220,20 +243,24 @@ const AddPurchaseTyre = () => {
     };
 
     setIsButtonDisabled(true);
-    axios({
-      url: BASE_URL + "/api/web-create-tyre",
-      method: "POST",
-      data,
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    }).then((res) => {
+    try {
+      const res = await axios({
+        url: BASE_URL + "/api/web-create-tyre",
+        method: "POST",
+        data,
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+  
       if (res.data.code == 200) {
         toast.success(res.data.msg);
-      } else if (res.data.code == 400) {
+      } else {
         toast.error(res.data.msg);
       }
+  
       navigate("/tyre/purchase-list");
+  
       setTyre({
         tyre_date: todayback,
         tyre_year: "2023-24",
@@ -246,7 +273,12 @@ const AddPurchaseTyre = () => {
         tyre_count: "",
         tyre_sub_data: "",
       });
-    });
+    } catch (error) {
+      console.error(error);
+      toast.error("Something went wrong!");
+    } finally {
+      setIsButtonDisabled(false); 
+    }
   };
 
   const FormLabel = ({ children, required }) => (
@@ -397,7 +429,7 @@ const AddPurchaseTyre = () => {
           <hr />
           {users.map((user, index) => (
             <div
-              className="grid grid-cols-1  md:grid-cols-1 lg:grid-cols-4 gap-6"
+              className="grid grid-cols-1  md:grid-cols-1 lg:grid-cols-5 gap-6"
               key={index}
             >
               <div>
@@ -444,6 +476,23 @@ const AddPurchaseTyre = () => {
                   {tyreMake.map((option) => (
                     <option key={option.tyre_make} value={option.tyre_make}>
                       {option.tyre_make}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <FormLabel required>Tyre Status</FormLabel>
+                <select
+                  name="tyre_sub_status"
+                  value={user.tyre_sub_status}
+                  onChange={(e) => onChange(e, index)}
+                  required
+                  className={inputClassSelect}
+                >
+                  <option value="">Select Tyre Status</option>
+                  {TYRE_SUB_STATUS.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.value}
                     </option>
                   ))}
                 </select>

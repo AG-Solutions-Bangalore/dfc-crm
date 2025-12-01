@@ -2,28 +2,33 @@ import React, { useState, useEffect, useRef } from 'react'
 import Layout from '../../../layout/Layout'
 import axios from 'axios'
 import moment from 'moment'
-import { useReactToPrint } from 'react-to-print'
 import * as ExcelJS from 'exceljs'
-import html2pdf from 'html2pdf.js'
 import BASE_URL from '../../../base/BaseUrl'
-import { Button, Paper } from '@mantine/core'
-import { Download, FileSpreadsheet, Printer, RefreshCw } from 'lucide-react'
+import { Button, Paper, TextInput, Group, Box } from '@mantine/core'
+import { FileSpreadsheet, RefreshCw, Search, X } from 'lucide-react'
 import { toast } from 'sonner'
 
 const FittedTyreReport = () => {
   const [reportData, setReportData] = useState([])
+  const [filteredData, setFilteredData] = useState([])
   const [loading, setLoading] = useState(false)
+  const [searchTerm, setSearchTerm] = useState('')
   const containerRef = useRef(null)
 
   // Group data by reg_sub_no
-  const groupedData = reportData.reduce((acc, item) => {
-    const vehicleNo = item.reg_sub_no
-    if (!acc[vehicleNo]) {
-      acc[vehicleNo] = []
-    }
-    acc[vehicleNo].push(item)
-    return acc
-  }, {})
+  const groupData = (data) => {
+    return data.reduce((acc, item) => {
+      const vehicleNo = item.reg_sub_no
+      if (!acc[vehicleNo]) {
+        acc[vehicleNo] = []
+      }
+      acc[vehicleNo].push(item)
+      return acc
+    }, {})
+  }
+
+  // Get grouped data
+  const groupedData = groupData(filteredData)
 
   // Function to get tyre positions based on vehicle type
   const getTyrePositions = (vehicleData) => {
@@ -253,6 +258,7 @@ const FittedTyreReport = () => {
       );
   
       setReportData(response.data.tyre || []);
+      setFilteredData(response.data.tyre || []);
   
       if (response.data.tyre?.length > 0) {
         toast.success("Report loaded successfully");
@@ -280,87 +286,48 @@ const FittedTyreReport = () => {
       controller.abort(); 
     };
   }, []);
-  
 
-  const handleDownload = () => {
-    const element = containerRef?.current
-
-    if (!element) {
-      toast.error('Failed to generate PDF')
-      return
+  // Function to handle search
+  const handleSearch = (term) => {
+    setSearchTerm(term);
+    
+    if (!term.trim()) {
+      setFilteredData(reportData);
+      return;
     }
-
-    const elementForPdf = element.cloneNode(true)
-    const printHideElements = elementForPdf.querySelectorAll('.print-hide')
-    printHideElements.forEach((el) => el.remove())
-
-    const style = document.createElement('style')
-    style.textContent = `
-      * {
-        color: #000000 !important;
-        background-color: transparent !important;
+    
+    const searchLower = term.toLowerCase().trim();
+    
+    const filtered = reportData.filter(item => {
+      // Search in vehicle number
+      const vehicleNo = item.reg_sub_no || '';
+      if (vehicleNo.toLowerCase().includes(searchLower)) {
+        return true;
       }
-      .bg-gray-200, .bg-gray-100, .bg-white {
-        background-color: #ffffff !important;
-      }
-    `
-    elementForPdf.appendChild(style)
-
-    const options = {
-      margin: [10, 10, 10, 10],
-      filename: `Fitted-Tyre-Report-${moment().format('DD-MM-YYYY')}.pdf`,
-      image: { type: 'jpeg', quality: 0.98 },
-      html2canvas: {
-        scale: 2,
-        useCORS: true,
-        scrollY: 0,
-        windowHeight: elementForPdf.scrollHeight,
-        backgroundColor: '#FFFFFF',
-      },
-      jsPDF: {
-        unit: 'mm',
-        format: 'a4',
-        orientation: 'portrait',
-      },
-      pagebreak: { mode: ['avoid-all', 'css', 'legacy'] },
-    }
-
-    html2pdf()
-      .from(elementForPdf)
-      .set(options)
-      .save()
-      .then(() => {
-        toast.success('PDF downloaded successfully')
-      })
-      .catch((error) => {
-        console.error('PDF download error:', error)
-        toast.error('Failed to download PDF')
-      })
-  }
-
-  const handlePrint = useReactToPrint({
-    content: () => containerRef.current,
-    documentTitle: `Fitted-Tyre-Report-${moment().format('DD-MM-YYYY')}`,
-    removeAfterPrint: true,
-    pageStyle: `
-      @page {
-        size: A4;
-        margin: 10mm;
-      }
-      @media print {
-        body {
-          margin: 0;
-          padding: 0;
-        }
-        .print-hide {
-          display: none !important;
+      
+      // Search in all tyre numbers
+      const tyrePositions = getTyrePositions([item]);
+      for (const position of tyrePositions) {
+        const tyreNo = item[position.no] || '';
+        if (tyreNo.toLowerCase().includes(searchLower)) {
+          return true;
         }
       }
-    `,
-  })
+      
+      return false;
+    });
+    
+    setFilteredData(filtered);
+  };
+
+  // Function to clear search
+  const clearSearch = () => {
+    setSearchTerm('');
+    setFilteredData(reportData);
+  };
 
   const handleExcelExport = async () => {
-    if (reportData.length === 0) {
+    if (filteredData.length === 0) {
       toast.error('No data to export')
       return
     }
@@ -485,34 +452,43 @@ const FittedTyreReport = () => {
                   </div>
                   
                   <div className="pt-4 border-t border-gray-200">
+                    <h4 className="text-sm font-semibold mb-2">Search:</h4>
+                    <Group spacing="xs" mb="md">
+                      <TextInput
+                        placeholder="Search Vehicle No or Tyre No"
+                        value={searchTerm}
+                        onChange={(e) => handleSearch(e.target.value)}
+                        icon={<Search size={16} />}
+                        className="flex-grow"
+                        size="sm"
+                      />
+                      {searchTerm && (
+                        <Button
+                          onClick={clearSearch}
+                          size="sm"
+                          variant="light"
+                          color="gray"
+                        >
+                          <X size={16} />
+                        </Button>
+                      )}
+                    </Group>
+                    <div className="text-xs text-gray-500 mb-3">
+                      Search by Vehicle Number (AP 04 TU 2314) or Tyre Number
+                    </div>
+                  </div>
+                  
+                  <div className="pt-4 border-t border-gray-200">
                     <h4 className="text-sm font-semibold mb-2">Export Options:</h4>
                     <div className="space-y-2">
                       <Button
-                        leftIcon={<Download size={16} />}
-                        onClick={handleDownload}
-                        disabled={reportData.length === 0}
-                        fullWidth
-                        className="bg-blue-600 hover:bg-blue-700 text-white"
-                      >
-                        PDF
-                      </Button>
-                      <Button
                         leftIcon={<FileSpreadsheet size={16} />}
                         onClick={handleExcelExport}
-                        disabled={reportData.length === 0}
+                        disabled={filteredData.length === 0}
                         fullWidth
                         className="bg-green-600 hover:bg-green-700 text-white"
                       >
                         Excel
-                      </Button>
-                      <Button
-                        leftIcon={<Printer size={16} />}
-                        onClick={handlePrint}
-                        disabled={reportData.length === 0}
-                        fullWidth
-                        className="bg-orange-600 hover:bg-orange-700 text-white"
-                      >
-                        Print
                       </Button>
                     </div>
                   </div>
@@ -521,7 +497,12 @@ const FittedTyreReport = () => {
                     <div className="text-sm text-gray-600">
                       <h4 className="font-semibold mb-1">Report Summary:</h4>
                       <p className="mb-1">Total Vehicles: {Object.keys(groupedData).length}</p>
-                      <p>Total Records: {reportData.length}</p>
+                      <p>Total Records: {filteredData.length}</p>
+                      {searchTerm && (
+                        <p className="mt-2 text-blue-600 font-medium">
+                          Showing {Object.keys(groupedData).length} of {groupData(reportData).length} vehicles
+                        </p>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -531,15 +512,34 @@ const FittedTyreReport = () => {
             {/* Main Content - Report Data */}
             <div className="w-full lg:w-5/6">
               <Paper shadow="md" p="md" className="min-h-[800px]">
-                
+                {/* Search Header */}
+                <Box mb="md">
+                  <Group position="apart">
+                    <div>
+                      <h2 className="text-xl font-bold">Fitted Tyre Report</h2>
+                      {searchTerm && (
+                        <p className="text-sm text-gray-600 mt-1">
+                          Search results for: <span className="font-semibold text-blue-600">{searchTerm}</span>
+                        </p>
+                      )}
+                    </div>
+                    {searchTerm && (
+                      <Button
+                        onClick={clearSearch}
+                        size="sm"
+                        variant="light"
+                        color="gray"
+                        leftIcon={<X size={16} />}
+                      >
+                        Clear Search
+                      </Button>
+                    )}
+                  </Group>
+                </Box>
 
-                {reportData.length > 0 ? (
+                {filteredData.length > 0 ? (
                   <div>
-                    
-
                     <div ref={containerRef} className="md:overflow-x-auto">
-                      
-
                       <div>
                         {Object.entries(groupedData).map(([vehicleNo, vehicleData]) => {
                           const firstItem = vehicleData[0]
@@ -639,11 +639,24 @@ const FittedTyreReport = () => {
                   </div>
                 ) : (
                   <div className="text-center py-20 text-gray-400">
-                    <div className="text-6xl mb-4">🛞</div>
-                    <h3 className="text-xl font-semibold mb-2">No Tyre Data</h3>
+                    <div className="text-6xl mb-4">🔍</div>
+                    <h3 className="text-xl font-semibold mb-2">
+                      {searchTerm ? 'No Matching Results Found' : 'No Tyre Data'}
+                    </h3>
                     <p>
-                      No fitted tyre data available. Please refresh the report.
+                      {searchTerm 
+                        ? `No results found for "${searchTerm}". Try a different search term.`
+                        : 'No fitted tyre data available. Please refresh the report.'}
                     </p>
+                    {searchTerm && (
+                      <Button 
+                        onClick={clearSearch} 
+                        variant="light" 
+                        className="mt-4"
+                      >
+                        Clear Search
+                      </Button>
+                    )}
                   </div>
                 )}
               </Paper>
