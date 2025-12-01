@@ -75,6 +75,16 @@ const VendorList = () => {
         size: 50,
       },
       {
+        accessorKey: "created_by",
+        header: "Created By",
+        size: 50,
+      },
+      {
+        accessorKey: "updated_by",
+        header: "Update By",
+        size: 50,
+      },
+      {
         id: "id",
         header: "Action",
         size: 20,

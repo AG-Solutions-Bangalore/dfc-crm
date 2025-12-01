@@ -70,7 +70,16 @@ const BranchPaymentList = () => {
           return <span>&#8377; {amount}</span>;
         },
       },
-
+      {
+        accessorKey: "created_by",
+        header: "Created By",
+        size: 50,
+      },
+      {
+        accessorKey: "updated_by",
+        header: "Update By",
+        size: 50,
+      },
       {
         id: "id",
         header: "Action",

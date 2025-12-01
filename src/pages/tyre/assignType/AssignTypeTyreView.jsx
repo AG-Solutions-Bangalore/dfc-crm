@@ -211,22 +211,22 @@ const AssignTypeTyreView = () => {
   //     <tr key={index} className="border border-gray-300">
   //       <td className="p-2 border border-gray-300">{tyre.position}</td>
   //       <td className="p-2 border border-gray-300">
-  //         {tyreData[`${tyre.prefix}_no`] || "N/A"}
+  //         {tyreData[`${tyre.prefix}_no`] || "-"}
   //       </td>
 
   //       <td className="p-2 border border-gray-300">
   //         {tyreData[`${tyre.prefix}_date`]
   //           ? moment(tyreData[`${tyre.prefix}_date`]).format("DD-MM-YYYY")
-  //           : "N/A"}
+  //           : "-"}
   //       </td>
   //       <td className="p-2 border border-gray-300">
-  //         {tyreData[`${tyre.prefix}_km`] || "N/A"}
+  //         {tyreData[`${tyre.prefix}_km`] || "-"}
   //       </td>
   //       <td className="p-2 border border-gray-300">
-  //         {tyreData[`${tyre.prefix}_pre_km`] || "N/A"}
+  //         {tyreData[`${tyre.prefix}_pre_km`] || "-"}
   //       </td>
   //       <td className="p-2 border border-gray-300">
-  //         {tyreData[`${tyre.prefix}_status`] || "N/A"}
+  //         {tyreData[`${tyre.prefix}_status`] || "-"}
   //       </td>
   //     </tr>
   //   ));
@@ -239,6 +239,7 @@ const AssignTypeTyreView = () => {
       Other: [
         { position: "1. Front Left", prefix: "tyre_assign_1_front_left" },
         { position: "2. Front Right", prefix: "tyre_assign_2_front_right" },
+        { position: "3. Stephany Tyre", prefix: "tyre_assign_stepney_no" },
       ],
       "6W Truck": [
         { position: "1. Front Left", prefix: "tyre_assign_1_front_left" },
@@ -247,6 +248,7 @@ const AssignTypeTyreView = () => {
         { position: "4. Back Left", prefix: "tyre_assign_4_back_left" },
         { position: "5. Back Right", prefix: "tyre_assign_5_back_right" },
         { position: "6. Back Right", prefix: "tyre_assign_6_back_right" },
+        { position: "7. Stephany Tyre", prefix: "tyre_assign_stepney_no" },
       ],
       "10W Truck": [
         { position: "1. Front Left", prefix: "tyre_assign_1_front_left" },
@@ -283,22 +285,23 @@ const AssignTypeTyreView = () => {
           position: "10. Back Dummy Right",
           prefix: "tyre_assign_10_back_dummy_right",
         },
+        { position: "11. Stephany Tyre", prefix: "tyre_assign_stepney_no" },
       ],
     };
 
     const positionsToRender = tyrePositions[vehicleType] || [];
 
     return positionsToRender.map((tyre, index) => {
-      const no = tyreData[`${tyre.prefix}_no`] || "N/A";
+      const no = tyreData[`${tyre.prefix}_no`] || "-";
       const date = tyreData[`${tyre.prefix}_date`]
         ? moment(tyreData[`${tyre.prefix}_date`]).format("DD-MM-YYYY")
-        : "N/A";
+        : "-";
       const km = parseInt(tyreData[`${tyre.prefix}_km`] || 0);
       const preKm = parseInt(tyreData[`${tyre.prefix}_pre_km`] || 0);
       const differenceKm = preKm - km;
-      const type = tyreData[`${tyre.prefix}_type`] || "N/A";
-      const make = tyreData[`${tyre.prefix}_make`] || "N/A";
-      const status = tyreData[`${tyre.prefix}_status`] || "N/A";
+      const type = tyreData[`${tyre.prefix}_type`] || "-";
+      const make = tyreData[`${tyre.prefix}_make`] || "-";
+      const status = tyreData[`${tyre.prefix}_status`] || "-";
 
       return (
         <tr key={index} className="border border-gray-300">
@@ -307,10 +310,10 @@ const AssignTypeTyreView = () => {
           <td className="p-2 border border-gray-300">{type}</td>
           <td className="p-2 border border-gray-300">{make}</td>
           <td className="p-2 border border-gray-300">{date}</td>
-          <td className="p-2 border border-gray-300">{km || "N/A"}</td>
-          <td className="p-2 border border-gray-300">{preKm || "N/A"}</td>
+          <td className="p-2 border border-gray-300">{km || "-"}</td>
+          <td className="p-2 border border-gray-300">{preKm || "-"}</td>
           <td className="p-2 border border-gray-300">
-            {differenceKm || "N/A"}
+            {differenceKm || "-"}
           </td>
           <td className="p-2 border border-gray-300">{status}</td>
         </tr>
@@ -368,7 +371,7 @@ const AssignTypeTyreView = () => {
                       <td className="p-2 font-medium bg-gray-100 w-1/3">
                         {row.label}
                       </td>
-                      <td className="p-2">{row.value || "N/A"}</td>
+                      <td className="p-2">{row.value || "-"}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -382,19 +385,19 @@ const AssignTypeTyreView = () => {
                       label: "Insurance Due",
                       value: vehicle.ins_due
                         ? moment(vehicle.ins_due).format("DD-MM-YYYY")
-                        : "N/A",
+                        : "-",
                     },
                     {
                       label: "Permit Due",
                       value: vehicle.permit_due
                         ? moment(vehicle.permit_due).format("DD-MM-YYYY")
-                        : "N/A",
+                        : "-",
                     },
                     {
                       label: "FC Due",
                       value: vehicle.fc_due
                         ? moment(vehicle.fc_due).format("DD-MM-YYYY")
-                        : "N/A",
+                        : "-",
                     },
                     { label: "Mileage", value: vehicle.vehicle_mileage },
                     {
@@ -410,7 +413,7 @@ const AssignTypeTyreView = () => {
                       <td className="p-2 font-medium bg-gray-100 w-1/3">
                         {row.label}
                       </td>
-                      <td className="p-2">{row.value || "N/A"}</td>
+                      <td className="p-2">{row.value || "-"}</td>
                     </tr>
                   ))}
                 </tbody>

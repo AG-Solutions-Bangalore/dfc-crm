@@ -19,6 +19,7 @@ import BASE_URL from "../../base/BaseUrl";
 import { decryptId } from "../../components/common/EncryptionDecryption";
 import Layout from "../../layout/Layout";
 import { IconScanEye } from "@tabler/icons-react";
+import { IconEdit } from "@tabler/icons-react";
 
 // Skeleton Loader Component
 const SkeletonLoader = () => {
@@ -114,6 +115,83 @@ const TruckView = () => {
     setOpen(false);
     setFilteredHistory([]);
   };
+
+
+
+
+  // --- status change ------
+
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [removeConfirmOpen, setRemoveConfirmOpen] = useState(false);
+    const [selectedTyre, setSelectedTyre] = useState({
+      fieldName: '',
+      tyreNo: '',
+      tyreType: '',
+      status: ''
+    });
+  
+    const TYRE_SUB_STATUS = [
+      { value: "New", label: "New" },
+      { value: "1st Retread", label: "1st Retread" },
+      { value: "2nd Retread", label: "2nd Retread" },
+      { value: "3rd Retread", label: "3rd Retread" },
+      { value: "Dead", label: "Dead" },
+    ];
+  
+    const openEditModal = (fieldName, tyreNo, tyreType, status) => {
+      setSelectedTyre({
+        fieldName,
+        tyreNo: tyreNo || '',
+        tyreType: tyreType || '',
+        status: status || 'New'
+      });
+      setEditModalOpen(true);
+    };
+  
+    const handleModalInputChange = (e) => {
+      const { name, value } = e.target;
+      setSelectedTyre(prev => ({
+        ...prev,
+        [name]: value
+      }));
+    };
+  
+    const handleSaveTyre = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const data = {
+      
+          tyre_no: selectedTyre.tyreNo,
+          tyre_type: selectedTyre.fieldName,
+          status: selectedTyre.status,
+       
+        };
+  
+        const response = await axios.put(
+          `${BASE_URL}/api/web-update-vehicle-tyre-assign-status/${tyre.id}`,
+          data,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+  
+        if (response.data.code === 200) {
+          toast.success(response.data.msg);
+          setEditModalOpen(false);
+          fetchTyreDetails();
+        } else {
+          toast.error(response.data.msg || "Failed to update tyre");
+        }
+      } catch (error) {
+        console.error("Error updating tyre:", error);
+        toast.error("Something went wrong");
+      }
+    };
+
+    
+
+    
+  // ----- status end ------
   const handlePrint = useReactToPrint({
     content: () => printRef.current,
     pageStyle: `
@@ -520,660 +598,891 @@ const TruckView = () => {
   };
 
   const tyreInfo = () => {
+   
     return (
       <>
-        {tyre != 0 && (
-          <div className="mt-2">
-            <h3 className="text-lg font-semibold mb-2 text-center">
-              Present Tyre
-            </h3>
-            <table className="w-full border-collapse">
-              <thead>
-                <tr className="bg-gray-100">
-                  <th className="border py-2 text-xs">Tyre Position</th>
-                  <th className="border py-2 text-xs">Tyre No</th>
-                  <th className="border py-2 text-xs">Type</th>
-                  <th className="border py-2 text-xs">Make</th>
-                  <th className="border py-2 text-xs">Date</th>
-                  <th className="border py-2 text-xs">KM</th>
-                  <th className="border py-2 text-xs">Present Date</th>
-                  <th className="border py-2 text-xs">Present KM</th>
-                  <th className="border py-2 text-xs">KM Run</th>
-                  <th className="border py-2 text-xs">Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {/* left  */}
-                {vehicle?.vehicle_type != "Other" && (
-                  <tr className="text-center">
-                    <td className="border py-2 text-xs text-start px-2">
-                      1.Front Left
-                    </td>
-                    <td className="border py-2 text-xs text-start px-2">
-                      {tyre?.tyre_assign_1_front_left_no}
-                    </td>
-                    <td className="border py-2 text-xs text-start px-2">
-                      {tyre?.tyre_assign_1_front_left_type}
-                    </td>
-                    <td className="border py-2 text-xs text-start px-2">
-                      {tyre?.tyre_assign_1_front_left_make}
-                    </td>
-                    <td className="border py-2 text-xs">
-                      {tyre?.tyre_assign_1_front_left_date
-                        ? moment(tyre?.tyre_assign_1_front_left_date).format(
-                            "DD-MMM-YYYY"
-                          )
-                        : ""}
-                    </td>
-                    <td className="border py-2 text-xs">
-                      {tyre?.tyre_assign_1_front_left_km}
-                    </td>
-                    <td className="border py-2 text-xs">
-                      {tyre?.tyre_assign_1_front_left_pre_date
-                        ? moment(
-                            tyre?.tyre_assign_1_front_left_pre_date
-                          ).format("DD-MMM-YYYY")
-                        : ""}
-                    </td>
-                    <td className="border py-2 text-xs">
-                      {tyre?.tyre_assign_1_front_left_pre_km}
-                    </td>
-                    <td className="border py-2 text-xs">
-                      {tyre?.tyre_assign_1_front_left_pre_km -
-                        tyre?.tyre_assign_1_front_left_km}
-                    </td>
-                    <td className="border py-2 text-xs">
-                      {tyre?.tyre_assign_1_front_left_status}
-                    </td>
-                  </tr>
-                )}
-                {/* right  */}
-                {vehicle.vehicle_type != "Other" && (
-                  <tr className="text-center">
-                    <td className="border py-2 text-xs text-start px-2">
-                      2.Front Right
-                    </td>
-                    <td className="border py-2 text-xs text-start px-2">
-                      {tyre?.tyre_assign_2_front_right_no}
-                    </td>
-                    <td className="border py-2 text-xs text-start px-2">
-                      {tyre?.tyre_assign_2_front_right_type}
-                    </td>
-                    <td className="border py-2 text-xs text-start px-2">
-                      {tyre?.tyre_assign_2_front_right_make}
-                    </td>
-                    <td className="border py-2 text-xs">
-                      {tyre?.tyre_assign_2_front_right_date
-                        ? moment(tyre?.tyre_assign_2_front_right_date).format(
-                            "DD-MMM-YYYY"
-                          )
-                        : ""}
-                    </td>
-                    <td className="border py-2 text-xs">
-                      {tyre?.tyre_assign_2_front_right_km}
-                    </td>
-                    <td className="border py-2 text-xs">
-                      {tyre?.tyre_assign_2_front_right_pre_date
-                        ? moment(
-                            tyre?.tyre_assign_2_front_right_pre_date
-                          ).format("DD-MMM-YYYY")
-                        : ""}
-                    </td>
-                    <td className="border py-2 text-xs">
-                      {tyre?.tyre_assign_2_front_right_pre_km}
-                    </td>
-                    <td className="border py-2 text-xs">
-                      {tyre?.tyre_assign_2_front_right_pre_km -
-                        tyre?.tyre_assign_2_front_right_km}
-                    </td>
-                    <td className="border py-2 text-xs">
-                      {tyre?.tyre_assign_2_front_right_status}
-                    </td>
-                  </tr>
-                )}
-
-                {/* 6w truck 1 back left */}
-                {vehicle.vehicle_type == "6W Truck" && (
-                  <tr className="text-center">
-                    <td className="border py-2 text-xs text-start px-2">
-                      3. Back Left
-                    </td>
-                    <td className="border py-2 text-xs text-start px-2">
-                      {tyre?.tyre_assign_3_back_left_no}
-                    </td>
-                    <td className="border py-2 text-xs text-start px-2">
-                      {tyre?.tyre_assign_3_back_left_type}
-                    </td>
-                    <td className="border py-2 text-xs text-start px-2">
-                      {tyre?.tyre_assign_3_back_left_make}
-                    </td>
-                    <td className="border py-2 text-xs">
-                      {tyre?.tyre_assign_3_back_left_date
-                        ? moment(tyre?.tyre_assign_3_back_left_date).format(
-                            "DD-MMM-YYYY"
-                          )
-                        : ""}
-                    </td>
-                    <td className="border py-2 text-xs">
-                      {tyre?.tyre_assign_3_back_left_km}
-                    </td>
-                    <td className="border py-2 text-xs">
-                      {tyre?.tyre_assign_3_back_left_pre_date
-                        ? moment(tyre?.tyre_assign_3_back_left_pre_date).format(
-                            "DD-MMM-YYYY"
-                          )
-                        : ""}
-                    </td>
-                    <td className="border py-2 text-xs">
-                      {tyre?.tyre_assign_3_back_left_pre_km}
-                    </td>
-                    <td className="border py-2 text-xs">
-                      {tyre?.tyre_assign_3_back_left_pre_km -
-                        tyre?.tyre_assign_3_back_left_km}
-                    </td>
-                    <td className="border py-2 text-xs ">
-                      {tyre?.tyre_assign_3_back_left_status}
-                    </td>
-                  </tr>
-                )}
-                {/* 6w truck 2 back left */}
-                {vehicle.vehicle_type == "6W Truck" && (
-                  <tr className="text-center">
-                    <td className="border py-2 text-xs text-start px-2">
-                      4. Back Left
-                    </td>
-                    <td className="border py-2 text-xs text-start px-2">
-                      {tyre?.tyre_assign_4_back_left_no}
-                    </td>
-                    <td className="border py-2 text-xs text-start px-2">
-                      {tyre?.tyre_assign_4_back_left_type}
-                    </td>
-                    <td className="border py-2 text-xs text-start px-2">
-                      {tyre?.tyre_assign_4_back_left_make}
-                    </td>
-                    <td className="border py-2 text-xs">
-                      {tyre?.tyre_assign_4_back_left_date
-                        ? moment(tyre?.tyre_assign_4_back_left_date).format(
-                            "DD-MMM-YYYY"
-                          )
-                        : ""}
-                    </td>
-                    <td className="border py-2 text-xs">
-                      {tyre?.tyre_assign_4_back_left_km}
-                    </td>
-                    <td className="border py-2 text-xs">
-                      {tyre?.tyre_assign_4_back_left_pre_date
-                        ? moment(tyre?.tyre_assign_4_back_left_pre_date).format(
-                            "DD-MMM-YYYY"
-                          )
-                        : ""}
-                    </td>
-                    <td className="border py-2 text-xs">
-                      {tyre?.tyre_assign_4_back_left_pre_km}
-                    </td>
-                    <td className="border py-2 text-xs">
-                      {tyre?.tyre_assign_4_back_left_pre_km -
-                        tyre?.tyre_assign_4_back_left_km}
-                    </td>
-                    <td className="border py-2 text-xs">
-                      {tyre?.tyre_assign_4_back_left_status}
-                    </td>
-                  </tr>
-                )}
-                {/* 6w truck 3 back right  */}
-                {vehicle.vehicle_type == "6W Truck" && (
-                  <tr className="text-center">
-                    <td className="border py-2 text-xs text-start px-2">
-                      5. Back Right
-                    </td>
-                    <td className="border py-2 text-xs text-start px-2">
-                      {tyre?.tyre_assign_5_back_right_no}
-                    </td>
-                    <td className="border py-2 text-xs text-start px-2">
-                      {tyre?.tyre_assign_5_back_right_type}
-                    </td>
-                    <td className="border py-2 text-xs text-start px-2">
-                      {tyre?.tyre_assign_5_back_right_make}
-                    </td>
-                    <td className="border py-2 text-xs">
-                      {tyre?.tyre_assign_5_back_right_date
-                        ? moment(tyre?.tyre_assign_5_back_right_date).format(
-                            "DD-MMM-YYYY"
-                          )
-                        : ""}
-                    </td>
-                    <td className="border py-2 text-xs">
-                      {tyre?.tyre_assign_5_back_right_km}
-                    </td>
-                    <td className="border py-2 text-xs">
-                      {tyre?.tyre_assign_5_back_right_pre_date
-                        ? moment(
-                            tyre?.tyre_assign_5_back_right_pre_date
-                          ).format("DD-MMM-YYYY")
-                        : ""}
-                    </td>
-                    <td className="border py-2 text-xs">
-                      {tyre?.tyre_assign_5_back_right_pre_km}
-                    </td>
-                    <td className="border py-2 text-xs">
-                      {tyre?.tyre_assign_5_back_right_pre_km -
-                        tyre?.tyre_assign_5_back_right_km}
-                    </td>
-                    <td className="border py-2 text-xs">
-                      {tyre?.tyre_assign_5_back_right_status}
-                    </td>
-                  </tr>
-                )}
-                {/* 6w truck 4 back right  */}
-                {vehicle.vehicle_type == "6W Truck" && (
-                  <tr className="text-center">
-                    <td className="border py-2 text-xs text-start px-2">
-                      6. Back Right
-                    </td>
-                    <td className="border py-2 text-xs text-start px-2">
-                      {tyre?.tyre_assign_6_back_right_no}
-                    </td>
-                    <td className="border py-2 text-xs text-start px-2">
-                      {tyre?.tyre_assign_6_back_right_type}
-                    </td>
-                    <td className="border py-2 text-xs text-start px-2">
-                      {tyre?.tyre_assign_6_back_right_make}
-                    </td>
-                    <td className="border py-2 text-xs">
-                      {tyre?.tyre_assign_6_back_right_date
-                        ? moment(tyre?.tyre_assign_6_back_right_date).format(
-                            "DD-MMM-YYYY"
-                          )
-                        : ""}
-                    </td>
-                    <td className="border py-2 text-xs">
-                      {tyre?.tyre_assign_6_back_right_km}
-                    </td>
-                    <td className="border py-2 text-xs">
-                      {tyre?.tyre_assign_6_back_right_pre_date
-                        ? moment(
-                            tyre?.tyre_assign_6_back_right_pre_date
-                          ).format("DD-MMM-YYYY")
-                        : ""}
-                    </td>
-                    <td className="border py-2 text-xs">
-                      {tyre?.tyre_assign_6_back_right_pre_km}
-                    </td>
-                    <td className="border py-2 text-xs">
-                      {tyre?.tyre_assign_6_back_right_pre_km -
-                        tyre?.tyre_assign_6_back_right_km}
-                    </td>
-                    <td className="border py-2 text-xs">
-                      {tyre?.tyre_assign_6_back_right_status}
-                    </td>
-                  </tr>
-                )}
-
-                {/* 10w truck 1 back housing  left  */}
-                {vehicle.vehicle_type == "10W Truck" && (
-                  <tr className="text-center">
-                    <td className="border py-2 text-xs text-start px-2">
-                      3. Back Housing Left
-                    </td>
-                    <td className="border py-2 text-xs text-start px-2">
-                      {tyre?.tyre_assign_3_back_housing_left_no}
-                    </td>
-                    <td className="border py-2 text-xs text-start px-2">
-                      {tyre?.tyre_assign_3_back_housing_left_type}
-                    </td>
-                    <td className="border py-2 text-xs text-start px-2">
-                      {tyre?.tyre_assign_3_back_housing_left_make}
-                    </td>
-                    <td className="border py-2 text-xs">
-                      {tyre?.tyre_assign_3_back_housing_left_date
-                        ? moment(
-                            tyre?.tyre_assign_3_back_housing_left_date
-                          ).format("DD-MMM-YYYY")
-                        : ""}
-                    </td>
-                    <td className="border py-2 text-xs">
-                      {tyre?.tyre_assign_3_back_housing_left_km}
-                    </td>
-                    <td className="border py-2 text-xs">
-                      {tyre?.tyre_assign_3_back_housing_left_pre_date
-                        ? moment(
-                            tyre?.tyre_assign_3_back_housing_left_pre_date
-                          ).format("DD-MMM-YYYY")
-                        : ""}
-                    </td>
-                    <td className="border py-2 text-xs">
-                      {tyre?.tyre_assign_3_back_housing_left_pre_km}
-                    </td>
-                    <td className="border py-2 text-xs">
-                      {tyre?.tyre_assign_3_back_housing_left_pre_km -
-                        tyre?.tyre_assign_3_back_housing_left_km}
-                    </td>
-                    <td className="border py-2 text-xs">
-                      {tyre?.tyre_assign_3_back_housing_left_status}
-                    </td>
-                  </tr>
-                )}
-
-                {/* 10w truck 2 back housing  left  */}
-                {vehicle.vehicle_type == "10W Truck" && (
-                  <tr className="text-center">
-                    <td className="border py-2 text-xs text-start px-2">
-                      4. Back Housing Left
-                    </td>
-                    <td className="border py-2 text-xs text-start px-2">
-                      {tyre?.tyre_assign_4_back_housing_left_no}
-                    </td>
-                    <td className="border py-2 text-xs text-start px-2">
-                      {tyre?.tyre_assign_4_back_housing_left_type}
-                    </td>
-                    <td className="border py-2 text-xs text-start px-2">
-                      {tyre?.tyre_assign_4_back_housing_left_make}
-                    </td>
-                    <td className="border py-2 text-xs">
-                      {tyre?.tyre_assign_4_back_housing_left_date
-                        ? moment(
-                            tyre?.tyre_assign_4_back_housing_left_date
-                          ).format("DD-MMM-YYYY")
-                        : ""}
-                    </td>
-                    <td className="border py-2 text-xs">
-                      {tyre?.tyre_assign_4_back_housing_left_km}
-                    </td>
-                    <td className="border py-2 text-xs">
-                      {tyre?.tyre_assign_4_back_housing_left_pre_date
-                        ? moment(
-                            tyre?.tyre_assign_4_back_housing_left_pre_date
-                          ).format("DD-MMM-YYYY")
-                        : ""}
-                    </td>
-                    <td className="border py-2 text-xs">
-                      {tyre?.tyre_assign_4_back_housing_left_pre_km}
-                    </td>
-                    <td className="border py-2 text-xs">
-                      {tyre?.tyre_assign_4_back_housing_left_pre_km -
-                        tyre?.tyre_assign_4_back_housing_left_km}
-                    </td>
-                    <td className="border py-2 text-xs">
-                      {tyre?.tyre_assign_4_back_housing_left_status}
-                    </td>
-                  </tr>
-                )}
-
-                {/* 10w truck 3 back dummy  left  */}
-                {vehicle.vehicle_type == "10W Truck" && (
-                  <tr className="text-center">
-                    <td className="border py-2 text-xs text-start px-2">
-                      5. Back Dummy Left
-                    </td>
-                    <td className="border py-2 text-xs text-start px-2">
-                      {tyre?.tyre_assign_5_back_dummy_left_no}
-                    </td>
-                    <td className="border py-2 text-xs text-start px-2">
-                      {tyre?.tyre_assign_5_back_dummy_left_type}
-                    </td>
-                    <td className="border py-2 text-xs text-start px-2">
-                      {tyre?.tyre_assign_5_back_dummy_left_make}
-                    </td>
-                    <td className="border py-2 text-xs">
-                      {tyre?.tyre_assign_5_back_dummy_left_date
-                        ? moment(
-                            tyre?.tyre_assign_5_back_dummy_left_date
-                          ).format("DD-MMM-YYYY")
-                        : ""}
-                    </td>
-                    <td className="border py-2 text-xs">
-                      {tyre?.tyre_assign_5_back_dummy_left_km}
-                    </td>
-                    <td className="border py-2 text-xs">
-                      {tyre?.tyre_assign_5_back_dummy_left_pre_date
-                        ? moment(
-                            tyre?.tyre_assign_5_back_dummy_left_pre_date
-                          ).format("DD-MMM-YYYY")
-                        : ""}
-                    </td>
-                    <td className="border py-2 text-xs">
-                      {tyre?.tyre_assign_5_back_dummy_left_pre_km}
-                    </td>
-                    <td className="border py-2 text-xs">
-                      {tyre?.tyre_assign_5_back_dummy_left_pre_km -
-                        tyre?.tyre_assign_5_back_dummy_left_km}
-                    </td>
-                    <td className="border py-2 text-xs">
-                      {tyre?.tyre_assign_5_back_dummy_left_status}
-                    </td>
-                  </tr>
-                )}
-                {/* 10w truck 4 back dummy  left  */}
-                {vehicle.vehicle_type == "10W Truck" && (
-                  <tr className="text-center">
-                    <td className="border py-2 text-xs text-start px-2">
-                      6. Back Dummy Left
-                    </td>
-                    <td className="border py-2 text-xs text-start px-2">
-                      {tyre?.tyre_assign_6_back_dummy_left_no}
-                    </td>
-                    <td className="border py-2 text-xs text-start px-2">
-                      {tyre?.tyre_assign_6_back_dummy_left_type}
-                    </td>
-                    <td className="border py-2 text-xs text-start px-2">
-                      {tyre?.tyre_assign_6_back_dummy_left_make}
-                    </td>
-                    <td className="border py-2 text-xs">
-                      {tyre?.tyre_assign_6_back_dummy_left_date
-                        ? moment(
-                            tyre?.tyre_assign_6_back_dummy_left_date
-                          ).format("DD-MMM-YYYY")
-                        : ""}
-                    </td>
-                    <td className="border py-2 text-xs">
-                      {tyre?.tyre_assign_6_back_dummy_left_km}
-                    </td>
-                    <td className="border py-2 text-xs">
-                      {tyre?.tyre_assign_6_back_dummy_left_pre_date
-                        ? moment(
-                            tyre?.tyre_assign_6_back_dummy_left_pre_date
-                          ).format("DD-MMM-YYYY")
-                        : ""}
-                    </td>
-                    <td className="border py-2 text-xs">
-                      {tyre?.tyre_assign_6_back_dummy_left_pre_km}
-                    </td>
-                    <td className="border py-2 text-xs">
-                      {tyre?.tyre_assign_6_back_dummy_left_pre_km -
-                        tyre?.tyre_assign_6_back_dummy_left_km}
-                    </td>
-                    <td className="border py-2 text-xs">
-                      {tyre?.tyre_assign_6_back_dummy_left_status}
-                    </td>
-                  </tr>
-                )}
-
-                {/* 10w truck 5 back Housing  Right  */}
-                {vehicle.vehicle_type == "10W Truck" && (
-                  <tr className="text-center">
-                    <td className="border py-2 text-xs text-start px-2">
-                      7. Back Housing Right
-                    </td>
-                    <td className="border py-2 text-xs text-start px-2">
-                      {tyre?.tyre_assign_7_back_housing_right_no}
-                    </td>
-                    <td className="border py-2 text-xs text-start px-2">
-                      {tyre?.tyre_assign_7_back_housing_right_type}
-                    </td>
-                    <td className="border py-2 text-xs text-start px-2">
-                      {tyre?.tyre_assign_7_back_housing_right_make}
-                    </td>
-                    <td className="border py-2 text-xs">
-                      {tyre?.tyre_assign_7_back_housing_right_date
-                        ? moment(
-                            tyre?.tyre_assign_7_back_housing_right_date
-                          ).format("DD-MMM-YYYY")
-                        : ""}
-                    </td>
-                    <td className="border py-2 text-xs">
-                      {tyre?.tyre_assign_7_back_housing_right_km}
-                    </td>
-                    <td className="border py-2 text-xs">
-                      {tyre?.tyre_assign_7_back_housing_right_pre_date
-                        ? moment(
-                            tyre?.tyre_assign_7_back_housing_right_pre_date
-                          ).format("DD-MMM-YYYY")
-                        : ""}
-                    </td>
-                    <td className="border py-2 text-xs">
-                      {tyre?.tyre_assign_7_back_housing_right_pre_km}
-                    </td>
-                    <td className="border py-2 text-xs">
-                      {tyre?.tyre_assign_7_back_housing_right_pre_km -
-                        tyre?.tyre_assign_7_back_housing_right_km}
-                    </td>
-                    <td className="border py-2 text-xs">
-                      {tyre?.tyre_assign_7_back_housing_right_status}
-                    </td>
-                  </tr>
-                )}
-
-                {/* 10w truck 6 back Housing  Right  */}
-                {vehicle.vehicle_type == "10W Truck" && (
-                  <tr className="text-center">
-                    <td className="border py-2 text-xs text-start px-2">
-                      8. Back Housing Right
-                    </td>
-                    <td className="border py-2 text-xs text-start px-2">
-                      {tyre?.tyre_assign_8_back_housing_right_no}
-                    </td>
-                    <td className="border py-2 text-xs text-start px-2">
-                      {tyre?.tyre_assign_8_back_housing_right_type}
-                    </td>
-                    <td className="border py-2 text-xs text-start px-2">
-                      {tyre?.tyre_assign_8_back_housing_right_make}
-                    </td>
-                    <td className="border py-2 text-xs">
-                      {tyre?.tyre_assign_8_back_housing_right_date
-                        ? moment(
-                            tyre?.tyre_assign_8_back_housing_right_date
-                          ).format("DD-MMM-YYYY")
-                        : ""}
-                    </td>
-                    <td className="border py-2 text-xs">
-                      {tyre?.tyre_assign_8_back_housing_right_km}
-                    </td>
-                    <td className="border py-2 text-xs">
-                      {tyre?.tyre_assign_8_back_housing_right_pre_date
-                        ? moment(
-                            tyre?.tyre_assign_8_back_housing_right_pre_date
-                          ).format("DD-MMM-YYYY")
-                        : ""}
-                    </td>
-                    <td className="border py-2 text-xs">
-                      {tyre?.tyre_assign_8_back_housing_right_pre_km}
-                    </td>
-                    <td className="border py-2 text-xs">
-                      {tyre?.tyre_assign_8_back_housing_right_pre_km -
-                        tyre?.tyre_assign_8_back_housing_right_km}
-                    </td>
-                    <td className="border py-2 text-xs">
-                      {tyre?.tyre_assign_8_back_housing_right_status}
-                    </td>
-                  </tr>
-                )}
-                {/* 10w truck 7 back Dummy Right  */}
-                {vehicle.vehicle_type == "10W Truck" && (
-                  <tr className="text-center">
-                    <td className="border py-2 text-xs text-start px-2">
-                      9. Back Dummy Right
-                    </td>
-                    <td className="border py-2 text-xs text-start px-2">
-                      {tyre?.tyre_assign_9_back_dummy_right_no}
-                    </td>
-                    <td className="border py-2 text-xs text-start px-2">
-                      {tyre?.tyre_assign_9_back_dummy_right_type}
-                    </td>
-                    <td className="border py-2 text-xs text-start px-2">
-                      {tyre?.tyre_assign_9_back_dummy_right_make}
-                    </td>
-                    <td className="border py-2 text-xs">
-                      {tyre?.tyre_assign_9_back_dummy_right_date
-                        ? moment(
-                            tyre?.tyre_assign_9_back_dummy_right_date
-                          ).format("DD-MMM-YYYY")
-                        : ""}
-                    </td>
-                    <td className="border py-2 text-xs">
-                      {tyre?.tyre_assign_9_back_dummy_right_km}
-                    </td>
-                    <td className="border py-2 text-xs">
-                      {tyre?.tyre_assign_9_back_dummy_right_pre_date
-                        ? moment(
-                            tyre?.tyre_assign_9_back_dummy_right_pre_date
-                          ).format("DD-MMM-YYYY")
-                        : ""}
-                    </td>
-                    <td className="border py-2 text-xs">
-                      {tyre?.tyre_assign_9_back_dummy_right_pre_km}
-                    </td>
-                    <td className="border py-2 text-xs">
-                      {tyre?.tyre_assign_9_back_dummy_right_pre_km -
-                        tyre?.tyre_assign_9_back_dummy_right_km}
-                    </td>
-                    <td className="border py-2 text-xs">
-                      {tyre?.tyre_assign_9_back_dummy_right_status}
-                    </td>
-                  </tr>
-                )}
-                {/* 10w truck 8 back Dummy Right  */}
-                {vehicle.vehicle_type == "10W Truck" && (
-                  <tr className="text-center">
-                    <td className="border py-2 text-xs text-start px-2">
-                      10. Back Dummy Right
-                    </td>
-                    <td className="border py-2 text-xs text-start px-2">
-                      {tyre?.tyre_assign_10_back_dummy_right_no}
-                    </td>
-                    <td className="border py-2 text-xs text-start px-2">
-                      {tyre?.tyre_assign_10_back_dummy_right_type}
-                    </td>
-                    <td className="border py-2 text-xs text-start px-2">
-                      {tyre?.tyre_assign_10_back_dummy_right_make}
-                    </td>
-                    <td className="border py-2 text-xs">
-                      {tyre?.tyre_assign_10_back_dummy_right_date
-                        ? moment(
-                            tyre?.tyre_assign_10_back_dummy_right_date
-                          ).format("DD-MMM-YYYY")
-                        : ""}
-                    </td>
-                    <td className="border py-2 text-xs">
-                      {tyre?.tyre_assign_10_back_dummy_right_km}
-                    </td>
-                    <td className="border py-2 text-xs">
-                      {tyre?.tyre_assign_10_back_dummy_right_pre_date
-                        ? moment(
-                            tyre?.tyre_assign_10_back_dummy_right_pre_date
-                          ).format("DD-MMM-YYYY")
-                        : ""}
-                    </td>
-                    <td className="border py-2 text-xs">
-                      {tyre?.tyre_assign_10_back_dummy_right_pre_km}
-                    </td>
-                    <td className="border py-2 text-xs">
-                      {tyre?.tyre_assign_10_back_dummy_right_pre_km -
-                        tyre?.tyre_assign_10_back_dummy_right_km}
-                    </td>
-                    <td className="border py-2 text-xs">
-                      {tyre?.tyre_assign_10_back_dummy_right_status}
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
-        )}
+          {tyre != 0 && (
+                <div className="mt-2">
+                  <h3 className="text-lg font-semibold mb-2 text-center">
+                    Present Tyre
+                  </h3>
+                  <table className="w-full border-collapse">
+                    <thead>
+                      <tr className="bg-gray-100">
+                        <th className="border py-2 text-xs">Tyre Position</th>
+                        <th className="border py-2 text-xs">Tyre No</th>
+                        <th className="border py-2 text-xs">Type</th>
+                        <th className="border py-2 text-xs">Make</th>
+                        <th className="border py-2 text-xs">Date</th>
+                        <th className="border py-2 text-xs">KM</th>
+                        <th className="border py-2 text-xs">Present Date</th>
+                        <th className="border py-2 text-xs">Present KM</th>
+                        <th className="border py-2 text-xs">KM Run</th>
+                        <th className="border py-2 text-xs">Status</th>
+                        <th className="border py-2 text-xs">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {vehicle?.vehicle_type != "Other" && (
+                        <tr className="text-center">
+                          <td className="border py-2 text-xs text-start px-2">
+                            1.Front Left 
+                          </td>
+                          <td className="border py-2 text-xs text-start px-2">
+                            {tyre?.tyre_assign_1_front_left_no}
+                          </td>
+                          <td className="border py-2 text-xs text-start px-2">
+                            {tyre?.tyre_assign_1_front_left_type}
+                          </td>
+                          <td className="border py-2 text-xs text-start px-2">
+                            {tyre?.tyre_assign_1_front_left_make}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            {tyre?.tyre_assign_1_front_left_date
+                              ? moment(tyre?.tyre_assign_1_front_left_date).format(
+                                  "DD-MMM-YYYY"
+                                )
+                              : ""}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            {tyre?.tyre_assign_1_front_left_km}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            {tyre?.tyre_assign_1_front_left_pre_date
+                              ? moment(
+                                  tyre?.tyre_assign_1_front_left_pre_date
+                                ).format("DD-MMM-YYYY")
+                              : ""}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            {tyre?.tyre_assign_1_front_left_pre_km}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            {tyre?.tyre_assign_1_front_left_pre_km -
+                              tyre?.tyre_assign_1_front_left_km}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            {tyre?.tyre_assign_1_front_left_status}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            <IconEdit 
+                              size={18} 
+                              className="cursor-pointer text-blue-600 hover:text-blue-800 mx-auto"
+                              onClick={() => openEditModal(
+                                'tyre_assign_1_front_left_no',
+                                tyre?.tyre_assign_1_front_left_no,
+                                tyre?.tyre_assign_1_front_left_type,
+                                tyre?.tyre_assign_1_front_left_status,
+                                tyre.id
+                              )}
+                              title="Edit Tyre"
+                            />
+                          </td>
+                        </tr>
+                      )}
+        
+                      {vehicle.vehicle_type != "Other" && (
+                        <tr className="text-center">
+                          <td className="border py-2 text-xs text-start px-2">
+                            2.Front Right
+                          </td>
+                          <td className="border py-2 text-xs text-start px-2">
+                            {tyre?.tyre_assign_2_front_right_no}
+                          </td>
+                          <td className="border py-2 text-xs text-start px-2">
+                            {tyre?.tyre_assign_2_front_right_type}
+                          </td>
+                          <td className="border py-2 text-xs text-start px-2">
+                            {tyre?.tyre_assign_2_front_right_make}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            {tyre?.tyre_assign_2_front_right_date
+                              ? moment(tyre?.tyre_assign_2_front_right_date).format(
+                                  "DD-MMM-YYYY"
+                                )
+                              : ""}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            {tyre?.tyre_assign_2_front_right_km}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            {tyre?.tyre_assign_2_front_right_pre_date
+                              ? moment(
+                                  tyre?.tyre_assign_2_front_right_pre_date
+                                ).format("DD-MMM-YYYY")
+                              : ""}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            {tyre?.tyre_assign_2_front_right_pre_km}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            {tyre?.tyre_assign_2_front_right_pre_km -
+                              tyre?.tyre_assign_2_front_right_km}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            {tyre?.tyre_assign_2_front_right_status}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            <IconEdit 
+                              size={18} 
+                              className="cursor-pointer text-blue-600 hover:text-blue-800 mx-auto"
+                              onClick={() => openEditModal(
+                                'tyre_assign_2_front_right_no',
+                                tyre?.tyre_assign_2_front_right_no,
+                                tyre?.tyre_assign_2_front_right_type,
+                                tyre?.tyre_assign_2_front_right_status
+                              )}
+                              title="Edit Tyre"
+                            />
+                          </td>
+                        </tr>
+                      )}
+        
+                      {vehicle.vehicle_type == "6W Truck" && (
+                        <tr className="text-center">
+                          <td className="border py-2 text-xs text-start px-2">
+                            3. Back Left
+                          </td>
+                          <td className="border py-2 text-xs text-start px-2">
+                            {tyre?.tyre_assign_3_back_left_no}
+                          </td>
+                          <td className="border py-2 text-xs text-start px-2">
+                            {tyre?.tyre_assign_3_back_left_type}
+                          </td>
+                          <td className="border py-2 text-xs text-start px-2">
+                            {tyre?.tyre_assign_3_back_left_make}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            {tyre?.tyre_assign_3_back_left_date
+                              ? moment(tyre?.tyre_assign_3_back_left_date).format(
+                                  "DD-MMM-YYYY"
+                                )
+                              : ""}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            {tyre?.tyre_assign_3_back_left_km}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            {tyre?.tyre_assign_3_back_left_pre_date
+                              ? moment(tyre?.tyre_assign_3_back_left_pre_date).format(
+                                  "DD-MMM-YYYY"
+                                )
+                              : ""}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            {tyre?.tyre_assign_3_back_left_pre_km}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            {tyre?.tyre_assign_3_back_left_pre_km -
+                              tyre?.tyre_assign_3_back_left_km}
+                          </td>
+                          <td className="border py-2 text-xs ">
+                            {tyre?.tyre_assign_3_back_left_status}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            <IconEdit 
+                              size={18} 
+                              className="cursor-pointer text-blue-600 hover:text-blue-800 mx-auto"
+                              onClick={() => openEditModal(
+                                'tyre_assign_3_back_left_no',
+                                tyre?.tyre_assign_3_back_left_no,
+                                tyre?.tyre_assign_3_back_left_type,
+                                tyre?.tyre_assign_3_back_left_status
+                              )}
+                              title="Edit Tyre"
+                            />
+                          </td>
+                        </tr>
+                      )}
+        
+                      {vehicle.vehicle_type == "6W Truck" && (
+                        <tr className="text-center">
+                          <td className="border py-2 text-xs text-start px-2">
+                            4. Back Left
+                          </td>
+                          <td className="border py-2 text-xs text-start px-2">
+                            {tyre?.tyre_assign_4_back_left_no}
+                          </td>
+                          <td className="border py-2 text-xs text-start px-2">
+                            {tyre?.tyre_assign_4_back_left_type}
+                          </td>
+                          <td className="border py-2 text-xs text-start px-2">
+                            {tyre?.tyre_assign_4_back_left_make}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            {tyre?.tyre_assign_4_back_left_date
+                              ? moment(tyre?.tyre_assign_4_back_left_date).format(
+                                  "DD-MMM-YYYY"
+                                )
+                              : ""}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            {tyre?.tyre_assign_4_back_left_km}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            {tyre?.tyre_assign_4_back_left_pre_date
+                              ? moment(tyre?.tyre_assign_4_back_left_pre_date).format(
+                                  "DD-MMM-YYYY"
+                                )
+                              : ""}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            {tyre?.tyre_assign_4_back_left_pre_km}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            {tyre?.tyre_assign_4_back_left_pre_km -
+                              tyre?.tyre_assign_4_back_left_km}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            {tyre?.tyre_assign_4_back_left_status}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            <IconEdit 
+                              size={18} 
+                              className="cursor-pointer text-blue-600 hover:text-blue-800 mx-auto"
+                              onClick={() => openEditModal(
+                                'tyre_assign_4_back_left_no',
+                                tyre?.tyre_assign_4_back_left_no,
+                                tyre?.tyre_assign_4_back_left_type,
+                                tyre?.tyre_assign_4_back_left_status
+                              )}
+                              title="Edit Tyre"
+                            />
+                          </td>
+                        </tr>
+                      )}
+        
+                      {vehicle.vehicle_type == "6W Truck" && (
+                        <tr className="text-center">
+                          <td className="border py-2 text-xs text-start px-2">
+                            5. Back Right
+                          </td>
+                          <td className="border py-2 text-xs text-start px-2">
+                            {tyre?.tyre_assign_5_back_right_no}
+                          </td>
+                          <td className="border py-2 text-xs text-start px-2">
+                            {tyre?.tyre_assign_5_back_right_type}
+                          </td>
+                          <td className="border py-2 text-xs text-start px-2">
+                            {tyre?.tyre_assign_5_back_right_make}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            {tyre?.tyre_assign_5_back_right_date
+                              ? moment(tyre?.tyre_assign_5_back_right_date).format(
+                                  "DD-MMM-YYYY"
+                                )
+                              : ""}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            {tyre?.tyre_assign_5_back_right_km}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            {tyre?.tyre_assign_5_back_right_pre_date
+                              ? moment(
+                                  tyre?.tyre_assign_5_back_right_pre_date
+                                ).format("DD-MMM-YYYY")
+                              : ""}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            {tyre?.tyre_assign_5_back_right_pre_km}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            {tyre?.tyre_assign_5_back_right_pre_km -
+                              tyre?.tyre_assign_5_back_right_km}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            {tyre?.tyre_assign_5_back_right_status}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            <IconEdit 
+                              size={18} 
+                              className="cursor-pointer text-blue-600 hover:text-blue-800 mx-auto"
+                              onClick={() => openEditModal(
+                                'tyre_assign_5_back_right_no',
+                                tyre?.tyre_assign_5_back_right_no,
+                                tyre?.tyre_assign_5_back_right_type,
+                                tyre?.tyre_assign_5_back_right_status
+                              )}
+                              title="Edit Tyre"
+                            />
+                          </td>
+                        </tr>
+                      )}
+        
+                      {vehicle.vehicle_type == "6W Truck" && (
+                        <tr className="text-center">
+                          <td className="border py-2 text-xs text-start px-2">
+                            6. Back Right
+                          </td>
+                          <td className="border py-2 text-xs text-start px-2">
+                            {tyre?.tyre_assign_6_back_right_no}
+                          </td>
+                          <td className="border py-2 text-xs text-start px-2">
+                            {tyre?.tyre_assign_6_back_right_type}
+                          </td>
+                          <td className="border py-2 text-xs text-start px-2">
+                            {tyre?.tyre_assign_6_back_right_make}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            {tyre?.tyre_assign_6_back_right_date
+                              ? moment(tyre?.tyre_assign_6_back_right_date).format(
+                                  "DD-MMM-YYYY"
+                                )
+                              : ""}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            {tyre?.tyre_assign_6_back_right_km}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            {tyre?.tyre_assign_6_back_right_pre_date
+                              ? moment(
+                                  tyre?.tyre_assign_6_back_right_pre_date
+                                ).format("DD-MMM-YYYY")
+                              : ""}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            {tyre?.tyre_assign_6_back_right_pre_km}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            {tyre?.tyre_assign_6_back_right_pre_km -
+                              tyre?.tyre_assign_6_back_right_km}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            {tyre?.tyre_assign_6_back_right_status}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            <IconEdit 
+                              size={18} 
+                              className="cursor-pointer text-blue-600 hover:text-blue-800 mx-auto"
+                              onClick={() => openEditModal(
+                                'tyre_assign_6_back_right_no',
+                                tyre?.tyre_assign_6_back_right_no,
+                                tyre?.tyre_assign_6_back_right_type,
+                                tyre?.tyre_assign_6_back_right_status
+                              )}
+                              title="Edit Tyre"
+                            />
+                          </td>
+                        </tr>
+                      )}
+        
+                      {vehicle.vehicle_type == "10W Truck" && (
+                        <tr className="text-center">
+                          <td className="border py-2 text-xs text-start px-2">
+                            3. Back Housing Left
+                          </td>
+                          <td className="border py-2 text-xs text-start px-2">
+                            {tyre?.tyre_assign_3_back_housing_left_no}
+                          </td>
+                          <td className="border py-2 text-xs text-start px-2">
+                            {tyre?.tyre_assign_3_back_housing_left_type}
+                          </td>
+                          <td className="border py-2 text-xs text-start px-2">
+                            {tyre?.tyre_assign_3_back_housing_left_make}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            {tyre?.tyre_assign_3_back_housing_left_date
+                              ? moment(
+                                  tyre?.tyre_assign_3_back_housing_left_date
+                                ).format("DD-MMM-YYYY")
+                              : ""}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            {tyre?.tyre_assign_3_back_housing_left_km}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            {tyre?.tyre_assign_3_back_housing_left_pre_date
+                              ? moment(
+                                  tyre?.tyre_assign_3_back_housing_left_pre_date
+                                ).format("DD-MMM-YYYY")
+                              : ""}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            {tyre?.tyre_assign_3_back_housing_left_pre_km}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            {tyre?.tyre_assign_3_back_housing_left_pre_km -
+                              tyre?.tyre_assign_3_back_housing_left_km}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            {tyre?.tyre_assign_3_back_housing_left_status}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            <IconEdit 
+                              size={18} 
+                              className="cursor-pointer text-blue-600 hover:text-blue-800 mx-auto"
+                              onClick={() => openEditModal(
+                                'tyre_assign_3_back_housing_left_no',
+                                tyre?.tyre_assign_3_back_housing_left_no,
+                                tyre?.tyre_assign_3_back_housing_left_type,
+                                tyre?.tyre_assign_3_back_housing_left_status
+                              )}
+                              title="Edit Tyre"
+                            />
+                          </td>
+                        </tr>
+                      )}
+        
+                      {vehicle.vehicle_type == "10W Truck" && (
+                        <tr className="text-center">
+                          <td className="border py-2 text-xs text-start px-2">
+                            4. Back Housing Left
+                          </td>
+                          <td className="border py-2 text-xs text-start px-2">
+                            {tyre?.tyre_assign_4_back_housing_left_no}
+                          </td>
+                          <td className="border py-2 text-xs text-start px-2">
+                            {tyre?.tyre_assign_4_back_housing_left_type}
+                          </td>
+                          <td className="border py-2 text-xs text-start px-2">
+                            {tyre?.tyre_assign_4_back_housing_left_make}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            {tyre?.tyre_assign_4_back_housing_left_date
+                              ? moment(
+                                  tyre?.tyre_assign_4_back_housing_left_date
+                                ).format("DD-MMM-YYYY")
+                              : ""}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            {tyre?.tyre_assign_4_back_housing_left_km}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            {tyre?.tyre_assign_4_back_housing_left_pre_date
+                              ? moment(
+                                  tyre?.tyre_assign_4_back_housing_left_pre_date
+                                ).format("DD-MMM-YYYY")
+                              : ""}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            {tyre?.tyre_assign_4_back_housing_left_pre_km}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            {tyre?.tyre_assign_4_back_housing_left_pre_km -
+                              tyre?.tyre_assign_4_back_housing_left_km}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            {tyre?.tyre_assign_4_back_housing_left_status}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            <IconEdit 
+                              size={18} 
+                              className="cursor-pointer text-blue-600 hover:text-blue-800 mx-auto"
+                              onClick={() => openEditModal(
+                                'tyre_assign_4_back_housing_left_no',
+                                tyre?.tyre_assign_4_back_housing_left_no,
+                                tyre?.tyre_assign_4_back_housing_left_type,
+                                tyre?.tyre_assign_4_back_housing_left_status
+                              )}
+                              title="Edit Tyre"
+                            />
+                          </td>
+                        </tr>
+                      )}
+        
+                      {vehicle.vehicle_type == "10W Truck" && (
+                        <tr className="text-center">
+                          <td className="border py-2 text-xs text-start px-2">
+                            5. Back Dummy Left
+                          </td>
+                          <td className="border py-2 text-xs text-start px-2">
+                            {tyre?.tyre_assign_5_back_dummy_left_no}
+                          </td>
+                          <td className="border py-2 text-xs text-start px-2">
+                            {tyre?.tyre_assign_5_back_dummy_left_type}
+                          </td>
+                          <td className="border py-2 text-xs text-start px-2">
+                            {tyre?.tyre_assign_5_back_dummy_left_make}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            {tyre?.tyre_assign_5_back_dummy_left_date
+                              ? moment(
+                                  tyre?.tyre_assign_5_back_dummy_left_date
+                                ).format("DD-MMM-YYYY")
+                              : ""}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            {tyre?.tyre_assign_5_back_dummy_left_km}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            {tyre?.tyre_assign_5_back_dummy_left_pre_date
+                              ? moment(
+                                  tyre?.tyre_assign_5_back_dummy_left_pre_date
+                                ).format("DD-MMM-YYYY")
+                              : ""}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            {tyre?.tyre_assign_5_back_dummy_left_pre_km}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            {tyre?.tyre_assign_5_back_dummy_left_pre_km -
+                              tyre?.tyre_assign_5_back_dummy_left_km}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            {tyre?.tyre_assign_5_back_dummy_left_status}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            <IconEdit 
+                              size={18} 
+                              className="cursor-pointer text-blue-600 hover:text-blue-800 mx-auto"
+                              onClick={() => openEditModal(
+                                'tyre_assign_5_back_dummy_left_no',
+                                tyre?.tyre_assign_5_back_dummy_left_no,
+                                tyre?.tyre_assign_5_back_dummy_left_type,
+                                tyre?.tyre_assign_5_back_dummy_left_status
+                              )}
+                              title="Edit Tyre"
+                            />
+                          </td>
+                        </tr>
+                      )}
+        
+                      {vehicle.vehicle_type == "10W Truck" && (
+                        <tr className="text-center">
+                          <td className="border py-2 text-xs text-start px-2">
+                            6. Back Dummy Left
+                          </td>
+                          <td className="border py-2 text-xs text-start px-2">
+                            {tyre?.tyre_assign_6_back_dummy_left_no}
+                          </td>
+                          <td className="border py-2 text-xs text-start px-2">
+                            {tyre?.tyre_assign_6_back_dummy_left_type}
+                          </td>
+                          <td className="border py-2 text-xs text-start px-2">
+                            {tyre?.tyre_assign_6_back_dummy_left_make}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            {tyre?.tyre_assign_6_back_dummy_left_date
+                              ? moment(
+                                  tyre?.tyre_assign_6_back_dummy_left_date
+                                ).format("DD-MMM-YYYY")
+                              : ""}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            {tyre?.tyre_assign_6_back_dummy_left_km}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            {tyre?.tyre_assign_6_back_dummy_left_pre_date
+                              ? moment(
+                                  tyre?.tyre_assign_6_back_dummy_left_pre_date
+                                ).format("DD-MMM-YYYY")
+                              : ""}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            {tyre?.tyre_assign_6_back_dummy_left_pre_km}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            {tyre?.tyre_assign_6_back_dummy_left_pre_km -
+                              tyre?.tyre_assign_6_back_dummy_left_km}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            {tyre?.tyre_assign_6_back_dummy_left_status}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            <IconEdit 
+                              size={18} 
+                              className="cursor-pointer text-blue-600 hover:text-blue-800 mx-auto"
+                              onClick={() => openEditModal(
+                                'tyre_assign_6_back_dummy_left_no',
+                                tyre?.tyre_assign_6_back_dummy_left_no,
+                                tyre?.tyre_assign_6_back_dummy_left_type,
+                                tyre?.tyre_assign_6_back_dummy_left_status
+                              )}
+                              title="Edit Tyre"
+                            />
+                          </td>
+                        </tr>
+                      )}
+        
+                      {vehicle.vehicle_type == "10W Truck" && (
+                        <tr className="text-center">
+                          <td className="border py-2 text-xs text-start px-2">
+                            7. Back Housing Right
+                          </td>
+                          <td className="border py-2 text-xs text-start px-2">
+                            {tyre?.tyre_assign_7_back_housing_right_no}
+                          </td>
+                          <td className="border py-2 text-xs text-start px-2">
+                            {tyre?.tyre_assign_7_back_housing_right_type}
+                          </td>
+                          <td className="border py-2 text-xs text-start px-2">
+                            {tyre?.tyre_assign_7_back_housing_right_make}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            {tyre?.tyre_assign_7_back_housing_right_date
+                              ? moment(
+                                  tyre?.tyre_assign_7_back_housing_right_date
+                                ).format("DD-MMM-YYYY")
+                              : ""}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            {tyre?.tyre_assign_7_back_housing_right_km}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            {tyre?.tyre_assign_7_back_housing_right_pre_date
+                              ? moment(
+                                  tyre?.tyre_assign_7_back_housing_right_pre_date
+                                ).format("DD-MMM-YYYY")
+                              : ""}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            {tyre?.tyre_assign_7_back_housing_right_pre_km}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            {tyre?.tyre_assign_7_back_housing_right_pre_km -
+                              tyre?.tyre_assign_7_back_housing_right_km}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            {tyre?.tyre_assign_7_back_housing_right_status}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            <IconEdit 
+                              size={18} 
+                              className="cursor-pointer text-blue-600 hover:text-blue-800 mx-auto"
+                              onClick={() => openEditModal(
+                                'tyre_assign_7_back_housing_right_no',
+                                tyre?.tyre_assign_7_back_housing_right_no,
+                                tyre?.tyre_assign_7_back_housing_right_type,
+                                tyre?.tyre_assign_7_back_housing_right_status
+                              )}
+                              title="Edit Tyre"
+                            />
+                          </td>
+                        </tr>
+                      )}
+        
+                      {vehicle.vehicle_type == "10W Truck" && (
+                        <tr className="text-center">
+                          <td className="border py-2 text-xs text-start px-2">
+                            8. Back Housing Right
+                          </td>
+                          <td className="border py-2 text-xs text-start px-2">
+                            {tyre?.tyre_assign_8_back_housing_right_no}
+                          </td>
+                          <td className="border py-2 text-xs text-start px-2">
+                            {tyre?.tyre_assign_8_back_housing_right_type}
+                          </td>
+                          <td className="border py-2 text-xs text-start px-2">
+                            {tyre?.tyre_assign_8_back_housing_right_make}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            {tyre?.tyre_assign_8_back_housing_right_date
+                              ? moment(
+                                  tyre?.tyre_assign_8_back_housing_right_date
+                                ).format("DD-MMM-YYYY")
+                              : ""}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            {tyre?.tyre_assign_8_back_housing_right_km}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            {tyre?.tyre_assign_8_back_housing_right_pre_date
+                              ? moment(
+                                  tyre?.tyre_assign_8_back_housing_right_pre_date
+                                ).format("DD-MMM-YYYY")
+                              : ""}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            {tyre?.tyre_assign_8_back_housing_right_pre_km}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            {tyre?.tyre_assign_8_back_housing_right_pre_km -
+                              tyre?.tyre_assign_8_back_housing_right_km}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            {tyre?.tyre_assign_8_back_housing_right_status}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            <IconEdit 
+                              size={18} 
+                              className="cursor-pointer text-blue-600 hover:text-blue-800 mx-auto"
+                              onClick={() => openEditModal(
+                                'tyre_assign_8_back_housing_right_no',
+                                tyre?.tyre_assign_8_back_housing_right_no,
+                                tyre?.tyre_assign_8_back_housing_right_type,
+                                tyre?.tyre_assign_8_back_housing_right_status
+                              )}
+                              title="Edit Tyre"
+                            />
+                          </td>
+                        </tr>
+                      )}
+        
+                      {vehicle.vehicle_type == "10W Truck" && (
+                        <tr className="text-center">
+                          <td className="border py-2 text-xs text-start px-2">
+                            9. Back Dummy Right
+                          </td>
+                          <td className="border py-2 text-xs text-start px-2">
+                            {tyre?.tyre_assign_9_back_dummy_right_no}
+                          </td>
+                          <td className="border py-2 text-xs text-start px-2">
+                            {tyre?.tyre_assign_9_back_dummy_right_type}
+                          </td>
+                          <td className="border py-2 text-xs text-start px-2">
+                            {tyre?.tyre_assign_9_back_dummy_right_make}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            {tyre?.tyre_assign_9_back_dummy_right_date
+                              ? moment(
+                                  tyre?.tyre_assign_9_back_dummy_right_date
+                                ).format("DD-MMM-YYYY")
+                              : ""}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            {tyre?.tyre_assign_9_back_dummy_right_km}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            {tyre?.tyre_assign_9_back_dummy_right_pre_date
+                              ? moment(
+                                  tyre?.tyre_assign_9_back_dummy_right_pre_date
+                                ).format("DD-MMM-YYYY")
+                              : ""}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            {tyre?.tyre_assign_9_back_dummy_right_pre_km}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            {tyre?.tyre_assign_9_back_dummy_right_pre_km -
+                              tyre?.tyre_assign_9_back_dummy_right_km}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            {tyre?.tyre_assign_9_back_dummy_right_status}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            <IconEdit 
+                              size={18} 
+                              className="cursor-pointer text-blue-600 hover:text-blue-800 mx-auto"
+                              onClick={() => openEditModal(
+                                'tyre_assign_9_back_dummy_right_no',
+                                tyre?.tyre_assign_9_back_dummy_right_no,
+                                tyre?.tyre_assign_9_back_dummy_right_type,
+                                tyre?.tyre_assign_9_back_dummy_right_status
+                              )}
+                              title="Edit Tyre"
+                            />
+                          </td>
+                        </tr>
+                      )}
+        
+                      {vehicle.vehicle_type == "10W Truck" && (
+                        <tr className="text-center">
+                          <td className="border py-2 text-xs text-start px-2">
+                            10. Back Dummy Right
+                          </td>
+                          <td className="border py-2 text-xs text-start px-2">
+                            {tyre?.tyre_assign_10_back_dummy_right_no}
+                          </td>
+                          <td className="border py-2 text-xs text-start px-2">
+                            {tyre?.tyre_assign_10_back_dummy_right_type}
+                          </td>
+                          <td className="border py-2 text-xs text-start px-2">
+                            {tyre?.tyre_assign_10_back_dummy_right_make}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            {tyre?.tyre_assign_10_back_dummy_right_date
+                              ? moment(
+                                  tyre?.tyre_assign_10_back_dummy_right_date
+                                ).format("DD-MMM-YYYY")
+                              : ""}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            {tyre?.tyre_assign_10_back_dummy_right_km}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            {tyre?.tyre_assign_10_back_dummy_right_pre_date
+                              ? moment(
+                                  tyre?.tyre_assign_10_back_dummy_right_pre_date
+                                ).format("DD-MMM-YYYY")
+                              : ""}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            {tyre?.tyre_assign_10_back_dummy_right_pre_km}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            {tyre?.tyre_assign_10_back_dummy_right_pre_km -
+                              tyre?.tyre_assign_10_back_dummy_right_km}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            {tyre?.tyre_assign_10_back_dummy_right_status}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            <IconEdit 
+                              size={18} 
+                              className="cursor-pointer text-blue-600 hover:text-blue-800 mx-auto"
+                              onClick={() => openEditModal(
+                                'tyre_assign_10_back_dummy_right_no',
+                                tyre?.tyre_assign_10_back_dummy_right_no,
+                                tyre?.tyre_assign_10_back_dummy_right_type,
+                                tyre?.tyre_assign_10_back_dummy_right_status
+                              )}
+                              title="Edit Tyre"
+                            />
+                          </td>
+                        </tr>
+                      )}
+        
+                      {vehicle?.vehicle_type != "Other" && (
+                        <tr className="text-center">
+                          <td className="border py-2 text-xs text-start px-2">
+                            Stepney tyre
+                          </td>
+                          <td className="border py-2 text-xs text-start px-2">
+                            {tyre?.tyre_assign_stepney_no}
+                          </td>
+                          <td className="border py-2 text-xs text-start px-2">
+                            {tyre?.tyre_assign_stepney_type}
+                          </td>
+                          <td className="border py-2 text-xs text-start px-2">
+                            {tyre?.tyre_assign_stepney_make}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            {tyre?.tyre_assign_stepney_date
+                              ? moment(tyre?.tyre_assign_stepney_date).format(
+                                  "DD-MMM-YYYY"
+                                )
+                              : ""}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            {tyre?.tyre_assign_stepney_km}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            {tyre?.tyre_assign_stepney_pre_date
+                              ? moment(
+                                  tyre?.tyre_assign_stepney_pre_date
+                                ).format("DD-MMM-YYYY")
+                              : ""}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            {tyre?.tyre_assign_stepney_pre_km}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            {tyre?.tyre_assign_stepney_pre_km -
+                              tyre?.tyre_assign_stepney_km}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            {tyre?.tyre_assign_stepney_status}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            <IconEdit 
+                              size={18} 
+                              className="cursor-pointer text-blue-600 hover:text-blue-800 mx-auto"
+                              onClick={() => setRemoveConfirmOpen(true)}
+        title="Remove Stepney Tyre"
+                            />
+                          </td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              )}
         {tyre == 0 && (
           <div className="text-center">
             <h1>No Data Available</h1>
           </div>
         )}
+      
       </>
     );
   };
@@ -1538,6 +1847,124 @@ const TruckView = () => {
           )}
         </div>
       </Modal>
+
+     <Modal
+             opened={editModalOpen}
+             onClose={() => setEditModalOpen(false)}
+             title="Edit Tyre Details"
+             centered
+             size="md"
+           >
+             <div className="space-y-4">
+               {/* <div>
+                 <label className="block text-sm font-medium text-gray-700 mb-1">
+                   Tyre Number 
+                 </label>
+                 <input
+                   type="text"
+                   name="tyreNo"
+                   value={selectedTyre.tyreNo}
+                   onChange={handleModalInputChange}
+                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                 />
+               </div>
+               
+               <div>
+                 <label className="block text-sm font-medium text-gray-700 mb-1">
+                   Tyre Type
+                 </label>
+                 <input
+                   type="text"
+                   name="tyreType"
+                   value={selectedTyre.fieldName}
+                   onChange={handleModalInputChange}
+                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                 />
+               </div> */}
+               
+               <div>
+                 <label className="block text-sm font-medium text-gray-700 mb-1">
+                   Status
+                 </label>
+                 <select
+                   name="status"
+                   value={selectedTyre.status}
+                   onChange={handleModalInputChange}
+                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                 >
+                   {TYRE_SUB_STATUS.map((option) => (
+                     <option key={option.value} value={option.value}>
+                       {option.label}
+                     </option>
+                   ))}
+                 </select>
+               </div>
+               
+               <div className="flex justify-end space-x-3 pt-4">
+                 <button
+                   type="button"
+                   onClick={() => setEditModalOpen(false)}
+                   className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200"
+                 >
+                   Cancel
+                 </button>
+                 <button
+                   type="button"
+                   onClick={handleSaveTyre}
+                   className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700"
+                 >
+                   Save Changes
+                 </button>
+               </div>
+             </div>
+           </Modal>
+           <Modal
+  opened={removeConfirmOpen}
+  onClose={() => setRemoveConfirmOpen(false)}
+  title="Remove Stepney Tyre"
+  centered
+  size="sm"
+>
+  <div className="space-y-4">
+    <p className="text-center">Do you want to remove the stepney tyre?</p>
+    <div className="flex justify-center space-x-4">
+      <button
+        onClick={() => setRemoveConfirmOpen(false)}
+        className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200"
+      >
+        No
+      </button>
+      <button
+        onClick={async () => {
+          setRemoveConfirmOpen(false);
+          try {
+            const token = localStorage.getItem("token");
+            const response = await axios.put(
+              `${BASE_URL}/api/web-update-vehicle-tyre-remove-stepney/${tyre.id}`,
+              {},
+              {
+                headers: { Authorization: `Bearer ${token}` },
+              }
+            );
+
+            if (response.data.code === 200) {
+              toast.success(response.data.msg);
+              fetchTyreDetails();
+            } else {
+              toast.error(response.data.msg || "Failed to remove stepney tyre");
+            }
+          } catch (error) {
+            console.error("Error removing stepney tyre:", error);
+            toast.error("Something went wrong");
+          }
+        }}
+        className="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-md hover:bg-red-700"
+      >
+        Yes, Remove
+      </button>
+    </div>
+  </div>
+</Modal>
     </>
   );
 };

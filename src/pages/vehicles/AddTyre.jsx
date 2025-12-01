@@ -74,6 +74,11 @@ const AddTyre = () => {
     tyre_assign_10_back_dummy_right_no: "",
     tyre_assign_10_back_dummy_right_date: "",
     tyre_assign_10_back_dummy_right_km: "",
+
+
+    tyre_assign_stepney_no: "",
+    tyre_assign_stepney_date: "",
+    tyre_assign_stepney_km: "",
   });
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -254,6 +259,11 @@ const AddTyre = () => {
         ...vehicles,
         [e.name]: e.value,
       });
+    } else if(e.name == "tyre_assign_stepney_no"){
+      setVehicles({
+        ...vehicles,
+        [e.name]: e.value,
+      });
     } else if (e.target.name == "bata_for_km") {
       if (validateOnlyNumber(e.target.value)) {
         setVehicles({
@@ -297,6 +307,13 @@ const AddTyre = () => {
         });
       }
     } else if (e.target.name == "vehicle_open_km") {
+      if (validateOnlyDigits(e.target.value)) {
+        setVehicles({
+          ...vehicles,
+          [e.target.name]: e.target.value,
+        });
+      }
+    } else if (e.target.name == "tyre_assign_stepney_km"){
       if (validateOnlyDigits(e.target.value)) {
         setVehicles({
           ...vehicles,
@@ -516,23 +533,30 @@ const AddTyre = () => {
         vehicles.tyre_assign_10_back_dummy_right_date,
       tyre_assign_10_back_dummy_right_km:
         vehicles.tyre_assign_10_back_dummy_right_km,
+
+
+        tyre_assign_stepney_no: vehicles.tyre_assign_stepney_no,
+        tyre_assign_stepney_date: vehicles.tyre_assign_stepney_date,
+        tyre_assign_stepney_km: vehicles.tyre_assign_stepney_km,
     };
 
     setIsButtonDisabled(true);
-    axios({
-      url: BASE_URL + "/api/web-create-vehicles-tyre-assign",
-      method: "POST",
-      data,
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    }).then((res) => {
-      if (res.data.code == 200) {
+    try {
+      const res = await axios({
+        url: BASE_URL + "/api/web-create-vehicles-tyre-assign",
+        method: "POST",
+        data,
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      });
+  
+      if (res.data.code === 200) {
         toast.success(res.data.msg);
-      } else if (res.data.code == 400) {
+      } else {
         toast.error(res.data.msg);
       }
+  
       navigate("/vehicles-list");
+  
       setVehicles({
         reg_no: "",
         mfg_year: "",
@@ -593,8 +617,18 @@ const AddTyre = () => {
         tyre_assign_10_back_dummy_right_no: "",
         tyre_assign_10_back_dummy_right_date: "",
         tyre_assign_10_back_dummy_right_km: "",
+        tyre_assign_stepney_no: "",
+    tyre_assign_stepney_date: "",
+    tyre_assign_stepney_km: "",
       });
-    });
+  
+    } catch (error) {
+      console.error(error);
+      toast.error("Something went wrong!");
+    } finally {
+    
+      setIsButtonDisabled(false);
+    }
   };
 
   const FormLabel = ({ children, required }) => (
@@ -664,7 +698,7 @@ const AddTyre = () => {
           <h2 className=" px-5 text-[black] text-lg   flex flex-row  justify-between items-center  rounded-xl p-2 ">
             <div className="flex  items-center gap-2">
               <IconInfoCircle className="w-4 h-4" />
-              <span>Add Tyre</span>
+              <span>Add Tyrez</span>
             </div>
             <IconArrowBack
               onClick={() => navigate("/vehicles-list")}
@@ -1728,6 +1762,58 @@ const AddTyre = () => {
                   </div>
                 </>
               )}
+
+
+<div className="col-span-full grid grid-cols-3 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Stepney tyre
+                  </label>
+                  <Select
+                    name="tyre_assign_stepney_no"
+                    options={tyre.map((option) => ({
+                      value: option.tyre_sub_no,
+                      label: option.tyre_sub_no,
+                      name: "tyre_assign_stepney_no",
+                    }))}
+                    onChange={(e) => onInputChange(e)}
+                    value={
+                      vehicles.tyre_assign_stepney_no
+                        ? {
+                            value: vehicles.tyre_assign_stepney_no,
+                            label: vehicles.tyre_assign_stepney_no,
+                          }
+                        : null
+                    }
+                    placeholder="Select Tyre"
+                    styles={customStyles}
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Date
+                  </label>
+                  <input
+                    type="date"
+                    name="tyre_assign_stepney_date"
+                    value={vehicles.tyre_assign_stepney_date}
+                    onChange={(e) => onInputChange(e)}
+                    className={inputClass}
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">
+                    KM
+                  </label>
+                  <input
+                    type="tel"
+                    name="tyre_assign_stepney_km"
+                    value={vehicles.tyre_assign_stepney_km}
+                    onChange={(e) => onInputChange(e)}
+                    className={inputClass}
+                  />
+                </div>
+              </div>
             </div>
           )}
 

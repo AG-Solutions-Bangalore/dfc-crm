@@ -41,6 +41,7 @@ import VehicleReportView from "./pages/reports/vechilesDetails/VehicleReportView
 import VendorReportView from "./pages/reports/vendor/VendorReportView";
 import VendorReportForm from "./pages/reports/vendor/VendorReportForm";
 import DisableRightClick from "./components/common/DisableRightClick";
+import FittedTyreReport from "./pages/reports/fitted-tyre/FittedTyreReport";
 
 // Pages (Profile)
 const Profile = lazy(() => import("./pages/profile/Profile"));
@@ -190,7 +191,7 @@ const App = () => {
       <Toaster richColors position="top-right" />
 
       <Suspense fallback={<LoadingSpinner />}>
-        <DisableRightClick />
+        {/* <DisableRightClick /> */}
         <Routes>
           {/* Auth Routes */}
           <Route path="/" element={<SignIn />} />
@@ -405,6 +406,10 @@ const App = () => {
           <Route
             path="/report-payment-form/view"
             element={<PaymentReportView />}
+          />
+          <Route
+            path="/report-fitted-tyre"
+            element={<FittedTyreReport />}
           />
 
           {/* User Management Routes */}
