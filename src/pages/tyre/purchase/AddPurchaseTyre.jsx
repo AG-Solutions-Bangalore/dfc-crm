@@ -33,8 +33,8 @@ const TYRE_SUB_STATUS = [
     label: "2nd Retread",
   },
   {
-    value: "3rd Retread",
-    label: "3rd Retread",
+    value: "Casing",
+    label: "Casing",
   },
   {
     value: "Dead",

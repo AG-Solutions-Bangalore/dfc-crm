@@ -134,7 +134,7 @@ const TruckView = () => {
       { value: "New", label: "New" },
       { value: "1st Retread", label: "1st Retread" },
       { value: "2nd Retread", label: "2nd Retread" },
-      { value: "3rd Retread", label: "3rd Retread" },
+      { value: "Casing", label: "Casing" },
       { value: "Dead", label: "Dead" },
     ];
   
