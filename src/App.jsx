@@ -409,7 +409,7 @@ const App = () => {
             element={<PaymentReportView />}
           />
           <Route path="/report-fitted-tyre" element={<FittedTyreReport />} />
-          <Route path="/report-servicer" element={<ServiceR />} />
+          <Route path="/report-service-r" element={<ServiceR />} />
 
           {/* User Management Routes */}
           <Route path="/userManagement" element={<UserPage />} />

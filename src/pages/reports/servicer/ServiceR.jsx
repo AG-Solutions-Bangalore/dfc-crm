@@ -15,6 +15,9 @@ const ServiceR = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const containerRef = useRef(null);
   const [selectedBranch, setSelectedBranch] = useState("all");
+  const [vehicle, setVehicle] = useState({}); //first one
+  const [serviceTypeFixed, setServiceTypeFixed] = useState([]); //fifth one
+  const [oldService, setOldService] = useState([]); //last one
 
   // Group data by reg_sub_no
   const groupData = (data) => {
@@ -30,217 +33,6 @@ const ServiceR = () => {
 
   // Get grouped data
   const groupedData = groupData(filteredData);
-  // Function to get tyre positions based on vehicle type
-  const getTyrePositions = (vehicleData) => {
-    const vehicleType = vehicleData[0]?.vehicle_type; // first item of the group
-
-    if (vehicleType === "6W Truck") {
-      return [
-        {
-          name: "1.Front Left",
-          no: "tyre_assign_1_front_left_no",
-          type: "tyre_assign_1_front_left_type",
-          make: "tyre_assign_1_front_left_make",
-          date: "tyre_assign_1_front_left_date",
-          km: "tyre_assign_1_front_left_km",
-          preDate: "tyre_assign_1_front_left_pre_date",
-          preKm: "tyre_assign_1_front_left_pre_km",
-          status: "tyre_assign_1_front_left_status",
-        },
-        {
-          name: "2.Front Right",
-          no: "tyre_assign_2_front_right_no",
-          type: "tyre_assign_2_front_right_type",
-          make: "tyre_assign_2_front_right_make",
-          date: "tyre_assign_2_front_right_date",
-          km: "tyre_assign_2_front_right_km",
-          preDate: "tyre_assign_2_front_right_pre_date",
-          preKm: "tyre_assign_2_front_right_pre_km",
-          status: "tyre_assign_2_front_right_status",
-        },
-        {
-          name: "3.Back Left",
-          no: "tyre_assign_3_back_left_no",
-          type: "tyre_assign_3_back_left_type",
-          make: "tyre_assign_3_back_left_make",
-          date: "tyre_assign_3_back_left_date",
-          km: "tyre_assign_3_back_left_km",
-          preDate: "tyre_assign_3_back_left_pre_date",
-          preKm: "tyre_assign_3_back_left_pre_km",
-          status: "tyre_assign_3_back_left_status",
-        },
-        {
-          name: "4.Back Left",
-          no: "tyre_assign_4_back_left_no",
-          type: "tyre_assign_4_back_left_type",
-          make: "tyre_assign_4_back_left_make",
-          date: "tyre_assign_4_back_left_date",
-          km: "tyre_assign_4_back_left_km",
-          preDate: "tyre_assign_4_back_left_pre_date",
-          preKm: "tyre_assign_4_back_left_pre_km",
-          status: "tyre_assign_4_back_left_status",
-        },
-        {
-          name: "5.Back Right",
-          no: "tyre_assign_5_back_right_no",
-          type: "tyre_assign_5_back_right_type",
-          make: "tyre_assign_5_back_right_make",
-          date: "tyre_assign_5_back_right_date",
-          km: "tyre_assign_5_back_right_km",
-          preDate: "tyre_assign_5_back_right_pre_date",
-          preKm: "tyre_assign_5_back_right_pre_km",
-          status: "tyre_assign_5_back_right_status",
-        },
-        {
-          name: "6.Back Right",
-          no: "tyre_assign_6_back_right_no",
-          type: "tyre_assign_6_back_right_type",
-          make: "tyre_assign_6_back_right_make",
-          date: "tyre_assign_6_back_right_date",
-          km: "tyre_assign_6_back_right_km",
-          preDate: "tyre_assign_6_back_right_pre_date",
-          preKm: "tyre_assign_6_back_right_pre_km",
-          status: "tyre_assign_6_back_right_status",
-        },
-        {
-          name: "Stepney Tyre",
-          no: "tyre_assign_stepney_no",
-          type: "tyre_assign_stepney_type",
-          make: "tyre_assign_stepney_make",
-          date: "tyre_assign_stepney_date",
-          km: "tyre_assign_stepney_km",
-          preDate: "tyre_assign_stepney_pre_date",
-          preKm: "tyre_assign_stepney_pre_km",
-          status: "tyre_assign_stepney_status",
-        },
-      ];
-    } else {
-      // Vehicles with back housing tyres
-      return [
-        {
-          name: "1.Front Left",
-          no: "tyre_assign_1_front_left_no",
-          type: "tyre_assign_1_front_left_type",
-          make: "tyre_assign_1_front_left_make",
-          date: "tyre_assign_1_front_left_date",
-          km: "tyre_assign_1_front_left_km",
-          preDate: "tyre_assign_1_front_left_pre_date",
-          preKm: "tyre_assign_1_front_left_pre_km",
-          status: "tyre_assign_1_front_left_status",
-        },
-        {
-          name: "2.Front Right",
-          no: "tyre_assign_2_front_right_no",
-          type: "tyre_assign_2_front_right_type",
-          make: "tyre_assign_2_front_right_make",
-          date: "tyre_assign_2_front_right_date",
-          km: "tyre_assign_2_front_right_km",
-          preDate: "tyre_assign_2_front_right_pre_date",
-          preKm: "tyre_assign_2_front_right_pre_km",
-          status: "tyre_assign_2_front_right_status",
-        },
-        {
-          name: "3.Back Housing Left",
-          no: "tyre_assign_3_back_housing_left_no",
-          type: "tyre_assign_3_back_housing_left_type",
-          make: "tyre_assign_3_back_housing_left_make",
-          date: "tyre_assign_3_back_housing_left_date",
-          km: "tyre_assign_3_back_housing_left_km",
-          preDate: "tyre_assign_3_back_housing_left_pre_date",
-          preKm: "tyre_assign_3_back_housing_left_pre_km",
-          status: "tyre_assign_3_back_housing_left_status",
-        },
-        {
-          name: "4.Back Housing Left",
-          no: "tyre_assign_4_back_housing_left_no",
-          type: "tyre_assign_4_back_housing_left_type",
-          make: "tyre_assign_4_back_housing_left_make",
-          date: "tyre_assign_4_back_housing_left_date",
-          km: "tyre_assign_4_back_housing_left_km",
-          preDate: "tyre_assign_4_back_housing_left_pre_date",
-          preKm: "tyre_assign_4_back_housing_left_pre_km",
-          status: "tyre_assign_4_back_housing_left_status",
-        },
-        {
-          name: "5.Back Dummy Left",
-          no: "tyre_assign_5_back_dummy_left_no",
-          type: "tyre_assign_5_back_dummy_left_type",
-          make: "tyre_assign_5_back_dummy_left_make",
-          date: "tyre_assign_5_back_dummy_left_date",
-          km: "tyre_assign_5_back_dummy_left_km",
-          preDate: "tyre_assign_5_back_dummy_left_pre_date",
-          preKm: "tyre_assign_5_back_dummy_left_pre_km",
-          status: "tyre_assign_5_back_dummy_left_status",
-        },
-        {
-          name: "6.Back Dummy Left",
-          no: "tyre_assign_6_back_dummy_left_no",
-          type: "tyre_assign_6_back_dummy_left_type",
-          make: "tyre_assign_6_back_dummy_left_make",
-          date: "tyre_assign_6_back_dummy_left_date",
-          km: "tyre_assign_6_back_dummy_left_km",
-          preDate: "tyre_assign_6_back_dummy_left_pre_date",
-          preKm: "tyre_assign_6_back_dummy_left_pre_km",
-          status: "tyre_assign_6_back_dummy_left_status",
-        },
-        {
-          name: "7.Back Housing Right",
-          no: "tyre_assign_7_back_housing_right_no",
-          type: "tyre_assign_7_back_housing_right_type",
-          make: "tyre_assign_7_back_housing_right_make",
-          date: "tyre_assign_7_back_housing_right_date",
-          km: "tyre_assign_7_back_housing_right_km",
-          preDate: "tyre_assign_7_back_housing_right_pre_date",
-          preKm: "tyre_assign_7_back_housing_right_pre_km",
-          status: "tyre_assign_7_back_housing_right_status",
-        },
-        {
-          name: "8.Back Housing Right",
-          no: "tyre_assign_8_back_housing_right_no",
-          type: "tyre_assign_8_back_housing_right_type",
-          make: "tyre_assign_8_back_housing_right_make",
-          date: "tyre_assign_8_back_housing_right_date",
-          km: "tyre_assign_8_back_housing_right_km",
-          preDate: "tyre_assign_8_back_housing_right_pre_date",
-          preKm: "tyre_assign_8_back_housing_right_pre_km",
-          status: "tyre_assign_8_back_housing_right_status",
-        },
-        {
-          name: "9.Back Dummy Right",
-          no: "tyre_assign_9_back_dummy_right_no",
-          type: "tyre_assign_9_back_dummy_right_type",
-          make: "tyre_assign_9_back_dummy_right_make",
-          date: "tyre_assign_9_back_dummy_right_date",
-          km: "tyre_assign_9_back_dummy_right_km",
-          preDate: "tyre_assign_9_back_dummy_right_pre_date",
-          preKm: "tyre_assign_9_back_dummy_right_pre_km",
-          status: "tyre_assign_9_back_dummy_right_status",
-        },
-        {
-          name: "10.Back Dummy Right",
-          no: "tyre_assign_10_back_dummy_right_no",
-          type: "tyre_assign_10_back_dummy_right_type",
-          make: "tyre_assign_10_back_dummy_right_make",
-          date: "tyre_assign_10_back_dummy_right_date",
-          km: "tyre_assign_10_back_dummy_right_km",
-          preDate: "tyre_assign_10_back_dummy_right_pre_date",
-          preKm: "tyre_assign_10_back_dummy_right_pre_km",
-          status: "tyre_assign_10_back_dummy_right_status",
-        },
-        {
-          name: "Stepney Tyre",
-          no: "tyre_assign_stepney_no",
-          type: "tyre_assign_stepney_type",
-          make: "tyre_assign_stepney_make",
-          date: "tyre_assign_stepney_date",
-          km: "tyre_assign_stepney_km",
-          preDate: "tyre_assign_stepney_pre_date",
-          preKm: "tyre_assign_stepney_pre_km",
-          status: "tyre_assign_stepney_status",
-        },
-      ];
-    }
-  };
 
   const fetchReportData = async (controller) => {
     try {
@@ -248,7 +40,7 @@ const ServiceR = () => {
       const token = localStorage.getItem("token");
 
       const response = await axios.post(
-        `${BASE_URL}/api/fetch-vehicle-tyre-report`,
+        `${BASE_URL}/api/fetch-vehicle-services-report`,
         {},
         {
           headers: {
@@ -257,9 +49,9 @@ const ServiceR = () => {
           signal: controller.signal,
         }
       );
-
-      setReportData(response.data.tyre || []);
-      setFilteredData(response.data.tyre || []);
+      setVehicle(response.data.vehicle);
+      setServiceTypeFixed(response.data.servicesTypesFixed);
+      setOldService(response.data.historyservices);
 
       if (response.data.tyre?.length > 0) {
         toast.success("Report loaded successfully");
@@ -322,13 +114,13 @@ const ServiceR = () => {
       }
 
       // Search in all tyre numbers
-      const tyrePositions = getTyrePositions([item]);
-      for (const position of tyrePositions) {
-        const tyreNo = item[position.no] || "";
-        if (tyreNo.toLowerCase().includes(searchLower)) {
-          return true;
-        }
-      }
+      // const tyrePositions = getTyrePositions([item]);
+      // for (const position of tyrePositions) {
+      //   const tyreNo = item[position.no] || "";
+      //   if (tyreNo.toLowerCase().includes(searchLower)) {
+      //     return true;
+      //   }
+      // }
 
       return false;
     });
@@ -380,40 +172,37 @@ const ServiceR = () => {
       // Add data rows
       Object.entries(groupedData).forEach(([vehicleNo, vehicleData]) => {
         vehicleData.forEach((item) => {
-          const tyrePositions = getTyrePositions(vehicleData);
-
-          tyrePositions.forEach((position) => {
-            const tyreNo = item[position.no];
-            const tyreType = item[position.type];
-            const tyreMake = item[position.make];
-            const date = item[position.date];
-            const km = item[position.km];
-            const preDate = item[position.preDate];
-            const preKm = item[position.preKm];
-            const status = item[position.status];
-
-            // Calculate KM Run
-            const kmRun = preKm && km ? parseFloat(preKm) - parseFloat(km) : "";
-
-            if (tyreNo || tyreType || tyreMake) {
-              worksheet.addRow([
-                vehicleNo,
-                item.tyre_assign_branch || "",
-                position.name,
-                tyreNo || "",
-                tyreType || "",
-                tyreMake || "",
-                date ? moment(date).format("DD-MM-YYYY") : "",
-                km || "",
-                preDate && preDate !== "0000-00-00"
-                  ? moment(preDate).format("DD-MM-YYYY")
-                  : "",
-                preKm || "",
-                kmRun,
-                status || "",
-              ]);
-            }
-          });
+          // const tyrePositions = getTyrePositions(vehicleData);
+          // tyrePositions.forEach((position) => {
+          //   const tyreNo = item[position.no];
+          //   const tyreType = item[position.type];
+          //   const tyreMake = item[position.make];
+          //   const date = item[position.date];
+          //   const km = item[position.km];
+          //   const preDate = item[position.preDate];
+          //   const preKm = item[position.preKm];
+          //   const status = item[position.status];
+          //   // Calculate KM Run
+          //   const kmRun = preKm && km ? parseFloat(preKm) - parseFloat(km) : "";
+          //   if (tyreNo || tyreType || tyreMake) {
+          //     worksheet.addRow([
+          //       vehicleNo,
+          //       item.tyre_assign_branch || "",
+          //       position.name,
+          //       tyreNo || "",
+          //       tyreType || "",
+          //       tyreMake || "",
+          //       date ? moment(date).format("DD-MM-YYYY") : "",
+          //       km || "",
+          //       preDate && preDate !== "0000-00-00"
+          //         ? moment(preDate).format("DD-MM-YYYY")
+          //         : "",
+          //       preKm || "",
+          //       kmRun,
+          //       status || "",
+          //     ]);
+          //   }
+          // });
         });
       });
 
@@ -571,7 +360,7 @@ const ServiceR = () => {
                 <Box mb="md">
                   <Group position="apart">
                     <div>
-                      <h2 className="text-xl font-bold">Fitted Tyre Report</h2>
+                      <h2 className="text-xl font-bold">Service Report</h2>
                     </div>
                     <Select
                       placeholder="Select Branch"
