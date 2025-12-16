@@ -28,13 +28,70 @@ const FittedTyreReport = () => {
     }, {});
   };
 
-  // Get grouped data
   const groupedData = groupData(filteredData);
-  // Function to get tyre positions based on vehicle type
   const getTyrePositions = (vehicleData) => {
-    const vehicleType = vehicleData[0]?.vehicle_type; // first item of the group
+    const vehicleType = vehicleData[0]?.vehicle_type;
+    if (vehicleType === "Car") {
+      return [
+        {
+          name: "1.Front Left",
+          no: "tyre_assign_1_front_left_no",
+          type: "tyre_assign_1_front_left_type",
+          make: "tyre_assign_1_front_left_make",
+          date: "tyre_assign_1_front_left_date",
+          km: "tyre_assign_1_front_left_km",
+          preDate: "tyre_assign_1_front_left_pre_date",
+          preKm: "tyre_assign_1_front_left_pre_km",
+          status: "tyre_assign_1_front_left_status",
+        },
+        {
+          name: "2.Front Right",
+          no: "tyre_assign_2_front_right_no",
+          type: "tyre_assign_2_front_right_type",
+          make: "tyre_assign_2_front_right_make",
+          date: "tyre_assign_2_front_right_date",
+          km: "tyre_assign_2_front_right_km",
+          preDate: "tyre_assign_2_front_right_pre_date",
+          preKm: "tyre_assign_2_front_right_pre_km",
+          status: "tyre_assign_2_front_right_status",
+        },
+        {
+          name: "3.Back Left",
+          no: "tyre_assign_3_back_left_no",
+          type: "tyre_assign_3_back_left_type",
+          make: "tyre_assign_3_back_left_make",
+          date: "tyre_assign_3_back_left_date",
+          km: "tyre_assign_3_back_left_km",
+          preDate: "tyre_assign_3_back_left_pre_date",
+          preKm: "tyre_assign_3_back_left_pre_km",
+          status: "tyre_assign_3_back_left_status",
+        },
 
-    if (vehicleType === "6W Truck") {
+        {
+          name: "4.Back Right",
+          no: "tyre_assign_5_back_right_no",
+          type: "tyre_assign_5_back_right_type",
+          make: "tyre_assign_5_back_right_make",
+          date: "tyre_assign_5_back_right_date",
+          km: "tyre_assign_5_back_right_km",
+          preDate: "tyre_assign_5_back_right_pre_date",
+          preKm: "tyre_assign_5_back_right_pre_km",
+          status: "tyre_assign_5_back_right_status",
+        },
+
+        {
+          name: "Stepney Tyre",
+          no: "tyre_assign_stepney_no",
+          type: "tyre_assign_stepney_type",
+          make: "tyre_assign_stepney_make",
+          date: "tyre_assign_stepney_date",
+          km: "tyre_assign_stepney_km",
+          preDate: "tyre_assign_stepney_pre_date",
+          preKm: "tyre_assign_stepney_pre_km",
+          status: "tyre_assign_stepney_status",
+        },
+      ];
+    } else if (vehicleType === "6W Truck") {
       return [
         {
           name: "1.Front Left",
@@ -114,8 +171,7 @@ const FittedTyreReport = () => {
           status: "tyre_assign_stepney_status",
         },
       ];
-    } else {
-      // Vehicles with back housing tyres
+    } else if (vehicleType === "10W Truck") {
       return [
         {
           name: "1.Front Left",

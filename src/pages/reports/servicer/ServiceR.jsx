@@ -21,7 +21,6 @@ import {
   SERVICE_COLOR_CLASSES,
 } from "../../../utils/serviceRules";
 
-// Group vehicles by reg_no
 const groupData = (data = []) => {
   if (!Array.isArray(data)) return {};
   return data.reduce((acc, item) => {
@@ -65,7 +64,6 @@ const ServiceR = () => {
     }
   }, [oldService]);
 
-  // Fetch report
   const fetchReportData = async (controller) => {
     try {
       setLoading(true);
@@ -112,13 +110,9 @@ const ServiceR = () => {
       const matchesBranch =
         selectedBranch === "all" || v.vehicle_branch === selectedBranch;
 
-      const matchesService =
-        selectedServiceType === "all" ||
-        v.services?.some((s) => s.service_sub_type == selectedServiceType);
-
-      return matchesSearch && matchesBranch && matchesService;
+      return matchesSearch && matchesBranch;
     });
-  }, [vehicleArray, debouncedSearch, selectedBranch, selectedServiceType]);
+  }, [vehicleArray, debouncedSearch, selectedBranch]);
 
   // Group filtered vehicles
   const groupedData = useMemo(
@@ -133,6 +127,23 @@ const ServiceR = () => {
       );
     });
   }, [groupedData, selectedBranch]);
+  const visibleGroups = useMemo(() => {
+    return filteredGroups.filter(([_, vehicleData]) => {
+      const v = vehicleData[0];
+
+      return servicesTypesFixed.some((stype) => {
+        if (
+          selectedServiceType !== "all" &&
+          stype.service_types_fixed !== selectedServiceType
+        ) {
+          return false;
+        }
+        return v.services?.some(
+          (s) => s.service_sub_type === stype.service_types_fixed
+        );
+      });
+    });
+  }, [filteredGroups, servicesTypesFixed, selectedServiceType]);
 
   const branchOptions = useMemo(() => {
     const branches = vehicleArray.map((v) => v.vehicle_branch).filter(Boolean);
@@ -385,7 +396,7 @@ const ServiceR = () => {
                 </Box>
 
                 <div className="overflow-x-auto mt-4">
-                  {filteredGroups.length === 0 ? (
+                  {visibleGroups.length === 0 ? (
                     <div className="text-center py-20 text-gray-400">
                       <div className="text-6xl mb-4">🔍</div>
                       <h3 className="text-xl font-semibold mb-2">
@@ -409,14 +420,21 @@ const ServiceR = () => {
                       )}
                     </div>
                   ) : (
-                    filteredGroups.map(([vehicleNo, vehicleData]) => {
+                    visibleGroups.map(([vehicleNo, vehicleData]) => {
                       const v = vehicleData[0];
                       const serviceWithData = servicesTypesFixed.filter(
-                        (stype) =>
-                          v.services?.some(
+                        (stype) => {
+                          if (
+                            selectedServiceType !== "all" &&
+                            stype.service_types_fixed !== selectedServiceType
+                          ) {
+                            return false;
+                          }
+                          return v.services?.some(
                             (s) =>
                               s.service_sub_type === stype.service_types_fixed
-                          )
+                          );
+                        }
                       );
 
                       if (serviceWithData.length === 0) return null;
