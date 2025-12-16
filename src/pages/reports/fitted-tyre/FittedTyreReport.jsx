@@ -279,7 +279,7 @@ const FittedTyreReport = () => {
   const branchOptions = [
     { value: "all", label: "All Branches" },
     ...Object.values(groupedData)
-      .map((records) => records[0]?.tyre_assign_branch)
+      .map((records) => records[0]?.vehicle_branch)
       .filter(Boolean)
       .filter((v, i, arr) => arr.indexOf(v) == i)
       .map((branch) => ({
@@ -290,7 +290,7 @@ const FittedTyreReport = () => {
   const filteredGroups = Object.entries(groupedData).filter(
     ([vehicleNo, vehicleData]) => {
       if (!selectedBranch || selectedBranch == "all") return true;
-      return vehicleData[0]?.tyre_assign_branch === selectedBranch;
+      return vehicleData[0]?.vehicle_branch === selectedBranch;
     }
   );
   useEffect(() => {
@@ -398,7 +398,7 @@ const FittedTyreReport = () => {
             if (tyreNo || tyreType || tyreMake) {
               worksheet.addRow([
                 vehicleNo,
-                item.tyre_assign_branch || "",
+                item.vehicle_branch || "",
                 position.name,
                 tyreNo || "",
                 tyreType || "",
@@ -605,8 +605,7 @@ const FittedTyreReport = () => {
                                     Vehicle No: {vehicleNo}
                                   </span>
                                   <span className="text-gray-700">
-                                    Branch:{" "}
-                                    {firstItem.tyre_assign_branch || "N/A"}
+                                    Branch: {firstItem.vehicle_branch || "N/A"}
                                   </span>
                                 </div>
                               </div>
@@ -650,7 +649,6 @@ const FittedTyreReport = () => {
                                   </thead>
 
                                   <tbody>
-                                
                                     {tyrePositions.map((position, posIndex) => {
                                       const item = vehicleData[0];
 
