@@ -19,6 +19,10 @@ const vehicleType = [
     value: "10W Truck",
     label: "10W Truck",
   },
+  {
+    value: "Car",
+    label: "Car",
+  },
 ];
 const CreateDriver = () => {
   const navigate = useNavigate();

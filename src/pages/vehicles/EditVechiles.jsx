@@ -19,8 +19,8 @@ const vehicleType = [
     label: "10W Truck",
   },
   {
-    value: "Other",
-    label: "Other",
+    value: "Car",
+    label: "Car",
   },
 ];
 
@@ -329,7 +329,7 @@ const EditVechiles = () => {
                 name="reg_no"
                 value={vehicles.reg_no}
                 onChange={(e) => onInputChange(e)}
-className={`${inputClass} cursor-not-allowed`}
+                className={`${inputClass} cursor-not-allowed`}
                 required
                 disabled
               />

@@ -70,3 +70,12 @@ body {
   scrollbar-width: thin;
   scrollbar-color: #c2e1fa #f0f5f9;
 }
+::selection {
+  background: #e64800;
+  color: white; 
+}
+
+::-moz-selection {
+  background: #e64800;
+  color: white;
+}

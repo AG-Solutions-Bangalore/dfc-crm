@@ -150,87 +150,6 @@ const AssignTypeTyreView = () => {
     fetchVehicleData();
   }, [id, navigate]);
 
-  // const renderTyreRows = () => {
-  //   const vehicleType = vehicle.vehicle_type;
-  //   const tyreData = tyre;
-
-  //   const tyrePositions = {
-  //     Other: [
-  //       { position: "1. Front Left", prefix: "tyre_assign_1_front_left" },
-  //       { position: "2. Front Right", prefix: "tyre_assign_2_front_right" },
-  //     ],
-  //     "6W Truck": [
-  //       { position: "1. Front Left", prefix: "tyre_assign_1_front_left" },
-  //       { position: "2. Front Right", prefix: "tyre_assign_2_front_right" },
-  //       { position: "3. Back Left", prefix: "tyre_assign_3_back_left" },
-  //       { position: "4. Back Left", prefix: "tyre_assign_4_back_left" },
-  //       { position: "5. Back Right", prefix: "tyre_assign_5_back_right" },
-  //       { position: "6. Back Right", prefix: "tyre_assign_6_back_right" },
-  //     ],
-  //     "10W Truck": [
-  //       { position: "1. Front Left", prefix: "tyre_assign_1_front_left" },
-  //       { position: "2. Front Right", prefix: "tyre_assign_2_front_right" },
-  //       {
-  //         position: "3. Back Housing Left",
-  //         prefix: "tyre_assign_3_back_housing_left",
-  //       },
-  //       {
-  //         position: "4. Back Housing Left",
-  //         prefix: "tyre_assign_4_back_housing_left",
-  //       },
-  //       {
-  //         position: "5. Back Dummy Left",
-  //         prefix: "tyre_assign_5_back_dummy_left",
-  //       },
-  //       {
-  //         position: "6. Back Dummy Left",
-  //         prefix: "tyre_assign_6_back_dummy_left",
-  //       },
-  //       {
-  //         position: "7. Back Housing Right",
-  //         prefix: "tyre_assign_7_back_housing_right",
-  //       },
-  //       {
-  //         position: "8. Back Housing Right",
-  //         prefix: "tyre_assign_8_back_housing_right",
-  //       },
-  //       {
-  //         position: "9. Back Dummy Right",
-  //         prefix: "tyre_assign_9_back_dummy_right",
-  //       },
-  //       {
-  //         position: "10. Back Dummy Right",
-  //         prefix: "tyre_assign_10_back_dummy_right",
-  //       },
-  //     ],
-  //   };
-
-  //   const positionsToRender = tyrePositions[vehicleType] || [];
-
-  //   return positionsToRender.map((tyre, index) => (
-  //     <tr key={index} className="border border-gray-300">
-  //       <td className="p-2 border border-gray-300">{tyre.position}</td>
-  //       <td className="p-2 border border-gray-300">
-  //         {tyreData[`${tyre.prefix}_no`] || "-"}
-  //       </td>
-
-  //       <td className="p-2 border border-gray-300">
-  //         {tyreData[`${tyre.prefix}_date`]
-  //           ? moment(tyreData[`${tyre.prefix}_date`]).format("DD-MM-YYYY")
-  //           : "-"}
-  //       </td>
-  //       <td className="p-2 border border-gray-300">
-  //         {tyreData[`${tyre.prefix}_km`] || "-"}
-  //       </td>
-  //       <td className="p-2 border border-gray-300">
-  //         {tyreData[`${tyre.prefix}_pre_km`] || "-"}
-  //       </td>
-  //       <td className="p-2 border border-gray-300">
-  //         {tyreData[`${tyre.prefix}_status`] || "-"}
-  //       </td>
-  //     </tr>
-  //   ));
-  // };
   const renderTyreRows = () => {
     const vehicleType = vehicle.vehicle_type;
     const tyreData = tyre;
@@ -240,6 +159,13 @@ const AssignTypeTyreView = () => {
         { position: "1. Front Left", prefix: "tyre_assign_1_front_left" },
         { position: "2. Front Right", prefix: "tyre_assign_2_front_right" },
         { position: "3. Stephany Tyre", prefix: "tyre_assign_stepney_no" },
+      ],
+      Car: [
+        { position: "1. Front Left", prefix: "tyre_assign_1_front_left" },
+        { position: "2. Front Right", prefix: "tyre_assign_2_front_right" },
+        { position: "3. Back Left", prefix: "tyre_assign_3_back_left" },
+        { position: "4. Back Right", prefix: "tyre_assign_5_back_right" },
+        { position: "5. Stephany Tyre", prefix: "tyre_assign_stepney_no" },
       ],
       "6W Truck": [
         { position: "1. Front Left", prefix: "tyre_assign_1_front_left" },
@@ -312,9 +238,7 @@ const AssignTypeTyreView = () => {
           <td className="p-2 border border-gray-300">{date}</td>
           <td className="p-2 border border-gray-300">{km || "-"}</td>
           <td className="p-2 border border-gray-300">{preKm || "-"}</td>
-          <td className="p-2 border border-gray-300">
-            {differenceKm || "-"}
-          </td>
+          <td className="p-2 border border-gray-300">{differenceKm || "-"}</td>
           <td className="p-2 border border-gray-300">{status}</td>
         </tr>
       );

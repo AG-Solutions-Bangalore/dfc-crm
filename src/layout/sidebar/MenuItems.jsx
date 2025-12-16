@@ -10,7 +10,7 @@ import {
   IconTool,
   IconTruck,
   IconTruckDelivery,
-  IconUsers
+  IconUsers,
 } from "@tabler/icons-react";
 import { uniqueId } from "lodash";
 import menuItems from "../../json/menuItems.json";
@@ -31,6 +31,7 @@ const iconComponents = {
   Tyre: IconTool,
   Purchase: IconRepeat,
   "Fitted Tyre": IconComponents,
+  "Service R": IconComponents,
   "Stock Tyre": IconRepeat,
   "Under Inspec.": IconRepeat,
   Service: IconTool,
@@ -42,7 +43,7 @@ const iconComponents = {
 };
 
 const isItemAllowed = (item, pageControl, userId) => {
-  const itemHref = item.href?.replace(/^\//, ""); 
+  const itemHref = item.href?.replace(/^\//, "");
 
   return pageControl.some((control) => {
     return (

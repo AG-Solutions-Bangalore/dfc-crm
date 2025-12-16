@@ -28,13 +28,70 @@ const FittedTyreReport = () => {
     }, {});
   };
 
-  // Get grouped data
   const groupedData = groupData(filteredData);
-  // Function to get tyre positions based on vehicle type
   const getTyrePositions = (vehicleData) => {
-    const vehicleType = vehicleData[0]?.vehicle_type; // first item of the group
+    const vehicleType = vehicleData[0]?.vehicle_type;
+    if (vehicleType === "Car") {
+      return [
+        {
+          name: "1.Front Left",
+          no: "tyre_assign_1_front_left_no",
+          type: "tyre_assign_1_front_left_type",
+          make: "tyre_assign_1_front_left_make",
+          date: "tyre_assign_1_front_left_date",
+          km: "tyre_assign_1_front_left_km",
+          preDate: "tyre_assign_1_front_left_pre_date",
+          preKm: "tyre_assign_1_front_left_pre_km",
+          status: "tyre_assign_1_front_left_status",
+        },
+        {
+          name: "2.Front Right",
+          no: "tyre_assign_2_front_right_no",
+          type: "tyre_assign_2_front_right_type",
+          make: "tyre_assign_2_front_right_make",
+          date: "tyre_assign_2_front_right_date",
+          km: "tyre_assign_2_front_right_km",
+          preDate: "tyre_assign_2_front_right_pre_date",
+          preKm: "tyre_assign_2_front_right_pre_km",
+          status: "tyre_assign_2_front_right_status",
+        },
+        {
+          name: "3.Back Left",
+          no: "tyre_assign_3_back_left_no",
+          type: "tyre_assign_3_back_left_type",
+          make: "tyre_assign_3_back_left_make",
+          date: "tyre_assign_3_back_left_date",
+          km: "tyre_assign_3_back_left_km",
+          preDate: "tyre_assign_3_back_left_pre_date",
+          preKm: "tyre_assign_3_back_left_pre_km",
+          status: "tyre_assign_3_back_left_status",
+        },
 
-    if (vehicleType === "6W Truck") {
+        {
+          name: "4.Back Right",
+          no: "tyre_assign_5_back_right_no",
+          type: "tyre_assign_5_back_right_type",
+          make: "tyre_assign_5_back_right_make",
+          date: "tyre_assign_5_back_right_date",
+          km: "tyre_assign_5_back_right_km",
+          preDate: "tyre_assign_5_back_right_pre_date",
+          preKm: "tyre_assign_5_back_right_pre_km",
+          status: "tyre_assign_5_back_right_status",
+        },
+
+        {
+          name: "Stepney Tyre",
+          no: "tyre_assign_stepney_no",
+          type: "tyre_assign_stepney_type",
+          make: "tyre_assign_stepney_make",
+          date: "tyre_assign_stepney_date",
+          km: "tyre_assign_stepney_km",
+          preDate: "tyre_assign_stepney_pre_date",
+          preKm: "tyre_assign_stepney_pre_km",
+          status: "tyre_assign_stepney_status",
+        },
+      ];
+    } else if (vehicleType === "6W Truck") {
       return [
         {
           name: "1.Front Left",
@@ -114,8 +171,7 @@ const FittedTyreReport = () => {
           status: "tyre_assign_stepney_status",
         },
       ];
-    } else {
-      // Vehicles with back housing tyres
+    } else if (vehicleType === "10W Truck") {
       return [
         {
           name: "1.Front Left",
@@ -279,7 +335,7 @@ const FittedTyreReport = () => {
   const branchOptions = [
     { value: "all", label: "All Branches" },
     ...Object.values(groupedData)
-      .map((records) => records[0]?.tyre_assign_branch)
+      .map((records) => records[0]?.vehicle_branch)
       .filter(Boolean)
       .filter((v, i, arr) => arr.indexOf(v) == i)
       .map((branch) => ({
@@ -290,7 +346,7 @@ const FittedTyreReport = () => {
   const filteredGroups = Object.entries(groupedData).filter(
     ([vehicleNo, vehicleData]) => {
       if (!selectedBranch || selectedBranch == "all") return true;
-      return vehicleData[0]?.tyre_assign_branch === selectedBranch;
+      return vehicleData[0]?.vehicle_branch === selectedBranch;
     }
   );
   useEffect(() => {
@@ -398,7 +454,7 @@ const FittedTyreReport = () => {
             if (tyreNo || tyreType || tyreMake) {
               worksheet.addRow([
                 vehicleNo,
-                item.tyre_assign_branch || "",
+                item.vehicle_branch || "",
                 position.name,
                 tyreNo || "",
                 tyreType || "",
@@ -605,8 +661,7 @@ const FittedTyreReport = () => {
                                     Vehicle No: {vehicleNo}
                                   </span>
                                   <span className="text-gray-700">
-                                    Branch:{" "}
-                                    {firstItem.tyre_assign_branch || "N/A"}
+                                    Branch: {firstItem.vehicle_branch || "N/A"}
                                   </span>
                                 </div>
                               </div>
@@ -650,82 +705,6 @@ const FittedTyreReport = () => {
                                   </thead>
 
                                   <tbody>
-                                    {/* {tyrePositions.map((position, posIndex) => {
-                                      const item = vehicleData[0];
-
-                                      const tyreNo = item[position.no] || "-";
-                                      const tyreType =
-                                        item[position.type] || "-";
-                                      const tyreMake =
-                                        item[position.make] || "-";
-
-                                      const date = item[position.date]
-                                        ? moment(item[position.date]).format(
-                                            "DD-MMM-YYYY"
-                                          )
-                                        : "-";
-
-                                      const km = item[position.km] || "-";
-
-                                      const preDate =
-                                        item[position.preDate] &&
-                                        item[position.preDate] !== "0000-00-00"
-                                          ? moment(
-                                              item[position.preDate]
-                                            ).format("DD-MMM-YYYY")
-                                          : "-";
-
-                                      const preKm = item[position.preKm] || "-";
-                                      const status =
-                                        item[position.status] || "-";
-
-                                      const kmRun =
-                                        preKm !== "-" && km !== "-"
-                                          ? parseFloat(preKm) - parseFloat(km)
-                                          : "-";
-//if the status is new and kmRun is between 60 k and 70 k the row need to be bg color orange 
-//if the status is new and kmRun is greater than  70 k the row need to be bg color red 
-//if the status is new and kmRun is 1st Retread is between 25 k to  35 k the row need to be bg color orange
-//if the status is new and kmRun is 1st Retread is greater than  35 k the row need to be bg color red
-
-                                      return (
-                                        <tr
-                                          key={posIndex}
-                                          className="hover:bg-gray-50"
-                                        >
-                                          <td className="border py-2 text-xs px-3">
-                                            {position.name}
-                                          </td>
-                                          <td className="border py-2 text-xs px-3">
-                                            {tyreNo}
-                                          </td>
-                                          <td className="border py-2 text-xs px-3">
-                                            {tyreType}
-                                          </td>
-                                          <td className="border py-2 text-xs px-3">
-                                            {tyreMake}
-                                          </td>
-                                          <td className="border py-2 text-xs text-center">
-                                            {date}
-                                          </td>
-                                          <td className="border py-2 text-xs text-center">
-                                            {km}
-                                          </td>
-                                          <td className="border py-2 text-xs text-center">
-                                            {preDate}
-                                          </td>
-                                          <td className="border py-2 text-xs text-center">
-                                            {preKm}
-                                          </td>
-                                          <td className="border py-2 text-xs text-center">
-                                            {kmRun}
-                                          </td>
-                                          <td className="border py-2 text-xs text-center">
-                                            {status}
-                                          </td>
-                                        </tr>
-                                      );
-                                    })} */}
                                     {tyrePositions.map((position, posIndex) => {
                                       const item = vehicleData[0];
 

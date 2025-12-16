@@ -83,7 +83,7 @@ const ViewVechile = () => {
   const [tyre, setTyre] = useState({});
   const [loading, setLoading] = useState(true);
   const [isInfoVisible, setIsInfoVisible] = useState(false);
-
+  console.log(vehicle, "vehicle");
   const toggleInfo = () => {
     setIsInfoVisible(!isInfoVisible);
   };
@@ -190,7 +190,6 @@ const ViewVechile = () => {
     localStorage.setItem("vehicle_no", vehicle.reg_no);
     localStorage.setItem("vehicle_branch", vehicle.vehicle_branch);
     localStorage.setItem("vechile_view", id);
-    // navigate("/changePkm");
     setOpen(true);
   };
 
@@ -586,7 +585,151 @@ const ViewVechile = () => {
                       </td>
                     </tr>
                   )}
+                  {/* //Car */}
+                  {vehicle.vehicle_type == "Car" && (
+                    <tr className="text-center">
+                      <td className="border p-2">3. Back Left</td>
+                      <td className="border p-2">
+                        {tyre?.tyre_assign_3_back_left_no}
+                      </td>
+                      <td className="border p-2">
+                        {tyre?.tyre_assign_3_back_left_type}
+                      </td>
+                      <td className="border p-2">
+                        {tyre?.tyre_assign_3_back_left_make}
+                      </td>
+                      <td className="border p-2">
+                        {/* {tyre?.tyre_assign_3_back_left_date} */}
+                        {tyre?.tyre_assign_3_back_left_date
+                          ? moment(tyre?.tyre_assign_3_back_left_date).format(
+                              "DD-MMMM-YYYY"
+                            )
+                          : ""}
+                      </td>
+                      <td className="border p-2">
+                        {tyre?.tyre_assign_3_back_left_km}
+                      </td>
+                      <td className="border p-2">
+                        {/* {tyre?.tyre_assign_3_back_left_pre_date} */}
+                        {tyre?.tyre_assign_3_back_left_pre_date
+                          ? moment(
+                              tyre?.tyre_assign_3_back_left_pre_date
+                            ).format("DD-MMMM-YYYY")
+                          : ""}
+                      </td>
+                      <td className="border p-2">
+                        {tyre?.tyre_assign_3_back_left_pre_km}
+                      </td>
+                      <td className="border p-2">
+                        {tyre?.tyre_assign_3_back_left_pre_km -
+                          tyre?.tyre_assign_3_back_left_km}
+                      </td>
+                      <td className="border p-2 ">
+                        {tyre?.tyre_assign_3_back_left_status}
+                      </td>
+                      <td className="border p-2 print:hidden">
+                        <div className="flex items-center justify-center gap-4">
+                          <button
+                            onClick={(e) =>
+                              handleChangeTyre(
+                                e,
+                                tyre?.id + "#tyre_assign_3_back_left_no"
+                              )
+                            }
+                            title="Change Tyre"
+                            className="text-blue-500 hover:text-blue-700"
+                          >
+                            <IconEdit size={20} />
+                          </button>
 
+                          <button
+                            onClick={(e) =>
+                              handleChangePkm(
+                                e,
+                                tyre?.id + "#tyre_assign_3_back_left_no"
+                              )
+                            }
+                            title="Change Date & Km"
+                            className="text-blue-500 hover:text-blue-700"
+                          >
+                            <IconEditCircle size={20} />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  )}
+                  {vehicle.vehicle_type == "Car" && (
+                    <tr className="text-center">
+                      <td className="border p-2">4. Back Right</td>
+                      <td className="border p-2">
+                        {tyre?.tyre_assign_5_back_right_no}
+                      </td>
+                      <td className="border p-2">
+                        {tyre?.tyre_assign_5_back_right_type}
+                      </td>
+                      <td className="border p-2">
+                        {tyre?.tyre_assign_5_back_right_make}
+                      </td>
+                      <td className="border p-2">
+                        {/* {tyre?.tyre_assign_5_back_right_date} */}
+                        {tyre?.tyre_assign_5_back_right_date
+                          ? moment(tyre?.tyre_assign_5_back_right_date).format(
+                              "DD-MMMM-YYYY"
+                            )
+                          : ""}
+                      </td>
+                      <td className="border p-2">
+                        {tyre?.tyre_assign_5_back_right_km}
+                      </td>
+                      <td className="border p-2">
+                        {/* {tyre?.tyre_assign_5_back_right_pre_date} */}
+                        {tyre?.tyre_assign_5_back_right_pre_date
+                          ? moment(
+                              tyre?.tyre_assign_5_back_right_pre_date
+                            ).format("DD-MMMM-YYYY")
+                          : ""}
+                      </td>
+                      <td className="border p-2">
+                        {tyre?.tyre_assign_5_back_right_pre_km}
+                      </td>
+                      <td className="border p-2">
+                        {tyre?.tyre_assign_5_back_right_pre_km -
+                          tyre?.tyre_assign_5_back_right_km}
+                      </td>
+                      <td className="border p-2">
+                        {tyre?.tyre_assign_5_back_right_status}
+                      </td>
+                      <td className="border p-2 print:hidden">
+                        <div className="flex items-center justify-center gap-4">
+                          <button
+                            onClick={(e) =>
+                              handleChangeTyre(
+                                e,
+                                tyre?.id + "#tyre_assign_5_back_right_no"
+                              )
+                            }
+                            title="Change Tyre"
+                            className="text-blue-500 hover:text-blue-700"
+                          >
+                            <IconEdit size={20} />
+                          </button>
+
+                          <button
+                            onClick={(e) =>
+                              handleChangePkm(
+                                e,
+                                tyre?.id + "#tyre_assign_5_back_right_no"
+                              )
+                            }
+                            title="Change Date & Km"
+                            className="text-blue-500 hover:text-blue-700"
+                          >
+                            <IconEditCircle size={20} />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  )}
                   {/* 6w truck 1 back left */}
                   {vehicle.vehicle_type == "6W Truck" && (
                     <tr className="text-center">

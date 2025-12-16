@@ -42,6 +42,7 @@ import VendorReportView from "./pages/reports/vendor/VendorReportView";
 import VendorReportForm from "./pages/reports/vendor/VendorReportForm";
 import DisableRightClick from "./components/common/DisableRightClick";
 import FittedTyreReport from "./pages/reports/fitted-tyre/FittedTyreReport";
+import ServiceR from "./pages/reports/servicer/ServiceR";
 
 // Pages (Profile)
 const Profile = lazy(() => import("./pages/profile/Profile"));
@@ -195,7 +196,7 @@ const App = () => {
         <Routes>
           {/* Auth Routes */}
           <Route path="/" element={<SignIn />} />
-      
+
           <Route path="/forget-password" element={<ForgetPassword />} />
 
           {/* Dashboard Routes */}
@@ -407,10 +408,8 @@ const App = () => {
             path="/report-payment-form/view"
             element={<PaymentReportView />}
           />
-          <Route
-            path="/report-fitted-tyre"
-            element={<FittedTyreReport />}
-          />
+          <Route path="/report-fitted-tyre" element={<FittedTyreReport />} />
+          <Route path="/report-service-r" element={<ServiceR />} />
 
           {/* User Management Routes */}
           <Route path="/userManagement" element={<UserPage />} />
