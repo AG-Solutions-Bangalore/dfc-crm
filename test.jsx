@@ -1,282 +1,91 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Layout from "../../../layout/Layout";
 import axios from "axios";
 import moment from "moment";
 import * as ExcelJS from "exceljs";
 import BASE_URL from "../../../base/BaseUrl";
-import { Button, Paper, TextInput, Group, Box } from "@mantine/core";
-import { FileSpreadsheet, RefreshCw, Search, X } from "lucide-react";
+import {
+  Button,
+  Paper,
+  TextInput,
+  Group,
+  Box,
+  Select,
+  Modal,
+} from "@mantine/core";
+import { FileSpreadsheet, RefreshCw, Search } from "lucide-react";
 import { toast } from "sonner";
+import { IconScanEye } from "@tabler/icons-react";
 
-const FittedTyreReport = () => {
-  const [reportData, setReportData] = useState([]);
-  const [filteredData, setFilteredData] = useState([]);
+// Group vehicles by reg_no
+const groupData = (data = []) => {
+  if (!Array.isArray(data)) return {};
+  return data.reduce((acc, item) => {
+    const vehicleNo = item.reg_no;
+    if (!acc[vehicleNo]) acc[vehicleNo] = [];
+    acc[vehicleNo].push(item);
+    return acc;
+  }, {});
+};
+
+const ServiceR = () => {
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  const containerRef = useRef(null);
+  const [selectedBranch, setSelectedBranch] = useState("all");
+  const [vehicle, setVehicle] = useState([]);
+  const [filteredHistory, setFilteredHistory] = useState([]);
+  const [servicesTypesFixed, setServiceTypeFixed] = useState([]);
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [oldService, setOldService] = useState([]);
+  const [open, setOpen] = useState(false);
+  const [selectedVehicle, setSelectedVehicle] = useState(null);
+  const [serviceLookup, setServiceLookup] = useState({});
+  const [selectedServiceType, setSelectedServiceType] = useState("all");
 
-  // Group data by reg_sub_no
-  const groupData = (data) => {
-    return data.reduce((acc, item) => {
-      const vehicleNo = item.reg_sub_no;
-      if (!acc[vehicleNo]) {
-        acc[vehicleNo] = [];
-      }
-      acc[vehicleNo].push(item);
-      return acc;
-    }, {});
-  };
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearch(searchTerm.toLowerCase());
+    }, 300);
+    return () => clearTimeout(handler);
+  }, [searchTerm]);
 
-  // Get grouped data
-  const groupedData = groupData(filteredData);
-  console.log(groupedData, "groupedData");
-  // Function to get tyre positions based on vehicle type
-  const getTyrePositions = (vehicleData) => {
-    // Check if it's a 10W Truck (has housing/dummy fields)
-    if (
-      vehicleData.some(
-        (item) =>
-          item.tyre_assign_3_back_housing_left_no ||
-          item.tyre_assign_3_back_housing_left_type
-      )
-    ) {
-      return [
-        {
-          name: "1.Front Left",
-          no: "tyre_assign_1_front_left_no",
-          type: "tyre_assign_1_front_left_type",
-          make: "tyre_assign_1_front_left_make",
-          date: "tyre_assign_1_front_left_date",
-          km: "tyre_assign_1_front_left_km",
-          preDate: "tyre_assign_1_front_left_pre_date",
-          preKm: "tyre_assign_1_front_left_pre_km",
-          status: "tyre_assign_1_front_left_status",
-        },
-        {
-          name: "2.Front Right",
-          no: "tyre_assign_2_front_right_no",
-          type: "tyre_assign_2_front_right_type",
-          make: "tyre_assign_2_front_right_make",
-          date: "tyre_assign_2_front_right_date",
-          km: "tyre_assign_2_front_right_km",
-          preDate: "tyre_assign_2_front_right_pre_date",
-          preKm: "tyre_assign_2_front_right_pre_km",
-          status: "tyre_assign_2_front_right_status",
-        },
-        {
-          name: "3.Back Housing Left",
-          no: "tyre_assign_3_back_housing_left_no",
-          type: "tyre_assign_3_back_housing_left_type",
-          make: "tyre_assign_3_back_housing_left_make",
-          date: "tyre_assign_3_back_housing_left_date",
-          km: "tyre_assign_3_back_housing_left_km",
-          preDate: "tyre_assign_3_back_housing_left_pre_date",
-          preKm: "tyre_assign_3_back_housing_left_pre_km",
-          status: "tyre_assign_3_back_housing_left_status",
-        },
-        {
-          name: "4.Back Housing Left",
-          no: "tyre_assign_4_back_housing_left_no",
-          type: "tyre_assign_4_back_housing_left_type",
-          make: "tyre_assign_4_back_housing_left_make",
-          date: "tyre_assign_4_back_housing_left_date",
-          km: "tyre_assign_4_back_housing_left_km",
-          preDate: "tyre_assign_4_back_housing_left_pre_date",
-          preKm: "tyre_assign_4_back_housing_left_pre_km",
-          status: "tyre_assign_4_back_housing_left_status",
-        },
-        {
-          name: "5.Back Dummy Left",
-          no: "tyre_assign_5_back_dummy_left_no",
-          type: "tyre_assign_5_back_dummy_left_type",
-          make: "tyre_assign_5_back_dummy_left_make",
-          date: "tyre_assign_5_back_dummy_left_date",
-          km: "tyre_assign_5_back_dummy_left_km",
-          preDate: "tyre_assign_5_back_dummy_left_pre_date",
-          preKm: "tyre_assign_5_back_dummy_left_pre_km",
-          status: "tyre_assign_5_back_dummy_left_status",
-        },
-        {
-          name: "6.Back Dummy Left",
-          no: "tyre_assign_6_back_dummy_left_no",
-          type: "tyre_assign_6_back_dummy_left_type",
-          make: "tyre_assign_6_back_dummy_left_make",
-          date: "tyre_assign_6_back_dummy_left_date",
-          km: "tyre_assign_6_back_dummy_left_km",
-          preDate: "tyre_assign_6_back_dummy_left_pre_date",
-          preKm: "tyre_assign_6_back_dummy_left_pre_km",
-          status: "tyre_assign_6_back_dummy_left_status",
-        },
-        {
-          name: "7.Back Housing Right",
-          no: "tyre_assign_7_back_housing_right_no",
-          type: "tyre_assign_7_back_housing_right_type",
-          make: "tyre_assign_7_back_housing_right_make",
-          date: "tyre_assign_7_back_housing_right_date",
-          km: "tyre_assign_7_back_housing_right_km",
-          preDate: "tyre_assign_7_back_housing_right_pre_date",
-          preKm: "tyre_assign_7_back_housing_right_pre_km",
-          status: "tyre_assign_7_back_housing_right_status",
-        },
-        {
-          name: "8.Back Housing Right",
-          no: "tyre_assign_8_back_housing_right_no",
-          type: "tyre_assign_8_back_housing_right_type",
-          make: "tyre_assign_8_back_housing_right_make",
-          date: "tyre_assign_8_back_housing_right_date",
-          km: "tyre_assign_8_back_housing_right_km",
-          preDate: "tyre_assign_8_back_housing_right_pre_date",
-          preKm: "tyre_assign_8_back_housing_right_pre_km",
-          status: "tyre_assign_8_back_housing_right_status",
-        },
-        {
-          name: "9.Back Dummy Right",
-          no: "tyre_assign_9_back_dummy_right_no",
-          type: "tyre_assign_9_back_dummy_right_type",
-          make: "tyre_assign_9_back_dummy_right_make",
-          date: "tyre_assign_9_back_dummy_right_date",
-          km: "tyre_assign_9_back_dummy_right_km",
-          preDate: "tyre_assign_9_back_dummy_right_pre_date",
-          preKm: "tyre_assign_9_back_dummy_right_pre_km",
-          status: "tyre_assign_9_back_dummy_right_status",
-        },
-        {
-          name: "10.Back Dummy Right",
-          no: "tyre_assign_10_back_dummy_right_no",
-          type: "tyre_assign_10_back_dummy_right_type",
-          make: "tyre_assign_10_back_dummy_right_make",
-          date: "tyre_assign_10_back_dummy_right_date",
-          km: "tyre_assign_10_back_dummy_right_km",
-          preDate: "tyre_assign_10_back_dummy_right_pre_date",
-          preKm: "tyre_assign_10_back_dummy_right_pre_km",
-          status: "tyre_assign_10_back_dummy_right_status",
-        },
-        {
-          name: "Stepney Tyre",
-          no: "tyre_assign_stepney_no",
-          type: "tyre_assign_stepney_type",
-          make: "tyre_assign_stepney_make",
-          date: "tyre_assign_stepney_date",
-          km: "tyre_assign_stepney_km",
-          preDate: "tyre_assign_stepney_pre_date",
-          preKm: "tyre_assign_stepney_pre_km",
-          status: "tyre_assign_stepney_status",
-        },
-      ];
-    } else {
-      // 6W Truck or Other
-      return [
-        {
-          name: "1.Front Left",
-          no: "tyre_assign_1_front_left_no",
-          type: "tyre_assign_1_front_left_type",
-          make: "tyre_assign_1_front_left_make",
-          date: "tyre_assign_1_front_left_date",
-          km: "tyre_assign_1_front_left_km",
-          preDate: "tyre_assign_1_front_left_pre_date",
-          preKm: "tyre_assign_1_front_left_pre_km",
-          status: "tyre_assign_1_front_left_status",
-        },
-        {
-          name: "2.Front Right",
-          no: "tyre_assign_2_front_right_no",
-          type: "tyre_assign_2_front_right_type",
-          make: "tyre_assign_2_front_right_make",
-          date: "tyre_assign_2_front_right_date",
-          km: "tyre_assign_2_front_right_km",
-          preDate: "tyre_assign_2_front_right_pre_date",
-          preKm: "tyre_assign_2_front_right_pre_km",
-          status: "tyre_assign_2_front_right_status",
-        },
-        {
-          name: "3.Back Left",
-          no: "tyre_assign_3_back_left_no",
-          type: "tyre_assign_3_back_left_type",
-          make: "tyre_assign_3_back_left_make",
-          date: "tyre_assign_3_back_left_date",
-          km: "tyre_assign_3_back_left_km",
-          preDate: "tyre_assign_3_back_left_pre_date",
-          preKm: "tyre_assign_3_back_left_pre_km",
-          status: "tyre_assign_3_back_left_status",
-        },
-        {
-          name: "4.Back Left",
-          no: "tyre_assign_4_back_left_no",
-          type: "tyre_assign_4_back_left_type",
-          make: "tyre_assign_4_back_left_make",
-          date: "tyre_assign_4_back_left_date",
-          km: "tyre_assign_4_back_left_km",
-          preDate: "tyre_assign_4_back_left_pre_date",
-          preKm: "tyre_assign_4_back_left_pre_km",
-          status: "tyre_assign_4_back_left_status",
-        },
-        {
-          name: "5.Back Right",
-          no: "tyre_assign_5_back_right_no",
-          type: "tyre_assign_5_back_right_type",
-          make: "tyre_assign_5_back_right_make",
-          date: "tyre_assign_5_back_right_date",
-          km: "tyre_assign_5_back_right_km",
-          preDate: "tyre_assign_5_back_right_pre_date",
-          preKm: "tyre_assign_5_back_right_pre_km",
-          status: "tyre_assign_5_back_right_status",
-        },
-        {
-          name: "6.Back Right",
-          no: "tyre_assign_6_back_right_no",
-          type: "tyre_assign_6_back_right_type",
-          make: "tyre_assign_6_back_right_make",
-          date: "tyre_assign_6_back_right_date",
-          km: "tyre_assign_6_back_right_km",
-          preDate: "tyre_assign_6_back_right_pre_date",
-          preKm: "tyre_assign_6_back_right_pre_km",
-          status: "tyre_assign_6_back_right_status",
-        },
-        {
-          name: "Stepney Tyre",
-          no: "tyre_assign_stepney_no",
-          type: "tyre_assign_stepney_type",
-          make: "tyre_assign_stepney_make",
-          date: "tyre_assign_stepney_date",
-          km: "tyre_assign_stepney_km",
-          preDate: "tyre_assign_stepney_pre_date",
-          preKm: "tyre_assign_stepney_pre_km",
-          status: "tyre_assign_stepney_status",
-        },
-      ];
+  useEffect(() => {
+    if (oldService.length > 0) {
+      const lookup = oldService.reduce((acc, item) => {
+        const key = `${item.service_sub_truck_no}_${item.service_sub_type}`;
+        if (!acc[key]) acc[key] = [];
+        acc[key].push(item);
+        return acc;
+      }, {});
+      setServiceLookup(lookup);
     }
-  };
+  }, [oldService]);
 
+  // Fetch report
   const fetchReportData = async (controller) => {
     try {
       setLoading(true);
       const token = localStorage.getItem("token");
-
       const response = await axios.post(
-        `${BASE_URL}/api/fetch-vehicle-tyre-report`,
+        `${BASE_URL}/api/fetch-vehicle-services-report`,
         {},
         {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          signal: controller.signal,
+          headers: { Authorization: `Bearer ${token}` },
+          signal: controller?.signal,
         }
       );
-      setReportData(response.data.tyre || []);
-      setFilteredData(response.data.tyre || []);
+      setVehicle(response.data.vehicle || []);
+      setServiceTypeFixed(response.data.servicesTypesFixed || []);
+      setOldService(response.data.historyservices || []);
 
-      if (response.data.tyre?.length > 0) {
-        toast.success("Report loaded successfully");
-      } else {
-        toast.info("No data found");
-      }
+      toast[response.data.vehicle?.length > 0 ? "success" : "info"](
+        response.data.vehicle?.length > 0
+          ? "Report loaded successfully"
+          : "No data found"
+      );
     } catch (error) {
-      if (axios.isCancel(error)) {
-        console.log("Request cancelled:", error.message);
-        return;
-      }
-      console.error("Error fetching tyre report:", error);
-      toast.error("Failed to load report");
+      if (!axios.isCancel(error)) toast.error("Failed to load report");
+      console.error(error);
     } finally {
       setLoading(false);
     }
@@ -284,453 +93,423 @@ const FittedTyreReport = () => {
 
   useEffect(() => {
     const controller = new AbortController();
-
     fetchReportData(controller);
-
-    return () => {
-      controller.abort();
-    };
+    return () => controller.abort();
   }, []);
 
-  // Function to handle search
-  const handleSearch = (term) => {
-    setSearchTerm(term);
+  const vehicleArray = Array.isArray(vehicle) ? vehicle : [];
 
-    if (!term.trim()) {
-      setFilteredData(reportData);
-      return;
-    }
+  const filteredVehicles = useMemo(() => {
+    return vehicleArray.filter((v) => {
+      const regNo = v.reg_no?.toLowerCase() || "";
+      const branch = v.vehicle_branch?.toLowerCase() || "";
+      const matchesSearch =
+        regNo.includes(debouncedSearch) || branch.includes(debouncedSearch);
+      const matchesBranch =
+        selectedBranch === "all" || v.vehicle_branch === selectedBranch;
 
-    const searchLower = term.toLowerCase().trim();
+      const matchesService =
+        selectedServiceType === "all" ||
+        v.services?.some((s) => s.service_sub_type == selectedServiceType);
 
-    const filtered = reportData.filter((item) => {
-      // Search in vehicle number
-      const vehicleNo = item.reg_sub_no || "";
-      if (vehicleNo.toLowerCase().includes(searchLower)) {
-        return true;
-      }
+      return matchesSearch && matchesBranch && matchesService;
+    });
+  }, [vehicleArray, debouncedSearch, selectedBranch, selectedServiceType]);
 
-      // Search in all tyre numbers
-      const tyrePositions = getTyrePositions([item]);
-      for (const position of tyrePositions) {
-        const tyreNo = item[position.no] || "";
-        if (tyreNo.toLowerCase().includes(searchLower)) {
-          return true;
-        }
-      }
+  // Group filtered vehicles
+  const groupedData = useMemo(
+    () => groupData(filteredVehicles),
+    [filteredVehicles]
+  );
 
-      return false;
+  const filteredGroups = useMemo(() => {
+    return Object.entries(groupedData).filter(([_, vData]) => {
+      return (
+        selectedBranch === "all" || vData[0]?.vehicle_branch === selectedBranch
+      );
+    });
+  }, [groupedData, selectedBranch]);
+
+  const branchOptions = useMemo(() => {
+    const branches = vehicleArray.map((v) => v.vehicle_branch).filter(Boolean);
+    return [
+      // { value: "all", label: "All Branches" },
+      ...Array.from(new Set(branches)).map((b) => ({ value: b, label: b })),
+    ];
+  }, [vehicleArray]);
+
+  const handleOpen = (service_sub_type, vehicleNo, vehicleObj) => {
+    const key = `${vehicleNo}_${service_sub_type}`;
+    setFilteredHistory(serviceLookup[key] || []);
+    setSelectedVehicle(vehicleObj);
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    setFilteredHistory([]);
+  };
+
+  // Excel export
+  const handleExcelExport = async () => {
+    if (!filteredGroups.length) return toast.error("No data to export");
+    const workbook = new ExcelJS.Workbook();
+    const sheet = workbook.addWorksheet("Service Report");
+
+    const header = [
+      "Vehicle No",
+      "Branch",
+      ...servicesTypesFixed.map((s) => s.service_types_fixed),
+    ];
+    sheet.addRow(header).font = { bold: true };
+
+    filteredGroups.forEach(([vehicleNo, vData]) => {
+      const v = vData[0];
+      const row = [
+        vehicleNo,
+        v.vehicle_branch,
+        ...servicesTypesFixed.map((stype) => {
+          const matched =
+            v.services?.filter(
+              (s) => s.service_sub_type === stype.service_types_fixed
+            ) || [];
+          return matched.length > 0
+            ? matched
+                .map(
+                  (s) =>
+                    `${moment(s.service_sub_date).format("DD-MMM-YYYY")} / ${
+                      s.service_sub_km
+                    }`
+                )
+                .join(", ")
+            : "-";
+        }),
+      ];
+      sheet.addRow(row);
     });
 
-    setFilteredData(filtered);
-  };
+    sheet.columns.forEach((col) => (col.width = 20));
 
-  // Function to clear search
-  const clearSearch = () => {
-    setSearchTerm("");
-    setFilteredData(reportData);
-  };
-
-  const handleExcelExport = async () => {
-    if (filteredData.length === 0) {
-      toast.error("No data to export");
-      return;
-    }
-
-    try {
-      const workbook = new ExcelJS.Workbook();
-      const worksheet = workbook.addWorksheet("Fitted Tyre Report");
-
-      // Add headers
-      const headers = [
-        "Vehicle No",
-        "Branch",
-        "Tyre Position",
-        "Tyre No",
-        "Type",
-        "Make",
-        "Date",
-        "KM",
-        "Present Date",
-        "Present KM",
-        "KM Run",
-        "Status",
-      ];
-      worksheet.addRow(headers);
-
-      const headerRow = worksheet.getRow(1);
-      headerRow.font = { bold: true };
-      headerRow.fill = {
-        type: "pattern",
-        pattern: "solid",
-        fgColor: { argb: "FFD3D3D3" },
-      };
-
-      // Add data rows
-      Object.entries(groupedData).forEach(([vehicleNo, vehicleData]) => {
-        vehicleData.forEach((item) => {
-          const tyrePositions = getTyrePositions(vehicleData);
-
-          tyrePositions.forEach((position) => {
-            const tyreNo = item[position.no];
-            const tyreType = item[position.type];
-            const tyreMake = item[position.make];
-            const date = item[position.date];
-            const km = item[position.km];
-            const preDate = item[position.preDate];
-            const preKm = item[position.preKm];
-            const status = item[position.status];
-
-            // Calculate KM Run
-            const kmRun = preKm && km ? parseFloat(preKm) - parseFloat(km) : "";
-
-            if (tyreNo || tyreType || tyreMake) {
-              worksheet.addRow([
-                vehicleNo,
-                item.tyre_assign_branch || "",
-                position.name,
-                tyreNo || "",
-                tyreType || "",
-                tyreMake || "",
-                date ? moment(date).format("DD-MM-YYYY") : "",
-                km || "",
-                preDate && preDate !== "0000-00-00"
-                  ? moment(preDate).format("DD-MM-YYYY")
-                  : "",
-                preKm || "",
-                kmRun,
-                status || "",
-              ]);
-            }
-          });
-        });
-      });
-
-      // Auto-fit columns
-      worksheet.columns.forEach((column) => {
-        let maxLength = 0;
-        column.eachCell({ includeEmpty: true }, (cell) => {
-          const columnLength = cell.value ? cell.value.toString().length : 10;
-          if (columnLength > maxLength) {
-            maxLength = columnLength;
-          }
-        });
-        column.width = maxLength < 10 ? 10 : maxLength + 2;
-      });
-
-      const buffer = await workbook.xlsx.writeBuffer();
-      const blob = new Blob([buffer], {
-        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-      });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = `Fitted-Tyre-Report-${moment().format(
-        "DD-MM-YYYY"
-      )}.xlsx`;
-      link.click();
-      URL.revokeObjectURL(url);
-
-      toast.success("Excel file downloaded successfully");
-    } catch (error) {
-      console.error("Excel export error:", error);
-      toast.error("Failed to export Excel file");
-    }
+    const buffer = await workbook.xlsx.writeBuffer();
+    const blob = new Blob([buffer], {
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = `Service_Report_${moment().format("DD-MM-YYYY")}.xlsx`;
+    link.click();
+    toast.success("Excel downloaded");
   };
 
   return (
-    <Layout>
-      <div className="min-h-screen ">
-        <div className="max-w-full mx-auto">
-          <div className="flex flex-col lg:flex-row gap-4">
-            {/* Left Sidebar - Report Actions */}
+    <>
+      <Layout>
+        <div className="min-h-screen">
+          <div className="max-w-full mx-auto flex flex-col lg:flex-row gap-4">
+            {/* Sidebar */}
             <div className="w-full lg:w-1/6">
-              <Paper shadow="md" p="md" className="sticky top-4">
-                <div className="space-y-4">
-                  <div>
-                    <h3 className="text-lg font-semibold mb-3">
-                      Report Actions
-                    </h3>
-                    <Button
-                      leftIcon={<RefreshCw size={16} />}
-                      onClick={fetchReportData}
-                      loading={loading}
-                      fullWidth
-                      className="bg-blue-600 hover:bg-blue-700"
-                    >
-                      Refresh Report
-                    </Button>
-                  </div>
+              <Paper shadow="md" p="md" className="sticky top-4 space-y-4">
+                <div>
+                  <h3 className="text-lg font-semibold mb-3">Report Actions</h3>
+                  <Button
+                    leftIcon={<RefreshCw size={16} />}
+                    onClick={() => fetchReportData()}
+                    loading={loading}
+                    fullWidth
+                    className="bg-blue-600 hover:bg-blue-700"
+                  >
+                    Refresh
+                  </Button>
+                </div>
 
-                  <div className="pt-4 border-t border-gray-200">
-                    <h4 className="text-sm font-semibold mb-2">Search:</h4>
-                    <Group spacing="xs" mb="md">
-                      <TextInput
-                        placeholder="Search Vehicle No or Tyre No"
-                        value={searchTerm}
-                        onChange={(e) => handleSearch(e.target.value)}
-                        icon={<Search size={16} />}
-                        className="flex-grow"
-                        size="sm"
-                      />
-                      {searchTerm && (
-                        <Button
-                          onClick={clearSearch}
-                          size="sm"
-                          variant="light"
-                          color="gray"
-                        >
-                          <X size={16} />
-                        </Button>
-                      )}
-                    </Group>
-                    <div className="text-xs text-gray-500 mb-3">
-                      Search by Vehicle Number (AP 04 TU 2314) or Tyre Number
-                    </div>
-                  </div>
+                <div className="pt-4 border-t border-gray-200">
+                  <h4 className="text-sm font-semibold mb-2">Search:</h4>
+                  <Group spacing="xs" mb="md">
+                    <TextInput
+                      placeholder="Search Vehicle No or Tyre No"
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      icon={<Search size={16} />}
+                      size="sm"
+                      className="flex-grow"
+                    />
+                  </Group>
+                </div>
 
-                  <div className="pt-4 border-t border-gray-200">
-                    <h4 className="text-sm font-semibold mb-2">
-                      Export Options:
-                    </h4>
-                    <div className="space-y-2">
-                      <Button
-                        leftIcon={<FileSpreadsheet size={16} />}
-                        onClick={handleExcelExport}
-                        disabled={filteredData.length === 0}
-                        fullWidth
-                        className="bg-green-600 hover:bg-green-700 text-white"
-                      >
-                        Excel
-                      </Button>
-                    </div>
-                  </div>
+                <div className="pt-4 border-t border-gray-200">
+                  <h4 className="text-sm font-semibold mb-2">
+                    Export Options:
+                  </h4>
+                  <Button
+                    leftIcon={<FileSpreadsheet size={16} />}
+                    onClick={handleExcelExport}
+                    disabled={filteredGroups.length === 0}
+                    fullWidth
+                    className="bg-green-600 hover:bg-green-700 text-white"
+                  >
+                    Excel
+                  </Button>
+                </div>
+                <div className="pt-4 border-t border-gray-200">
+                  <div className="text-sm text-gray-600">
+                    <h4 className="font-semibold mb-1">Report Summary:</h4>
 
-                  <div className="pt-4 border-t border-gray-200">
-                    <div className="text-sm text-gray-600">
-                      <h4 className="font-semibold mb-1">Report Summary:</h4>
-                      <p className="mb-1">
-                        Total Vehicles: {Object.keys(groupedData).length}
+                    <p className="mb-1">
+                      Total Vehicles:{" "}
+                      <span className="font-semibold">
+                        {filteredGroups.length}
+                      </span>
+                    </p>
+
+                    <p className="mb-1">
+                      Total Records:{" "}
+                      <span className="font-semibold">
+                        {filteredGroups.reduce(
+                          (sum, [, vehicleData]) => sum + vehicleData.length,
+                          0
+                        )}
+                      </span>
+                    </p>
+
+                    {(searchTerm || selectedBranch !== "all") && (
+                      <p className="mt-2 text-blue-600 font-medium">
+                        Showing {filteredGroups.length} of{" "}
+                        {Object.keys(groupedData).length} vehicles
                       </p>
-                      <p>Total Records: {filteredData.length}</p>
-                      {searchTerm && (
-                        <p className="mt-2 text-blue-600 font-medium">
-                          Showing {Object.keys(groupedData).length} of{" "}
-                          {groupData(reportData).length} vehicles
-                        </p>
-                      )}
-                    </div>
+                    )}
                   </div>
                 </div>
               </Paper>
             </div>
 
-            {/* Main Content - Report Data */}
+            {/* Main content */}
             <div className="w-full lg:w-5/6">
               <Paper shadow="md" p="md" className="min-h-[800px]">
-                {/* Search Header */}
                 <Box mb="md">
                   <Group position="apart">
-                    <div>
-                      <h2 className="text-xl font-bold">Fitted Tyre Report</h2>
-                      {searchTerm && (
-                        <p className="text-sm text-gray-600 mt-1">
-                          Search results for:{" "}
-                          <span className="font-semibold text-blue-600">
-                            {searchTerm}
-                          </span>
-                        </p>
-                      )}
-                    </div>
-                    {searchTerm && (
-                      <Button
-                        onClick={clearSearch}
+                    <h2 className="text-xl font-bold">Service Report</h2>
+                    <div className="flex gap-4">
+                      <Select
+                        placeholder="Select Service Type"
+                        value={selectedServiceType}
+                        onChange={(value) =>
+                          setSelectedServiceType(value || "all")
+                        }
+                        data={[
+                          ...servicesTypesFixed.map((s) => ({
+                            value: s.service_types_fixed,
+                            label: s.service_types_fixed,
+                          })),
+                        ]}
+                        clearable
+                        searchable
                         size="sm"
-                        variant="light"
-                        color="gray"
-                        leftIcon={<X size={16} />}
-                      >
-                        Clear Search
-                      </Button>
-                    )}
+                        className="min-w-[200px]"
+                      />
+
+                      <Select
+                        placeholder="Select Branch"
+                        value={selectedBranch}
+                        onChange={(value) => setSelectedBranch(value || "all")}
+                        data={branchOptions}
+                        searchable
+                        clearable
+                        size="sm"
+                        className="min-w-[200px]"
+                      />
+                    </div>
                   </Group>
                 </Box>
 
-                {filteredData.length > 0 ? (
-                  <div>
-                    <div ref={containerRef} className="md:overflow-x-auto">
-                      <div>
-                        {Object.entries(groupedData).map(
-                          ([vehicleNo, vehicleData]) => {
-                            const firstItem = vehicleData[0];
-                            const tyrePositions = getTyrePositions(vehicleData);
-                            console.log(tyrePositions, "tyrePositions");
-                            return (
-                              <div
-                                key={vehicleNo}
-                                className="mb-8 border border-gray-300 rounded-lg overflow-hidden"
-                              >
-                                <div className="p-3 bg-blue-50 font-bold border-b border-gray-300">
-                                  <div className="flex justify-between">
-                                    <span className="text-blue-700">
-                                      Vehicle No: {vehicleNo}
-                                    </span>
-                                    <span className="text-gray-700">
-                                      Branch:{" "}
-                                      {firstItem.tyre_assign_branch || "N/A"}
-                                    </span>
+                <div className="overflow-x-auto mt-4">
+                  {filteredGroups.length === 0 ? (
+                    <div className="text-center py-20 text-gray-400">
+                      <div className="text-6xl mb-4">🔍</div>
+                      <h3 className="text-xl font-semibold mb-2">
+                        {searchTerm
+                          ? "No Matching Results Found"
+                          : "No Service Data"}
+                      </h3>
+                      <p>
+                        {searchTerm
+                          ? `No results found for "${searchTerm}". Try a different search term.`
+                          : "No fitted service data available. Please refresh the report."}
+                      </p>
+                      {searchTerm && (
+                        <Button
+                          onClick={() => setSearchTerm("")}
+                          variant="light"
+                          className="mt-4"
+                        >
+                          Clear Search
+                        </Button>
+                      )}
+                    </div>
+                  ) : (
+                    filteredGroups.map(([vehicleNo, vehicleData]) => {
+                      const v = vehicleData[0];
+                      const serviceWithData = servicesTypesFixed.filter(
+                        (stype) =>
+                          v.services?.some(
+                            (s) =>
+                              s.service_sub_type === stype.service_types_fixed
+                          )
+                      );
+
+                      if (serviceWithData.length === 0) return null;
+
+                      return (
+                        <div
+                          key={vehicleNo}
+                          className="mb-8 border border-gray-300 rounded-lg overflow-hidden"
+                        >
+                          <div className="p-3 bg-blue-50 font-bold border-b border-gray-300 flex justify-between items-center text-xs md:text-sm">
+                            <div className="text-blue-700 truncate">
+                              Vehicle No:{" "}
+                              <span className="font-extrabold">
+                                {vehicleNo}
+                              </span>
+                            </div>
+                            <div className="flex items-center gap-6 text-gray-700 whitespace-nowrap">
+                              <span>
+                                <span className="font-semibold">Date:</span>{" "}
+                                {v.vehicle_present_date
+                                  ? moment(v.vehicle_present_date).format(
+                                      "DD-MMM-YYYY"
+                                    )
+                                  : "-"}
+                              </span>
+                              <span>
+                                <span className="font-semibold">KM:</span>{" "}
+                                {v.vehicle_present_km || "-"}
+                              </span>
+                              <span>
+                                <span className="font-semibold">Branch:</span>{" "}
+                                {v.vehicle_branch || "-"}
+                              </span>
+                            </div>
+                          </div>
+
+                          <div className="p-3 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2">
+                            {serviceWithData.map((stype, index) => {
+                              const matched =
+                                v.services?.filter(
+                                  (s) =>
+                                    s.service_sub_type ===
+                                    stype.service_types_fixed
+                                ) || [];
+
+                              return (
+                                <div
+                                  key={index}
+                                  className="border border-black hover:bg-gray-50 transition-colors duration-300"
+                                >
+                                  <p className="p-1 text-xs border-b font-bold flex items-center justify-center gap-1 bg-blue-200 border-black text-center">
+                                    {stype.service_types_fixed}
+                                    <IconScanEye
+                                      size={16}
+                                      onClick={() =>
+                                        handleOpen(
+                                          stype.service_types_fixed,
+                                          vehicleNo,
+                                          v
+                                        )
+                                      }
+                                      className="cursor-pointer"
+                                    />
+                                  </p>
+
+                                  <div className="p-2 text-xs text-center space-y-1">
+                                    {matched.map((item, i) => (
+                                      <div key={i}>
+                                        <div>
+                                          {moment(item.service_sub_date).format(
+                                            "DD-MMM-YYYY"
+                                          )}
+                                        </div>
+                                        <div>
+                                          <span className="font-semibold">
+                                            KM&nbsp;:&nbsp;
+                                          </span>
+                                          {item.service_sub_km}
+                                        </div>
+                                      </div>
+                                    ))}
                                   </div>
                                 </div>
-
-                                <div className="overflow-x-auto">
-                                  <table className="w-full">
-                                    <thead>
-                                      <tr className="bg-gray-50">
-                                        <th className="border py-2 text-xs">
-                                          Tyre Position
-                                        </th>
-                                        <th className="border py-2 text-xs">
-                                          Tyre No
-                                        </th>
-                                        <th className="border py-2 text-xs">
-                                          Type
-                                        </th>
-                                        <th className="border py-2 text-xs">
-                                          Make
-                                        </th>
-                                        <th className="border py-2 text-xs">
-                                          Date
-                                        </th>
-                                        <th className="border py-2 text-xs">
-                                          KM
-                                        </th>
-                                        <th className="border py-2 text-xs">
-                                          Present Date
-                                        </th>
-                                        <th className="border py-2 text-xs">
-                                          Present KM
-                                        </th>
-                                        <th className="border py-2 text-xs">
-                                          KM Run
-                                        </th>
-                                        <th className="border py-2 text-xs">
-                                          Status
-                                        </th>
-                                      </tr>
-                                    </thead>
-                                    <tbody>
-                                      {tyrePositions.map(
-                                        (position, posIndex) => {
-                                          const item = vehicleData[0];
-                                          const tyreNo = item[position.no];
-                                          const tyreType = item[position.type];
-                                          const tyreMake = item[position.make];
-                                          const date = item[position.date];
-                                          const km = item[position.km];
-                                          const preDate =
-                                            item[position.preDate];
-                                          const preKm = item[position.preKm];
-                                          const status = item[position.status];
-
-                                          const kmRun =
-                                            preKm && km
-                                              ? parseFloat(preKm) -
-                                                parseFloat(km)
-                                              : "";
-
-                                          if (!tyreNo) {
-                                            return null;
-                                          }
-
-                                          return (
-                                            <tr
-                                              key={posIndex}
-                                              className="hover:bg-gray-50"
-                                            >
-                                              <td className="border py-2 text-xs px-3">
-                                                {position.name}
-                                              </td>
-                                              <td className="border py-2 text-xs px-3">
-                                                {tyreNo || "-"}
-                                              </td>
-                                              <td className="border py-2 text-xs px-3">
-                                                {tyreType || "-"}
-                                              </td>
-                                              <td className="border py-2 text-xs px-3">
-                                                {tyreMake || "-"}
-                                              </td>
-                                              <td className="border py-2 text-xs text-center">
-                                                {date
-                                                  ? moment(date).format(
-                                                      "DD-MMM-YYYY"
-                                                    )
-                                                  : "-"}
-                                              </td>
-                                              <td className="border py-2 text-xs text-center">
-                                                {km || "-"}
-                                              </td>
-                                              <td className="border py-2 text-xs text-center">
-                                                {preDate &&
-                                                preDate !== "0000-00-00"
-                                                  ? moment(preDate).format(
-                                                      "DD-MMM-YYYY"
-                                                    )
-                                                  : "-"}
-                                              </td>
-                                              <td className="border py-2 text-xs text-center">
-                                                {preKm || "-"}
-                                              </td>
-                                              <td className="border py-2 text-xs text-center">
-                                                {kmRun || "-"}
-                                              </td>
-                                              <td className="border py-2 text-xs text-center">
-                                                {status || "-"}
-                                              </td>
-                                            </tr>
-                                          );
-                                        }
-                                      )}
-                                    </tbody>
-                                  </table>
-                                </div>
-                              </div>
-                            );
-                          }
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="text-center py-20 text-gray-400">
-                    <div className="text-6xl mb-4">🔍</div>
-                    <h3 className="text-xl font-semibold mb-2">
-                      {searchTerm
-                        ? "No Matching Results Found"
-                        : "No Tyre Data"}
-                    </h3>
-                    <p>
-                      {searchTerm
-                        ? `No results found for "${searchTerm}". Try a different search term.`
-                        : "No fitted tyre data available. Please refresh the report."}
-                    </p>
-                    {searchTerm && (
-                      <Button
-                        onClick={clearSearch}
-                        variant="light"
-                        className="mt-4"
-                      >
-                        Clear Search
-                      </Button>
-                    )}
-                  </div>
-                )}
+                              );
+                            })}
+                          </div>
+                        </div>
+                      );
+                    })
+                  )}
+                </div>
               </Paper>
             </div>
           </div>
         </div>
-      </div>
-    </Layout>
+      </Layout>
+
+      <Modal
+        opened={open}
+        onClose={handleClose}
+        title="History Services"
+        size="xl"
+        centered
+        overlayProps={{ backgroundOpacity: 0.55, blur: 3 }}
+      >
+        <div style={{ maxHeight: "70vh", overflow: "auto" }}>
+          {filteredHistory.length > 0 ? (
+            <table className="w-full border-collapse text-xs text-center">
+              <thead>
+                <tr className="bg-blue-100">
+                  <th className="border py-2">Services</th>
+                  <th className="border py-2">Date</th>
+                  <th className="border py-2">KM</th>
+                  <th className="border py-2">Present Date</th>
+                  <th className="border py-2">Present KM</th>
+                  <th className="border py-2">KM Run</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredHistory.map((item, key) => (
+                  <tr key={key}>
+                    <td className="border py-2 px-2 text-start">
+                      {item?.service_sub_type}
+                    </td>
+                    <td className="border py-2">
+                      {moment(item?.service_sub_date).format("DD-MMM-YYYY")}
+                    </td>
+                    <td className="border py-2">{item?.service_sub_km}</td>
+                    <td className="border py-2">
+                      {selectedVehicle?.vehicle_present_date
+                        ? moment(selectedVehicle.vehicle_present_date).format(
+                            "DD-MMM-YYYY"
+                          )
+                        : "-"}
+                    </td>
+                    <td className="border py-2">
+                      {selectedVehicle?.vehicle_present_km || "-"}
+                    </td>
+                    <td className="border py-2">
+                      {selectedVehicle?.vehicle_present_km &&
+                      item?.service_sub_km
+                        ? selectedVehicle.vehicle_present_km -
+                          item.service_sub_km
+                        : "-"}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <p className="text-center">No Data Available</p>
+          )}
+        </div>
+      </Modal>
+    </>
   );
 };
 
-export default FittedTyreReport;
+export default ServiceR;

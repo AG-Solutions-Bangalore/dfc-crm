@@ -1,20 +1,10 @@
-import React, { useEffect, useMemo, useState } from "react";
-import Layout from "../../layout/Layout";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import BASE_URL from "../../base/BaseUrl";
-import {
-  IconEdit,
-  IconEye,
-  IconLiveView,
-  IconPlus,
-  IconSwitchHorizontal,
-  IconTruck,
-} from "@tabler/icons-react";
-import { MantineReactTable, useMantineReactTable } from "mantine-react-table";
 import { Tooltip } from "@mantine/core";
+import axios from "axios";
+import { MantineReactTable, useMantineReactTable } from "mantine-react-table";
 import moment from "moment";
-import PartialVechileView from "./PartialVechileView";
+import { useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import BASE_URL from "../../base/BaseUrl";
 import {
   VechilesCreate,
   VechilesCreateTyre,
@@ -24,6 +14,8 @@ import {
 } from "../../components/buttonIndex/ButtonComponents";
 import { CreateButton } from "../../components/common/ButtonColors";
 import { encryptId } from "../../components/common/EncryptionDecryption";
+import Layout from "../../layout/Layout";
+import PartialVechileView from "./PartialVechileView";
 
 const VehiclesList = () => {
   const [vehiclesData, setVehiclesData] = useState(null);
@@ -238,24 +230,7 @@ const VehiclesList = () => {
 
           return (
             <div className="flex gap-2">
-              {/* <div
-               onClick={() => {
-                setSelectedVehicleId(id); 
-                setIsViewExpanded(true); 
-              }}
-                className="flex items-center space-x-2"
-                title="Side View"
-              >
-                <IconEye className="h-5 w-5 text-blue-500 cursor-pointer" />
-              </div> */}
-              {/* <VechilesView
-                onClick={() => {
-                  setSelectedVehicleId(id);
-                  setIsViewExpanded(true);
-                }}
-                
-                className="flex items-center space-x-2"
-              /> */}
+              
               <VechilesView
                 onClick={() => {
                   setSelectedVehicleId(id);
@@ -263,14 +238,6 @@ const VehiclesList = () => {
                 }}
                 className="flex items-center space-x-2"
               />
-
-              {/* <div
-                onClick={() => navigate(`/vechile-edit/${id}`)}
-                className="flex items-center space-x-2"
-                title="Edit"
-              >
-                <IconEdit className="h-5 w-5 text-blue-500 cursor-pointer" />
-              </div> */}
 
               <VechilesEdit
                 className="flex items-center space-x-2"
@@ -281,15 +248,7 @@ const VehiclesList = () => {
                 }}
               />
 
-              {/* <a
-                href={`/truckdetails-viewall/${encodeURIComponent(
-                  encryptId(id)
-                )}`}
-                rel="noopener noreferrer"
-              >
-      
-                <VechilesTruck className="flex items-center space-x-2" />
-              </a> */}
+           
 
               <VechilesTruck
                 className="flex items-center space-x-2"
@@ -309,19 +268,6 @@ const VehiclesList = () => {
     []
   );
 
-  // const table = useMantineReactTable({
-  //   columns,
-  //   data: filteredVehiclesData || [],
-  //   enableFullScreenToggle: false,
-  //   enableDensityToggle: false,
-  //   enableColumnActions: false,
-  //   enableHiding: false,
-  //   enableStickyHeader: true,
-  //   enableStickyFooter: true,
-  //   mantineTableContainerProps: { sx: { maxHeight: "400px" } },
-
-  //   initialState: { columnVisibility: { address: false } },
-  // });
 
   const table = useMantineReactTable({
     columns,
@@ -345,23 +291,13 @@ const VehiclesList = () => {
               Vehicles List
             </h1>
             <div className="flex flex-row items-center gap-2">
-              {/* <button
-                onClick={() => navigate("/createVechiles")}
-                className=" flex flex-row items-center gap-1 text-center text-sm font-[400] cursor-pointer  w-[6rem] text-white bg-blue-600 hover:bg-red-700 p-2 rounded-lg shadow-md"
-              >
-                <IconPlus className="w-4 h-4" /> Vehicles
-              </button> */}
+         
 
               <VechilesCreate
                 onClick={() => navigate("/createVechiles")}
                 className={CreateButton}
               />
-              {/* <button
-                onClick={() => navigate("/createTyre")}
-                className=" flex flex-row items-center gap-1 text-center text-sm font-[400] cursor-pointer  w-[4rem] text-white bg-blue-600 hover:bg-red-700 p-2 rounded-lg shadow-md"
-              >
-                <IconPlus className="w-4 h-4" /> Tyre
-              </button> */}
+      
 
               <VechilesCreateTyre
                 onClick={() => navigate("/createTyre")}

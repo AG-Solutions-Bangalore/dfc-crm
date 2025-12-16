@@ -13,7 +13,10 @@ import moment from "moment";
 import { useReactToPrint } from "react-to-print";
 import html2pdf from "html2pdf.js";
 import { toast } from "sonner";
-import { ReportDate, ReportTitle } from "../../../components/common/ReportTitle";
+import {
+  ReportDate,
+  ReportTitle,
+} from "../../../components/common/ReportTitle";
 const SkeletonLoading = () => {
   return (
     <Layout>
@@ -491,6 +494,58 @@ const VehicleReportView = () => {
                           </td>
                           <td className="text-xs border p-1 border-black text-center">
                             {tyre.tyre_assign_2_front_right_status || "-"}
+                          </td>
+                        </tr>
+                      )}
+                      {vehicle.vehicle_type == "Car" && (
+                        <tr>
+                          <td className="text-xs border p-1 border-black px-2">
+                            3. Back Left
+                          </td>
+                          <td className="text-xs border p-1 border-black px-2">
+                            {tyre.tyre_assign_3_back_left_no || "-"}
+                          </td>
+                          <td className="text-xs border p-1 border-black text-center">
+                            {tyre.tyre_assign_3_back_left_date
+                              ? moment(
+                                  tyre.tyre_assign_3_back_left_date
+                                ).format("DD-MM-YYYY")
+                              : "-"}
+                          </td>
+                          <td className="text-xs border p-1 border-black text-center">
+                            {tyre.tyre_assign_3_back_left_km || "-"}
+                          </td>
+                          <td className="text-xs border p-1 border-black text-center">
+                            {tyre.tyre_assign_3_back_left_pre_km || "-"}
+                          </td>
+                          <td className="text-xs border p-1 border-black text-center">
+                            {tyre.tyre_assign_3_back_left_status || "-"}
+                          </td>
+                        </tr>
+                      )}
+                      {vehicle.vehicle_type == "Car" && (
+                        <tr>
+                          <td className="text-xs border p-1 border-black px-2">
+                            4. Back Right
+                          </td>
+                          <td className="text-xs border p-1 border-black px-2">
+                            {tyre.tyre_assign_5_back_right_no || "-"}
+                          </td>
+                          <td className="text-xs border p-1 border-black text-center">
+                            {tyre.tyre_assign_5_back_right_date
+                              ? moment(
+                                  tyre.tyre_assign_5_back_right_date
+                                ).format("DD-MM-YYYY")
+                              : "-"}
+                          </td>
+                          <td className="text-xs border p-1 border-black text-center">
+                            {tyre.tyre_assign_5_back_right_km || "-"}
+                          </td>
+                          <td className="text-xs border p-1 border-black text-center">
+                            {tyre.tyre_assign_5_back_right_pre_km || "-"}
+                          </td>
+                          <td className="text-xs border p-1 border-black text-center">
+                            {tyre.tyre_assign_5_back_right_status || "-"}
                           </td>
                         </tr>
                       )}

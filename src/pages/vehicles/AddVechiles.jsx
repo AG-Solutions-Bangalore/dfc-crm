@@ -17,8 +17,8 @@ const vehicleType = [
     label: "10W Truck",
   },
   {
-    value: "Other",
-    label: "Other",
+    value: "Car",
+    label: "Car",
   },
 ];
 

@@ -25,7 +25,7 @@ const PartialVechileView = ({ vehicleId }) => {
   const [loading, setLoading] = useState(true);
   const [tyre, setTyre] = useState({});
   const [error, setError] = useState(null);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchVehicleDetails = async () => {
@@ -60,7 +60,7 @@ const PartialVechileView = ({ vehicleId }) => {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
-  
+
         setTyre(response.data.vehiceltyresub);
         setLoading(false);
       } catch (error) {
@@ -68,14 +68,12 @@ const PartialVechileView = ({ vehicleId }) => {
         setLoading(false);
       }
     };
-  
+
     if (vehicle?.reg_no) {
       fetchTyreVechile();
     }
   }, [vehicle?.reg_no]);
-  
 
- 
   if (loading) {
     return (
       <div className="flex justify-center items-center h-full">
@@ -107,7 +105,14 @@ const PartialVechileView = ({ vehicleId }) => {
   }
   const renderTyreIcons = () => {
     let tyreFields = [];
-    if (vehicle.vehicle_type === "6W Truck") {
+    if (vehicle.vehicle_type === "Car") {
+      tyreFields = [
+        "tyre_assign_1_front_left_no",
+        "tyre_assign_2_front_right_no",
+        "tyre_assign_3_back_left_no",
+        "tyre_assign_5_back_right_no",
+      ];
+    } else if (vehicle.vehicle_type === "6W Truck") {
       tyreFields = [
         "tyre_assign_1_front_left_no",
         "tyre_assign_2_front_right_no",
@@ -178,10 +183,11 @@ const PartialVechileView = ({ vehicleId }) => {
 
             {/* <button  className="p-1 border text-black bg-orange-500 text-[10px] border-black rounded-lg"   onClick={() => window.open(`/vechile-view/${vehicleId}`, '_blank')} >Go to Tyre Page</button> */}
             <VechilesPVGototyre
-            className="p-1 border text-black bg-orange-500 text-[10px] border-black rounded-lg"   onClick={() => window.open(`/vechile-view/${vehicleId}`, '_blank')}
-            
+              className="p-1 border text-black bg-orange-500 text-[10px] border-black rounded-lg"
+              onClick={() =>
+                window.open(`/vechile-view/${vehicleId}`, "_blank")
+              }
             />
-
           </div>
 
           <div>
