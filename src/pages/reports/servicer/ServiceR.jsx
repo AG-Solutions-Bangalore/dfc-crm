@@ -436,7 +436,6 @@ const ServiceR = () => {
                           );
                         }
                       );
-
                       if (serviceWithData.length === 0) return null;
 
                       return (
@@ -448,7 +447,7 @@ const ServiceR = () => {
                             <div className="text-blue-700 truncate">
                               Vehicle No:{" "}
                               <span className="font-extrabold">
-                                {vehicleNo}
+                                {vehicleNo} - {v?.mfg_year}
                               </span>
                             </div>
                             <div className="flex items-center gap-6 text-gray-700 whitespace-nowrap">
@@ -516,9 +515,10 @@ const ServiceR = () => {
                                         </div>
                                         <div>
                                           <span className="font-semibold">
-                                            KM&nbsp;:&nbsp;
+                                            KM Run&nbsp;:&nbsp;
                                           </span>
-                                          {item.service_sub_km}
+                                          {Number(v.vehicle_present_km) -
+                                            Number(item.service_sub_km)}
                                         </div>
                                       </div>
                                     ))}
