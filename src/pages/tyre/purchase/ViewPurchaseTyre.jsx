@@ -145,7 +145,7 @@ const ViewPurchaseTyre = () => {
           <h2 className="px-5 text-black text-lg flex flex-row justify-between items-center rounded-xl p-2">
             <div className="flex items-center gap-2">
               <IconInfoCircle className="w-4 h-4" />
-              <span>Purchase Tyre View {id}</span>
+              <span>Purchase Tyre View</span>
             </div>
             <div className="flex items-center space-x-4">
              

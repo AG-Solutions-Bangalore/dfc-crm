@@ -444,7 +444,8 @@ const TruckView = () => {
                                     <span className=" font-semibold">
                                       KM&nbsp;:&nbsp;
                                     </span>
-                                    {serviceItem.service_sub_km}
+                                    {Number(vehicleskm.vehicle_present_km) -
+                                      Number(serviceItem.service_sub_km)}
                                   </div>
                                 </React.Fragment>
                               );
