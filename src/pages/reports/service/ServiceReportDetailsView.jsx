@@ -127,7 +127,7 @@ const ServiceReportDetailsView = () => {
           data,
           {
             headers: { Authorization: `Bearer ${token}` },
-          }
+          },
         );
 
         setService(Response.data.services);
