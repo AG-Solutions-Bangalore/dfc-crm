@@ -105,7 +105,7 @@ const TruckView = () => {
   });
   const handleOpen = (service_sub_type) => {
     const filtered = oldService.filter(
-      (item) => item.service_sub_type == service_sub_type
+      (item) => item.service_sub_type == service_sub_type,
     );
     setFilteredHistory(filtered);
     setOpen(true);
@@ -167,7 +167,7 @@ const TruckView = () => {
         data,
         {
           headers: { Authorization: `Bearer ${token}` },
-        }
+        },
       );
 
       if (response.data.code === 200) {
@@ -262,7 +262,7 @@ const TruckView = () => {
         `${BASE_URL}/api/fetch-vehicle-detail-id/${decryptedId}`,
         {
           headers: { Authorization: `Bearer ${token}` },
-        }
+        },
       );
       const vehicledata = response.data.vehicle;
       setVehicle(vehicledata);
@@ -403,7 +403,7 @@ const TruckView = () => {
                   const hasData = service.some(
                     (serviceItem) =>
                       serviceItem.service_sub_type ===
-                      serviceType.service_types_fixed
+                      serviceType.service_types_fixed,
                   );
 
                   return (
@@ -437,7 +437,7 @@ const TruckView = () => {
                                 <React.Fragment key={serviceItem.id}>
                                   <div>
                                     {moment(
-                                      serviceItem.service_sub_date
+                                      serviceItem.service_sub_date,
                                     ).format("DD-MMM-YYYY")}
                                   </div>
                                   <div>
@@ -505,7 +505,7 @@ const TruckView = () => {
                     <td className="border py-2 text-xs">
                       {vehicle?.vehicle_present_date
                         ? moment(item.vehicle_present_date).format(
-                            "DD-MMM-YYYY"
+                            "DD-MMM-YYYY",
                           )
                         : ""}
                     </td>
@@ -632,7 +632,7 @@ const TruckView = () => {
                     <td className="border py-2 text-xs">
                       {tyre?.tyre_assign_1_front_left_date
                         ? moment(tyre?.tyre_assign_1_front_left_date).format(
-                            "DD-MMM-YYYY"
+                            "DD-MMM-YYYY",
                           )
                         : ""}
                     </td>
@@ -642,7 +642,7 @@ const TruckView = () => {
                     <td className="border py-2 text-xs">
                       {tyre?.tyre_assign_1_front_left_pre_date
                         ? moment(
-                            tyre?.tyre_assign_1_front_left_pre_date
+                            tyre?.tyre_assign_1_front_left_pre_date,
                           ).format("DD-MMM-YYYY")
                         : ""}
                     </td>
@@ -666,7 +666,7 @@ const TruckView = () => {
                             tyre?.tyre_assign_1_front_left_no,
                             tyre?.tyre_assign_1_front_left_type,
                             tyre?.tyre_assign_1_front_left_status,
-                            tyre.id
+                            tyre.id,
                           )
                         }
                         title="Edit Tyre"
@@ -692,7 +692,7 @@ const TruckView = () => {
                     <td className="border py-2 text-xs">
                       {tyre?.tyre_assign_2_front_right_date
                         ? moment(tyre?.tyre_assign_2_front_right_date).format(
-                            "DD-MMM-YYYY"
+                            "DD-MMM-YYYY",
                           )
                         : ""}
                     </td>
@@ -702,7 +702,7 @@ const TruckView = () => {
                     <td className="border py-2 text-xs">
                       {tyre?.tyre_assign_2_front_right_pre_date
                         ? moment(
-                            tyre?.tyre_assign_2_front_right_pre_date
+                            tyre?.tyre_assign_2_front_right_pre_date,
                           ).format("DD-MMM-YYYY")
                         : ""}
                     </td>
@@ -725,7 +725,7 @@ const TruckView = () => {
                             "tyre_assign_2_front_right_no",
                             tyre?.tyre_assign_2_front_right_no,
                             tyre?.tyre_assign_2_front_right_type,
-                            tyre?.tyre_assign_2_front_right_status
+                            tyre?.tyre_assign_2_front_right_status,
                           )
                         }
                         title="Edit Tyre"
@@ -750,7 +750,7 @@ const TruckView = () => {
                     <td className="border py-2 text-xs">
                       {tyre?.tyre_assign_3_back_left_date
                         ? moment(tyre?.tyre_assign_3_back_left_date).format(
-                            "DD-MMM-YYYY"
+                            "DD-MMM-YYYY",
                           )
                         : ""}
                     </td>
@@ -760,7 +760,7 @@ const TruckView = () => {
                     <td className="border py-2 text-xs">
                       {tyre?.tyre_assign_3_back_left_pre_date
                         ? moment(tyre?.tyre_assign_3_back_left_pre_date).format(
-                            "DD-MMM-YYYY"
+                            "DD-MMM-YYYY",
                           )
                         : ""}
                     </td>
@@ -783,7 +783,7 @@ const TruckView = () => {
                             "tyre_assign_3_back_left_no",
                             tyre?.tyre_assign_3_back_left_no,
                             tyre?.tyre_assign_3_back_left_type,
-                            tyre?.tyre_assign_3_back_left_status
+                            tyre?.tyre_assign_3_back_left_status,
                           )
                         }
                         title="Edit Tyre"
@@ -808,7 +808,7 @@ const TruckView = () => {
                     <td className="border py-2 text-xs">
                       {tyre?.tyre_assign_5_back_right_date
                         ? moment(tyre?.tyre_assign_5_back_right_date).format(
-                            "DD-MMM-YYYY"
+                            "DD-MMM-YYYY",
                           )
                         : ""}
                     </td>
@@ -818,7 +818,7 @@ const TruckView = () => {
                     <td className="border py-2 text-xs">
                       {tyre?.tyre_assign_5_back_right_pre_date
                         ? moment(
-                            tyre?.tyre_assign_5_back_right_pre_date
+                            tyre?.tyre_assign_5_back_right_pre_date,
                           ).format("DD-MMM-YYYY")
                         : ""}
                     </td>
@@ -841,7 +841,7 @@ const TruckView = () => {
                             "tyre_assign_5_back_right_no",
                             tyre?.tyre_assign_5_back_right_no,
                             tyre?.tyre_assign_5_back_right_type,
-                            tyre?.tyre_assign_5_back_right_status
+                            tyre?.tyre_assign_5_back_right_status,
                           )
                         }
                         title="Edit Tyre"
@@ -866,7 +866,7 @@ const TruckView = () => {
                     <td className="border py-2 text-xs">
                       {tyre?.tyre_assign_3_back_left_date
                         ? moment(tyre?.tyre_assign_3_back_left_date).format(
-                            "DD-MMM-YYYY"
+                            "DD-MMM-YYYY",
                           )
                         : ""}
                     </td>
@@ -876,7 +876,7 @@ const TruckView = () => {
                     <td className="border py-2 text-xs">
                       {tyre?.tyre_assign_3_back_left_pre_date
                         ? moment(tyre?.tyre_assign_3_back_left_pre_date).format(
-                            "DD-MMM-YYYY"
+                            "DD-MMM-YYYY",
                           )
                         : ""}
                     </td>
@@ -899,7 +899,7 @@ const TruckView = () => {
                             "tyre_assign_3_back_left_no",
                             tyre?.tyre_assign_3_back_left_no,
                             tyre?.tyre_assign_3_back_left_type,
-                            tyre?.tyre_assign_3_back_left_status
+                            tyre?.tyre_assign_3_back_left_status,
                           )
                         }
                         title="Edit Tyre"
@@ -925,7 +925,7 @@ const TruckView = () => {
                     <td className="border py-2 text-xs">
                       {tyre?.tyre_assign_4_back_left_date
                         ? moment(tyre?.tyre_assign_4_back_left_date).format(
-                            "DD-MMM-YYYY"
+                            "DD-MMM-YYYY",
                           )
                         : ""}
                     </td>
@@ -935,7 +935,7 @@ const TruckView = () => {
                     <td className="border py-2 text-xs">
                       {tyre?.tyre_assign_4_back_left_pre_date
                         ? moment(tyre?.tyre_assign_4_back_left_pre_date).format(
-                            "DD-MMM-YYYY"
+                            "DD-MMM-YYYY",
                           )
                         : ""}
                     </td>
@@ -958,7 +958,7 @@ const TruckView = () => {
                             "tyre_assign_4_back_left_no",
                             tyre?.tyre_assign_4_back_left_no,
                             tyre?.tyre_assign_4_back_left_type,
-                            tyre?.tyre_assign_4_back_left_status
+                            tyre?.tyre_assign_4_back_left_status,
                           )
                         }
                         title="Edit Tyre"
@@ -984,7 +984,7 @@ const TruckView = () => {
                     <td className="border py-2 text-xs">
                       {tyre?.tyre_assign_5_back_right_date
                         ? moment(tyre?.tyre_assign_5_back_right_date).format(
-                            "DD-MMM-YYYY"
+                            "DD-MMM-YYYY",
                           )
                         : ""}
                     </td>
@@ -994,7 +994,7 @@ const TruckView = () => {
                     <td className="border py-2 text-xs">
                       {tyre?.tyre_assign_5_back_right_pre_date
                         ? moment(
-                            tyre?.tyre_assign_5_back_right_pre_date
+                            tyre?.tyre_assign_5_back_right_pre_date,
                           ).format("DD-MMM-YYYY")
                         : ""}
                     </td>
@@ -1017,7 +1017,7 @@ const TruckView = () => {
                             "tyre_assign_5_back_right_no",
                             tyre?.tyre_assign_5_back_right_no,
                             tyre?.tyre_assign_5_back_right_type,
-                            tyre?.tyre_assign_5_back_right_status
+                            tyre?.tyre_assign_5_back_right_status,
                           )
                         }
                         title="Edit Tyre"
@@ -1043,7 +1043,7 @@ const TruckView = () => {
                     <td className="border py-2 text-xs">
                       {tyre?.tyre_assign_6_back_right_date
                         ? moment(tyre?.tyre_assign_6_back_right_date).format(
-                            "DD-MMM-YYYY"
+                            "DD-MMM-YYYY",
                           )
                         : ""}
                     </td>
@@ -1053,7 +1053,7 @@ const TruckView = () => {
                     <td className="border py-2 text-xs">
                       {tyre?.tyre_assign_6_back_right_pre_date
                         ? moment(
-                            tyre?.tyre_assign_6_back_right_pre_date
+                            tyre?.tyre_assign_6_back_right_pre_date,
                           ).format("DD-MMM-YYYY")
                         : ""}
                     </td>
@@ -1076,7 +1076,7 @@ const TruckView = () => {
                             "tyre_assign_6_back_right_no",
                             tyre?.tyre_assign_6_back_right_no,
                             tyre?.tyre_assign_6_back_right_type,
-                            tyre?.tyre_assign_6_back_right_status
+                            tyre?.tyre_assign_6_back_right_status,
                           )
                         }
                         title="Edit Tyre"
@@ -1102,7 +1102,7 @@ const TruckView = () => {
                     <td className="border py-2 text-xs">
                       {tyre?.tyre_assign_3_back_housing_left_date
                         ? moment(
-                            tyre?.tyre_assign_3_back_housing_left_date
+                            tyre?.tyre_assign_3_back_housing_left_date,
                           ).format("DD-MMM-YYYY")
                         : ""}
                     </td>
@@ -1112,7 +1112,7 @@ const TruckView = () => {
                     <td className="border py-2 text-xs">
                       {tyre?.tyre_assign_3_back_housing_left_pre_date
                         ? moment(
-                            tyre?.tyre_assign_3_back_housing_left_pre_date
+                            tyre?.tyre_assign_3_back_housing_left_pre_date,
                           ).format("DD-MMM-YYYY")
                         : ""}
                     </td>
@@ -1135,7 +1135,7 @@ const TruckView = () => {
                             "tyre_assign_3_back_housing_left_no",
                             tyre?.tyre_assign_3_back_housing_left_no,
                             tyre?.tyre_assign_3_back_housing_left_type,
-                            tyre?.tyre_assign_3_back_housing_left_status
+                            tyre?.tyre_assign_3_back_housing_left_status,
                           )
                         }
                         title="Edit Tyre"
@@ -1161,7 +1161,7 @@ const TruckView = () => {
                     <td className="border py-2 text-xs">
                       {tyre?.tyre_assign_4_back_housing_left_date
                         ? moment(
-                            tyre?.tyre_assign_4_back_housing_left_date
+                            tyre?.tyre_assign_4_back_housing_left_date,
                           ).format("DD-MMM-YYYY")
                         : ""}
                     </td>
@@ -1171,7 +1171,7 @@ const TruckView = () => {
                     <td className="border py-2 text-xs">
                       {tyre?.tyre_assign_4_back_housing_left_pre_date
                         ? moment(
-                            tyre?.tyre_assign_4_back_housing_left_pre_date
+                            tyre?.tyre_assign_4_back_housing_left_pre_date,
                           ).format("DD-MMM-YYYY")
                         : ""}
                     </td>
@@ -1194,7 +1194,7 @@ const TruckView = () => {
                             "tyre_assign_4_back_housing_left_no",
                             tyre?.tyre_assign_4_back_housing_left_no,
                             tyre?.tyre_assign_4_back_housing_left_type,
-                            tyre?.tyre_assign_4_back_housing_left_status
+                            tyre?.tyre_assign_4_back_housing_left_status,
                           )
                         }
                         title="Edit Tyre"
@@ -1220,7 +1220,7 @@ const TruckView = () => {
                     <td className="border py-2 text-xs">
                       {tyre?.tyre_assign_5_back_dummy_left_date
                         ? moment(
-                            tyre?.tyre_assign_5_back_dummy_left_date
+                            tyre?.tyre_assign_5_back_dummy_left_date,
                           ).format("DD-MMM-YYYY")
                         : ""}
                     </td>
@@ -1230,7 +1230,7 @@ const TruckView = () => {
                     <td className="border py-2 text-xs">
                       {tyre?.tyre_assign_5_back_dummy_left_pre_date
                         ? moment(
-                            tyre?.tyre_assign_5_back_dummy_left_pre_date
+                            tyre?.tyre_assign_5_back_dummy_left_pre_date,
                           ).format("DD-MMM-YYYY")
                         : ""}
                     </td>
@@ -1253,7 +1253,7 @@ const TruckView = () => {
                             "tyre_assign_5_back_dummy_left_no",
                             tyre?.tyre_assign_5_back_dummy_left_no,
                             tyre?.tyre_assign_5_back_dummy_left_type,
-                            tyre?.tyre_assign_5_back_dummy_left_status
+                            tyre?.tyre_assign_5_back_dummy_left_status,
                           )
                         }
                         title="Edit Tyre"
@@ -1279,7 +1279,7 @@ const TruckView = () => {
                     <td className="border py-2 text-xs">
                       {tyre?.tyre_assign_6_back_dummy_left_date
                         ? moment(
-                            tyre?.tyre_assign_6_back_dummy_left_date
+                            tyre?.tyre_assign_6_back_dummy_left_date,
                           ).format("DD-MMM-YYYY")
                         : ""}
                     </td>
@@ -1289,7 +1289,7 @@ const TruckView = () => {
                     <td className="border py-2 text-xs">
                       {tyre?.tyre_assign_6_back_dummy_left_pre_date
                         ? moment(
-                            tyre?.tyre_assign_6_back_dummy_left_pre_date
+                            tyre?.tyre_assign_6_back_dummy_left_pre_date,
                           ).format("DD-MMM-YYYY")
                         : ""}
                     </td>
@@ -1312,7 +1312,7 @@ const TruckView = () => {
                             "tyre_assign_6_back_dummy_left_no",
                             tyre?.tyre_assign_6_back_dummy_left_no,
                             tyre?.tyre_assign_6_back_dummy_left_type,
-                            tyre?.tyre_assign_6_back_dummy_left_status
+                            tyre?.tyre_assign_6_back_dummy_left_status,
                           )
                         }
                         title="Edit Tyre"
@@ -1338,7 +1338,7 @@ const TruckView = () => {
                     <td className="border py-2 text-xs">
                       {tyre?.tyre_assign_7_back_housing_right_date
                         ? moment(
-                            tyre?.tyre_assign_7_back_housing_right_date
+                            tyre?.tyre_assign_7_back_housing_right_date,
                           ).format("DD-MMM-YYYY")
                         : ""}
                     </td>
@@ -1348,7 +1348,7 @@ const TruckView = () => {
                     <td className="border py-2 text-xs">
                       {tyre?.tyre_assign_7_back_housing_right_pre_date
                         ? moment(
-                            tyre?.tyre_assign_7_back_housing_right_pre_date
+                            tyre?.tyre_assign_7_back_housing_right_pre_date,
                           ).format("DD-MMM-YYYY")
                         : ""}
                     </td>
@@ -1371,7 +1371,7 @@ const TruckView = () => {
                             "tyre_assign_7_back_housing_right_no",
                             tyre?.tyre_assign_7_back_housing_right_no,
                             tyre?.tyre_assign_7_back_housing_right_type,
-                            tyre?.tyre_assign_7_back_housing_right_status
+                            tyre?.tyre_assign_7_back_housing_right_status,
                           )
                         }
                         title="Edit Tyre"
@@ -1397,7 +1397,7 @@ const TruckView = () => {
                     <td className="border py-2 text-xs">
                       {tyre?.tyre_assign_8_back_housing_right_date
                         ? moment(
-                            tyre?.tyre_assign_8_back_housing_right_date
+                            tyre?.tyre_assign_8_back_housing_right_date,
                           ).format("DD-MMM-YYYY")
                         : ""}
                     </td>
@@ -1407,7 +1407,7 @@ const TruckView = () => {
                     <td className="border py-2 text-xs">
                       {tyre?.tyre_assign_8_back_housing_right_pre_date
                         ? moment(
-                            tyre?.tyre_assign_8_back_housing_right_pre_date
+                            tyre?.tyre_assign_8_back_housing_right_pre_date,
                           ).format("DD-MMM-YYYY")
                         : ""}
                     </td>
@@ -1430,7 +1430,7 @@ const TruckView = () => {
                             "tyre_assign_8_back_housing_right_no",
                             tyre?.tyre_assign_8_back_housing_right_no,
                             tyre?.tyre_assign_8_back_housing_right_type,
-                            tyre?.tyre_assign_8_back_housing_right_status
+                            tyre?.tyre_assign_8_back_housing_right_status,
                           )
                         }
                         title="Edit Tyre"
@@ -1456,7 +1456,7 @@ const TruckView = () => {
                     <td className="border py-2 text-xs">
                       {tyre?.tyre_assign_9_back_dummy_right_date
                         ? moment(
-                            tyre?.tyre_assign_9_back_dummy_right_date
+                            tyre?.tyre_assign_9_back_dummy_right_date,
                           ).format("DD-MMM-YYYY")
                         : ""}
                     </td>
@@ -1466,7 +1466,7 @@ const TruckView = () => {
                     <td className="border py-2 text-xs">
                       {tyre?.tyre_assign_9_back_dummy_right_pre_date
                         ? moment(
-                            tyre?.tyre_assign_9_back_dummy_right_pre_date
+                            tyre?.tyre_assign_9_back_dummy_right_pre_date,
                           ).format("DD-MMM-YYYY")
                         : ""}
                     </td>
@@ -1489,7 +1489,7 @@ const TruckView = () => {
                             "tyre_assign_9_back_dummy_right_no",
                             tyre?.tyre_assign_9_back_dummy_right_no,
                             tyre?.tyre_assign_9_back_dummy_right_type,
-                            tyre?.tyre_assign_9_back_dummy_right_status
+                            tyre?.tyre_assign_9_back_dummy_right_status,
                           )
                         }
                         title="Edit Tyre"
@@ -1515,7 +1515,7 @@ const TruckView = () => {
                     <td className="border py-2 text-xs">
                       {tyre?.tyre_assign_10_back_dummy_right_date
                         ? moment(
-                            tyre?.tyre_assign_10_back_dummy_right_date
+                            tyre?.tyre_assign_10_back_dummy_right_date,
                           ).format("DD-MMM-YYYY")
                         : ""}
                     </td>
@@ -1525,7 +1525,7 @@ const TruckView = () => {
                     <td className="border py-2 text-xs">
                       {tyre?.tyre_assign_10_back_dummy_right_pre_date
                         ? moment(
-                            tyre?.tyre_assign_10_back_dummy_right_pre_date
+                            tyre?.tyre_assign_10_back_dummy_right_pre_date,
                           ).format("DD-MMM-YYYY")
                         : ""}
                     </td>
@@ -1548,7 +1548,7 @@ const TruckView = () => {
                             "tyre_assign_10_back_dummy_right_no",
                             tyre?.tyre_assign_10_back_dummy_right_no,
                             tyre?.tyre_assign_10_back_dummy_right_type,
-                            tyre?.tyre_assign_10_back_dummy_right_status
+                            tyre?.tyre_assign_10_back_dummy_right_status,
                           )
                         }
                         title="Edit Tyre"
@@ -1574,7 +1574,7 @@ const TruckView = () => {
                     <td className="border py-2 text-xs">
                       {tyre?.tyre_assign_stepney_date
                         ? moment(tyre?.tyre_assign_stepney_date).format(
-                            "DD-MMM-YYYY"
+                            "DD-MMM-YYYY",
                           )
                         : ""}
                     </td>
@@ -1584,7 +1584,7 @@ const TruckView = () => {
                     <td className="border py-2 text-xs">
                       {tyre?.tyre_assign_stepney_pre_date
                         ? moment(tyre?.tyre_assign_stepney_pre_date).format(
-                            "DD-MMM-YYYY"
+                            "DD-MMM-YYYY",
                           )
                         : ""}
                     </td>
@@ -1661,7 +1661,7 @@ const TruckView = () => {
                     <td className="border py-2 text-xs">
                       {data?.history_assign_date
                         ? moment(data?.history_assign_date).format(
-                            "DD-MMM-YYYY"
+                            "DD-MMM-YYYY",
                           )
                         : ""}
                     </td>
@@ -1671,7 +1671,7 @@ const TruckView = () => {
                     <td className="border py-2 text-xs">
                       {data?.history_assign_pre_date
                         ? moment(data?.history_assign_pre_date).format(
-                            "DD-MMM-YYYY"
+                            "DD-MMM-YYYY",
                           )
                         : ""}
                     </td>
@@ -1760,7 +1760,7 @@ const TruckView = () => {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
-        }
+        },
       );
 
       if (res.data.code === 200) {
@@ -1926,7 +1926,7 @@ const TruckView = () => {
       <Modal
         opened={open}
         onClose={handleClose}
-        title="Tyre History"
+        title="Service History"
         size="xl"
         centered
         overlayProps={{
@@ -1962,7 +1962,7 @@ const TruckView = () => {
                     <td className="border py-2 text-xs">
                       {vehicle?.vehicle_present_date
                         ? moment(vehicle?.vehicle_present_date).format(
-                            "DD-MMM-YYYY"
+                            "DD-MMM-YYYY",
                           )
                         : ""}
                     </td>
@@ -2078,7 +2078,7 @@ const TruckView = () => {
                     {},
                     {
                       headers: { Authorization: `Bearer ${token}` },
-                    }
+                    },
                   );
 
                   if (response.data.code === 200) {
@@ -2086,7 +2086,7 @@ const TruckView = () => {
                     fetchTyreDetails();
                   } else {
                     toast.error(
-                      response.data.msg || "Failed to remove stepney tyre"
+                      response.data.msg || "Failed to remove stepney tyre",
                     );
                   }
                 } catch (error) {
