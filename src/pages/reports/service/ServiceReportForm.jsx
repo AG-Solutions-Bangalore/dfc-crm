@@ -49,12 +49,12 @@ function ServiceReportForm() {
     try {
       const theLoginToken = localStorage.getItem("token");
       const response = await axios.get(
-        `${BASE_URL}/api/web-fetch-vendors/Tyre/${downloadServices.service_branch}`,
+        `${BASE_URL}/api/web-fetch-vendors-new/Tyre`,
         {
           headers: {
             Authorization: `Bearer ${theLoginToken}`,
           },
-        }
+        },
       );
 
       console.log(response.data, "response");
@@ -102,7 +102,7 @@ function ServiceReportForm() {
           headers: {
             Authorization: `Bearer ${theLoginToken}`,
           },
-        }
+        },
       );
 
       console.log(response.data, "response");
@@ -120,7 +120,7 @@ function ServiceReportForm() {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
 
       setServicesType(response.data?.serviceTypes);
@@ -133,12 +133,8 @@ function ServiceReportForm() {
     fetchVehicle();
     fetchCompany();
     fetchServiceType();
+    fetchVendors();
   }, []);
-  useEffect(() => {
-    if (downloadServices.service_branch) {
-      fetchVendors();
-    }
-  }, [downloadServices.service_branch]);
   //DOWNLOAD
   const onSubmit = (e) => {
     e.preventDefault();
@@ -236,7 +232,7 @@ function ServiceReportForm() {
     navigate("/report-services-form/view");
     localStorage.setItem(
       "service_date_from",
-      downloadServices.service_date_from
+      downloadServices.service_date_from,
     );
     localStorage.setItem("service_date_to", downloadServices.service_date_to);
     localStorage.setItem("service_garage", downloadServices.service_garage);
@@ -248,7 +244,7 @@ function ServiceReportForm() {
     navigate("/report-services-form/details/view");
     localStorage.setItem(
       "service_date_from",
-      downloadServices.service_date_from
+      downloadServices.service_date_from,
     );
     localStorage.setItem("service_date_to", downloadServices.service_date_to);
     localStorage.setItem("service_garage", downloadServices.service_garage);
