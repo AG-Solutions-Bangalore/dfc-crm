@@ -11,7 +11,7 @@ import { toast } from "sonner";
 const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-    const { fetchPagePermission, fetchPermissions } = useContext(ContextPanel);
+  const { fetchPagePermission, fetchPermissions } = useContext(ContextPanel);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const handleForgetPasswordClick = () => {
@@ -33,7 +33,7 @@ const SignIn = () => {
       if (res.status === 200) {
         const token = res.data.UserInfo?.token;
         const allUser = res.data?.userN;
-        const userType = res.data?.UserInfo?.user?.user_type_id
+        const userType = res.data?.UserInfo?.user?.user_type_id;
         if (token) {
           localStorage.setItem("token", token);
           localStorage.setItem("allUsers", JSON.stringify(allUser));
@@ -42,11 +42,11 @@ const SignIn = () => {
           localStorage.setItem("username", res.data.UserInfo.user.full_name);
           localStorage.setItem(
             "user_type_id",
-            res.data.UserInfo.user.user_type_id
+            res.data.UserInfo.user.user_type_id,
           );
           await fetchPermissions();
           await fetchPagePermission();
-          
+
           switch (userType) {
             case 3:
             case 4:
@@ -81,8 +81,6 @@ const SignIn = () => {
   );
   return (
     <>
-     
-
       <div className="flex flex-col lg:flex-row h-screen">
         {/* Left Side - Image */}
 
@@ -100,7 +98,7 @@ const SignIn = () => {
               variant="h6"
               className="text-center font-bold mb-6 text-blue-gray-800"
             >
-              Sign into your account
+              Sign-in into your account
             </Typography>
             <form onSubmit={handleSubmit} method="POST" className="space-y-6">
               <div>

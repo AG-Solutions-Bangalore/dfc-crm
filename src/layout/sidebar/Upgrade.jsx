@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 
 export const Upgrade = ({ isCollapsed }) => {
-  const text = "Updated On: 26-03-2026";
+  const text = "Updated On: 16-04-2026";
 
   return (
     <>
