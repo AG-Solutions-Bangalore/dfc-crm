@@ -311,7 +311,7 @@ const FittedTyreReport = () => {
             Authorization: `Bearer ${token}`,
           },
           signal: controller.signal,
-        }
+        },
       );
 
       setReportData(response.data.tyre || []);
@@ -347,7 +347,7 @@ const FittedTyreReport = () => {
     ([vehicleNo, vehicleData]) => {
       if (!selectedBranch || selectedBranch == "all") return true;
       return vehicleData[0]?.vehicle_branch === selectedBranch;
-    }
+    },
   );
   useEffect(() => {
     const controller = new AbortController();
@@ -493,7 +493,7 @@ const FittedTyreReport = () => {
       const link = document.createElement("a");
       link.href = url;
       link.download = `Fitted-Tyre-Report-${moment().format(
-        "DD-MM-YYYY"
+        "DD-MM-YYYY",
       )}.xlsx`;
       link.click();
       URL.revokeObjectURL(url);
@@ -589,7 +589,7 @@ const FittedTyreReport = () => {
                         <span className="font-semibold">Orange:</span>
                         <ul className="list-disc pl-4">
                           <li>
-                            NEW tyre → KM run between <strong>60k – 70k</strong>
+                            NEW tyre → KM run between <strong>70k – 80k</strong>
                           </li>
                           <li>
                             1st Retread → KM run between{" "}
@@ -606,7 +606,7 @@ const FittedTyreReport = () => {
                         <span className="font-semibold">Red:</span>
                         <ul className="list-disc pl-4">
                           <li>
-                            NEW tyre → KM run greater than <strong>70k</strong>
+                            NEW tyre → KM run greater than <strong>80k</strong>
                           </li>
                           <li>
                             1st Retread → KM run greater than{" "}
@@ -716,7 +716,7 @@ const FittedTyreReport = () => {
 
                                       const date = item[position.date]
                                         ? moment(item[position.date]).format(
-                                            "DD-MMM-YYYY"
+                                            "DD-MMM-YYYY",
                                           )
                                         : "-";
 
@@ -726,7 +726,7 @@ const FittedTyreReport = () => {
                                         item[position.preDate] &&
                                         item[position.preDate] !== "0000-00-00"
                                           ? moment(
-                                              item[position.preDate]
+                                              item[position.preDate],
                                             ).format("DD-MMM-YYYY")
                                           : "-";
 
@@ -746,11 +746,11 @@ const FittedTyreReport = () => {
                                       if (numericKmRun != null) {
                                         if (statusLower == "new") {
                                           if (
-                                            numericKmRun >= 60000 &&
-                                            numericKmRun <= 70000
+                                            numericKmRun >= 70000 &&
+                                            numericKmRun <= 80000
                                           ) {
                                             rowBgClass = "bg-orange-300";
-                                          } else if (numericKmRun > 70000) {
+                                          } else if (numericKmRun > 80000) {
                                             rowBgClass = "bg-red-400";
                                           }
                                         } else if (
