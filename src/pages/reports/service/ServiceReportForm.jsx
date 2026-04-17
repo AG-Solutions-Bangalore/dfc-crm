@@ -18,8 +18,10 @@ import { CreateButton } from "../../../components/common/ButtonColors";
 function ServiceReportForm() {
   const navigate = useNavigate();
   const [branch, setBranch] = useState([]);
-  const todayback = moment().format("YYYY-MM-DD");
-  const firstdate = moment().startOf("month").format("YYYY-MM-DD");
+  const [todayback, setTodayback] = useState(moment().format("YYYY-MM-DD"));
+  const [firstdate, setFirstdate] = useState(
+    moment().startOf("month").format("YYYY-MM-DD"),
+  );
   const [vendor, setVendor] = useState([]);
   const [company, setCompany] = useState([]);
   const [vehicles, setVehicles] = useState([]);
@@ -34,6 +36,15 @@ function ServiceReportForm() {
     service_truck_no: "",
     service_type: "",
   });
+
+  const handleDateChange = (e) => {
+    const { name, value } = e.target;
+
+    setServicesDownload((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
 
   const onInputChange = (selectedOption, action) => {
     console.log("Selected Option:", selectedOption);
@@ -266,8 +277,40 @@ function ServiceReportForm() {
         </div>
         <hr />
         <div className="p-4">
-          <form id="dowRecp" autoComplete="off">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3  gap-4">
+          <form id="dowRecp" autoComplete="off" className="flex flex-col gap-3">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4  gap-4">
+              <div className="flex flex-col gap-1 text-xs">
+                <label
+                  htmlFor="service_date_from"
+                  className="font-bold text-sm"
+                >
+                  From Date <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="date"
+                  name="service_date_from"
+                  id="service_date_from"
+                  value={downloadServices.service_date_from}
+                  onChange={handleDateChange}
+                  max={moment().format("YYYY-MM-DD")}
+                  className="border border-blue-400 rounded-md p-2"
+                />
+              </div>
+
+              <div className="flex flex-col gap-1 text-xs">
+                <label htmlFor="service_date_to" className="font-bold text-sm">
+                  To Date <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="date"
+                  name="service_date_to"
+                  id="service_date_to"
+                  value={downloadServices.service_date_to}
+                  onChange={handleDateChange}
+                  max={moment().format("YYYY-MM-DD")}
+                  className="border border-blue-400 rounded-md p-2"
+                />
+              </div>
               <SelectInput
                 label="Vehicle No"
                 name="service_truck_no"
@@ -308,6 +351,8 @@ function ServiceReportForm() {
                 styles={customStyles}
                 isSearchable={true}
               />
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3  gap-4">
               <SelectInput
                 label="Branch"
                 name="service_branch"
