@@ -13,6 +13,13 @@ import {
 import Select from "react-select";
 import { BackButton, CreateButton } from "../../components/common/ButtonColors";
 import { decryptId } from "../../components/common/EncryptionDecryption";
+import {
+  Button,
+  Dialog,
+  DialogHeader,
+  DialogBody,
+  DialogFooter,
+} from "@material-tailwind/react";
 
 const status = [
   {
@@ -50,8 +57,13 @@ const EditServices = () => {
     service_sub_data: "",
   });
   const [count, setCount] = useState(1);
+  const [subCount, setSubCount] = useState(0);
 
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [deleteId, setDeleteId] = useState(null);
+
+  const handleOpen = () => setOpen(!open);
 
   const useTemplate = {
     service_sub_type: "",
@@ -76,11 +88,12 @@ const EditServices = () => {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
 
       setService(response.data?.services);
       setUsers(response.data?.servicesSub);
+      setSubCount(response.data?.servicesSub.length);
     } catch (error) {
       console.error("Error fetching service edit data", error);
     } finally {
@@ -98,7 +111,7 @@ const EditServices = () => {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
 
       setVendor(response.data?.vendor);
@@ -118,7 +131,7 @@ const EditServices = () => {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
 
       setServicesType(response.data?.serviceTypes);
@@ -142,7 +155,7 @@ const EditServices = () => {
     const updatedUsers = users.map((user, i) =>
       index == i
         ? Object.assign(user, { [e.target.name]: e.target.value })
-        : user
+        : user,
     );
     setUsers(updatedUsers);
   };
@@ -219,6 +232,30 @@ const EditServices = () => {
     }),
   };
 
+  const deleteUser = (id) => {
+    setDeleteId(id);
+    setOpen(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      await axios.delete(
+        `${BASE_URL}/api/panel-delete-services-sub/${deleteId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+      toast.success("Service Sub Deleted Successfully");
+      fetchEditService();
+      setOpen(false);
+    } catch (error) {
+      toast.error("Service Sub Not Deleted");
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const form = document.getElementById("addIndiv");
@@ -236,7 +273,7 @@ const EditServices = () => {
       service_amount: service.service_amount,
       service_remarks: service.service_remarks,
       service_status: service.service_status,
-      service_count: count,
+      service_count: subCount,
       service_sub_data: users,
     };
 
@@ -260,12 +297,14 @@ const EditServices = () => {
   const addItem = () => {
     setUsers([...users, useTemplate]);
     setCount(count + 1);
+    setSubCount(subCount + 1);
   };
   const removeUser = (index) => {
     const filteredUsers = [...users];
     filteredUsers.splice(index, 1);
     setUsers(filteredUsers);
     setCount(count - 1);
+    setSubCount(subCount - 1);
   };
   console.log(count, "count");
   const FormLabel = ({ children, required }) => (
@@ -504,13 +543,16 @@ const EditServices = () => {
                     if (users.length > 1 && !user.id) {
                       removeUser(index);
                     }
+                    if (user.id && users.length > 1) {
+                      deleteUser(user.id);
+                    }
                   }}
                   className={`
     cursor-pointer 
     ${
-      users.length <= 1 || user.id
+      users.length <= 1
         ? "text-gray-300 cursor-not-allowed pointer-events-none"
-        : "text-gray-500 hover:text-red-600"
+        : "text-red-500 hover:text-red-600"
     }
   `}
                 />
@@ -540,6 +582,32 @@ const EditServices = () => {
           </div>
         </form>
       </div>
+
+      <Dialog open={open} handler={handleOpen} className="p-2 space-y-0">
+        <DialogBody className="flex flex-col gap-2">
+          <h1 className="text-2xl font-bold">Confirm Delete</h1>
+          <p className="text-lg">
+            Are you sure you want to delete this service sub?
+          </p>
+          <div className="flex justify-end gap-2">
+            <Button
+              variant="text"
+              color="red"
+              onClick={handleOpen}
+              className="mr-1"
+            >
+              <span>No</span>
+            </Button>
+            <Button
+              variant="gradient"
+              color="red"
+              onClick={handleDeleteConfirm}
+            >
+              <span>Yes</span>
+            </Button>
+          </div>
+        </DialogBody>
+      </Dialog>
     </Layout>
   );
 };
