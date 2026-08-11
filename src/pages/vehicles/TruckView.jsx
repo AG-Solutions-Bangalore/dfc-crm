@@ -1,10 +1,14 @@
 import { Modal, Tabs } from "@mantine/core";
 import {
   IconArrowBack,
+  IconChevronDown,
+  IconChevronRight,
   IconEye,
+  IconFilter,
   IconInfoCircle,
   IconMessageCircle,
   IconPrinter,
+  IconSearch,
   IconSettings,
   IconTruck,
   IconTruckDelivery,
@@ -95,6 +99,9 @@ const TruckView = () => {
   const [tyrehistroy, setTyreHistroy] = useState({}); //fourth one
   const [serviceTypeFixed, setServiceTypeFixed] = useState([]); //fifth one
   const [oldService, setOldService] = useState([]); //last one
+  const [expandedServiceGroups, setExpandedServiceGroups] = useState({});
+  const [serviceSearchTerm, setServiceSearchTerm] = useState("");
+  const [serviceCategoryFilter, setServiceCategoryFilter] = useState("all");
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("info");
   const [loadingkm, setLodingKm] = useState(false); //last one
@@ -103,6 +110,148 @@ const TruckView = () => {
     vehicle_present_km: vehicle.vehicle_present_km,
     vehicle_present_date: vehicle.vehicle_present_date,
   });
+
+  const getMajorHeadName = React.useCallback((items) => {
+    if (!items || items.length === 0) return "Service Work";
+
+    const genericWords = [
+      "labour",
+      "labor",
+      "misc",
+      "miscellaneous",
+      "repair",
+      "service",
+      "charge",
+      "charges",
+      "work",
+    ];
+
+    const pumpItem = items.find((i) =>
+      i.service_sub_type?.toUpperCase().includes("PUMP"),
+    );
+    const nozzleItem = items.find((i) =>
+      i.service_sub_type?.toUpperCase().includes("NOZZLE"),
+    );
+
+    if (pumpItem && nozzleItem) {
+      const details =
+        pumpItem.service_sub_details || nozzleItem.service_sub_details || "";
+      return details ? `PUMP & NOZZLE ${details}` : "PUMP & NOZZLE";
+    }
+    if (pumpItem) {
+      const details = pumpItem.service_sub_details || "";
+      return details
+        ? `${pumpItem.service_sub_type} ${details}`
+        : pumpItem.service_sub_type;
+    }
+    if (nozzleItem) {
+      const details = nozzleItem.service_sub_details || "";
+      return details ? `PUMP / NOZZLE ${details}` : "PUMP / NOZZLE";
+    }
+
+    const specificItem = items.find(
+      (i) =>
+        i.service_sub_type &&
+        !genericWords.includes(i.service_sub_type.trim().toLowerCase()),
+    );
+
+    const mainItem = specificItem || items[0];
+    const subType = mainItem?.service_sub_type || "Service Work";
+    const details = mainItem?.service_sub_details || "";
+
+    if (details) {
+      if (subType.toLowerCase().includes(details.toLowerCase())) {
+        return subType;
+      }
+      return `${subType} ${details}`;
+    }
+    return subType;
+  }, []);
+
+  // Unique service types for Category Filter
+  const categoryOptions = React.useMemo(() => {
+    if (!oldService || oldService.length === 0) return [];
+    const types = new Set();
+    oldService.forEach((item) => {
+      if (item.service_sub_type) {
+        types.add(item.service_sub_type.trim());
+      }
+    });
+    return Array.from(types).sort();
+  }, [oldService]);
+
+  // Group oldService entries by bill / date + km / service reference ID
+  const groupedServices = React.useMemo(() => {
+    if (!oldService || oldService.length === 0) return [];
+    const map = new Map();
+    oldService.forEach((item) => {
+      const key =
+        item.service_sub_ref_id ||
+        item.service_ref_id ||
+        item.service_id ||
+        `${item.service_sub_date}_${item.service_sub_km}`;
+      if (!map.has(key)) {
+        map.set(key, {
+          key,
+          date: item.service_sub_date,
+          km: item.service_sub_km,
+          presentDate: vehicle?.vehicle_present_date || item.vehicle_present_date,
+          presentKm: vehicle?.vehicle_present_km || item.vehicle_present_km,
+          items: [],
+        });
+      }
+      map.get(key).items.push(item);
+    });
+    return Array.from(map.values());
+  }, [oldService, vehicle]);
+
+  // Filter groups by category and search query
+  const filteredGroups = React.useMemo(() => {
+    let result = groupedServices;
+
+    // Filter by Category Dropdown
+    if (serviceCategoryFilter !== "all") {
+      const selectedCat = serviceCategoryFilter.toLowerCase();
+      result = result.filter((group) => {
+        const majorName = getMajorHeadName(group.items).toLowerCase();
+        return (
+          majorName.includes(selectedCat) ||
+          group.items.some(
+            (i) =>
+              i.service_sub_type &&
+              i.service_sub_type.toLowerCase().includes(selectedCat),
+          )
+        );
+      });
+    }
+
+    // Filter by Search Query
+    if (serviceSearchTerm.trim()) {
+      const query = serviceSearchTerm.toLowerCase().trim();
+      result = result.filter((group) => {
+        const majorName = getMajorHeadName(group.items).toLowerCase();
+        const dateStr = group.date
+          ? moment(group.date).format("DD-MMM-YYYY").toLowerCase()
+          : "";
+        const kmStr = group.km ? String(group.km) : "";
+        const itemsMatch = group.items.some(
+          (item) =>
+            (item.service_sub_type &&
+              item.service_sub_type.toLowerCase().includes(query)) ||
+            (item.service_sub_details &&
+              item.service_sub_details.toLowerCase().includes(query)),
+        );
+        return (
+          majorName.includes(query) ||
+          dateStr.includes(query) ||
+          kmStr.includes(query) ||
+          itemsMatch
+        );
+      });
+    }
+
+    return result;
+  }, [groupedServices, serviceSearchTerm, serviceCategoryFilter, getMajorHeadName]);
   const handleOpen = (service_sub_type) => {
     const filtered = oldService.filter(
       (item) => item.service_sub_type == service_sub_type,
@@ -470,55 +619,196 @@ const TruckView = () => {
       </>
     );
   };
+  const toggleServiceGroup = (key) => {
+    setExpandedServiceGroups((prev) => ({
+      ...prev,
+      [key]: !prev[key],
+    }));
+  };
+
   const serviceInfo = () => {
     return (
       <>
         {oldService.length > 0 && (
           <div className="mt-2">
-            <h3 className="text-lg font-semibold mb-2 text-center">
-              Service Histroy
-            </h3>
-            <table className="w-full border-collapse">
-              <thead>
-                <tr className="bg-gray-100">
-                  <th className="border py-2 text-xs">Services</th>
-                  <th className="border py-2 text-xs">Date</th>
-                  <th className="border py-2 text-xs">KM</th>
-                  <th className="border py-2 text-xs">Present Date</th>
-                  <th className="border py-2 text-xs">Present KM</th>
-                  <th className="border py-2 text-xs">KM Run</th>
-                </tr>
-              </thead>
-              <tbody>
-                {oldService?.map((item, key) => (
-                  <tr key={key} className="text-center">
-                    <td className="border py-2 text-xs text-start px-2">
-                      {item?.service_sub_type}
-                    </td>
-                    <td className="border py-2 text-xs">
-                      {moment(item?.service_sub_date).format("DD-MMM-YYYY")}
-                    </td>
-                    <td className="border py-2 text-xs">
-                      {item?.service_sub_km}
-                    </td>
+            <div className="flex flex-col md:flex-row justify-between items-center mb-3 gap-3">
+              <h3 className="text-lg font-semibold text-gray-800">
+                Service History
+              </h3>
+              <div className="flex flex-col sm:flex-row items-center gap-2 w-full md:w-auto print:hidden">
+                {/* Category Filter Dropdown */}
+                <div className="relative w-full sm:w-48">
+                  <select
+                    value={serviceCategoryFilter}
+                    onChange={(e) => setServiceCategoryFilter(e.target.value)}
+                    className="w-full pl-3 pr-8 py-1.5 text-xs border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 bg-white"
+                  >
+                    <option value="all">All Service Categories</option>
+                    {categoryOptions.map((cat, i) => (
+                      <option key={i} value={cat}>
+                        {cat}
+                      </option>
+                    ))}
+                  </select>
+                </div>
 
-                    <td className="border py-2 text-xs">
-                      {vehicle?.vehicle_present_date
-                        ? moment(item.vehicle_present_date).format(
-                            "DD-MMM-YYYY",
-                          )
-                        : ""}
-                    </td>
-                    <td className="border py-2 text-xs">
-                      {vehicle?.vehicle_present_km}
-                    </td>
-                    <td className="border py-2 text-xs">
-                      {vehicle?.vehicle_present_km - item?.service_sub_km}
-                    </td>
+                {/* Search Input */}
+                <div className="relative w-full sm:w-60">
+                  <IconSearch className="absolute left-2.5 top-2.5 text-gray-400 w-4 h-4" />
+                  <input
+                    type="text"
+                    placeholder="Search service, date, km..."
+                    value={serviceSearchTerm}
+                    onChange={(e) => setServiceSearchTerm(e.target.value)}
+                    className="w-full pl-9 pr-3 py-1.5 text-xs border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {filteredGroups.length > 0 ? (
+              <table className="w-full border-collapse">
+                <thead>
+                  <tr className="bg-gray-100">
+                    <th className="border py-2 text-xs text-start px-3">
+                      Services (Major Head)
+                    </th>
+                    <th className="border py-2 text-xs text-right px-3">Amount</th>
+                    <th className="border py-2 text-xs">Date</th>
+                    <th className="border py-2 text-xs">KM</th>
+                    <th className="border py-2 text-xs">KM Run</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {filteredGroups.map((group) => {
+                    const isExpanded =
+                      expandedServiceGroups[group.key] ||
+                      serviceSearchTerm.trim() !== "" ||
+                      serviceCategoryFilter !== "all";
+
+                    // Smart Major Head Name (e.g. PUMP & NOZZLE or PUMP O/H)
+                    const majorHeadName = getMajorHeadName(group.items);
+
+                    // Total Amount for this service task/bill
+                    const totalAmount = group.items.reduce(
+                      (sum, item) => sum + (Number(item?.service_sub_amount) || 0),
+                      0,
+                    );
+
+                    return (
+                      <React.Fragment key={group.key}>
+                        <tr className="text-center hover:bg-gray-50 transition-colors">
+                          <td className="border py-2 text-xs text-start px-2">
+                            <div className="flex items-center gap-1.5 select-none">
+                              {group.items.length > 1 ? (
+                                <button
+                                  type="button"
+                                  onClick={() => toggleServiceGroup(group.key)}
+                                  className="p-1 hover:bg-blue-100 rounded text-blue-600 focus:outline-none flex items-center gap-1 cursor-pointer"
+                                  title={
+                                    isExpanded
+                                      ? "Click to collapse minor head breakups"
+                                      : "Click to expand minor head breakups"
+                                  }
+                                >
+                                  {isExpanded ? (
+                                    <IconChevronDown className="w-4 h-4 text-blue-600 flex-shrink-0" />
+                                  ) : (
+                                    <IconChevronRight className="w-4 h-4 text-gray-500 flex-shrink-0" />
+                                  )}
+                                </button>
+                              ) : (
+                                <span className="w-6 inline-block" />
+                              )}
+                              <span
+                                className="font-semibold text-gray-900 cursor-pointer"
+                                onClick={() => {
+                                  if (group.items.length > 1) {
+                                    toggleServiceGroup(group.key);
+                                  }
+                                }}
+                              >
+                                {majorHeadName}
+                              </span>
+                              {group.items.length > 1 && (
+                                <span
+                                  onClick={() => toggleServiceGroup(group.key)}
+                                  className="text-[10px] bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-medium cursor-pointer hover:bg-blue-200"
+                                >
+                                  {group.items.length} breakup items
+                                </span>
+                              )}
+                            </div>
+                          </td>
+                          <td className="border py-2 text-xs font-semibold text-gray-800 text-right px-3">
+                            {totalAmount > 0
+                              ? `₹${totalAmount.toLocaleString("en-IN")}`
+                              : "-"}
+                          </td>
+                          <td className="border py-2 text-xs">
+                            {moment(group.date).format("DD-MMM-YYYY")}
+                          </td>
+                          <td className="border py-2 text-xs">{group.km}</td>
+                          <td className="border py-2 text-xs">
+                            {vehicle?.vehicle_present_km
+                              ? vehicle.vehicle_present_km - group.km
+                              : ""}
+                          </td>
+                        </tr>
+
+                        {isExpanded && group.items.length > 1 && (
+                          <tr className="bg-blue-50/30">
+                            <td colSpan={5} className="border p-3">
+                              <div className="pl-4 pr-2 text-xs">
+                                <p className="font-semibold text-gray-700 mb-2">
+                                  Minor Head Breakup Items ({group.items.length} line items):
+                                </p>
+                                <div className="overflow-x-auto">
+                                  <table className="w-full bg-white border border-gray-200 rounded-md text-xs">
+                                    <thead>
+                                      <tr className="bg-gray-100 text-gray-700">
+                                        <th className="py-1.5 px-3 border-b text-center w-10">#</th>
+                                        <th className="py-1.5 px-3 border-b text-left">Minor Head (Line Item)</th>
+                                        <th className="py-1.5 px-3 border-b text-left">Description / Narration</th>
+                                        <th className="py-1.5 px-3 border-b text-right">Amount</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                      {group.items.map((item, idx) => (
+                                        <tr key={idx} className="border-b hover:bg-gray-50">
+                                          <td className="py-1.5 px-3 text-center text-gray-500 font-medium">{idx + 1}</td>
+                                          <td className="py-1.5 px-3 text-gray-800 font-semibold">{item?.service_sub_type}</td>
+                                          <td className="py-1.5 px-3 text-gray-600">{item?.service_sub_details || "-"}</td>
+                                          <td className="py-1.5 px-3 text-right font-medium text-gray-800">
+                                            {item?.service_sub_amount ? `₹${Number(item.service_sub_amount).toLocaleString("en-IN")}` : "-"}
+                                          </td>
+                                        </tr>
+                                      ))}
+                                      {totalAmount > 0 && (
+                                        <tr className="bg-blue-50/70 font-bold text-gray-800">
+                                          <td colSpan={3} className="py-2 px-3 text-right">Total Breakup Amount:</td>
+                                          <td className="py-2 px-3 text-right text-blue-700 font-bold">
+                                            ₹{totalAmount.toLocaleString("en-IN")}
+                                          </td>
+                                        </tr>
+                                      )}
+                                    </tbody>
+                                  </table>
+                                </div>
+                              </div>
+                            </td>
+                          </tr>
+                        )}
+                      </React.Fragment>
+                    );
+                  })}
+                </tbody>
+              </table>
+            ) : (
+              <div className="text-center py-4 text-gray-500">
+                No matching service records found.
+              </div>
+            )}
           </div>
         )}
 
